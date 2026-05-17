@@ -25,7 +25,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * GET /notifications/recent — JSON for bell dropdown (last 8)
+     * GET /notifications/recent — JSON for bell dropdown
      */
     public function recent(Request $request)
     {

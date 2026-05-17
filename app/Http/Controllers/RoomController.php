@@ -30,9 +30,6 @@ class RoomController extends Controller
 
         $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
-        // =========================
-        // FUZZY SERVICE
-        // =========================
         $fuzzyService = new FuzzyMamdaniService;
 
         foreach ($rooms as $room) {
@@ -52,10 +49,6 @@ class RoomController extends Controller
 
             $room->device_status = $isOnline ? 'online' : 'offline';
 
-            // =========================
-            // SUHU TERBARU
-            // =========================
-
             $lastTempRecord = $latestTemperatures->get(
                 RoomTemperature::normalizeRoomName($room->name)
             );
@@ -71,10 +64,6 @@ class RoomController extends Controller
                 $room->temperature_is_offline = true;
             }
 
-            // =========================
-            // AMBIL 2 DATA TERBARU
-            // =========================
-
             $tempHistory = RoomTemperature::where(
                 'room',
                 RoomTemperature::normalizeRoomName($room->name)
@@ -84,10 +73,6 @@ class RoomController extends Controller
                 ->get();
 
             $currentTemp = $tempHistory->first()?->temperature;
-
-            // =========================
-            // HITUNG DELTA T (dengan timestamp)
-            // =========================
 
             $deltaT = 0;
             if ($currentTemp !== null && $tempHistory->count() > 1) {
@@ -102,10 +87,6 @@ class RoomController extends Controller
                 }
             }
 
-            // =========================
-            // FUZZY CALCULATION
-            // =========================
-
             if ($currentTemp !== null) {
 
                 $fuzzyResult = $fuzzyService->calculate(
@@ -119,11 +100,6 @@ class RoomController extends Controller
 
                 $room->fuzzy = $fuzzyResult;
 
-                // =========================
-                // FUZZY DECISION
-                // =========================
-
-                // sementara setpoint default dulu
                 $currentSetpoint = 24;
 
                 $decision = $fuzzyService->decideAction(

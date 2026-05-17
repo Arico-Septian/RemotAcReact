@@ -30,15 +30,13 @@ class MqttService
             ->setTlsSelfSignedAllowed(true)
             ->setTlsVerifyPeer(false)
             ->setTlsVerifyPeerName(false)
-            ->setKeepAliveInterval(15)        // ping broker tiap 15 detik (lebih agresif)
+            ->setKeepAliveInterval(15)
             ->setConnectTimeout(15)
             ->setSocketTimeout(20)
             ->setResendTimeout(10);
 
         $this->mqtt = new MqttClient($server, $port, $clientId);
 
-        // Clean session prevents the broker from replaying old queued messages
-        // after reconnect. The subscriber always registers its topics again.
         $this->mqtt->connect($connectionSettings, true);
     }
 

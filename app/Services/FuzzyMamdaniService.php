@@ -4,11 +4,7 @@ namespace App\Services;
 
 class FuzzyMamdaniService
 {
-    // ==============================
-    // FUZZY MEMBERSHIP SUHU
-    // ==============================
-
-    // Dingin (Trapesium Kiri)
+    // Dingin
     public function muSuhuDingin($x): float
     {
         if ($x <= 22) {
@@ -22,7 +18,7 @@ class FuzzyMamdaniService
         return 0;
     }
 
-    // Normal (Segitiga)
+    // Normal
     public function muSuhuNormal($x): float
     {
         if ($x <= 22 || $x >= 30) {
@@ -40,7 +36,7 @@ class FuzzyMamdaniService
         return 0;
     }
 
-    // Panas (Trapesium Kanan)
+    // Panas
     public function muSuhuPanas($x): float
     {
         if ($x <= 26) {
@@ -53,10 +49,6 @@ class FuzzyMamdaniService
 
         return 1;
     }
-
-    // ==============================
-    // FUZZY MEMBERSHIP DELTA T
-    // ==============================
 
     // Turun
     public function muDeltaTurun($dt): float
@@ -104,10 +96,6 @@ class FuzzyMamdaniService
         return 1;
     }
 
-    // ==============================
-    // OUTPUT MEMBERSHIP AC
-    // ==============================
-
     // AC Rendah
     public function muAcRendah($z): float
     {
@@ -154,16 +142,8 @@ class FuzzyMamdaniService
         return 1;
     }
 
-    // ==============================
-    // MAIN FUZZY CALCULATION
-    // ==============================
-
     public function calculate($suhu, $deltaT): array
     {
-        // ==============================
-        // FUZZIFIKASI
-        // ==============================
-
         $dingin = $this->muSuhuDingin($suhu);
         $normal = $this->muSuhuNormal($suhu);
         $panas = $this->muSuhuPanas($suhu);
@@ -172,10 +152,7 @@ class FuzzyMamdaniService
         $stabil = $this->muDeltaStabil($deltaT);
         $naik = $this->muDeltaNaik($deltaT);
 
-        // ==============================
         // RULE BASE
-        // ==============================
-
         // R1
         $r1 = min($dingin, $turun);
 
@@ -203,10 +180,7 @@ class FuzzyMamdaniService
         // R9
         $r9 = min($panas, $naik);
 
-        // ==============================
         // AGREGASI OUTPUT
-        // ==============================
-
         // AC Rendah
         $acRendah = max($r1, $r2, $r4);
 
@@ -216,10 +190,7 @@ class FuzzyMamdaniService
         // AC Tinggi
         $acTinggi = max($r6, $r8, $r9);
 
-        // ==============================
         // DEFUZZIFIKASI (CENTROID)
-        // ==============================
-
         $numerator = 0;
         $denominator = 0;
 
@@ -239,10 +210,6 @@ class FuzzyMamdaniService
             ? $numerator / $denominator
             : 0;
 
-        // ==============================
-        // LABEL OUTPUT
-        // ==============================
-
         $muR = $this->muAcRendah($crisp);
         $muS = $this->muAcSedang($crisp);
         $muT = $this->muAcTinggi($crisp);
@@ -256,10 +223,6 @@ class FuzzyMamdaniService
         } elseif ($maxMu == $muS) {
             $status = 'AC Sedang';
         }
-
-        // ==============================
-        // RETURN DATA
-        // ==============================
 
         return [
             'suhu' => round($suhu, 2),

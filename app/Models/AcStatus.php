@@ -24,8 +24,6 @@ class AcStatus extends Model
     protected static function booted(): void
     {
         static::saved(function (AcStatus $status) {
-            // Broadcast hanya saat ada field operasional yang berubah
-            // (mencegah spam event saat firstOrNew tanpa perubahan)
             if (! $status->wasRecentlyCreated && ! $status->wasChanged([
                 'power', 'mode', 'set_temperature', 'fan_speed', 'swing',
             ])) {

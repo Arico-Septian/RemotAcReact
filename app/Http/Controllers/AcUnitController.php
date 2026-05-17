@@ -27,10 +27,6 @@ class AcUnitController extends Controller
             ->where('room_id', $id)
             ->get();
 
-        // =========================
-        // FUZZY LOGIC
-        // =========================
-
         $fuzzyService = new FuzzyMamdaniService;
 
         $normalized = RoomTemperature::normalizeRoomName($room->name);
@@ -239,10 +235,6 @@ class AcUnitController extends Controller
             $decision['setpoint_after'] ?? $currentSetpoint
         );
 
-        // =========================
-        // COOLDOWN
-        // =========================
-
         $cooldownKey = 'fuzzy_room_'.$room->id;
 
         if (Cache::has($cooldownKey)) {
@@ -253,10 +245,6 @@ class AcUnitController extends Controller
         }
 
         Cache::put($cooldownKey, true, 30);
-
-        // =========================
-        // APPLY KE SEMUA AC
-        // =========================
 
         $acController = new AcControlController;
 

@@ -183,7 +183,6 @@ class AcControlController extends Controller
 
         $targetTemp = $this->normalizeTemperature($targetTemp);
 
-        // skip kalau sama
         if ((int)$status->set_temperature === $targetTemp) {
             return true;
         }

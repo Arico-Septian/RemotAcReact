@@ -89,7 +89,7 @@ class RunAcTimer extends Command
             // Cek cooldown untuk mencegah spam
             $cooldownKey = "ac_cooldown_{$ac->id}";
             if (Cache::has($cooldownKey)) {
-                continue; // Skip jika masih dalam cooldown
+                continue;
             }
 
             $version = Cache::get("timer_version_{$ac->id}", 1);
@@ -109,7 +109,7 @@ class RunAcTimer extends Command
             foreach (['on', 'off'] as $type) {
 
                 $timerField     = "timer_{$type}";
-                $expectedStatus = strtoupper($type); // "ON" atau "OFF"
+                $expectedStatus = strtoupper($type);
 
                 if (!$ac->$timerField) continue;
 
@@ -164,10 +164,8 @@ class RunAcTimer extends Command
                             'activity' => 'timer_' . strtolower($type),
                         ]);
 
-                        // Tandai sudah dieksekusi
                         Cache::put($key, true, 300);
 
-                        // Set cooldown
                         Cache::put($cooldownKey, true, self::COOLDOWN_SECONDS);
 
                         Log::info("TIMER {$expectedStatus} SUCCESS", [
