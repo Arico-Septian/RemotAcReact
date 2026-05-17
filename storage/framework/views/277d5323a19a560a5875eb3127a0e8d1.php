@@ -420,50 +420,78 @@
         }
 
         /* ===== Responsive ===== */
+        /* Tablet & smaller laptop (≤ 960 px) — hide brand panel, center form */
         @media (max-width: 960px) {
+            html, body { height: 100%; }
+            body { overflow-y: auto; overflow-x: hidden; }
+            .page {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                gap: 0;
+                min-height: 100vh;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+            .brand-panel { display: none; }
+            .form-panel {
+                padding: 40px 36px 28px;
+                min-height: 0;
+                width: 100%;
+                max-width: 480px;
+                border-radius: 24px;
+            }
+            .form-footer { margin-left: -36px; margin-right: -36px; padding-left: 36px; padding-right: 36px; }
+        }
+
+        /* Mobile L (≤ 480 px) — hide brand panel, center the form */
+        @media (max-width: 480px) {
+            html, body { height: 100%; }
             body { overflow-y: auto; }
             .page {
-                grid-template-columns: 1fr;
-                gap: 16px;
-                padding: 20px;
-                min-height: auto;
-                align-items: stretch;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+                gap: 0;
+                max-width: 100%;
+                min-height: 100vh;
+                margin: 0 auto;
             }
-            .brand-panel {
-                padding: 32px 28px;
-                min-height: 0;
-                order: 2;
-            }
-            .brand-hero { font-size: 32px; margin-top: 28px; }
-            .brand-features { padding-top: 24px; }
+            .brand-panel { display: none; }
             .form-panel {
-                padding: 34px 28px 26px;
-                min-height: 0;
-                order: 1;
+                padding: 28px 22px 22px;
+                border-radius: 22px;
+                width: 100%;
+                max-width: 400px;
+                margin: 0;
             }
-            .form-footer { margin-left: -28px; margin-right: -28px; padding-left: 28px; padding-right: 28px; }
-        }
-
-        @media (max-width: 480px) {
-            .page { padding: 12px; gap: 12px; }
-            .brand-panel { padding: 26px 22px; border-radius: 22px; }
-            .brand-hero { font-size: 28px; }
-            .brand-sub { font-size: 13.5px; }
-            .form-panel { padding: 28px 22px 22px; border-radius: 22px; }
-            .form-title { font-size: 26px; }
+            .form-title { font-size: 24px; margin-top: 12px; }
+            .form-sub { font-size: 13px; margin-top: 8px; }
+            .form { margin-top: 22px; gap: 14px; }
             .form-footer { margin-left: -22px; margin-right: -22px; padding-left: 22px; padding-right: 22px; }
+            .back-link { margin-bottom: 22px; font-size: 11.5px; }
+            .input-wrap input { padding: 12px 0; font-size: 13.5px; }
+            .alert { font-size: 12px; padding: 10px 12px; }
         }
 
-        /* Very small phones (<360px) */
+        /* Mobile S (≤ 360 px) — very tight, form-only */
         @media (max-width: 360px) {
-            .page { padding: 10px; }
-            .brand-panel { padding: 22px 18px; }
-            .brand-hero { font-size: 24px; }
-            .brand-sub { font-size: 13px; }
-            .feat-text { font-size: 12px; }
-            .form-panel { padding: 24px 18px 20px; }
-            .form-title { font-size: 22px; }
-            .form-footer { margin-left: -18px; margin-right: -18px; padding-left: 18px; padding-right: 18px; }
+            .page { padding: 12px; }
+            .form-panel { padding: 22px 16px 18px; border-radius: 18px; }
+            .form-eyebrow { font-size: 9.5px; letter-spacing: 0.14em; }
+            .form-title { font-size: 20px; margin-top: 10px; }
+            .form-sub { font-size: 12px; margin-top: 6px; }
+            .form { margin-top: 18px; gap: 12px; }
+            .form-footer { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
+            .input-wrap { border-radius: 10px; }
+            .input-wrap input { font-size: 13px; padding: 11px 0; }
+            .input-wrap .leading { padding: 0 10px 0 12px; font-size: 12px; }
+            .input-wrap .trailing { padding: 0 12px; font-size: 12px; }
+            .field-label { font-size: 10px; letter-spacing: 0.1em; margin-bottom: 6px; }
+            .alert { font-size: 11.5px; padding: 9px 11px; margin-top: 18px; gap: 8px; }
+            .back-link { margin-bottom: 18px; font-size: 11px; }
         }
 
         /* Landscape mobile — make body scrollable so form is reachable */

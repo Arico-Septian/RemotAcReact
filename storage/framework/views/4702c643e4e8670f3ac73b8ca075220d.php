@@ -136,7 +136,7 @@
             color: var(--cyan);
             font-size: 14px;
         }
-        .brand-name { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink-0); }
+        .brand-name { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink-0); white-space: nowrap; }
         .brand-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
 
         .nav-links { display: flex; align-items: center; gap: 2px; }
@@ -675,6 +675,7 @@
         }
 
         /* ===== Responsive ===== */
+        /* Tablet & smaller laptop (≤ 1024 px) — stack hero, 2-col bento */
         @media (max-width: 1024px) {
             .hero-grid { grid-template-columns: 1fr; }
             .hero-main { padding: 40px 32px 32px; min-height: 0; }
@@ -688,45 +689,194 @@
             .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
         }
 
+        /* Tablet portrait (≤ 768 px) — tighten hero & spacing */
+        @media (max-width: 768px) {
+            .section { padding: 0 24px; }
+            .hero { padding: 48px 0 40px; }
+            .hero-main { padding: 32px 28px 28px; border-radius: 22px; }
+            .hero-h1 { font-size: 44px; letter-spacing: -0.025em; }
+            .hero-sub { font-size: 15px; max-width: 100%; }
+            .hero-trust { margin-left: -28px; margin-right: -28px; padding-left: 28px; padding-right: 28px; }
+            .status-card { padding: 28px 26px 24px; border-radius: 22px; }
+            .status-title { font-size: 30px; }
+            .features, .how, .cta-final { padding: 64px 0; }
+            .cta-box { padding: 56px 32px; }
+        }
+
+        /* Mobile L (≤ 640 px) — full mobile layout */
         @media (max-width: 640px) {
-            .nav-inner { padding: 14px 18px; }
-            .section { padding: 0 18px; }
+            .nav-inner { padding: 14px 24px; }
+            .section { padding: 0 24px; max-width: 100%; }
             .brand-tag { display: none; }
             .lang-pill { display: none; }
             .btn-pill { padding: 8px 14px; font-size: 12px; }
-            .hero { padding: 36px 0 32px; }
-            .hero-main { padding: 28px 22px 24px; border-radius: 20px; }
-            .hero-trust { margin-left: -22px; margin-right: -22px; padding-left: 22px; padding-right: 22px; gap: 22px; padding-top: 28px; }
-            .hero-trust .num { font-size: 20px; }
-            .hero-h1 { font-size: 38px; letter-spacing: -0.025em; }
-            .hero-sub { font-size: 14.5px; }
-            .btn-cta-primary, .btn-cta-ghost { padding: 12px 18px; font-size: 13px; }
+
+            .hero { padding: 32px 0 28px; }
+            .hero-grid { gap: 20px; }
+            .hero-main { padding: 32px 28px 28px; border-radius: 20px; }
+            .hero-h1 { font-size: 34px; letter-spacing: -0.025em; line-height: 1.05; }
+            .hero-sub { font-size: 14px; line-height: 1.55; max-width: 100%; }
+            .hero-cta { flex-direction: column; gap: 10px; }
+            .hero-cta > a { width: 100%; justify-content: center; }
+            .btn-cta-primary, .btn-cta-ghost { padding: 13px 18px; font-size: 13px; min-height: 44px; }
+
+            /* hero-trust → 2×2 grid (lebih rapi dari flex-wrap) */
+            .hero-trust {
+                margin-left: -28px; margin-right: -28px;
+                padding: 22px 28px 4px;
+                gap: 18px 14px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+            .hero-trust .num { font-size: 22px; }
+            .hero-trust .lbl { font-size: 9.5px; }
+
             .status-card { padding: 24px 22px 20px; border-radius: 20px; }
             .status-title { font-size: 26px; }
-            .anomaly-card { padding: 22px 20px 20px; }
-            .bento { grid-template-columns: 1fr; }
-            .bento-card, .bento-card.wide-3, .bento-card.wide-2, .bento-card.wide-4, .preview-card { grid-column: span 1; min-height: 0; padding: 24px 22px; }
-            .metrics { padding: 28px 24px; }
-            .metrics-inner { grid-template-columns: 1fr 1fr; gap: 24px 18px; }
+            .spec-row { gap: 10px; }
+            .anomaly-card { padding: 22px 20px 20px; border-radius: 20px; }
+
+            .bento { grid-template-columns: 1fr; gap: 12px; }
+            .bento-card, .bento-card.wide-3, .bento-card.wide-2, .bento-card.wide-4, .preview-card {
+                grid-column: span 1; min-height: 0; padding: 22px 20px; border-radius: 18px;
+            }
+
+            .metrics { padding: 26px 22px; border-radius: 22px; }
+            .metrics-inner { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
             .metric:not(:first-child) { padding-left: 0; border-left: 0; }
-            .metric .v { font-size: 32px; }
-            .cta-box { padding: 48px 26px; border-radius: 24px; }
+            .metric .v { font-size: 30px; }
+
+            .cta-box { padding: 44px 24px; border-radius: 22px; }
             .features, .how, .cta-final { padding: 56px 0; }
+            .features-h2, .cta-h2 { font-size: 30px; line-height: 1.1; }
+            .features-sub, .cta-sub { font-size: 14px; }
         }
 
-        /* Very small phones (<360px) */
-        @media (max-width: 360px) {
-            .nav-inner { padding: 12px 14px; }
-            .section { padding: 0 14px; }
-            .hero-h1 { font-size: 32px; letter-spacing: -0.02em; }
-            .hero-sub { font-size: 13.5px; }
-            .hero-main { padding: 22px 18px 20px; }
-            .hero-trust { margin-left: -18px; margin-right: -18px; padding-left: 18px; padding-right: 18px; gap: 18px; }
-            .hero-trust .num { font-size: 18px; }
-            .status-title, .features-h2, .cta-h2 { font-size: 24px !important; }
+        /* Mobile M (≤ 480 px) — further tightening */
+        @media (max-width: 480px) {
+            .nav-inner { padding: 12px 20px; }
+            .section { padding: 0 20px; }
+            .hero { padding: 24px 0 22px; }
+            .hero-grid { gap: 16px; }
+            .hero-main { padding: 26px 22px 22px; border-radius: 18px; }
+            .hero-h1 { font-size: 28px; line-height: 1.06; }
+            .hero-sub { font-size: 13.5px; margin-top: 12px; }
+            .hero-cta { margin-top: 18px; }
+            .btn-cta-primary, .btn-cta-ghost { padding: 12px 16px; font-size: 13px; }
+
+            .hero-trust {
+                margin-left: -22px; margin-right: -22px;
+                padding: 18px 22px 2px;
+                gap: 14px 12px;
+            }
+            .hero-trust .num { font-size: 19px; }
+            .hero-trust .lbl { font-size: 9px; letter-spacing: 0.12em; }
+
+            .status-card { padding: 20px 18px 16px; border-radius: 18px; }
+            .status-title { font-size: 22px; }
+            .anomaly-card { padding: 20px 18px 18px; border-radius: 18px; }
+            .bento-card { padding: 20px 18px; border-radius: 16px; }
+
+            .metrics { padding: 22px 18px; }
+            .metric .v { font-size: 26px; }
+
+            .cta-box { padding: 36px 20px; border-radius: 20px; }
             .features, .how, .cta-final { padding: 44px 0; }
-            .metric .v { font-size: 28px; }
-            .bento-card { padding: 20px 18px; }
+            .features-h2, .cta-h2 { font-size: 26px; }
+        }
+
+        /* Mobile S (≤ 360 px) — extra tight */
+        @media (max-width: 360px) {
+            .nav-inner { padding: 10px 18px; }
+            .section { padding: 0 18px; }
+            .hero { padding: 20px 0 18px; }
+            .hero-main { padding: 22px 18px 20px; border-radius: 16px; }
+            .hero-h1 { font-size: 24px; letter-spacing: -0.02em; }
+            .hero-sub { font-size: 12.5px; line-height: 1.5; }
+            .btn-cta-primary, .btn-cta-ghost { padding: 11px 14px; font-size: 12px; min-height: 42px; }
+
+            .hero-trust {
+                margin-left: -18px; margin-right: -18px;
+                padding: 16px 18px 2px;
+                gap: 12px 10px;
+            }
+            .hero-trust .num { font-size: 17px; }
+            .hero-trust .lbl { font-size: 8.5px; letter-spacing: 0.1em; }
+
+            .status-card { padding: 18px 14px 14px; border-radius: 14px; }
+            .status-title, .features-h2, .cta-h2 { font-size: 20px !important; line-height: 1.1; }
+            .anomaly-card { padding: 18px 14px 14px; border-radius: 14px; }
+            .bento-card { padding: 18px 14px; border-radius: 14px; }
+
+            .metrics { padding: 20px 14px; border-radius: 18px; }
+            .metric .v { font-size: 22px; }
+            .metric .l { font-size: 9.5px; }
+
+            .cta-box { padding: 28px 16px; border-radius: 16px; }
+            .features, .how, .cta-final { padding: 36px 0; }
+            .features-sub, .cta-sub { font-size: 13px; }
+        }
+
+        /* ===== Cross-cutting cleanup for ALL mobile/tablet (≤ 1024 px) ===== */
+        @media (max-width: 1024px) {
+            /* Section headings (features-head, how-head) — match bento card visual offset */
+            .features-head, .how-head { padding-left: 14px; padding-right: 14px; }
+            .features-h2 { line-height: 1.1; }
+            .features-sub { line-height: 1.55; }
+
+            /* Brand block — keep name on single line */
+            .brand-block { min-width: 0; }
+            .brand-block .brand-name { white-space: nowrap; }
+
+            /* Spec list rows — tighter spacing + smaller icons on mobile */
+            .spec-list { gap: 14px; }
+            .spec-ic { width: 32px; height: 32px; font-size: 13px; flex-shrink: 0; }
+            .text-main { font-size: 13px; line-height: 1.3; }
+            .text-sub { font-size: 11.5px; }
+
+            /* Bento preview-card mini dashboard — 3 stats can squeeze on narrow screens */
+            .preview-card .mini-dashboard {
+                gap: 10px;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .preview-stat { padding: 12px; }
+            .preview-stat .val { font-size: 20px; }
+            .preview-stat .lbl { font-size: 8.5px; letter-spacing: 0.1em; }
+
+            /* How section — reduce step number circle */
+            .step .num-circle { width: 40px; height: 40px; font-size: 14px; }
+            .step h4 { font-size: 16px; }
+            .step p { font-size: 13px; margin-top: 8px; }
+
+            /* Footer — center alignment on smaller screens, vertical stack */
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+            .footer-links { justify-content: center; }
+        }
+
+        /* Mobile (≤ 480 px): preview-card stats 1-col so values stay readable */
+        @media (max-width: 480px) {
+            .preview-card .mini-dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+            .preview-card .preview-stat:nth-child(3) { grid-column: 1 / -1; }
+            .preview-stat .val { font-size: 22px; }
+        }
+
+        /* Mobile S (≤ 360 px): spec rows even tighter */
+        @media (max-width: 360px) {
+            .spec-list { gap: 11px; }
+            .spec-ic { width: 28px; height: 28px; font-size: 11px; }
+            .text-main { font-size: 12.5px; }
+            .text-sub { font-size: 11px; }
+            .step .num-circle { width: 36px; height: 36px; font-size: 13px; }
+            .step h4 { font-size: 15px; }
+            .step p { font-size: 12.5px; }
+            .footer-links { gap: 16px; font-size: 11.5px; }
+            .footer-copy { font-size: 11px; }
         }
 
         /* Landscape mobile (short screens) */
@@ -790,9 +940,6 @@
                     Masuk
                     <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i>
                 </a>
-                <button type="button" class="menu-toggle" aria-label="Menu">
-                    <i class="fa-solid fa-bars" style="font-size:13px;"></i>
-                </button>
             </div>
         </div>
     </nav>
@@ -1045,7 +1192,6 @@
                 <a href="#produk">Produk</a>
                 <a href="#fitur">Fitur</a>
                 <a href="#cara-kerja">Cara kerja</a>
-                <a href="<?php echo e(route('login')); ?>">Masuk</a>
             </div>
             <div class="footer-copy">© 2026 Control AC — SmartAC IoT Platform</div>
         </div>
