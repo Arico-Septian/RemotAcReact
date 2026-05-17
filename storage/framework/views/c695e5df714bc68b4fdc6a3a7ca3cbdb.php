@@ -554,6 +554,17 @@
                                     <div class="stat-icon"><i class="fa-solid fa-square-plus"></i></div>
                                 </div>
                             </div>
+                            <div class="stat-card acc-coral">
+                                <span class="accent-bar"></span>
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="stat-label-sm">Delete Room</p>
+                                        <p class="stat-num-lg"><?php echo e($stats['delete_room'] ?? 0); ?></p>
+                                        <p class="stat-sub">+<?php echo e($stats['delete_room24'] ?? 0); ?> dalam 24 jam</p>
+                                    </div>
+                                    <div class="stat-icon"><i class="fa-solid fa-trash"></i></div>
+                                </div>
+                            </div>
                             <div class="stat-card acc-lavender">
                                 <span class="accent-bar"></span>
                                 <div class="flex items-start justify-between gap-3">
@@ -563,17 +574,6 @@
                                         <p class="stat-sub">on/off · mode · suhu</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-snowflake"></i></div>
-                                </div>
-                            </div>
-                            <div class="stat-card acc-coral">
-                                <span class="accent-bar"></span>
-                                <div class="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p class="stat-label-sm">Destructive</p>
-                                        <p class="stat-num-lg"><?php echo e($stats['destructive']); ?></p>
-                                        <p class="stat-sub">delete user · room</p>
-                                    </div>
-                                    <div class="stat-icon"><i class="fa-solid fa-trash"></i></div>
                                 </div>
                             </div>
                         </div>

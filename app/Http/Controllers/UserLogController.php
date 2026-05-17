@@ -115,17 +115,20 @@ class UserLogController extends Controller
         }
 
         $stats = [
-            'total'      => (clone $statsScope)->count(),
-            'add_room'   => (clone $statsScope)->where('activity', 'add_room')->count(),
-            'add_room24' => (clone $statsScope)->where('activity', 'add_room')
-                              ->where('created_at', '>=', now()->subDay())->count(),
-            'ac'         => (clone $statsScope)->where(function ($qq) use ($acActs, $acLikes) {
-                              $qq->whereIn('activity', $acActs);
-                              foreach ($acLikes as $like) {
-                                  $qq->orWhere('activity', 'like', $like);
-                              }
-                          })->count(),
-            'destructive' => (clone $statsScope)->whereIn('activity', $destructiveActs)->count(),
+            'total'         => (clone $statsScope)->count(),
+            'add_room'      => (clone $statsScope)->where('activity', 'add_room')->count(),
+            'add_room24'    => (clone $statsScope)->where('activity', 'add_room')
+                                 ->where('created_at', '>=', now()->subDay())->count(),
+            'delete_room'   => (clone $statsScope)->where('activity', 'delete_room')->count(),
+            'delete_room24' => (clone $statsScope)->where('activity', 'delete_room')
+                                 ->where('created_at', '>=', now()->subDay())->count(),
+            'ac'            => (clone $statsScope)->where(function ($qq) use ($acActs, $acLikes) {
+                                 $qq->whereIn('activity', $acActs);
+                                 foreach ($acLikes as $like) {
+                                     $qq->orWhere('activity', 'like', $like);
+                                 }
+                             })->count(),
+            'destructive'   => (clone $statsScope)->whereIn('activity', $destructiveActs)->count(),
         ];
 
         return view('logs.index', compact('logs', 'users', 'rooms', 'stats'));

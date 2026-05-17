@@ -1743,10 +1743,10 @@
                     if (infoEl) {
                         if ((data.total_rooms || 0) > (data.shown || 0)) {
                             infoEl.textContent =
-                                `Menampilkan ${data.shown} dari ${data.total_rooms} ruangan (urutkan: suhu tertinggi). Klik nama ruangan di legenda untuk show/hide.`;
+                                `Menampilkan ${data.shown} dari ${data.total_rooms} ruangan (urutkan: suhu tertinggi).`;
                         } else {
                             infoEl.textContent =
-                                `Menampilkan ${data.shown || (data.datasets || []).length} ruangan. Klik nama ruangan di legenda untuk show/hide.`;
+                                `Menampilkan ${data.shown || (data.datasets || []).length} ruangan.`;
                         }
                     }
                 })
