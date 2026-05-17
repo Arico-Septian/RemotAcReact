@@ -34,8 +34,8 @@
             </a>
             <a href="{{ route('monitoring') }}"
                class="nav-link menu-link {{ request()->routeIs('monitoring') ? 'active' : '' }}">
-                <i class="fa-brands fa-raspberry-pi"></i>
-                <span class="menu-text">Monitoring Raspi</span>
+                <i class="fa-solid fa-temperature-half"></i>
+                <span class="menu-text">Monitoring Suhu Server</span>
             </a>
         </div>
 

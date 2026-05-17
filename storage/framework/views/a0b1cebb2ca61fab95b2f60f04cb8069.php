@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Notifikasi — SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite('resources/js/app.js')
-    @include('components.sidebar-styles')
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    <?php echo $__env->make('components.sidebar-styles', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <style>
         .nlist-item {
             display: flex;
@@ -133,7 +133,7 @@
     <div id="overlay"></div>
 
     <div class="layout">
-        @include('components.sidebar')
+        <?php echo $__env->make('components.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <div class="main-content">
             <header class="main-header">
@@ -143,20 +143,20 @@
                     </button>
                     <div class="app-header-title">
                         <h1>Notifikasi</h1>
-                        <p>{{ $unreadCount }} belum dibaca dari {{ $notifications->total() }} total</p>
+                        <p><?php echo e($unreadCount); ?> belum dibaca dari <?php echo e($notifications->total()); ?> total</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    @if ($unreadCount > 0)
+                    <?php if($unreadCount > 0): ?>
                         <form action="/notifications/read-all" method="POST" id="markAllForm">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <button type="button" onclick="bulkMarkAllRead()" class="btn btn-soft btn-sm">
                                 <i class="fa-solid fa-check-double text-[10px]"></i>
                                 <span>Tandai semua dibaca</span>
                             </button>
                         </form>
-                    @endif
-                    @include('components.notification-bell')
+                    <?php endif; ?>
+                    <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                     <span id="systemStatus" class="pill pill-online">
                         <span class="dot"></span>
                         <span>Online</span>
@@ -168,8 +168,8 @@
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
                         <div class="tbl-wrap" id="notifListWrap">
-                            @forelse ($notifications as $n)
-                                @php
+                            <?php $__empty_1 = true; $__currentLoopData = $notifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $n): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <?php
                                     $iconMap = [
                                         'device_offline' => 'fa-plug-circle-exclamation',
                                         'temp_alert' => 'fa-temperature-three-quarters',
@@ -177,85 +177,86 @@
                                         'system' => 'fa-gear',
                                     ];
                                     $icon = $iconMap[$n->type] ?? 'fa-bell';
-                                @endphp
-                                <div class="nlist-item {{ $n->isUnread() ? 'unread' : '' }}"
-                                    data-id="{{ $n->id }}">
-                                    <span class="nlist-icon {{ $n->severity }}">
-                                        <i class="fa-solid {{ $icon }}"></i>
+                                ?>
+                                <div class="nlist-item <?php echo e($n->isUnread() ? 'unread' : ''); ?>"
+                                    data-id="<?php echo e($n->id); ?>">
+                                    <span class="nlist-icon <?php echo e($n->severity); ?>">
+                                        <i class="fa-solid <?php echo e($icon); ?>"></i>
                                     </span>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2">
-                                            @if ($n->isUnread())
+                                            <?php if($n->isUnread()): ?>
                                                 <span
                                                     style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></span>
-                                            @endif
+                                            <?php endif; ?>
                                             <p class="text-sm font-semibold" style="color:var(--ink-0);margin:0;">
-                                                {{ $n->title }}</p>
+                                                <?php echo e($n->title); ?></p>
                                         </div>
-                                        @if ($n->message)
+                                        <?php if($n->message): ?>
                                             <p class="text-xs mt-1" style="color:var(--ink-2);line-height:1.5;">
-                                                {{ $n->message }}</p>
-                                        @endif
+                                                <?php echo e($n->message); ?></p>
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-3 mt-2 text-mono"
                                             style="font-size:10.5px;color:var(--ink-4);">
                                             <span><i class="fa-regular fa-clock text-[9px]"></i>
-                                                {{ $n->created_at->diffForHumans() }}</span>
+                                                <?php echo e($n->created_at->diffForHumans()); ?></span>
                                             <span>·</span>
-                                            <span>{{ $n->created_at->format('d M Y H:i') }}</span>
-                                            @if ($n->link)
+                                            <span><?php echo e($n->created_at->format('d M Y H:i')); ?></span>
+                                            <?php if($n->link): ?>
                                                 <span>·</span>
-                                                <a href="{{ $n->link }}"
-                                                    onclick="markNotifReadInline(event, {{ $n->id }}, '{{ $n->link }}')"
+                                                <a href="<?php echo e($n->link); ?>"
+                                                    onclick="markNotifReadInline(event, <?php echo e($n->id); ?>, '<?php echo e($n->link); ?>')"
                                                     style="color:var(--cyan);">Buka detail →</a>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     <div class="nlist-actions">
-                                        @if ($n->isUnread())
-                                            <button onclick="markNotifReadInline(event, {{ $n->id }}, null)"
+                                        <?php if($n->isUnread()): ?>
+                                            <button onclick="markNotifReadInline(event, <?php echo e($n->id); ?>, null)"
                                                 class="btn-icon" title="Tandai dibaca">
                                                 <i class="fa-solid fa-check text-[11px]"></i>
                                             </button>
-                                        @endif
-                                        @if ($n->user_id)
-                                            <button onclick="deleteNotif({{ $n->id }})" class="btn-icon danger"
+                                        <?php endif; ?>
+                                        <?php if($n->user_id): ?>
+                                            <button onclick="deleteNotif(<?php echo e($n->id); ?>)" class="btn-icon danger"
                                                 title="Hapus">
                                                 <i class="fa-solid fa-trash text-[11px]"></i>
                                             </button>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="empty-state">
                                     <div class="empty-icon"><i class="fa-regular fa-bell-slash"></i></div>
                                     <p class="empty-title">Belum ada notifikasi</p>
                                     <p class="empty-sub">Notifikasi sistem & alert akan muncul di sini</p>
                                 </div>
-                            @endforelse
+                            <?php endif; ?>
 
-                            @if ($notifications->hasPages())
+                            <?php if($notifications->hasPages()): ?>
                                 <div class="tbl-footer">
-                                    <p>Page {{ $notifications->currentPage() }} of {{ $notifications->lastPage() }}
+                                    <p>Page <?php echo e($notifications->currentPage()); ?> of <?php echo e($notifications->lastPage()); ?>
+
                                     </p>
                                     <div class="pager">
-                                        @if ($notifications->onFirstPage())
+                                        <?php if($notifications->onFirstPage()): ?>
                                             <span class="disabled"><i
                                                     class="fa-solid fa-chevron-left text-[9px]"></i></span>
-                                        @else
-                                            <a href="{{ $notifications->previousPageUrl() }}"><i
+                                        <?php else: ?>
+                                            <a href="<?php echo e($notifications->previousPageUrl()); ?>"><i
                                                     class="fa-solid fa-chevron-left text-[9px]"></i></a>
-                                        @endif
-                                        <span class="active text-mono">{{ $notifications->currentPage() }}</span>
-                                        @if ($notifications->hasMorePages())
-                                            <a href="{{ $notifications->nextPageUrl() }}"><i
+                                        <?php endif; ?>
+                                        <span class="active text-mono"><?php echo e($notifications->currentPage()); ?></span>
+                                        <?php if($notifications->hasMorePages()): ?>
+                                            <a href="<?php echo e($notifications->nextPageUrl()); ?>"><i
                                                     class="fa-solid fa-chevron-right text-[9px]"></i></a>
-                                        @else
+                                        <?php else: ?>
                                             <span class="disabled"><i
                                                     class="fa-solid fa-chevron-right text-[9px]"></i></span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -263,7 +264,7 @@
         </div>
     </div>
 
-    @include('components.bottom-nav')
+    <?php echo $__env->make('components.bottom-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script>
         function markNotifReadInline(e, id, redirectTo) {
@@ -408,8 +409,9 @@
         });
     </script>
 
-    @include('components.sidebar-scripts')
+    <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 
 </html>
 
+<?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/notifications/index.blade.php ENDPATH**/ ?>

@@ -67,7 +67,7 @@
     background: var(--panel-1);
 }
 .notif-panel-body {
-    max-height: 420px; overflow-y: auto;
+    max-height: 300px; overflow-y: auto;
 }
 .notif-loading {
     text-align: center; padding: 40px 16px; color: var(--ink-3);
@@ -129,12 +129,63 @@
     border-top: 1px solid var(--line-soft);
     background: var(--panel-1);
 }
+/* Tablet (481–1024 px): slightly more compact than desktop */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .notif-panel {
+        width: 300px;
+    }
+    .notif-panel-header { padding: 10px 12px; }
+    .notif-panel-header h3 { font-size: 12px; }
+    .notif-panel-header .text-xs { font-size: 10px; }
+    .notif-panel-body { max-height: 280px; }
+    .notif-item { padding: 9px 12px; gap: 9px; }
+    .notif-icon { width: 28px; height: 28px; font-size: 11px; border-radius: 8px; }
+    .notif-title { font-size: 12px; line-height: 1.3; }
+    .notif-msg {
+        font-size: 11px; margin-top: 2px; line-height: 1.35;
+        -webkit-line-clamp: 2;
+    }
+    .notif-time { font-size: 9.5px; margin-top: 3px; }
+    .notif-panel-footer { padding: 7px 10px; }
+    .notif-panel-footer a { font-size: 11.5px; }
+}
+
 @media (max-width: 480px) {
     .notif-panel {
         position: fixed;
-        top: 64px; right: 12px; left: 12px;
-        width: auto;
+        top: 54px;
+        right: 6px;
+        left: auto;
+        width: min(260px, calc(100vw - 12px));
+        border-radius: 12px;
     }
+    .notif-panel-header { padding: 6px 9px; }
+    .notif-panel-header h3 { font-size: 10px; }
+    .notif-panel-header .text-xs { font-size: 9px; }
+    .notif-panel-body { max-height: 32vh; }
+    .notif-item { padding: 5px 9px; gap: 7px; }
+    .notif-icon { width: 20px; height: 20px; font-size: 9px; border-radius: 6px; }
+    .notif-title { font-size: 10.5px; line-height: 1.2; gap: 4px; }
+    .notif-unread-dot { width: 5px; height: 5px; }
+    .notif-msg {
+        font-size: 9.5px; margin-top: 1px; line-height: 1.25;
+        -webkit-line-clamp: 1;
+    }
+    .notif-time { font-size: 8.5px; margin-top: 1px; }
+    .notif-panel-footer { padding: 5px 8px; }
+    .notif-panel-footer a { font-size: 10px; }
+}
+
+@media (max-width: 360px) {
+    .notif-panel {
+        top: 50px; right: 4px;
+        width: min(240px, calc(100vw - 8px));
+    }
+    .notif-item { padding: 5px 8px; gap: 6px; }
+    .notif-icon { width: 18px; height: 18px; font-size: 8.5px; }
+    .notif-title { font-size: 10px; }
+    .notif-msg { font-size: 9px; }
+    .notif-time { font-size: 8px; }
 }
 </style>
 

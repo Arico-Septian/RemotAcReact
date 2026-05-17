@@ -216,10 +216,16 @@
         .tbl tbody tr { transition: background 0.12s ease; }
         .tbl tbody tr:hover { background: var(--panel-2); }
 
+        .tbl.tbl-log thead {
+            background: transparent;
+        }
+
         .tbl.tbl-log th {
             font-size: 11.5px;
             letter-spacing: 0.1em;
             padding: 14px 18px;
+            background: transparent;
+            color: var(--ink-0);
         }
 
         .tbl.tbl-log td {

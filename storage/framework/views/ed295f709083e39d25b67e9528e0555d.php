@@ -235,6 +235,7 @@
             padding: 14px 18px;
             font-size: 11.5px;
             letter-spacing: 0.1em;
+            color: var(--ink-0);
         }
 
         @media (max-width: 720px) {

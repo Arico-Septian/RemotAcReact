@@ -33,8 +33,8 @@
 
     <a href="<?php echo e(route('monitoring')); ?>"
        class="bnav-item <?php echo e(request()->routeIs('monitoring') ? 'active' : ''); ?>">
-        <i class="fa-brands fa-raspberry-pi"></i>
-        <span>Raspi</span>
+        <i class="fa-solid fa-temperature-half"></i>
+        <span>Suhu Server</span>
     </a>
 
     <a href="/profile"
