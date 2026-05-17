@@ -37,7 +37,7 @@ class CheckDeviceStatus extends Command
         try {
             $this->info('Starting device status checker...');
 
-            for ($i = 0; $i < 12; $i++) {  // Run for ~1 minute (12 * 5 seconds)
+            for ($i = 0; $i < 12; $i++) {
 
                 $now = now('Asia/Jakarta');
 
@@ -130,8 +130,6 @@ class CheckDeviceStatus extends Command
 
     private function checkOrphanDevices($now)
     {
-        // Check for devices in cache that are not in rooms table
-        // This is optional, for debugging purposes
         $cacheKeys = Cache::get('device_keys', []);
 
         foreach ($cacheKeys as $deviceId) {

@@ -99,8 +99,6 @@ class MqttListener extends Command
                         return;
                     }
 
-                    // room sudah normalized dari atas
-
                     $dupKey = 'dup_' . md5($normalizedRoom . $temperature);
                     if (Cache::has($dupKey)) {
                         return;

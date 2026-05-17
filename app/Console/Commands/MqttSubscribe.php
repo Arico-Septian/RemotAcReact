@@ -358,7 +358,6 @@ class MqttSubscribe extends Command
                         Cache::put("room_temp_{$room}", $temp, 300);
                         $this->line("ROOM TEMP [{$room}]: {$temp}°C");
 
-                        // Broadcast suhu real-time ke browser via Reverb
                         event(new RoomTemperatureUpdated($room, $temp));
                     },
 
