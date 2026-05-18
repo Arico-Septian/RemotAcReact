@@ -493,8 +493,6 @@
                                     'add_user' => ['ADD USER', 'act-lavender'],
                                     'delete_user' => ['DELETE USER', 'act-coral'],
                                     'update_role' => ['UPDATE ROLE', 'act-lavender'],
-                                    'activate_user' => ['ACTIVATE', 'act-mint'],
-                                    'deactivate_user' => ['DEACTIVATE', 'act-coral'],
                                     'change_password' => ['CHG PASSWORD', 'act-amber'],
                                     default => [strtoupper($activity), 'act-lavender'],
                                 };
@@ -917,7 +915,6 @@
                     add_ac: ['ADD AC', 'act-cyan'], delete_ac: ['DELETE AC', 'act-coral'],
                     add_user: ['ADD USER', 'act-lavender'], delete_user: ['DELETE USER', 'act-coral'],
                     update_role: ['UPDATE ROLE', 'act-lavender'],
-                    activate_user: ['ACTIVATE', 'act-mint'], deactivate_user: ['DEACTIVATE', 'act-coral'],
                     change_password: ['CHG PASSWORD', 'act-amber'],
                 };
                 return map[a] || [a.toUpperCase(), 'act-lavender'];

@@ -47,7 +47,8 @@ class CheckDeviceStatus extends Command
                     ->get();
 
                 foreach ($devices as $room) {
-                    $deviceId = trim($room->device_id);
+                    // Normalize like MqttSubscribe to share the same cache keys
+                    $deviceId = strtolower(trim((string) $room->device_id));
 
                     $this->checkDeviceStatus($deviceId, $now);
                 }
@@ -107,8 +108,13 @@ class CheckDeviceStatus extends Command
             Cache::put($statusKey, self::STATUS_OFFLINE, self::STATUS_TTL);
             Cache::forget($unknownKey);
 
-            // Optional: Update database
             $this->updateDeviceInDatabase($deviceId, 'offline', $lastSeen);
+
+            // Fire persistent notification so admins see this even without a browser open
+            $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
+            if ($room) {
+                \App\Models\Notification::deviceOffline($room->name, $deviceId);
+            }
         }
         // ONLINE
         elseif (! $isOffline && $currentStatus !== self::STATUS_ONLINE) {
@@ -123,8 +129,12 @@ class CheckDeviceStatus extends Command
             Cache::put($statusKey, self::STATUS_ONLINE, self::STATUS_TTL);
             Cache::forget($unknownKey);
 
-            // Optional: Update database
             $this->updateDeviceInDatabase($deviceId, 'online', $lastSeen);
+
+            $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
+            if ($room) {
+                \App\Models\Notification::deviceOnline($room->name, $deviceId);
+            }
         }
     }
 

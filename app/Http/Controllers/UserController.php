@@ -127,8 +127,16 @@ class UserController extends Controller
             ], 403);
         }
 
+        $oldRole = $user->role;
         $user->role = $request->role;
         $user->save();
+
+        UserLog::create([
+            'user_id' => Auth::id(),
+            'room' => '-',
+            'ac' => "{$user->name}: {$oldRole} → {$user->role}",
+            'activity' => 'update_role',
+        ]);
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);
@@ -236,6 +244,13 @@ class UserController extends Controller
 
         $user->password = Hash::make($request->password);
         $user->save();
+
+        UserLog::create([
+            'user_id' => $user->id,
+            'room' => '-',
+            'ac' => '-',
+            'activity' => 'change_password',
+        ]);
 
         return back()->with('success', 'Password berhasil diubah');
     }

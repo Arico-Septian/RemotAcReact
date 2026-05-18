@@ -1303,7 +1303,7 @@
 
             // Debounced reload saat ada aksi CRUD user dari admin lain
             let crudReloadTimer = null;
-            const crudActivities = ['add_user', 'delete_user', 'update_role', 'activate_user', 'deactivate_user', 'change_password'];
+            const crudActivities = ['add_user', 'delete_user', 'update_role', 'change_password'];
             function scheduleCrudReload() {
                 if (crudReloadTimer) clearTimeout(crudReloadTimer);
                 crudReloadTimer = setTimeout(() => {

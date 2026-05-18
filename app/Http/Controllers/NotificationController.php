@@ -104,8 +104,15 @@ class NotificationController extends Controller
 
         if ($n) {
             $n->delete();
+            return response()->json(['ok' => true]);
         }
 
-        return response()->json(['ok' => true]);
+        // Broadcast (user_id = null) or another user's notification — cannot delete
+        $isBroadcast = Notification::where('id', $id)->whereNull('user_id')->exists();
+
+        return response()->json([
+            'ok' => false,
+            'reason' => $isBroadcast ? 'broadcast' : 'not_found',
+        ], 200);
     }
 }

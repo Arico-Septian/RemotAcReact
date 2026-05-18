@@ -14,9 +14,9 @@ class UserLogController extends Controller
         $authActs = ['login', 'logout', 'change_password'];
         $acActs   = ['on', 'off', 'bulk_on', 'bulk_off', 'timer_on', 'timer_off', 'set_timer', 'control_ac'];
         $acLikes  = ['set_temp_%', 'mode_%', 'fan_speed_%', 'swing_%'];
-        $userActs = ['add_user', 'delete_user', 'update_role', 'activate_user', 'deactivate_user'];
+        $userActs = ['add_user', 'delete_user', 'update_role'];
         $roomActs = ['add_room', 'delete_room', 'add_ac', 'delete_ac'];
-        $destructiveActs = ['delete_user', 'delete_room', 'delete_ac', 'deactivate_user'];
+        $destructiveActs = ['delete_user', 'delete_room', 'delete_ac'];
 
         $applyAcFilter = function ($q) use ($acActs, $acLikes) {
             $q->where(function ($qq) use ($acActs, $acLikes) {
@@ -143,7 +143,25 @@ public function destroyAll(Request $request)
             abort(403);
         }
 
-        UserLog::truncate();
+        $totalDeleted = UserLog::count();
+
+        // Delete all rows but keep autoincrement and FK behavior consistent
+        UserLog::query()->delete();
+
+        // Write a fresh audit entry AFTER the wipe so the action itself is traceable
+        UserLog::create([
+            'user_id' => $user->id,
+            'room' => '-',
+            'ac' => '-',
+            'activity' => 'clear_logs',
+        ]);
+
+        \Illuminate\Support\Facades\Log::warning('User wiped activity log', [
+            'admin_id' => $user->id,
+            'admin_name' => $user->name,
+            'deleted_count' => $totalDeleted,
+        ]);
+
         event(new \App\Events\UserLogsCleared());
 
         if ($request->wantsJson()) {

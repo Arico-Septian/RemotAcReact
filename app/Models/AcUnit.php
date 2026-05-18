@@ -14,7 +14,6 @@ class AcUnit extends Model
         'brand',
         'location',
         'ip_ir',
-        'is_active',
         'timer_on',
         'timer_off'
     ];

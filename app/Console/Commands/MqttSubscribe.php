@@ -111,6 +111,12 @@ class MqttSubscribe extends Command
                                 'device_status' => 'offline',
                             ]);
 
+                            // Persistent notification so admins see this regardless of dashboard polling
+                            $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
+                            if ($room) {
+                                \App\Models\Notification::deviceOffline($room->name, $deviceId);
+                            }
+
                             event(new DeviceStatusUpdated($deviceId, 'offline'));
 
                             Log::info('Device marked OFFLINE via LWT', ['device' => $deviceId]);

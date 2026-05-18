@@ -172,6 +172,15 @@ class Notification extends Model
             return null;
         }
 
+        // Clear opposite reason state so it doesn't get stuck
+        // (e.g. when ESP came back but sensor went stale)
+        $otherReasons = ['temperature_offline', 'device_offline'];
+        foreach ($otherReasons as $other) {
+            if ($other !== $reason) {
+                cache()->forget("notification_state:fuzzy_warning:{$roomKey}:{$other}");
+            }
+        }
+
         // TTL panjang (7 hari) — tidak expire selama belum recovery
         cache()->put($stateKey, 'warned', now()->addDays(self::STATE_TTL_DAYS));
 

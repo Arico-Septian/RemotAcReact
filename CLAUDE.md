@@ -68,7 +68,7 @@ Three roles enforced by `RoleMiddleware` via `role:admin,operator` or `role:admi
 - **operator** — room/AC CRUD and control
 - **admin** — everything above + user management, activity logs export
 
-Auth middleware stack on protected routes: `auth` → `active` (blocks deactivated accounts) → `activity` (updates `last_activity`).
+Auth middleware stack on protected routes: `auth` → `activity` (updates `last_activity`).
 
 ### Key Models
 

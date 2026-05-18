@@ -23,9 +23,4 @@ class Room extends Model
         return $this->hasMany(AcUnit::class);
     }
 
-    public function temperatureData()
-    {
-        return $this->hasOne(\App\Models\RoomTemperature::class, 'room', 'name')
-            ->latestOfMany();
-    }
 }
