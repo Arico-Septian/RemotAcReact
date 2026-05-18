@@ -222,6 +222,6 @@ class Notification extends Model
 
     private static function roomKey(string $roomName): string
     {
-        return strtolower(trim($roomName));
+        return strtolower(preg_replace('/\s+/', '_', trim($roomName)));
     }
 }

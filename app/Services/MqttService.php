@@ -42,7 +42,9 @@ class MqttService
 
     public static function roomToTopic(string $roomName): string
     {
-        return strtolower(trim($roomName));
+        // Sanitize: lowercase, trim, replace any internal whitespace with underscore
+        // so legacy room names with spaces don't break MQTT topics
+        return strtolower(preg_replace('/\s+/', '_', trim($roomName)));
     }
 
     public function publish($topic, $message, $qos = 1, $retain = false)
