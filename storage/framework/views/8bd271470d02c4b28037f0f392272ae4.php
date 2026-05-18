@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>My Profile — SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite('resources/js/app.js')
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
 
 
-    @include('components.sidebar-styles')
+    <?php echo $__env->make('components.sidebar-styles', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <style>
         /* Profile page polish */
@@ -32,7 +32,7 @@
         .profile-identity .avatar-xl { width: 76px; height: 76px; border-radius: 999px; object-fit: cover; }
         .profile-identity-main { flex: 1; min-width: 0; }
         .profile-identity-aside { flex-shrink: 0; align-self: center; }
-        .profile-identity .name { font-size: 20px; font-weight: 700; color: var(--ink-0); margin: 0; letter-spacing: -.01em; }
+        .profile-identity .name { font-size: 20px; font-weight: 700; color: var(--ink-0); margin: 0; letter-spacing: -.01em; text-transform: capitalize; }
         .profile-identity .meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; color: var(--ink-3); font-size: 12px; }
         .profile-identity .meta-sep { color: var(--ink-4); }
         .profile-identity .remove-photo {
@@ -84,7 +84,7 @@
 <div id="overlay"></div>
 
 <div class="layout">
-    @include('components.sidebar')
+    <?php echo $__env->make('components.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <div class="main-content">
         <header class="main-header">
@@ -98,9 +98,9 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                @include('components.notification-bell')
-                <span class="pill {{ $user->isOnline ? 'pill-online' : 'pill-offline' }}">
-                    <span class="dot"></span><span>{{ $user->isOnline ? 'Online' : 'Offline' }}</span>
+                <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                <span class="pill <?php echo e($user->isOnline ? 'pill-online' : 'pill-offline'); ?>">
+                    <span class="dot"></span><span><?php echo e($user->isOnline ? 'Online' : 'Offline'); ?></span>
                 </span>
             </div>
         </header>
@@ -109,54 +109,54 @@
             <div class="app-content">
                 <div class="app-content-inner profile-shell">
 
-                    {{-- Identity Card --}}
+                    
                     <div class="panel panel-lg profile-identity">
                         <div class="avatar-wrap">
-                            @if ($user->avatar_url)
-                                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="avatar avatar-xl">
-                            @else
-                                <div class="avatar avatar-xl">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
-                            @endif
+                            <?php if($user->avatar_url): ?>
+                                <img src="<?php echo e($user->avatar_url); ?>" alt="<?php echo e($user->name); ?>" class="avatar avatar-xl">
+                            <?php else: ?>
+                                <div class="avatar avatar-xl"><?php echo e(strtoupper(substr($user->name, 0, 1))); ?></div>
+                            <?php endif; ?>
                             <button type="button" id="avatarBtn"
-                                    title="{{ $user->avatar ? 'Ubah foto' : 'Tambah foto' }}"
+                                    title="<?php echo e($user->avatar ? 'Ubah foto' : 'Tambah foto'); ?>"
                                     onclick="document.getElementById('avatarInput').click()"
                                     style="position:absolute;right:-2px;bottom:-2px;width:28px;height:28px;border-radius:999px;background:#0ea5e9;border:2px solid var(--panel-1);color:#0b1220;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.25);">
                                 <i class="fa-solid fa-camera text-[10px]"></i>
                             </button>
                         </div>
                         <div class="profile-identity-main">
-                            <h2 class="name">{{ $user->name }}</h2>
+                            <h2 class="name"><?php echo e($user->name); ?></h2>
                             <div class="meta">
-                                <span class="badge-role {{ $user->role }}" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">{{ $user->role }}</span>
+                                <span class="badge-role <?php echo e($user->role); ?>" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;"><?php echo e($user->role); ?></span>
                                 <span class="meta-sep">·</span>
-                                <span>Member sejak {{ $user->created_at->format('M Y') }}</span>
+                                <span>Member sejak <?php echo e($user->created_at->format('M Y')); ?></span>
                             </div>
                         </div>
-                        @if ($user->avatar)
+                        <?php if($user->avatar): ?>
                             <div class="profile-identity-aside">
-                                <form method="POST" action="{{ route('profile.avatar.delete') }}" style="margin:0;"
+                                <form method="POST" action="<?php echo e(route('profile.avatar.delete')); ?>" style="margin:0;"
                                       onsubmit="return confirm('Hapus foto profil?');">
-                                    @csrf
-                                    @method('DELETE')
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
                                     <button type="submit" class="remove-photo" title="Hapus foto profil">
                                         <i class="fa-solid fa-trash text-[10px]"></i>
                                         <span>Hapus foto</span>
                                     </button>
                                 </form>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
 
-                    {{-- Hidden avatar upload form --}}
-                    <form id="avatarForm" method="POST" action="{{ route('profile.avatar.upload') }}"
+                    
+                    <form id="avatarForm" method="POST" action="<?php echo e(route('profile.avatar.upload')); ?>"
                           enctype="multipart/form-data" style="display:none;">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <input type="file" id="avatarInput" name="avatar"
                                accept="image/jpeg,image/png,image/webp"
                                onchange="handleAvatarSelect(this)">
                     </form>
 
-                    {{-- Avatar preview modal --}}
+                    
                     <div id="avatarPreviewModal"
                          style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(7,16,31,0.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
                         <div style="max-width:360px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
@@ -184,7 +184,7 @@
                         </div>
                     </div>
 
-                    {{-- Account Information --}}
+                    
                     <div class="panel panel-lg">
                         <div class="panel-header" style="margin-bottom:14px;">
                             <p class="eyebrow" style="margin:0;"><i class="fa-solid fa-user-circle"></i> Account Information</p>
@@ -192,35 +192,35 @@
                         <div class="profile-info-grid">
                             <div>
                                 <p class="profile-info-label">Last Login</p>
-                                <p class="profile-info-value">{{ $user->last_login_at ? $user->last_login_at->format('M d, Y H:i') : 'Never' }}</p>
+                                <p class="profile-info-value"><?php echo e($user->last_login_at ? $user->last_login_at->format('M d, Y H:i') : 'Never'); ?></p>
                             </div>
                             <div>
                                 <p class="profile-info-label">Last Activity</p>
-                                <p class="profile-info-value">{{ $user->last_activity ? $user->last_activity->diffForHumans() : '-' }}</p>
+                                <p class="profile-info-value"><?php echo e($user->last_activity ? $user->last_activity->diffForHumans() : '-'); ?></p>
                             </div>
                             <div>
                                 <p class="profile-info-label">Join Date</p>
-                                <p class="profile-info-value">{{ $user->created_at->format('M d, Y') }}</p>
+                                <p class="profile-info-value"><?php echo e($user->created_at->format('M d, Y')); ?></p>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Change Password --}}
+                    
                     <div class="panel panel-lg">
                         <div class="panel-header" style="margin-bottom:14px;">
                             <p class="eyebrow"><i class="fa-solid fa-key"></i> Security</p>
                             <h3 class="panel-title">Ganti Password</h3>
                             <p class="panel-subtitle">Gunakan password yang kuat dan unik</p>
                         </div>
-                        @if ($errors->any())
+                        <?php if($errors->any()): ?>
                             <div class="profile-error-box">
-                                @foreach ($errors->all() as $err)
-                                    <p><i class="fa-solid fa-circle-exclamation text-[10px]"></i> {{ $err }}</p>
-                                @endforeach
+                                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $err): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <p><i class="fa-solid fa-circle-exclamation text-[10px]"></i> <?php echo e($err); ?></p>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
-                        @endif
+                        <?php endif; ?>
                         <form method="POST" action="/change-password" id="changePasswordForm" autocomplete="off">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <div class="field">
                                 <label class="field-label">Password Saat Ini</label>
                                 <div class="profile-pwd-field">
@@ -263,14 +263,14 @@
                         </form>
                     </div>
 
-                    {{-- Logout --}}
+                    
                     <div class="panel panel-lg profile-logout">
                         <div class="text">
                             <h3><i class="fa-solid fa-right-from-bracket text-[11px]" style="color:#ff5577;margin-right:6px;"></i>Keluar dari Akun</h3>
                             <p>Mengakhiri sesi login di browser ini</p>
                         </div>
                         <form action="/logout" method="POST" onsubmit="return confirm('Keluar dari akun?');" style="margin:0;">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="btn btn-soft" style="color:#ff5577;border-color:rgba(255,85,119,0.3);">
                                 <i class="fa-solid fa-right-from-bracket text-[11px]"></i>
                                 <span>Logout</span>
@@ -284,7 +284,7 @@
     </div>
 </div>
 
-@include('components.bottom-nav')
+<?php echo $__env->make('components.bottom-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <script>
 (function () {
@@ -387,7 +387,8 @@
     });
 })();
 </script>
-@include('components.sidebar-scripts')
+<?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 </html>
 
+<?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/profile/index.blade.php ENDPATH**/ ?>

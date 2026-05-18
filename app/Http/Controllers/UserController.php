@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -66,7 +67,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->merge([
-            'name' => strtolower(trim((string) $request->name)),
+            'name' => trim((string) $request->name),
             'role' => strtolower(trim((string) $request->role)),
         ]);
 
@@ -75,14 +76,21 @@ class UserController extends Controller
                 'required',
                 'string',
                 'max:255',
-                'regex:/^[a-z]\S*$/',
-                Rule::unique('users', 'name'),
+                'regex:/^[A-Za-z]\S*$/',
+                function ($attribute, $value, $fail) {
+                    if (User::whereRaw('LOWER(name) = ?', [strtolower($value)])->exists()) {
+                        $fail('Username sudah digunakan.');
+                    }
+                },
             ],
-            'password' => 'required|string|min:8',
+            'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()],
             'role' => 'required|in:admin,operator,user',
         ], [
-            'name.regex' => 'Username akan disimpan huruf kecil dan tidak boleh mengandung spasi.',
+            'name.regex' => 'Username harus diawali huruf dan tidak boleh mengandung spasi.',
             'password.min' => 'Password minimal 8 karakter.',
+            'password.letters' => 'Password harus mengandung huruf.',
+            'password.mixed' => 'Password harus mengandung huruf besar dan kecil.',
+            'password.numbers' => 'Password harus mengandung minimal 1 angka.',
         ]);
 
         $user = User::create([
@@ -207,11 +215,17 @@ class UserController extends Controller
 
         $request->validate([
             'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:6', 'confirmed', 'different:current_password'],
+            'password' => [
+                'required', 'string', 'confirmed', 'different:current_password',
+                Password::min(8)->letters()->mixedCase()->numbers(),
+            ],
         ], [
             'current_password.required' => 'Password saat ini wajib diisi.',
             'password.required' => 'Password baru wajib diisi.',
-            'password.min' => 'Password baru minimal 6 karakter.',
+            'password.min' => 'Password baru minimal 8 karakter.',
+            'password.letters' => 'Password baru harus mengandung huruf.',
+            'password.mixed' => 'Password baru harus mengandung huruf besar dan kecil.',
+            'password.numbers' => 'Password baru harus mengandung minimal 1 angka.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'password.different' => 'Password baru harus berbeda dari password saat ini.',
         ]);

@@ -601,15 +601,15 @@
                 <div class="field">
                     <label class="field-label" for="username">
                         <span>Username</span>
-                        <span class="help">huruf kecil, tanpa spasi</span>
+                        <span class="help">tanpa spasi</span>
                     </label>
                     <div class="input-wrap" id="usernameWrap">
                         <span class="leading"><i class="fa-regular fa-user"></i></span>
                         <input id="username" type="text" name="name"
                                required autofocus autocomplete="username"
                                pattern="[A-Za-z]\S*"
-                               title="Username tidak boleh ada spasi dan akan dibaca sebagai huruf kecil"
-                               placeholder="contoh: admin"
+                               title="Username tidak boleh ada spasi"
+                               placeholder="contoh: Admin"
                                value="<?php echo e(old('name')); ?>">
                         <span class="valid-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                     </div>
@@ -618,13 +618,11 @@
                 <div class="field">
                     <label class="field-label" for="password">
                         <span>Password</span>
-                        <span class="help">min. 8 karakter</span>
                     </label>
                     <div class="input-wrap" id="passwordWrap">
                         <span class="leading"><i class="fa-solid fa-lock"></i></span>
                         <input id="password" type="password" name="password"
                                required autocomplete="current-password"
-                               minlength="8" title="Password minimal 8 karakter"
                                placeholder="••••••••">
                         <span class="valid-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                         <button type="button" class="trailing" onclick="togglePassword()" aria-label="Show password">

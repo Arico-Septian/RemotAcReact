@@ -13,6 +13,7 @@ class AuthController extends Controller
 {
     private function rateLimitKey(Request $request): string
     {
+        // Key by lowercased username + IP so attacker can't bypass via case swap
         return 'login:'.strtolower(trim((string) $request->input('name', ''))).'|'.$request->ip();
     }
 
@@ -23,15 +24,14 @@ class AuthController extends Controller
         }
 
         $request->merge([
-            'name' => strtolower(trim((string) $request->name)),
+            'name' => trim((string) $request->name),
         ]);
 
         $credentials = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'regex:/^[a-z]\S*$/'],
-            'password' => 'required|string|min:8',
+            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z]\S*$/'],
+            'password' => 'required|string',
         ], [
-            'name.regex' => 'Username akan dibaca sebagai huruf kecil dan tidak boleh mengandung spasi.',
-            'password.min' => 'Password minimal 8 karakter.',
+            'name.regex' => 'Username harus diawali huruf dan tidak boleh mengandung spasi.',
         ]);
 
         $key = $this->rateLimitKey($request);
@@ -44,7 +44,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::whereRaw('LOWER(name) = ?', [$credentials['name']])->first();
+        $user = User::whereRaw('LOWER(name) = ?', [strtolower($credentials['name'])])->first();
 
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             RateLimiter::hit($key, 900); // 15 menit lockout
