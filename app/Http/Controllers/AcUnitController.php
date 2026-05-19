@@ -189,6 +189,7 @@ class AcUnitController extends Controller
 
         $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/control");
         $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/status");
+        $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/timer");
         $mqtt->resendConfig($room->device_id);
 
         return redirect('/rooms/'.$room_id.'/ac');

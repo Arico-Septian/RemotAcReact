@@ -291,6 +291,7 @@ class RoomController extends Controller
             foreach ($room->acUnits as $ac) {
                 $topics[] = "room/{$roomTopic}/ac/{$ac->ac_number}/control";
                 $topics[] = "room/{$roomTopic}/ac/{$ac->ac_number}/status";
+                $topics[] = "room/{$roomTopic}/ac/{$ac->ac_number}/timer";
             }
         }
 
