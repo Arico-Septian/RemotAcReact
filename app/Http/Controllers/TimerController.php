@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AcTimerUpdated;
 use App\Models\AcUnit;
 use App\Models\UserLog;
 use App\Services\MqttService;
@@ -91,6 +92,8 @@ class TimerController extends Controller
                 'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : '').' ['.implode(', ', $detail).']',
                 'activity' => 'set_timer',
             ]);
+
+            event(new AcTimerUpdated($ac->fresh()->load('room')));
         }
 
         return back()->with('success', $isDeletingTimer ? 'Timer berhasil dihapus' : 'Timer berhasil disimpan');

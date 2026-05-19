@@ -1852,9 +1852,88 @@
                     setActiveByForm(`/ac/${payload.ac_unit_id}/swing/`, swing);
                 }
 
+                function updateTimerPanel(payload) {
+                    if (!payload?.ac_unit_id) return;
+                    if (currentRoomId && payload.room_id && Number(payload.room_id) !== currentRoomId) return;
+
+                    const id = payload.ac_unit_id;
+                    const view = document.getElementById('timerView-' + id);
+                    const edit = document.getElementById('timerEdit-' + id);
+                    const btn = document.getElementById('btnTimer-' + id);
+                    if (!view) return;
+
+                    const on = payload.timer_on || null;
+                    const off = payload.timer_off || null;
+
+                    // Re-render the view block
+                    if (on || off) {
+                        view.innerHTML = `
+                            <div class="timer-state">
+                                <div class="timer-card ${on ? 'is-on' : ''}">
+                                    <span class="t-icon"><i class="fa-solid fa-circle-play"></i></span>
+                                    <div class="t-meta">
+                                        <p class="t-label">Turn On</p>
+                                        <p class="t-value ${on ? '' : 'empty'}">${on || '—'}</p>
+                                    </div>
+                                </div>
+                                <div class="timer-card ${off ? 'is-off' : ''}">
+                                    <span class="t-icon"><i class="fa-solid fa-circle-stop"></i></span>
+                                    <div class="t-meta">
+                                        <p class="t-label">Turn Off</p>
+                                        <p class="t-value ${off ? '' : 'empty'}">${off || '—'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <form action="/ac/${id}/schedule" method="POST" class="delete-timer-form mt-3">
+                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]')?.content || ''}">
+                                <input type="hidden" name="timer_on" value="">
+                                <input type="hidden" name="timer_off" value="">
+                                <button type="submit" class="btn btn-ghost btn-sm btn-block">
+                                    <i class="fa-solid fa-trash text-[10px]"></i>
+                                    <span>Hapus Timer</span>
+                                </button>
+                            </form>
+                        `;
+                        // Re-bind delete-timer confirm
+                        const delForm = view.querySelector('.delete-timer-form');
+                        if (delForm) {
+                            delForm.addEventListener('submit', function(e) {
+                                if (!confirm('Hapus timer AC ini?')) {
+                                    e.preventDefault();
+                                    return;
+                                }
+                                const b = this.querySelector('button[type="submit"]');
+                                if (b) b.classList.add('is-loading');
+                            });
+                        }
+                    } else {
+                        view.innerHTML = `
+                            <div class="timer-empty">
+                                <i class="fa-regular fa-clock"></i>
+                                Belum ada timer terpasang
+                            </div>
+                        `;
+                    }
+
+                    // Sync hidden edit form inputs so a tab in edit mode reflects new values
+                    if (edit) {
+                        const onInput = edit.querySelector('[name="timer_on"]');
+                        const offInput = edit.querySelector('[name="timer_off"]');
+                        if (onInput) onInput.value = on || '';
+                        if (offInput) offInput.value = off || '';
+                        // If user wasn't editing, make sure edit stays hidden and view shown
+                        if (edit.classList.contains('hidden') === false) {
+                            edit.classList.add('hidden');
+                            view.classList.remove('hidden');
+                            if (btn) btn.innerHTML = '<i class="fa-solid fa-pen text-[9px]"></i><span>Edit</span>';
+                        }
+                    }
+                }
+
                 window.Echo.channel('device-status')
                     .listen('.DeviceStatusUpdated', () => updateEspStatus())
-                    .listen('.AcStatusUpdated', (e) => updateAcPanel(e));
+                    .listen('.AcStatusUpdated', (e) => updateAcPanel(e))
+                    .listen('.AcTimerUpdated', (e) => updateTimerPanel(e));
             }
 
             <?php if(session('new_ac_id')): ?>
