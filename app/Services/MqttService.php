@@ -11,15 +11,21 @@ use PhpMqtt\Client\MqttClient;
 class MqttService
 {
     private $mqtt;
+    private bool $isSubscriber;
 
     public function __construct(?string $clientIdSuffix = null)
     {
         $server = env('MQTT_HOST', 'broker.hivemq.com');
         $port = (int) env('MQTT_PORT', 1883);
 
-        // Client ID TETAP per role agar reconnect menggantikan koneksi lama
-        // (bukan menambah koneksi baru — HiveMQ Cloud free tier batasi jumlah koneksi)
-        $clientId = 'laravel_'.($clientIdSuffix ?? 'default');
+        // Subscriber pakai client ID tetap supaya reconnect menggantikan koneksi lama.
+        // Publisher pakai client ID unik per-instance — kalau pakai ID sama, dua
+        // request publish yang bersamaan akan saling menendang dari broker dan
+        // pesan QoS 1 yang sedang di-handshake bisa hilang.
+        $this->isSubscriber = $clientIdSuffix === 'subscriber';
+        $clientId = $this->isSubscriber
+            ? 'laravel_subscriber'
+            : 'laravel_pub_'.bin2hex(random_bytes(4));
 
         $useTls = (int) env('MQTT_PORT', 1883) === 8883;
 
@@ -50,11 +56,41 @@ class MqttService
     public function publish($topic, $message, $qos = 1, $retain = false)
     {
         $this->mqtt->publish($topic, $message, $qos, $retain);
+
+        // QoS 1 butuh PUBACK dari broker — kalau script PHP-FPM langsung exit
+        // tanpa loop, bytes-nya memang sudah ke socket tapi broker belum tentu
+        // sempat ack-nya, dan pesan retain bisa tidak tersimpan. Loop sebentar
+        // agar handshake selesai sebelum koneksi ditutup.
+        if (! $this->isSubscriber && $qos > 0) {
+            try {
+                $this->mqtt->loop(false, true, 2);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('MQTT loop after publish failed', [
+                    'topic' => $topic,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
     }
 
     public function clearRetained(string $topic, int $qos = 1): void
     {
         $this->publish($topic, '', $qos, true);
+    }
+
+    public function disconnect(): void
+    {
+        try {
+            if ($this->mqtt && $this->mqtt->isConnected()) {
+                $this->mqtt->disconnect();
+            }
+        } catch (\Throwable) {
+        }
+    }
+
+    public function __destruct()
+    {
+        $this->disconnect();
     }
 
     public function subscribe($topic, $callback)

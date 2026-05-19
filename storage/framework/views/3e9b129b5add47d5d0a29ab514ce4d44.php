@@ -1559,6 +1559,23 @@
         function setTemp(id, temp) {
             if (temp < 16) temp = 16;
             if (temp > 30) temp = 30;
+
+            // Skip request kalau suhu sudah di nilai yang sama (mencegah klik berulang
+            // di batas 16/30 atau klik tanpa perubahan ngirim POST sia-sia ke server).
+            const tempEl = document.querySelector(`#ac-${id} .temp-value`);
+            const current = tempEl ? parseInt(tempEl.textContent, 10) : NaN;
+            if (!isNaN(current) && current === temp) {
+                if (window.smToast) {
+                    window.smToast(
+                        temp === 16 ? 'Suhu sudah di minimum (16°C)' :
+                        temp === 30 ? 'Suhu sudah di maksimum (30°C)' :
+                        `Suhu sudah ${temp}°C`,
+                        'info'
+                    );
+                }
+                return;
+            }
+
             document.querySelectorAll(`#ac-${id} .ctrl-row .ctrl-btn`).forEach(b => {
                 b.disabled = true;
                 b.style.opacity = '0.5';
