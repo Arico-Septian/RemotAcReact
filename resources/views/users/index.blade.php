@@ -1034,9 +1034,11 @@
                         <label class="field-label">Username</label>
                         <input class="input" type="text" name="name" id="newUserName"
                             placeholder="contoh: Admin"
-                            pattern="[A-Za-z]\S*" title="Username harus diawali huruf dan tidak boleh ada spasi"
+                            minlength="3" maxlength="20"
+                            pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
+                            title="Username 3–20 karakter, huruf/angka/underscore, diawali huruf"
                             autocomplete="off" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Huruf bebas (besar/kecil), tanpa spasi. Tersimpan persis seperti diketik.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3–20 karakter, hanya huruf/angka/underscore, diawali huruf.</p>
                     </div>
                     <div class="field">
                         <label class="field-label">Password</label>

@@ -12,10 +12,26 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    private function rateLimitKey(Request $request): string
+    // Bucket per username+IP: lindungi 1 akun dari brute-force terarah
+    private const MAX_PER_NAME = 5;
+    // Bucket per IP saja: lindungi dari enumerasi banyak username dari 1 IP
+    private const MAX_PER_IP = 20;
+    // Window lockout (detik) — berlaku untuk kedua bucket
+    private const LOCKOUT_SECONDS = 900;
+
+    // Dummy bcrypt hash dipakai untuk Hash::check saat user tidak ada,
+    // supaya timing response konstan dan tidak membocorkan eksistensi username.
+    private const DUMMY_HASH = '$2y$12$wB6Vh7iJ7e8M0pZmYbZb0eS1lE.7N8Qx3i6n6q3PqYZyVxz3lE0Bm';
+
+    private function rateLimitKeyName(Request $request): string
     {
         // Key by lowercased username + IP so attacker can't bypass via case swap
         return 'login:'.strtolower(trim((string) $request->input('name', ''))).'|'.$request->ip();
+    }
+
+    private function rateLimitKeyIp(Request $request): string
+    {
+        return 'login-ip:'.$request->ip();
     }
 
     public function login(Request $request)
@@ -29,34 +45,50 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z]\S*$/'],
+            'name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/'],
             'password' => 'required|string',
         ], [
-            'name.regex' => 'Username harus diawali huruf dan tidak boleh mengandung spasi.',
+            'name.min' => 'Username minimal 3 karakter.',
+            'name.max' => 'Username maksimal 20 karakter.',
+            'name.regex' => 'Username 3–20 karakter, hanya huruf/angka/underscore, dan diawali huruf.',
         ]);
 
-        $key = $this->rateLimitKey($request);
+        $keyName = $this->rateLimitKeyName($request);
+        $keyIp = $this->rateLimitKeyIp($request);
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            $seconds = RateLimiter::availableIn($key);
-            $minutes = ceil($seconds / 60);
+        // Bucket per username+IP penuh → akun ini dikunci
+        if (RateLimiter::tooManyAttempts($keyName, self::MAX_PER_NAME)) {
+            $minutes = ceil(RateLimiter::availableIn($keyName) / 60);
             throw ValidationException::withMessages([
                 'name' => "Terlalu banyak percobaan login. Coba lagi dalam {$minutes} menit.",
             ]);
         }
 
-        $user = User::whereRaw('LOWER(name) = ?', [strtolower($credentials['name'])])->first();
-
-        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-            RateLimiter::hit($key, 900); // 15 menit lockout
-            $remaining = 5 - RateLimiter::attempts($key);
-            $msg = $remaining > 0
-                ? "Username atau password salah. Sisa percobaan: {$remaining}."
-                : 'Akun dikunci sementara selama 15 menit karena terlalu banyak percobaan.';
-            throw ValidationException::withMessages(['name' => $msg]);
+        // Bucket per IP penuh → IP ini dikunci (cegah enumerasi multi-username)
+        if (RateLimiter::tooManyAttempts($keyIp, self::MAX_PER_IP)) {
+            $minutes = ceil(RateLimiter::availableIn($keyIp) / 60);
+            throw ValidationException::withMessages([
+                'name' => "Terlalu banyak percobaan login dari jaringan Anda. Coba lagi dalam {$minutes} menit.",
+            ]);
         }
 
-        RateLimiter::clear($key);
+        $user = User::whereRaw('LOWER(name) = ?', [strtolower($credentials['name'])])->first();
+
+        // Selalu jalankan Hash::check (entah pakai password user atau dummy hash)
+        // supaya timing response konstan — cegah enumerasi username via timing attack.
+        $hashToCheck = $user ? $user->password : self::DUMMY_HASH;
+        $passwordOk = Hash::check($credentials['password'], $hashToCheck);
+
+        if (! $user || ! $passwordOk) {
+            RateLimiter::hit($keyName, self::LOCKOUT_SECONDS);
+            RateLimiter::hit($keyIp, self::LOCKOUT_SECONDS);
+            throw ValidationException::withMessages([
+                'name' => 'Username atau password salah.',
+            ]);
+        }
+
+        RateLimiter::clear($keyName);
+        RateLimiter::clear($keyIp);
 
         Auth::login($user);
         $request->session()->regenerate();

@@ -16,6 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'activity' => \App\Http\Middleware\UpdateLastActivity::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
+
+        // Aktifkan AuthenticateSession agar Auth::logoutOtherDevices() benar-benar
+        // memutus session lain saat user ganti password.
+        $middleware->web(append: [
+            \Illuminate\Session\Middleware\AuthenticateSession::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

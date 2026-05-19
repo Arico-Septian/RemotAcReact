@@ -601,14 +601,15 @@
                 <div class="field">
                     <label class="field-label" for="username">
                         <span>Username</span>
-                        <span class="help">tanpa spasi</span>
+                        <span class="help">3–20 karakter</span>
                     </label>
                     <div class="input-wrap" id="usernameWrap">
                         <span class="leading"><i class="fa-regular fa-user"></i></span>
                         <input id="username" type="text" name="name"
                                required autofocus autocomplete="username"
-                               pattern="[A-Za-z]\S*"
-                               title="Username tidak boleh ada spasi"
+                               minlength="3" maxlength="20"
+                               pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
+                               title="Username 3–20 karakter, huruf/angka/underscore, diawali huruf"
                                placeholder="contoh: Admin"
                                value="<?php echo e(old('name')); ?>">
                         <span class="valid-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>

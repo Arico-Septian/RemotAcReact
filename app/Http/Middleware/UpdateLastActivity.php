@@ -6,19 +6,29 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class UpdateLastActivity
 {
+    /**
+     * Minimum jeda antar write last_activity ke DB (detik).
+     * Online-window di app = 120 detik, jadi 60s di sini masih aman.
+     */
+    private const THROTTLE_SECONDS = 60;
+
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
+            $userId = Auth::id();
+            $cacheKey = "user_activity_throttled_{$userId}";
 
-            /** @var User $user */
-            $user = Auth::user();
-
-            if (! $user->last_activity || now()->diffInSeconds($user->last_activity, true) > 10) {
+            if (! Cache::has($cacheKey)) {
+                /** @var User $user */
+                $user = Auth::user();
                 $user->last_activity = now();
                 $user->save();
+
+                Cache::put($cacheKey, true, self::THROTTLE_SECONDS);
             }
         }
 

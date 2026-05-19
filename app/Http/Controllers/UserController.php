@@ -75,8 +75,9 @@ class UserController extends Controller
             'name' => [
                 'required',
                 'string',
-                'max:255',
-                'regex:/^[A-Za-z]\S*$/',
+                'min:3',
+                'max:20',
+                'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/',
                 function ($attribute, $value, $fail) {
                     if (User::whereRaw('LOWER(name) = ?', [strtolower($value)])->exists()) {
                         $fail('Username sudah digunakan.');
@@ -86,7 +87,9 @@ class UserController extends Controller
             'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()],
             'role' => 'required|in:admin,operator,user',
         ], [
-            'name.regex' => 'Username harus diawali huruf dan tidak boleh mengandung spasi.',
+            'name.min' => 'Username minimal 3 karakter.',
+            'name.max' => 'Username maksimal 20 karakter.',
+            'name.regex' => 'Username 3–20 karakter, hanya huruf/angka/underscore, dan diawali huruf.',
             'password.min' => 'Password minimal 8 karakter.',
             'password.letters' => 'Password harus mengandung huruf.',
             'password.mixed' => 'Password harus mengandung huruf besar dan kecil.',
@@ -115,36 +118,53 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         if ($id == Auth::id()) {
-            return response()->json([
-                'error' => 'Tidak bisa mengubah role sendiri',
-            ], 403);
+            return $this->respondError($request, 'Tidak bisa mengubah role sendiri', 403);
+        }
+
+        // Guard: jangan biarkan admin terakhir didemote
+        if ($user->role === 'admin' && $request->role !== 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return $this->respondError($request, 'Tidak bisa mengubah role admin terakhir.', 422);
         }
 
         $user->role = $request->role;
         $user->save();
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true]);
         }
 
         return back()->with('success', 'Role user berhasil diubah');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($id == Auth::id()) {
-            return response()->json([
-                'error' => 'Tidak bisa hapus diri sendiri',
-            ], 403);
+            return $this->respondError($request, 'Tidak bisa hapus diri sendiri', 403);
         }
 
         $user = User::findOrFail($id);
 
+        // Guard: jangan biarkan admin terakhir terhapus
+        if ($user->role === 'admin' && User::where('role', 'admin')->count() <= 1) {
+            return $this->respondError($request, 'Tidak bisa menghapus admin terakhir.', 422);
+        }
+
         $user->delete();
 
-        return response()->json([
-            'success' => true,
-        ]);
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'User berhasil dihapus');
+    }
+
+    private function respondError(Request $request, string $message, int $status)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['error' => $message], $status);
+        }
+
+        return back()->with('error', $message);
     }
 
     public function profile()
@@ -220,8 +240,10 @@ class UserController extends Controller
             return back()->withErrors(['current_password' => 'Password saat ini salah.']);
         }
 
-        $user->password = Hash::make($request->password);
-        $user->save();
+        // Update password + invalidate session lain (mis. perangkat yang dicuri),
+        // lalu rotate session ID milik device saat ini untuk cegah session fixation.
+        Auth::logoutOtherDevices($request->password);
+        $request->session()->regenerate();
 
         UserLog::create([
             'user_id' => $user->id,
