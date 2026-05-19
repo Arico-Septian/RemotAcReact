@@ -51,6 +51,7 @@ class RoomController extends Controller
             $room->device_status = $isOnline ? 'online' : 'offline';
 
             $roomKey = RoomTemperature::normalizeRoomName($room->name);
+            $sensorStatus = Cache::get("room_temp_status_{$roomKey}");
             $tempHistory = $recentByRoom->get($roomKey) ?? collect();
             $lastTempRecord = $tempHistory->first();
 
@@ -58,7 +59,7 @@ class RoomController extends Controller
             $room->temperature = $room->last_temperature;
 
             // Check if temperature data is stale (offline)
-            $room->temperature_is_offline = ! $isOnline;
+            $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
             if ($lastTempRecord && $lastTempRecord->created_at) {
                 $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
                 $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 30;
@@ -251,6 +252,8 @@ class RoomController extends Controller
 
         Cache::forget("notification_state:device:{$normalizedRoom}");
         Cache::forget("notification_state:fuzzy_action:{$normalizedRoom}");
+        Cache::forget("room_temp_{$normalizedRoom}");
+        Cache::forget("room_temp_status_{$normalizedRoom}");
         foreach (['temperature_offline', 'device_offline', 'recovered'] as $reason) {
             Cache::forget("notification_state:fuzzy_warning:{$normalizedRoom}:{$reason}");
         }
@@ -330,7 +333,9 @@ class RoomController extends Controller
         $offlineRooms = 0;
 
         foreach ($rooms as $room) {
-            $lastTempRecord = $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name));
+            $roomKey = RoomTemperature::normalizeRoomName($room->name);
+            $sensorStatus = Cache::get("room_temp_status_{$roomKey}");
+            $lastTempRecord = $latestTemperatures->get($roomKey);
             $room->last_temperature = optional($lastTempRecord)->temperature;
             $room->temperature = $room->last_temperature;
 
@@ -347,7 +352,7 @@ class RoomController extends Controller
 
             $isOnline ? $onlineRooms++ : $offlineRooms++;
 
-            $room->temperature_is_offline = ! $isOnline;
+            $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
             if ($lastTempRecord && $lastTempRecord->created_at) {
                 $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
                 $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 30;
@@ -371,7 +376,10 @@ class RoomController extends Controller
         $room = Room::findOrFail($id);
 
         // Single room — query only its latest record, not all rooms
-        $lastTempRecord = RoomTemperature::where('room', RoomTemperature::normalizeRoomName($room->name))
+        $roomKey = RoomTemperature::normalizeRoomName($room->name);
+        $sensorStatus = Cache::get("room_temp_status_{$roomKey}");
+
+        $lastTempRecord = RoomTemperature::where('room', $roomKey)
             ->latest()
             ->first();
         $room->last_temperature = optional($lastTempRecord)->temperature;
@@ -388,7 +396,7 @@ class RoomController extends Controller
 
         $room->device_status = $isOnline ? 'online' : 'offline';
 
-        $room->temperature_is_offline = ! $isOnline;
+        $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
         if ($lastTempRecord && $lastTempRecord->created_at) {
             $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
             $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 30;

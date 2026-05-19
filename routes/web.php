@@ -166,10 +166,11 @@ Route::middleware(['auth', 'activity'])->group(function () {
         return Room::orderBy('name')
             ->get()
             ->map(function ($room) use ($latestTemperatures, $roomDeviceIsOnline) {
-                $record = $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name));
+                $roomKey = RoomTemperature::normalizeRoomName($room->name);
+                $record = $latestTemperatures->get($roomKey);
                 $lastTemperature = $record?->temperature;
                 $temperature = $lastTemperature;
-                $isOffline = ! $roomDeviceIsOnline($room);
+                $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$roomKey}") === 'offline';
 
                 // Stale check: kalau record terakhir > 30s, anggap sensor mati → null
                 if ($record && $record->created_at) {
@@ -301,7 +302,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
             $currentTemp = optional($lastRecord)->temperature;
 
             // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
-            $isOffline = ! $roomDeviceIsOnline($room);
+            $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
             $offlineSince = null;
             if ($lastRecord && $lastRecord->created_at) {
                 $secondsAgo = now()->diffInSeconds($lastRecord->created_at, true);

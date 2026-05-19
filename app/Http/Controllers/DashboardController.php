@@ -28,7 +28,9 @@ class DashboardController extends Controller
         $offlineRooms = 0;
 
         foreach ($rooms as $room) {
-            $latestTemperature = $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name));
+            $roomKey = RoomTemperature::normalizeRoomName($room->name);
+            $sensorStatus = Cache::get("room_temp_status_{$roomKey}");
+            $latestTemperature = $latestTemperatures->get($roomKey);
             $room->last_temperature = optional($latestTemperature)->temperature;
             $room->temperature = $room->last_temperature;
 
@@ -45,7 +47,7 @@ class DashboardController extends Controller
 
             $isOnline ? $onlineRooms++ : $offlineRooms++;
 
-            $temperatureIsOffline = ! $isOnline;
+            $temperatureIsOffline = ! $isOnline || $sensorStatus === 'offline';
             if ($latestTemperature && $latestTemperature->created_at) {
                 $temperatureIsOffline = $temperatureIsOffline
                     || now()->diffInSeconds($latestTemperature->created_at, true) > 30;

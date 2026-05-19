@@ -7,6 +7,7 @@ use App\Events\RaspiTemperatureUpdated;
 use App\Events\RoomTemperatureUpdated;
 use App\Models\AcStatus;
 use App\Models\AcUnit;
+use App\Models\Notification;
 use App\Models\Room;
 use App\Models\RoomTemperature;
 use App\Services\MqttService;
@@ -114,7 +115,7 @@ class MqttSubscribe extends Command
                             // Persistent notification so admins see this regardless of dashboard polling
                             $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
                             if ($room) {
-                                \App\Models\Notification::deviceOffline($room->name, $deviceId);
+                                Notification::deviceOffline($room->name, $deviceId);
                             }
 
                             event(new DeviceStatusUpdated($deviceId, 'offline'));
@@ -322,6 +323,7 @@ class MqttSubscribe extends Command
 
                         $room = $data['room'] ?? null;
                         $temp = $data['suhu'] ?? $data['temperature'] ?? null;
+                        $sensorStatus = $this->sensorStatusFrom($data);
 
                         // fallback ambil room dari topic kalau tidak ada di payload
                         if (! $room) {
@@ -329,20 +331,13 @@ class MqttSubscribe extends Command
                             $room = $parts[1] ?? null;
                         }
 
-                        if (! $room || $temp === null) {
-                            $this->error('ROOM SENSOR: room atau suhu kosong');
+                        if (! $room) {
+                            $this->error('ROOM SENSOR: room kosong');
 
                             return;
                         }
 
                         $room = RoomTemperature::normalizeRoomName($room);
-                        $temp = (float) $temp;
-
-                        if ($temp <= 0 || $temp > 100) {
-                            $this->error("ROOM SENSOR {$room}: suhu out of range ({$temp})");
-
-                            return;
-                        }
 
                         // Drop pesan dari ruangan yang tidak terdaftar di DB
                         // (proteksi dari ESP32 lama / topic asing di public broker)
@@ -356,12 +351,33 @@ class MqttSubscribe extends Command
                             return;
                         }
 
+                        if ($sensorStatus === 'offline') {
+                            $this->markRoomTemperatureOffline($room);
+
+                            return;
+                        }
+
+                        if ($temp === null) {
+                            $this->error('ROOM SENSOR: suhu kosong');
+
+                            return;
+                        }
+
+                        $temp = (float) $temp;
+
+                        if ($temp <= 0 || $temp > 100) {
+                            $this->error("ROOM SENSOR {$room}: suhu out of range ({$temp})");
+
+                            return;
+                        }
+
                         RoomTemperature::create([
                             'room' => $room,
                             'temperature' => $temp,
                         ]);
 
                         Cache::put("room_temp_{$room}", $temp, 300);
+                        Cache::put("room_temp_status_{$room}", 'online', 300);
                         $this->line("ROOM TEMP [{$room}]: {$temp}°C");
 
                         event(new RoomTemperatureUpdated($room, $temp));
@@ -398,6 +414,24 @@ class MqttSubscribe extends Command
                             return;
                         }
 
+                        // Cari room berdasarkan device_id
+                        $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
+                        if (! $room) {
+                            $this->warn("DEVICE SENSOR [{$deviceId}]: tidak ada room dengan device_id ini");
+
+                            return;
+                        }
+
+                        $roomName = RoomTemperature::normalizeRoomName($room->name);
+                        $sensorStatus = $this->sensorStatusFrom($data);
+
+                        if ($sensorStatus === 'offline') {
+                            $this->markRoomTemperatureOffline($roomName);
+                            $this->setOnline($deviceId);
+
+                            return;
+                        }
+
                         $temp = $data['suhu'] ?? $data['temperature'] ?? null;
                         if ($temp === null) {
                             return;
@@ -408,22 +442,13 @@ class MqttSubscribe extends Command
                             return;
                         }
 
-                        // Cari room berdasarkan device_id
-                        $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
-                        if (! $room) {
-                            $this->warn("DEVICE SENSOR [{$deviceId}]: tidak ada room dengan device_id ini");
-
-                            return;
-                        }
-
-                        $roomName = RoomTemperature::normalizeRoomName($room->name);
-
                         RoomTemperature::create([
                             'room' => $roomName,
                             'temperature' => $temp,
                         ]);
 
                         Cache::put("room_temp_{$roomName}", $temp, 300);
+                        Cache::put("room_temp_status_{$roomName}", 'online', 300);
 
                         // Sensor masuk = device pasti online (sekalian update last_seen)
                         $this->setOnline($deviceId);
@@ -548,6 +573,30 @@ class MqttSubscribe extends Command
         $this->warn("{$label} retained di-skip ({$topic})");
 
         return true;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function sensorStatusFrom(array $data): ?string
+    {
+        $status = strtolower(trim((string) ($data['sensor_status'] ?? $data['status'] ?? '')));
+
+        return $status !== '' ? $status : null;
+    }
+
+    private function markRoomTemperatureOffline(string $room): void
+    {
+        $room = RoomTemperature::normalizeRoomName($room);
+        Cache::put("room_temp_status_{$room}", 'offline', 300);
+
+        $lastTemp = RoomTemperature::where('room', $room)
+            ->latest()
+            ->value('temperature');
+
+        $this->warn("ROOM SENSOR [{$room}]: sensor offline");
+
+        event(new RoomTemperatureUpdated($room, (float) ($lastTemp ?? 0)));
     }
 
     /* === HELPER: EXTRACT DEVICE ID === */

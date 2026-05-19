@@ -52,6 +52,8 @@ static unsigned long lastPingLogMs = 0;
 static unsigned long lastMqttFailLogMs = 0;
 static bool forceDhtSend = true;
 static bool pingEverOk = false;
+static bool lastDhtOk = true;
+static unsigned long lastDhtStatusPublishMs = 0;
 
 String currentRoom = "";
 bool configReceived = false;
@@ -132,9 +134,6 @@ struct ACDevice {
   String fanSpeed;
   String swing;
   uint8_t irPin;
-  // Pesan control PERTAMA setelah boot/add cuma sync state ke ESP32 — tidak
-  // memancarkan IR. Mencegah AC yang sedang nyala (dari remote bawaan)
-  // tiba-tiba dimatikan saat ESP32 pertama kali subscribe & dapat retained.
   bool stateSynced;
 
   IRGreeAC gree;
@@ -492,8 +491,8 @@ void publishStatus(ACDevice& ac) {
   char buf[256];
   serializeJson(doc, buf, sizeof(buf));
 
-  char topic[80];
-  sprintf(topic, "room/%s/ac/%d/status", currentRoom.c_str(), ac.id);
+  char topic[160];
+  snprintf(topic, sizeof(topic), "room/%s/ac/%d/status", currentRoom.c_str(), ac.id);
   safePublish(topic, buf, true);
 }
 
@@ -507,19 +506,50 @@ void publishAllStatus() {
   }
 }
 
+void publishSensorStatus(const char* status, bool retain = true) {
+  if (currentRoom == "") return;
+
+  StaticJsonDocument<192> doc;
+  doc["device_id"] = DEVICE_ID;
+  doc["room"] = currentRoom;
+  doc["sensor_status"] = status;
+  doc["ts_ms"] = (uint32_t) millis();
+
+  char buf[192];
+  serializeJson(doc, buf, sizeof(buf));
+
+  char topicDev[80];
+  sprintf(topicDev, "device/%s/sensor", DEVICE_ID);
+  safePublish(topicDev, buf, retain);
+
+  char topicRoom[120];
+  sprintf(topicRoom, "room/%s/sensor", currentRoom.c_str());
+  safePublish(topicRoom, buf, retain);
+}
+
 void publishDHT(bool forceSend = false, bool forceLog = false) {
+  if (currentRoom == "") return;
+
   if (!forceSend && (millis() - lastSensorPublish < SENSOR_INTERVAL)) return;
   lastSensorPublish = millis();
 
   float temp = dht.readTemperature();
   if (isnan(temp)) {
+    if (lastDhtOk || forceSend || millis() - lastDhtStatusPublishMs >= DHT_LOG_MIN_MS) {
+      publishSensorStatus("offline", true);
+      lastDhtStatusPublishMs = millis();
+    }
+    lastDhtOk = false;
     logLine("DHT", "❌", "read failed");
     return;
   }
 
+  lastDhtOk = true;
+
   StaticJsonDocument<256> doc;
   doc["device_id"] = DEVICE_ID;
   doc["room"]      = currentRoom;
+  doc["sensor_status"] = "online";
   doc["suhu"]      = temp;
   doc["ts_ms"]     = (uint32_t) millis();
 
@@ -530,14 +560,12 @@ void publishDHT(bool forceSend = false, bool forceLog = false) {
   sprintf(topicDev, "device/%s/sensor", DEVICE_ID);
   bool ok1 = safePublish(topicDev, buf, true);
 
-  if (currentRoom != "") {
-    String safeRoom = currentRoom;
-    safeRoom.toLowerCase();
-    safeRoom.replace(" ", "_");
-    char topicRoom[120];
-    sprintf(topicRoom, "room/%s/sensor", safeRoom.c_str());
-    safePublish(topicRoom, buf, true);
-  }
+  String safeRoom = currentRoom;
+  safeRoom.toLowerCase();
+  safeRoom.replace(" ", "_");
+  char topicRoom[120];
+  sprintf(topicRoom, "room/%s/sensor", safeRoom.c_str());
+  safePublish(topicRoom, buf, true);
 
   bool changed1C = isnan(lastTempLogged) || (fabs(temp - lastTempLogged) >= 1.0f);
   bool shouldLog = forceLog || changed1C || !ok1;
@@ -566,7 +594,6 @@ void publishPing() {
   bool ok = safePublish(topic, buf, false);
   if (ok && !pingEverOk) {
     pingEverOk = true;
-    publishDHT(true, true);
   }
 
   bool shouldLogPing =
@@ -625,8 +652,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     }
 
     if (currentRoom != "") {
-      char oldSub[80];
-      sprintf(oldSub, "room/%s/ac/+/control", currentRoom.c_str());
+      char oldSub[160];
+      snprintf(oldSub, sizeof(oldSub), "room/%s/ac/+/control", currentRoom.c_str());
       client.unsubscribe(oldSub);
     }
 
@@ -644,8 +671,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       }
     }
 
-    char sub[80];
-    sprintf(sub, "room/%s/ac/+/control", currentRoom.c_str());
+    char sub[160];
+    snprintf(sub, sizeof(sub), "room/%s/ac/+/control", currentRoom.c_str());
     client.subscribe(sub);
     logLine("SUB", "📡", "%s", sub);
 
@@ -664,17 +691,28 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   // === CLEAR ===
   String clearTopic = "device/" + String(DEVICE_ID) + "/clear";
   if (t == clearTopic) {
+    String oldRoom = currentRoom;
+
     if (currentRoom != "") {
-      char oldSub[80];
-      sprintf(oldSub, "room/%s/ac/+/control", currentRoom.c_str());
+      char oldSub[160];
+      snprintf(oldSub, sizeof(oldSub), "room/%s/ac/+/control", currentRoom.c_str());
       client.unsubscribe(oldSub);
     }
+    char deviceSensorTopic[80];
+    sprintf(deviceSensorTopic, "device/%s/sensor", DEVICE_ID);
+    safePublish(deviceSensorTopic, "", true);
+
+    if (oldRoom != "") {
+      char roomSensorTopic[120];
+      sprintf(roomSensorTopic, "room/%s/sensor", oldRoom.c_str());
+      safePublish(roomSensorTopic, "", true);
+    }
+
     currentRoom = "";
     configReceived = false;
     acList.clear();
 
     forceDhtSend = true;
-    publishDHT(true, true);
 
     logLine("CLR", "🧹", "ESP tidak terdaftar");
     return;
@@ -682,9 +720,9 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
   if (currentRoom == "") return;
 
-  char roomParsed[50];
+  char roomParsed[120];
   int acId = 0;
-  if (sscanf(topic, "room/%[^/]/ac/%d/control", roomParsed, &acId) != 2) return;
+  if (sscanf(topic, "room/%119[^/]/ac/%d/control", roomParsed, &acId) != 2) return;
 
   String topicRoom = String(roomParsed);
   topicRoom.toLowerCase();
@@ -697,14 +735,27 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (millis() - lastIR < 500) continue;
     lastIR = millis();
 
-    // Pesan PERTAMA per AC setelah boot/add: abaikan total — jangan update
-    // state internal, jangan kirim IR, jangan publish balik. Server-side
-    // adalah authoritative sampai user klik explicit. Mencegah retained
-    // MQTT lama meng-overwrite DB & UI ke state yang AC fisik tidak benar2
-    // di state itu (karena IR-nya memang sengaja kita skip).
     if (!ac.stateSynced) {
       ac.stateSynced = true;
       String incomingPower = doc["power"] | "?";
+      if (doc.containsKey("power")) {
+        ac.power = (doc["power"].as<String>() == "ON");
+      }
+      if (doc.containsKey("mode")) {
+        ac.mode = doc["mode"].as<String>();
+        ac.mode.toUpperCase();
+      }
+      if (doc.containsKey("temp")) {
+        ac.setTemp = constrain(doc["temp"].as<int>(), 16, 30);
+      }
+      if (doc.containsKey("fan_speed")) {
+        ac.fanSpeed = doc["fan_speed"].as<String>();
+        ac.fanSpeed.toUpperCase();
+      }
+      if (doc.containsKey("swing")) {
+        ac.swing = doc["swing"].as<String>();
+        ac.swing.toUpperCase();
+      }
       logLine("IR", "⏭️", "skip first-sync | AC#%d incoming=%s (ignored)",
               ac.id, incomingPower.c_str());
       break;
@@ -728,10 +779,12 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (doc.containsKey("fan_speed")) {
       ac.fanSpeed = doc["fan_speed"].as<String>();
       ac.fanSpeed.toUpperCase();
+      if (ac.power) needSend = true;
     }
     if (doc.containsKey("swing")) {
       ac.swing = doc["swing"].as<String>();
       ac.swing.toUpperCase();
+      if (ac.power) needSend = true;
     }
 
     if (needSend) {
@@ -880,8 +933,8 @@ void reconnect() {
       logLine("SUB", "📡", "%s", subClear);
 
       if (currentRoom != "") {
-        char subCtrl[80];
-        sprintf(subCtrl, "room/%s/ac/+/control", currentRoom.c_str());
+        char subCtrl[160];
+        snprintf(subCtrl, sizeof(subCtrl), "room/%s/ac/+/control", currentRoom.c_str());
         client.subscribe(subCtrl);
         logLine("SUB", "📡", "re-sub -> %s", subCtrl);
       }

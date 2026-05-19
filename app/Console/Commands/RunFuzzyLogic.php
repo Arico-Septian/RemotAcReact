@@ -55,8 +55,10 @@ class RunFuzzyLogic extends Command
             $isDeviceOnline = $deviceStatus === 'online'
                 && $lastSeen
                 && now()->diffInSeconds($lastSeen, true) <= 300;
+            $sensorStatus = Cache::get("room_temp_status_{$normalized}");
             $latestTemp = $tempHistory->first();
             $isTempAvailable = $latestTemp
+                && $sensorStatus !== 'offline'
                 && $latestTemp->created_at
                 && now()->diffInSeconds($latestTemp->created_at, true) <= 30;
 
