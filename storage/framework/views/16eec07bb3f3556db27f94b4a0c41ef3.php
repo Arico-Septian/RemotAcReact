@@ -462,7 +462,7 @@
                                             <?php $__currentLoopData = $floorRooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <?php
                                                     $online = ($room->device_status ?? 'offline') === 'online';
-                                                    $temp = $room->temperature ?? null;
+                                                    $temp = $room->temperature ?? $room->last_temperature ?? null;
                                                     $tcls =
                                                         $temp === null
                                                             ? 'idle'
@@ -866,7 +866,7 @@
             }
         }
 
-        setInterval(() => {
+        function refreshTemps() {
             fetch('/temperature', {
                     headers: {
                         'Accept': 'application/json'
@@ -877,7 +877,9 @@
                     if (!Array.isArray(data)) return;
                     data.forEach(updateRoomTemperature);
                 }).catch(() => {});
-        }, 5000);
+        }
+
+        setInterval(refreshTemps, 5000);
 
         function setRoomStatus(card, online) {
             card.dataset.status = online ? 'online' : 'offline';
@@ -948,14 +950,12 @@
 
             if (window.Echo) {
                 window.Echo.channel('device-status')
-                    .listen('.DeviceStatusUpdated', () => refreshRoomStatuses())
+                    .listen('.DeviceStatusUpdated', () => {
+                        refreshRoomStatuses();
+                        refreshTemps();
+                    })
                     .listen('.RoomTemperatureUpdated', () => {
-                        fetch('/temperature', { headers: { 'Accept': 'application/json' } })
-                            .then(r => r.ok ? r.json() : null)
-                            .then(data => {
-                                if (!Array.isArray(data)) return;
-                                data.forEach(updateRoomTemperature);
-                            }).catch(() => {});
+                        refreshTemps();
                     })
                     .listen('.AcStatusUpdated', () => refreshAcCounters());
             }

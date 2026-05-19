@@ -58,7 +58,7 @@ class RunFuzzyLogic extends Command
             $latestTemp = $tempHistory->first();
             $isTempAvailable = $latestTemp
                 && $latestTemp->created_at
-                && now()->diffInSeconds($latestTemp->created_at, true) <= 60;
+                && now()->diffInSeconds($latestTemp->created_at, true) <= 30;
 
             if (! $isTempAvailable) {
                 Notification::fuzzyWarning($room->name, 'temperature_offline');

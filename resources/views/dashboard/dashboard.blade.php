@@ -1238,7 +1238,7 @@
                                     <div class="dashboard-room-list">
                                         @foreach ($previewRooms as $room)
                                             @php
-                                                $temperature = $room->temperature;
+                                                $temperature = $room->temperature ?? $room->last_temperature ?? null;
                                                 $status = $room->device_status === 'online' ? 'online' : 'offline';
                                             @endphp
                                             <a href="{{ route('rooms.overview') }}" class="dashboard-room-row"
@@ -1645,7 +1645,7 @@
                     data.forEach(room => {
                         const tempEl = document.getElementById(`dashboard-room-temp-${room.id}`);
                         if (!tempEl) return;
-                        const temp = parseFloat(room.temp);
+                        const temp = parseFloat(room.temp ?? room.last_temp ?? room.temperature);
                         tempEl.textContent = isNaN(temp) ? '-- \u00b0C' : `${temp.toFixed(1)}\u00b0C`;
 
                         setRoomLastUpdate(room.id);

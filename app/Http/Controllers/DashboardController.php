@@ -28,9 +28,9 @@ class DashboardController extends Controller
         $offlineRooms = 0;
 
         foreach ($rooms as $room) {
-            $room->temperature = optional(
-                $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name))
-            )->temperature;
+            $latestTemperature = $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name));
+            $room->last_temperature = optional($latestTemperature)->temperature;
+            $room->temperature = $room->last_temperature;
 
             $deviceId = strtolower(trim((string) $room->device_id));
             $status = Cache::get("device_status_{$deviceId}", $room->device_status ?? 'offline');
@@ -44,6 +44,18 @@ class DashboardController extends Controller
             $room->device_status = $isOnline ? 'online' : 'offline';
 
             $isOnline ? $onlineRooms++ : $offlineRooms++;
+
+            $temperatureIsOffline = ! $isOnline;
+            if ($latestTemperature && $latestTemperature->created_at) {
+                $temperatureIsOffline = $temperatureIsOffline
+                    || now()->diffInSeconds($latestTemperature->created_at, true) > 30;
+            } else {
+                $temperatureIsOffline = true;
+            }
+
+            if ($temperatureIsOffline) {
+                $room->temperature = null;
+            }
         }
 
         $totalRooms = $rooms->count();

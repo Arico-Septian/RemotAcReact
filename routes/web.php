@@ -10,12 +10,10 @@ use App\Http\Controllers\TimerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLogController;
 use App\Models\AcStatus;
-use App\Models\AcUnit;
 use App\Models\Notification;
 use App\Models\Room;
 use App\Models\RoomTemperature;
 use App\Models\User;
-use App\Services\MqttService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -142,24 +140,46 @@ Route::middleware(['auth', 'activity'])->group(function () {
         ]);
     });
 
-    $temperatureEndpoint = function () {
+    $roomDeviceIsOnline = function (Room $room): bool {
+        $deviceId = strtolower(trim((string) $room->device_id));
+
+        if ($deviceId === '') {
+            return false;
+        }
+
+        $lastSeen = Cache::get("device_{$deviceId}_last_seen") ?: $room->last_seen;
+        $status = Cache::get("device_status_{$deviceId}", $room->device_status ?? 'offline');
+
+        if (! $lastSeen) {
+            return false;
+        }
+
+        $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
+
+        return in_array($status, ['online', 'available'], true)
+            && now()->diffInSeconds($lastSeenAt, true) <= 30;
+    };
+
+    $temperatureEndpoint = function () use ($roomDeviceIsOnline) {
         $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
         return Room::orderBy('name')
             ->get()
-            ->map(function ($room) use ($latestTemperatures) {
+            ->map(function ($room) use ($latestTemperatures, $roomDeviceIsOnline) {
                 $record = $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name));
                 $lastTemperature = $record?->temperature;
                 $temperature = $lastTemperature;
-                $isOffline = true;
+                $isOffline = ! $roomDeviceIsOnline($room);
 
-                // Stale check: kalau record terakhir > 60s, anggap sensor mati → null
+                // Stale check: kalau record terakhir > 30s, anggap sensor mati → null
                 if ($record && $record->created_at) {
-                    $isOffline = now()->diffInSeconds($record->created_at, true) > 60;
+                    $isOffline = $isOffline || now()->diffInSeconds($record->created_at, true) > 30;
+                } else {
+                    $isOffline = true;
+                }
 
-                    if ($isOffline) {
-                        $temperature = null;
-                    }
+                if ($isOffline) {
+                    $temperature = null;
                 }
 
                 return [
@@ -264,7 +284,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
             '#facc15', '#22d3ee', '#c084fc', '#f87171',
         ];
 
-        $datasets = $rooms->values()->map(function ($room, $idx) use ($startTime, $slots, $palette, $latestTemperatures, $slotKeyFor) {
+        $datasets = $rooms->values()->map(function ($room, $idx) use ($startTime, $slots, $palette, $latestTemperatures, $slotKeyFor, $roomDeviceIsOnline) {
             $normalized = RoomTemperature::normalizeRoomName($room->name);
 
             $rows = RoomTemperature::where('room', $normalized)
@@ -280,15 +300,21 @@ Route::middleware(['auth', 'activity'])->group(function () {
             $lastRecord = $latestTemperatures->get($normalized);
             $currentTemp = optional($lastRecord)->temperature;
 
-            // Cek apakah sensor suhu offline (data terakhir > 2 menit lalu)
-            $isOffline = true;
+            // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
+            $isOffline = ! $roomDeviceIsOnline($room);
             $offlineSince = null;
             if ($lastRecord && $lastRecord->created_at) {
                 $secondsAgo = now()->diffInSeconds($lastRecord->created_at, true);
-                $isOffline = $secondsAgo > 120;
+                $isOffline = $isOffline || $secondsAgo > 30;
                 if ($isOffline) {
                     $offlineSince = $lastRecord->created_at->format('H:i');
                 }
+            } else {
+                $isOffline = true;
+            }
+
+            if ($isOffline) {
+                $currentTemp = null;
             }
 
             return [
