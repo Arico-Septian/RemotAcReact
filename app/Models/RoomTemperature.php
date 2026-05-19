@@ -27,4 +27,20 @@ class RoomTemperature extends Model
             ->get()
             ->keyBy(fn ($t) => static::normalizeRoomName($t->room));
     }
+
+    /**
+     * Get latest N records per room in a single query.
+     * Returns: Collection keyed by normalized room name → Collection of records.
+     */
+    public static function recentByNormalizedRoom(int $perRoom = 2, int $maxAgeSeconds = 600)
+    {
+        $rows = static::query()
+            ->where('created_at', '>=', now()->subSeconds($maxAgeSeconds))
+            ->orderByDesc('id')
+            ->get();
+
+        return $rows
+            ->groupBy(fn ($t) => static::normalizeRoomName($t->room))
+            ->map(fn ($group) => $group->take($perRoom)->values());
+    }
 }

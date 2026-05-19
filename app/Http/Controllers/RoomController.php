@@ -28,7 +28,8 @@ class RoomController extends Controller
             ->orderBy('name')
             ->get();
 
-        $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
+        // Batch fetch: 2 latest temperature records per room in a single query (not N+1)
+        $recentByRoom = RoomTemperature::recentByNormalizedRoom(perRoom: 2, maxAgeSeconds: 600);
 
         $fuzzyService = new FuzzyMamdaniService;
 
@@ -49,9 +50,9 @@ class RoomController extends Controller
 
             $room->device_status = $isOnline ? 'online' : 'offline';
 
-            $lastTempRecord = $latestTemperatures->get(
-                RoomTemperature::normalizeRoomName($room->name)
-            );
+            $roomKey = RoomTemperature::normalizeRoomName($room->name);
+            $tempHistory = $recentByRoom->get($roomKey) ?? collect();
+            $lastTempRecord = $tempHistory->first();
 
             $room->temperature = optional($lastTempRecord)->temperature;
 
@@ -63,14 +64,6 @@ class RoomController extends Controller
             } elseif (! $lastTempRecord) {
                 $room->temperature_is_offline = true;
             }
-
-            $tempHistory = RoomTemperature::where(
-                'room',
-                RoomTemperature::normalizeRoomName($room->name)
-            )
-                ->latest()
-                ->take(2)
-                ->get();
 
             $currentTemp = $tempHistory->first()?->temperature;
 
@@ -365,8 +358,10 @@ class RoomController extends Controller
     {
         $room = Room::findOrFail($id);
 
-        $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
-        $lastTempRecord = $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name));
+        // Single room — query only its latest record, not all rooms
+        $lastTempRecord = RoomTemperature::where('room', RoomTemperature::normalizeRoomName($room->name))
+            ->latest()
+            ->first();
         $room->temperature = optional($lastTempRecord)->temperature;
 
         $room->temperature_is_offline = false;
