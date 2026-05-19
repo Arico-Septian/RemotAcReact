@@ -20,7 +20,7 @@ class DashboardController extends Controller
 
         $recentActivities = UserLog::with('user')
             ->orderByDesc('created_at')
-            ->limit(6)
+            ->limit(15)
             ->get()
             ->map(fn ($log) => $this->formatLog($log));
 
@@ -83,7 +83,7 @@ class DashboardController extends Controller
     {
         $logs = UserLog::with('user')
             ->orderByDesc('created_at')
-            ->limit(6)
+            ->limit(15)
             ->get()
             ->map(fn ($log) => $this->formatLog($log));
 

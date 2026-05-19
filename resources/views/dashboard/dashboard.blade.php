@@ -53,7 +53,7 @@
             .dashboard-bottom-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
-                align-items: start;
+                align-items: stretch;
             }
         }
 
@@ -64,7 +64,7 @@
 
         /* ===== Recent Activity widget — premium ===== */
         .dashboard-activity-panel {
-            padding: 18px 16px 14px;
+            padding: 24px;
             border-radius: 20px;
             background:
                 linear-gradient(180deg, rgba(34, 211, 238, 0.06) 0%, transparent 40%),
@@ -168,7 +168,8 @@
             gap: 6px;
             flex: 1;
             overflow-y: auto;
-            max-height: 360px;
+            min-height: 0;
+            max-height: 420px;
         }
 
         .activity-item {
@@ -433,19 +434,20 @@
         }
 
         .dashboard-rooms-action {
-            min-width: 108px;
-            min-height: 60px;
-            padding: 10px 16px;
-            border-radius: 12px;
+            min-height: 40px;
+            padding: 8px 14px;
+            border-radius: 10px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             color: var(--ink-0);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            font-weight: 700;
-            line-height: 1.05;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 1;
+            white-space: nowrap;
             transition: var(--t-base);
         }
 
@@ -1225,7 +1227,7 @@
                                     </div>
                                     <a href="{{ route('rooms.overview') }}" class="dashboard-rooms-action"
                                         aria-label="Lihat semua server rooms">
-                                        <span>Lihat<br>semua</span>
+                                        <span>Lihat semua</span>
                                         <i class="fa-solid fa-chevron-right text-[10px]"></i>
                                     </a>
                                 </div>
@@ -1704,7 +1706,7 @@
                             '—';
 
                         const lineColor = ds.is_offline ?
-                            'rgba(148,163,184,0.45)' :
+                            'rgba(148,163,184,0.9)' :
                             '#67e8f9';
 
                         return {
@@ -1712,7 +1714,8 @@
                             data: ds.data,
 
                             borderColor: lineColor,
-                            borderWidth: ds.is_offline ? 1.8 : 3.2,
+                            borderWidth: ds.is_offline ? 2.4 : 3.2,
+                            borderDash: ds.is_offline ? [6, 4] : [],
 
                             tension: 0.48,
                             cubicInterpolationMode: 'monotone',

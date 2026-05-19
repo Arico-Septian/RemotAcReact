@@ -217,7 +217,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
         );
     });
 
-    Route::get('/temperature/trend', function (Request $request) {
+    Route::get('/temperature/trend', function (Request $request) use ($roomDeviceIsOnline) {
         $limit = (int) $request->query('limit', 5);
         $range = $request->query('range', '1h');
 
@@ -300,6 +300,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
             $lastRecord = $latestTemperatures->get($normalized);
             $currentTemp = optional($lastRecord)->temperature;
+            $lastKnownTemp = $currentTemp;
 
             // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
             $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
@@ -314,8 +315,9 @@ Route::middleware(['auth', 'activity'])->group(function () {
                 $isOffline = true;
             }
 
-            if ($isOffline) {
-                $currentTemp = null;
+            // Saat offline: isi slot kosong dengan suhu terakhir agar garis tetap muncul (statis)
+            if ($isOffline && $lastKnownTemp !== null) {
+                $data = $data->map(fn ($v) => $v ?? $lastKnownTemp);
             }
 
             return [

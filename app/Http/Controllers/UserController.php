@@ -99,13 +99,6 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        UserLog::create([
-            'user_id' => Auth::id(),
-            'room' => '-',
-            'ac' => '-',
-            'activity' => 'add_user',
-        ]);
-
         return back()->with('success', 'User berhasil ditambahkan');
     }
 
@@ -127,16 +120,8 @@ class UserController extends Controller
             ], 403);
         }
 
-        $oldRole = $user->role;
         $user->role = $request->role;
         $user->save();
-
-        UserLog::create([
-            'user_id' => Auth::id(),
-            'room' => '-',
-            'ac' => "{$user->name}: {$oldRole} → {$user->role}",
-            'activity' => 'update_role',
-        ]);
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);
@@ -154,13 +139,6 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
-
-        UserLog::create([
-            'user_id' => Auth::id(),
-            'room' => '-',
-            'ac' => '-',
-            'activity' => 'delete_user',
-        ]);
 
         $user->delete();
 
