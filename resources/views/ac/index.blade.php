@@ -981,6 +981,7 @@
                                     <div id="dropdownAC">
                                         @foreach ($acs as $ac)
                                             <div data-id="{{ $ac->id }}"
+                                                data-label="AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}"
                                                 onclick="selectAC({{ $ac->id }}, 'AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}')">
                                                 <span class="num">#{{ $ac->ac_number }}</span>
                                                 <span style="text-transform:capitalize;">{{ $ac->name }}@if ($ac->brand) <span style="opacity:.65;font-size:11px;">· {{ $ac->brand }}</span>@endif</span>
@@ -1064,6 +1065,7 @@
                                                 data-ac-name="AC {{ $ac->ac_number }}{{ $ac->name ? ' · ' . $ac->name : '' }}"
                                                 data-ac-power="{{ $ac->status?->power ?? 'OFF' }}">
                                                 @csrf
+                                                <input type="hidden" name="power" value="{{ $isPowerOn ? 'OFF' : 'ON' }}">
                                                 <button type="submit" class="power-btn {{ $isPowerOn ? 'on' : '' }}"
                                                     title="Toggle power">
                                                     <i class="fa-solid fa-power-off"></i>
@@ -1184,6 +1186,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <form action="/ac/{{ $ac->id }}/schedule" method="POST"
+                                                        class="delete-timer-form mt-3">
+                                                        @csrf
+                                                        <input type="hidden" name="timer_on" value="">
+                                                        <input type="hidden" name="timer_off" value="">
+                                                        <button type="submit" class="btn btn-ghost btn-sm btn-block">
+                                                            <i class="fa-solid fa-trash text-[10px]"></i>
+                                                            <span>Hapus Timer</span>
+                                                        </button>
+                                                    </form>
                                                 @else
                                                     <div class="timer-empty">
                                                         <i class="fa-regular fa-clock"></i>
@@ -1615,6 +1627,17 @@
                 if (btn) btn.classList.add('is-loading');
             });
         });
+        document.querySelectorAll('.delete-timer-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!confirm('Hapus timer AC ini?')) {
+                    e.preventDefault();
+                    return;
+                }
+
+                const btn = this.querySelector('button[type="submit"]');
+                if (btn) btn.classList.add('is-loading');
+            });
+        });
 
         function toggleDropdown() {
             document.getElementById('dropdownAC')?.classList.toggle('show');
@@ -1648,7 +1671,8 @@
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 pendingPowerForm = this;
-                const turnOn = (this.dataset.acPower || 'OFF').toUpperCase() !== 'ON';
+                const targetPower = (this.querySelector('[name="power"]')?.value || '').toUpperCase();
+                const turnOn = targetPower ? targetPower === 'ON' : (this.dataset.acPower || 'OFF').toUpperCase() !== 'ON';
                 const icon = document.getElementById('powerModalIcon');
                 const desc = document.getElementById('powerModalDesc');
                 const conf = document.getElementById('powerModalConfirm');
@@ -1791,7 +1815,11 @@
 
                     // Power form data attribute (dipakai modal konfirmasi)
                     const powerForm = panel.querySelector('.power-form');
-                    if (powerForm) powerForm.dataset.acPower = power;
+                    if (powerForm) {
+                        powerForm.dataset.acPower = power;
+                        const powerInput = powerForm.querySelector('[name="power"]');
+                        if (powerInput) powerInput.value = power === 'ON' ? 'OFF' : 'ON';
+                    }
 
                     // +/- temp button onclick handlers (selalu refer ke nilai temp saat ini)
                     const ctrlBtns = panel.querySelectorAll('.ctrl-row .ctrl-btn');
@@ -1828,7 +1856,7 @@
                 const id = "{{ session('new_ac_id') }}";
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
-                selectAC(id, el ? el.textContent.trim() :
+                selectAC(id, el ? el.dataset.label :
                     "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : '' }}");
                 @if (session('success'))
                     window.smToast("{{ session('success') }}", 'success');
@@ -1837,7 +1865,7 @@
                 const saved = localStorage.getItem('selectedAC');
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
-                    selectAC(saved, el ? el.textContent.trim() :
+                    selectAC(saved, el ? el.dataset.label :
                         "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : '' }}");
                 } else {
                     localStorage.removeItem('selectedAC');
@@ -1931,8 +1959,8 @@
         document.querySelectorAll('.power-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 const acName = this.dataset.acName || 'AC';
-                const isPowerOn = (this.dataset.acPower || 'OFF').toUpperCase() === 'ON';
-                const newState = isPowerOn ? 'OFF' : 'ON';
+                const newState = (this.querySelector('[name="power"]')?.value || '').toUpperCase()
+                    || (((this.dataset.acPower || 'OFF').toUpperCase() === 'ON') ? 'OFF' : 'ON');
 
                 setTimeout(() => {
                     if (window.smToast) {

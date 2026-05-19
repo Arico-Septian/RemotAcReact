@@ -30,6 +30,7 @@ class TimerController extends Controller
 
         $newTimerOn = $request->timer_on ?: null;
         $newTimerOff = $request->timer_off ?: null;
+        $isDeletingTimer = $newTimerOn === null && $newTimerOff === null;
 
         $key = "timer_version_{$ac->id}";
 
@@ -53,7 +54,7 @@ class TimerController extends Controller
             // PUBLISH TIMER INFO KE MQTT
             try {
                 $mqtt = new MqttService;
-                $topic = 'room/' . MqttService::roomToTopic($ac->room->name) . "/ac/{$ac->ac_number}/timer";
+                $topic = 'room/'.MqttService::roomToTopic($ac->room->name)."/ac/{$ac->ac_number}/timer";
 
                 $payload = [
                     'timer_on' => $newTimerOn,
@@ -92,6 +93,6 @@ class TimerController extends Controller
             ]);
         }
 
-        return back()->with('success', 'Timer berhasil disimpan');
+        return back()->with('success', $isDeletingTimer ? 'Timer berhasil dihapus' : 'Timer berhasil disimpan');
     }
 }

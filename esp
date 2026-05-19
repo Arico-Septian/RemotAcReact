@@ -132,6 +132,10 @@ struct ACDevice {
   String fanSpeed;
   String swing;
   uint8_t irPin;
+  // Pesan control PERTAMA setelah boot/add cuma sync state ke ESP32 — tidak
+  // memancarkan IR. Mencegah AC yang sedang nyala (dari remote bawaan)
+  // tiba-tiba dimatikan saat ESP32 pertama kali subscribe & dapat retained.
+  bool stateSynced;
 
   IRGreeAC gree;
   IRDaikinESP daikin;
@@ -145,7 +149,7 @@ struct ACDevice {
     : id(_id), brand(_brand),
       power(false), setTemp(24),
       mode("AUTO"), fanSpeed("AUTO"), swing("OFF"),
-      irPin(_pin),
+      irPin(_pin), stateSynced(false),
       gree(_pin), daikin(_pin), panasonic(_pin), lg(_pin),
       mitsubishi(_pin), sharp(_pin), toshiba(_pin) {
     gree.begin();
@@ -692,6 +696,19 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     static unsigned long lastIR = 0;
     if (millis() - lastIR < 500) continue;
     lastIR = millis();
+
+    // Pesan PERTAMA per AC setelah boot/add: abaikan total — jangan update
+    // state internal, jangan kirim IR, jangan publish balik. Server-side
+    // adalah authoritative sampai user klik explicit. Mencegah retained
+    // MQTT lama meng-overwrite DB & UI ke state yang AC fisik tidak benar2
+    // di state itu (karena IR-nya memang sengaja kita skip).
+    if (!ac.stateSynced) {
+      ac.stateSynced = true;
+      String incomingPower = doc["power"] | "?";
+      logLine("IR", "⏭️", "skip first-sync | AC#%d incoming=%s (ignored)",
+              ac.id, incomingPower.c_str());
+      break;
+    }
 
     bool needSend = false;
 

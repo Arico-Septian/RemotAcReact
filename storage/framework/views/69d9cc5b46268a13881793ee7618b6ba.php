@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — SmartAC</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <link href="/css/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="/js/chart.umd.js"></script>
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    <?php echo $__env->make('components.sidebar-styles', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <style>
+        .trend-filter-select {
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+            color: var(--ink-1);
+            border-radius: var(--r-md);
+            padding: 6px 10px;
+            font-size: 11px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            outline: none;
+            transition: var(--t-base);
+        }
+
+        .trend-filter-select:hover {
+            background: var(--panel-2);
+            border-color: var(--line);
+        }
+
+        .trend-filter-select:focus {
+            border-color: var(--cyan);
+        }
+
+        .dashboard-rooms-panel {
+            padding: 24px;
+            border-radius: 20px;
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+            box-shadow: var(--inset-hi);
+        }
+
+        /* Bottom row: Server Rooms + Recent Activity (side-by-side desktop) */
+        .dashboard-bottom-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard-bottom-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                align-items: start;
+            }
+        }
+
+        .dashboard-rooms-panel,
+        .dashboard-activity-panel {
+            min-width: 0;
+        }
+
+        /* ===== Recent Activity widget — premium ===== */
+        .dashboard-activity-panel {
+            padding: 18px 16px 14px;
+            border-radius: 20px;
+            background:
+                linear-gradient(180deg, rgba(34, 211, 238, 0.06) 0%, transparent 40%),
+                var(--panel-1);
+            border: 1px solid var(--line-soft);
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.04) inset,
+                0 10px 30px -18px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-activity-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.45), transparent);
+            opacity: 0.7;
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .activity-title-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .activity-title-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.18));
+            border: 1px solid rgba(34, 211, 238, 0.30);
+            color: var(--cyan);
+            font-size: 11px;
+        }
+
+        .activity-title {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--ink-0);
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: rgba(52, 211, 153, 0.10);
+            border: 1px solid rgba(52, 211, 153, 0.32);
+            color: var(--mint);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(8px);
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--mint);
+            box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
+            animation: livePulse 1.8s ease-out infinite;
+        }
+
+        @keyframes livePulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
+            }
+
+            70% {
+                box-shadow: 0 0 0 7px rgba(52, 211, 153, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+            }
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 360px;
+        }
+
+        .activity-item {
+            position: relative;
+            display: grid;
+            grid-template-columns: 4px 34px 1fr;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px 10px 8px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            border: 1px solid var(--line-soft);
+            transition: all 0.18s ease;
+        }
+
+        .activity-item:hover {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+            border-color: rgba(148, 163, 184, 0.25);
+            transform: translateX(2px);
+        }
+
+        .activity-rail {
+            width: 3px;
+            min-height: 28px;
+            border-radius: 999px;
+            align-self: stretch;
+            background: var(--tone, #94a3b8);
+            box-shadow: 0 0 8px -1px var(--tone, transparent);
+            opacity: 0.85;
+        }
+
+        .activity-icon-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: color-mix(in srgb, var(--tone, #94a3b8) 14%, transparent);
+            border: 1px solid color-mix(in srgb, var(--tone, #94a3b8) 30%, transparent);
+            color: var(--tone, #94a3b8);
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Avatar with activity icon badge overlay */
+        .activity-avatar-wrap {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+        }
+
+        .activity-avatar-img,
+        .activity-avatar-fallback {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            object-fit: cover;
+            background: linear-gradient(135deg, color-mix(in srgb, var(--tone, #94a3b8) 35%, #1e293b), color-mix(in srgb, var(--tone, #94a3b8) 18%, #0f172a));
+            color: #ffffff;
+            border: 1px solid color-mix(in srgb, var(--tone, #94a3b8) 40%, transparent);
+        }
+
+        .activity-icon-badge {
+            position: absolute;
+            right: -3px;
+            bottom: -3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--tone, #94a3b8);
+            color: #0b1220;
+            font-size: 9px;
+            border: 2px solid var(--panel-1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        .activity-item.tone-coral .activity-icon-badge,
+        .activity-item.tone-lavender .activity-icon-badge,
+        .activity-item.tone-slate .activity-icon-badge {
+            color: #ffffff;
+        }
+
+        /* Tone variants — sets --tone per item */
+        .activity-item.tone-cyan {
+            --tone: #22d3ee;
+        }
+
+        .activity-item.tone-mint {
+            --tone: #34d399;
+        }
+
+        .activity-item.tone-lavender {
+            --tone: #a78bfa;
+        }
+
+        .activity-item.tone-coral {
+            --tone: #fb7185;
+        }
+
+        .activity-item.tone-amber {
+            --tone: #fbbf24;
+        }
+
+        .activity-item.tone-sky {
+            --tone: #38bdf8;
+        }
+
+        .activity-item.tone-slate {
+            --tone: #94a3b8;
+        }
+
+        .activity-body {
+            min-width: 0;
+        }
+
+        .activity-line {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .activity-user {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ink-0);
+            letter-spacing: -0.005em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--ink-4);
+            flex-shrink: 0;
+        }
+
+        .activity-desc {
+            margin: 2px 0 0;
+            font-size: 12px;
+            line-height: 1.4;
+            color: var(--ink-2);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .activity-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .activity-chips .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            background: rgba(148, 163, 184, 0.10);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            color: var(--ink-3);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .activity-chips .chip i {
+            font-size: 8px;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-activity-panel {
+                padding: 14px 12px 12px;
+            }
+
+            .activity-title {
+                font-size: 14px;
+            }
+
+            .activity-title-icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            .activity-list {
+                max-height: 420px;
+            }
+
+            .activity-item {
+                grid-template-columns: 3px 30px 1fr;
+                padding: 9px 10px 9px 7px;
+                gap: 8px;
+            }
+
+            .activity-icon-wrap {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+
+            .activity-avatar-wrap {
+                width: 30px;
+                height: 30px;
+            }
+
+            .activity-avatar-img,
+            .activity-avatar-fallback {
+                width: 30px;
+                height: 30px;
+                font-size: 11px;
+            }
+
+            .activity-icon-badge {
+                width: 15px;
+                height: 15px;
+                font-size: 8px;
+                border-width: 1.5px;
+            }
+
+            .activity-user,
+            .activity-desc {
+                font-size: 11px;
+            }
+
+            .activity-time {
+                font-size: 9px;
+            }
+        }
+
+        .dashboard-rooms-panel .panel-header {
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .dashboard-rooms-title {
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--ink-0);
+        }
+
+        .dashboard-rooms-subtitle {
+            margin-top: 4px;
+            font-size: 16px;
+            line-height: 1.25;
+            color: var(--ink-2);
+        }
+
+        .dashboard-rooms-action {
+            min-width: 108px;
+            min-height: 60px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: var(--panel-2);
+            border: 1px solid var(--line-soft);
+            color: var(--ink-0);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 700;
+            line-height: 1.05;
+            transition: var(--t-base);
+        }
+
+        .dashboard-rooms-action:hover {
+            background: var(--panel-2);
+            border-color: var(--line);
+            color: var(--ink-0);
+            transform: translateY(-1px);
+        }
+
+        .dashboard-room-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .dashboard-room-row {
+            min-height: 72px;
+            padding: 14px 16px 14px 18px;
+            border-radius: 14px;
+            background: var(--panel-2);
+            border: 1px solid var(--line-soft);
+            color: inherit;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            transition: var(--t-base);
+        }
+
+        .dashboard-room-row::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 15px;
+            bottom: 15px;
+            width: 5px;
+            border-radius: 999px;
+            background: #fca5a5;
+        }
+
+        /* Dashboard sections spacing */
+        .app-content-inner>*+* {
+            margin-top: 32px;
+        }
+
+        .dashboard-room-row:hover {
+            background: var(--panel-2);
+            border-color: var(--line);
+            transform: translateY(-1px);
+        }
+
+        .dashboard-room-main {
+            min-width: 0;
+            padding-left: 24px;
+        }
+
+        .dashboard-room-name {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--ink-0);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dashboard-room-meta {
+            margin-top: 3px;
+            color: var(--ink-2);
+            font-size: 14px;
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dashboard-room-last {
+            margin-top: 3px;
+            font-size: 11px;
+            color: var(--ink-4);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dashboard-room-last .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #67e8f9;
+            box-shadow: 0 0 0 0 rgba(103, 232, 249, .55);
+            animation: lastPulse 1.8s ease-out infinite;
+        }
+
+        @keyframes lastPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(103, 232, 249, .55);
+            }
+
+            70% {
+                box-shadow: 0 0 0 7px rgba(103, 232, 249, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(103, 232, 249, 0);
+            }
+        }
+
+        .dashboard-room-temp {
+            min-width: 76px;
+            text-align: right;
+            color: var(--ink-3);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .dashboard-room-status {
+            min-width: 82px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .dashboard-room-status.online {
+            background: var(--mint-soft);
+            color: var(--mint);
+        }
+
+        .dashboard-room-status.offline {
+            background: rgba(251, 113, 133, 0.14);
+            color: #fca5a5;
+        }
+
+        @media (max-width: 640px) {
+            .dashboard-rooms-panel {
+                padding: 16px;
+            }
+
+            .dashboard-rooms-panel .panel-header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .dashboard-rooms-title {
+                font-size: 17px;
+                flex: 1;
+            }
+
+            .dashboard-rooms-action {
+                min-width: 80px;
+                min-height: 44px;
+                padding: 8px 12px;
+                font-size: 12px;
+                flex-shrink: 0;
+            }
+
+            .dashboard-room-row {
+                grid-template-columns: 1fr auto;
+                gap: 10px;
+                padding: 12px 14px;
+                min-height: 68px;
+            }
+
+            .dashboard-room-temp {
+                grid-column: 2;
+                grid-row: 1;
+                min-width: 60px;
+                font-size: 13px;
+                text-align: right;
+            }
+
+            .dashboard-room-status {
+                grid-column: 2;
+                grid-row: 2;
+                min-width: 72px;
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            .dashboard-room-name {
+                font-size: 14px;
+            }
+
+            .dashboard-room-meta {
+                font-size: 12px;
+                margin-top: 2px;
+            }
+
+            .dashboard-room-main {
+                padding-left: 16px;
+            }
+
+            .dashboard-room-row::before {
+                width: 4px;
+                left: 14px;
+            }
+        }
+
+        /* Very small screens (< 480px) */
+        @media (max-width: 480px) {
+            .dashboard-rooms-panel {
+                padding: 12px;
+                border-radius: 16px;
+            }
+
+            .dashboard-rooms-panel .panel-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .dashboard-rooms-title {
+                font-size: 16px;
+            }
+
+            .dashboard-rooms-action {
+                width: 100%;
+                justify-content: center;
+                min-height: 44px;
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+
+            .dashboard-room-list {
+                gap: 8px;
+            }
+
+            .dashboard-room-row {
+                grid-template-columns: 1fr auto;
+                gap: 8px;
+                padding: 10px 12px;
+                min-height: 64px;
+                border-radius: 12px;
+            }
+
+            .dashboard-room-row::before {
+                width: 3px;
+                left: 12px;
+            }
+
+            .dashboard-room-main {
+                padding-left: 12px;
+                min-width: 0;
+            }
+
+            .dashboard-room-name {
+                font-size: 13px;
+                font-weight: 600;
+            }
+
+            .dashboard-room-meta {
+                font-size: 11px;
+            }
+
+            .dashboard-room-temp {
+                min-width: 50px;
+                font-size: 12px;
+                padding: 0 4px;
+            }
+
+            .dashboard-room-status {
+                min-width: 60px;
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+
+            .trend-filter-select {
+                font-size: 10px;
+                padding: 5px 8px;
+            }
+        }
+
+        /* Landscape mode (max-height: 600px) */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .dashboard-rooms-panel {
+                padding: 12px;
+            }
+
+            .dashboard-rooms-title {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+
+            .dashboard-room-row {
+                min-height: 56px;
+                padding: 8px 12px;
+                gap: 8px;
+            }
+
+            .dashboard-room-name {
+                font-size: 13px;
+            }
+
+            .dashboard-room-meta {
+                font-size: 11px;
+            }
+
+            .dashboard-room-temp {
+                font-size: 12px;
+            }
+
+            .dashboard-room-status {
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+        }
+
+        /* Dashboard stat card base styling */
+        .grid.grid-cols-2.lg\:grid-cols-4 .stat-card {
+            padding: 18px 20px;
+        }
+
+        /* Stat card text styling */
+        .stat-card .stat-label-sm {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-3);
+        }
+
+        .stat-card .stat-num-lg {
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+            font-feature-settings: 'tnum' 1, 'lnum' 1, 'cv11' 1;
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin: 8px 0 6px;
+        }
+
+        .stat-card .stat-sub {
+            font-size: 11px;
+            color: var(--ink-3);
+        }
+
+        /* Angka utama selalu putih untuk hierarki yang kuat */
+        .stat-card .stat-num-lg {
+            color: var(--ink-0);
+        }
+
+        /* Label kecil di atas mengambil warna accent per kartu */
+        .stat-card.acc-cyan .stat-label-sm,
+        .stat-card.acc-cyan .stat-label {
+            color: var(--cyan);
+        }
+
+        .stat-card.acc-mint .stat-label-sm,
+        .stat-card.acc-mint .stat-label {
+            color: var(--mint);
+        }
+
+        .stat-card.acc-lavender .stat-label-sm,
+        .stat-card.acc-lavender .stat-label {
+            color: var(--lavender);
+        }
+
+        .stat-card.acc-coral .stat-label-sm,
+        .stat-card.acc-coral .stat-label {
+            color: var(--coral);
+        }
+
+        /* Device compatibility - Tablet & Below (768px) */
+        @media (max-width: 768px) {
+            .dashboard-rooms-panel {
+                padding: 16px;
+            }
+
+            .dashboard-rooms-title {
+                font-size: 17px;
+            }
+
+            .dashboard-rooms-subtitle {
+                font-size: 14px;
+            }
+
+            .dashboard-room-row {
+                padding: 12px 14px;
+                min-height: 64px;
+                gap: 10px;
+            }
+
+            .dashboard-room-name {
+                font-size: 14px;
+            }
+
+            .dashboard-room-meta {
+                font-size: 12px;
+            }
+
+            .dashboard-room-temp {
+                font-size: 13px;
+            }
+
+            .dashboard-room-last {
+                margin-top: 3px;
+                font-size: 11px;
+                color: var(--ink-4);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .dashboard-room-last .live-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 999px;
+                background: #67e8f9;
+                box-shadow: 0 0 0 0 rgba(103, 232, 249, .55);
+                animation: livePulse 1.8s ease-out infinite;
+            }
+
+            .dashboard-room-status {
+                font-size: 10px;
+                padding: 4px 8px;
+                min-width: 60px;
+            }
+        }
+
+        /* Stat cards optimization - Tablet (640px - 768px) */
+        @media (min-width: 641px) and (max-width: 768px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px 18px;
+            }
+
+            .stat-label-sm {
+                font-size: 9px;
+            }
+
+            .stat-num-lg {
+                font-size: 32px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-sub {
+                font-size: 10px;
+            }
+
+            .stat-icon {
+                font-size: 20px;
+            }
+        }
+
+        /* Stat cards optimization for small screens (< 640px) */
+        @media (max-width: 640px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px 16px;
+            }
+
+            .stat-label-sm {
+                font-size: 9px;
+                letter-spacing: 0.08em;
+            }
+
+            .stat-num-lg {
+                font-size: 28px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-sub {
+                font-size: 10px;
+            }
+
+            .stat-icon {
+                font-size: 16px;
+            }
+        }
+
+        /* Very small screens (< 480px) */
+        @media (max-width: 480px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+            }
+
+            .stat-label-sm {
+                font-size: 8px;
+                letter-spacing: 0.08em;
+            }
+
+            .stat-num-lg {
+                font-size: 24px;
+                margin: 4px 0 2px;
+            }
+
+            .stat-sub {
+                font-size: 9px;
+            }
+
+            .stat-icon {
+                font-size: 14px;
+            }
+
+            .dashboard-rooms-panel {
+                padding: 12px;
+            }
+
+            .dashboard-rooms-title {
+                font-size: 15px;
+            }
+
+            .dashboard-rooms-subtitle {
+                font-size: 12px;
+            }
+
+            .dashboard-room-row {
+                padding: 10px 12px;
+                min-height: 56px;
+                gap: 8px;
+                border-radius: 10px;
+            }
+
+            .dashboard-room-row::before {
+                width: 3px;
+            }
+
+            .dashboard-room-name {
+                font-size: 12px;
+            }
+
+            .dashboard-room-meta {
+                font-size: 11px;
+            }
+
+            .dashboard-room-temp {
+                font-size: 12px;
+            }
+
+            .dashboard-room-status {
+                font-size: 9px;
+                padding: 3px 6px;
+                min-width: 56px;
+            }
+
+            .dashboard-rooms-action {
+                min-height: 40px;
+                min-width: 70px;
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+        }
+
+        /* Temperature chart height responsive */
+        @media (max-width: 768px) {
+            div[style*="height:300px"] {
+                height: 250px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            div[style*="height:300px"] {
+                height: 200px !important;
+            }
+        }
+
+        /* Touch target optimization */
+        @media (hover: none) and (pointer: coarse) {
+            .dashboard-rooms-action {
+                min-height: 48px;
+                min-width: 48px;
+            }
+
+            .dashboard-room-row {
+                padding: 12px 14px;
+                min-height: 72px;
+            }
+
+            .stat-card {
+                min-height: 100px;
+            }
+        }
+
+        /* Tablet portrait (769px - 1023px) — promote stat grid to 4 columns */
+        @media (min-width: 769px) and (max-width: 1023px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 14px 16px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 9px;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 28px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+            }
+
+            .stat-icon {
+                font-size: 18px;
+            }
+        }
+
+        /* Header keep on one row across breakpoints */
+        .main-header { flex-wrap: nowrap; }
+        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
+        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+
+        /* Mobile S (≤ 360 px): shrink header so title fits in one row */
+        @media (max-width: 360px) {
+            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
+            .main-header > .flex.items-center.gap-3 { gap: 6px; }
+            .main-header > .flex.items-center.gap-2 { gap: 4px; }
+            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
+            .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
+            .main-header #systemStatus span:not(.dot) { display: none; }
+            .main-header #systemStatus { padding: 4px 6px; }
+            .main-header .btn-icon { width: 32px; height: 32px; }
+        }
+
+        /* Ultra-wide screens (>1600px) — cap content width for readability */
+        @media (min-width: 1600px) {
+            .app-content-inner {
+                max-width: 1480px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .app-content-inner {
+                max-width: 1600px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+    <div class="app-bg"></div>
+    <div id="overlay"></div>
+
+    <div class="layout">
+        <?php echo $__env->make('components.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+        <div class="app-main">
+            
+            <header class="main-header">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="app-header-title">
+                        <h1>Dashboard</h1>
+                        <p>Overview &amp; live monitoring</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                    <span id="systemStatus" class="pill pill-offline">
+                        <span class="dot"></span><span>Offline</span>
+                    </span>
+                </div>
+            </header>
+
+            
+            <div class="page-body">
+                <div class="app-content">
+                    <div class="app-content-inner space-y-4">
+
+                        
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                            <div class="stat-card acc-cyan">
+                                <span class="accent-bar"></span>
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="stat-label-sm">Rooms</p>
+                                        <p class="stat-num-lg"><?php echo e($rooms->count()); ?></p>
+                                        <p class="stat-sub">Total registered</p>
+                                    </div>
+                                    <div class="stat-icon"><i class="fa-solid fa-server"></i></div>
+                                </div>
+                            </div>
+                            <div class="stat-card acc-lavender">
+                                <span class="accent-bar"></span>
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="stat-label">AC Units</p>
+                                        <p class="stat-num-lg" id="statTotalAc"><?php echo e($totalAc); ?></p>
+                                        <p class="stat-meta">Across all rooms</p>
+                                    </div>
+                                    <div class="stat-icon"><i class="fa-solid fa-snowflake"></i></div>
+                                </div>
+                            </div>
+                            <div class="stat-card acc-mint">
+                                <span class="accent-bar"></span>
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="stat-label">Ac Active</p>
+                                        <p class="stat-num-lg" id="statActiveAc"><?php echo e($activeAc); ?></p>
+                                        <p class="stat-meta">Currently powered on</p>
+                                    </div>
+                                    <div class="stat-icon"><i class="fa-solid fa-bolt"></i></div>
+                                </div>
+                            </div>
+                            <div class="stat-card acc-coral">
+                                <span class="accent-bar"></span>
+                                <div class="flex items-start justify-between gap-3">
+                                    <div>
+                                        <p class="stat-label">Ac Idle</p>
+                                        <p class="stat-num-lg" id="statInactiveAc"><?php echo e($inactiveAc); ?></p>
+                                        <p class="stat-meta">Powered off</p>
+                                    </div>
+                                    <div class="stat-icon"><i class="fa-regular fa-circle"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow"><i class="fa-solid fa-chart-line"></i> <span
+                                            id="trendRangeLabel">Trend 1 jam terakhir</span></p>
+                                    <h2 class="panel-title">Room Temperatures</h2>
+                                </div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <select id="trendRange" class="trend-filter-select" title="Pilih range waktu">
+                                        <option value="1h">1 Jam</option>
+                                        <option value="3h">3 Jam</option>
+                                        <option value="6h">6 Jam</option>
+                                        <option value="24h">24 Jam</option>
+                                    </select>
+                                    <select id="trendLimit" class="trend-filter-select" title="Pilih jumlah ruangan">
+                                        <option value="5">Top 5</option>
+                                        <option value="10">Top 10</option>
+                                        <option value="0">Semua</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="height:300px;position:relative;">
+                                <canvas id="tempChart"></canvas>
+                                <div id="tempChartEmpty" class="empty-state"
+                                    style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;">
+                                    <div style="text-align:center;">
+                                        <div class="empty-icon"><i class="fa-solid fa-temperature-empty"></i></div>
+                                        <p class="empty-sub">Belum ada data suhu dalam 1 jam terakhir</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p id="trendInfo" class="panel-meta"
+                                style="margin-top:8px;font-size:11px;color:var(--ink-4);"></p>
+                        </div>
+
+                        
+                        <div class="dashboard-bottom-row">
+                            
+                            <section class="panel dashboard-rooms-panel">
+                                <div class="panel-header">
+                                    <div>
+                                        <h2 class="dashboard-rooms-title">Server Rooms</h2>
+                                        <p class="dashboard-rooms-subtitle"><?php echo e($totalRooms); ?> ruangan terdaftar</p>
+                                    </div>
+                                    <a href="<?php echo e(route('rooms.overview')); ?>" class="dashboard-rooms-action"
+                                        aria-label="Lihat semua server rooms">
+                                        <span>Lihat<br>semua</span>
+                                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                    </a>
+                                </div>
+
+                                <?php
+                                    $previewRooms = $rooms->take(4);
+                                ?>
+
+                                <?php if($previewRooms->isNotEmpty()): ?>
+                                    <div class="dashboard-room-list">
+                                        <?php $__currentLoopData = $previewRooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php
+                                                $temperature = $room->temperature;
+                                                $status = $room->device_status === 'online' ? 'online' : 'offline';
+                                            ?>
+                                            <a href="<?php echo e(route('rooms.overview')); ?>" class="dashboard-room-row"
+                                                data-dashboard-room-id="<?php echo e($room->id); ?>">
+                                                <div class="dashboard-room-main">
+                                                    <h3 class="dashboard-room-name"><?php echo e($room->name); ?></h3>
+                                                    <p class="dashboard-room-meta">
+                                                        <?php echo e($room->acUnits->count()); ?> unit &middot;
+                                                        <?php echo e($room->device_id ?: '-'); ?>
+
+                                                    </p>
+                                                    <p class="dashboard-room-last"
+                                                        id="dashboard-room-last-<?php echo e($room->id); ?>">
+                                                        Last update: —
+                                                    </p>
+                                                </div>
+                                                <div id="dashboard-room-temp-<?php echo e($room->id); ?>"
+                                                    class="dashboard-room-temp">
+                                                    <?php if($temperature !== null): ?>
+                                                        <?php echo e(number_format((float) $temperature, 1)); ?>&deg;C
+                                                    <?php else: ?>
+                                                        -- &deg;C
+                                                    <?php endif; ?>
+                                                </div>
+                                                <div class="dashboard-room-status <?php echo e($status); ?>">
+                                                    <?php echo e(strtoupper($status)); ?>
+
+                                                </div>
+                                            </a>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="empty-state" style="padding:28px 12px;">
+                                        <div class="empty-icon"><i class="fa-solid fa-server"></i></div>
+                                        <p class="empty-title">Belum ada ruangan</p>
+                                        <p class="empty-sub">Tambahkan ruangan untuk mulai monitoring</p>
+                                    </div>
+                                <?php endif; ?>
+                            </section>
+
+                            
+                            <section class="panel dashboard-activity-panel">
+                                <div class="activity-header">
+                                    <h2 class="activity-title">Aktivitas Terkini</h2>
+                                    <span class="activity-title-icon"><i class="fa-solid fa-bolt"></i></span>
+                                </div>
+
+                                <div class="activity-list" id="activityList">
+                                    <?php $__empty_1 = true; $__currentLoopData = $recentActivities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <div class="activity-item tone-<?php echo e($log['tone']); ?>">
+                                            <div class="activity-rail"></div>
+                                            <div class="activity-avatar-wrap">
+                                                <?php if(!empty($log['user_avatar'])): ?>
+                                                    <img src="<?php echo e($log['user_avatar']); ?>"
+                                                        alt="<?php echo e($log['user_name']); ?>" class="activity-avatar-img">
+                                                <?php else: ?>
+                                                    <div class="activity-avatar-fallback"><?php echo e($log['user_initial']); ?>
+
+                                                    </div>
+                                                <?php endif; ?>
+                                                <span class="activity-icon-badge"><i
+                                                        class="<?php echo e($log['icon']); ?>"></i></span>
+                                            </div>
+                                            <div class="activity-body">
+                                                <div class="activity-line">
+                                                    <span class="activity-user"><?php echo e($log['user_name']); ?></span>
+                                                    <span class="activity-time"><?php echo e($log['time']); ?></span>
+                                                </div>
+                                                <p class="activity-desc"><?php echo e($log['description']); ?></p>
+                                                <?php if($log['room'] || $log['ac']): ?>
+                                                    <div class="activity-chips">
+                                                        <?php if($log['room']): ?>
+                                                            <span class="chip"><i
+                                                                    class="fa-solid fa-door-open"></i><?php echo e($log['room']); ?></span>
+                                                        <?php endif; ?>
+                                                        <?php if($log['ac']): ?>
+                                                            <span class="chip"><i
+                                                                    class="fa-solid fa-snowflake"></i><?php echo e($log['ac']); ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                        <div class="empty-state" style="padding:24px 12px;">
+                                            <div class="empty-icon"><i class="fa-solid fa-clock-rotate-left"></i>
+                                            </div>
+                                            <p class="empty-title">Belum ada aktivitas</p>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </section>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php echo $__env->make('components.bottom-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+    <script>
+        function tempColor(t) {
+            if (t === null || isNaN(Number(t))) return 'rgba(100,116,139,0.55)';
+            if (t > 30) return 'rgba(251,113,133,0.85)'; // coral
+            if (t > 25) return 'rgba(251,191,36,0.85)'; // amber
+            return 'rgba(77,212,255,0.85)'; // cyan
+        }
+
+        // ===== Helpers (hex -> rgba) =====
+        function hexToRgba(hex, a = 1) {
+            if (!hex) return `rgba(255,255,255,${a})`;
+            const h = hex.replace('#', '').trim();
+            const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+            const r = parseInt(full.slice(0, 2), 16);
+            const g = parseInt(full.slice(2, 4), 16);
+            const b = parseInt(full.slice(4, 6), 16);
+            return `rgba(${r},${g},${b},${a})`;
+        }
+
+        function makeAreaGradient(chart, hex) {
+            const {
+                ctx,
+                chartArea
+            } = chart;
+            if (!chartArea) return hexToRgba(hex, 0.12);
+
+            const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+            g.addColorStop(0, hexToRgba(hex, 0.55));
+            g.addColorStop(0.6, hexToRgba(hex, 0.22));
+            g.addColorStop(1, hexToRgba(hex, 0.0));
+            return g;
+        }
+
+        // ===== Crosshair plugin (garis vertikal + glow point) =====
+        const crosshairGlowPlugin = {
+            id: 'crosshairGlow',
+            afterDatasetsDraw(chart) {
+                const tooltip = chart.tooltip;
+                if (!tooltip || !tooltip.getActiveElements || tooltip.getActiveElements().length === 0) return;
+
+                const {
+                    ctx,
+                    chartArea: {
+                        top,
+                        bottom
+                    }
+                } = chart;
+                const active = tooltip.getActiveElements()[0];
+                const x = active.element.x;
+                const y = active.element.y;
+
+                // vertical line
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, top);
+                ctx.lineTo(x, bottom);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(103,232,249,0.25)';
+                ctx.stroke();
+
+                // glow point
+                ctx.shadowBlur = 16;
+                ctx.shadowColor = 'rgba(255,255,255,0.25)';
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.beginPath();
+                ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        };
+
+        const glowLinePlugin = {
+            id: 'glowLine',
+            beforeDatasetsDraw(chart) {
+                const {
+                    ctx
+                } = chart;
+                ctx.save();
+                ctx.shadowBlur = 18;
+                ctx.shadowColor = 'rgba(103,232,249,0.35)';
+            },
+            afterDatasetsDraw(chart) {
+                chart.ctx.restore();
+            }
+        };
+
+        /* ===== NOTIFICATIONS ===== */
+        let notifEnabled = localStorage.getItem('notifEnabled') === 'true';
+        const notifCooldown = {};
+
+        function updateNotifButton() {
+            const btn = document.getElementById('notifBtn');
+            if (!btn) return;
+            const i = btn.querySelector('i');
+            if (notifEnabled && Notification.permission === 'granted') {
+                btn.style.color = 'var(--amber)';
+                btn.style.background = 'var(--amber-soft)';
+                btn.style.borderColor = 'var(--amber-soft-2)';
+                i.className = 'fa-solid fa-bell text-xs';
+                btn.title = 'Notifications enabled — click to disable';
+            } else {
+                btn.style.color = '';
+                btn.style.background = '';
+                btn.style.borderColor = '';
+                i.className = 'fa-regular fa-bell text-xs';
+                btn.title = 'Enable critical temperature notifications';
+            }
+        }
+
+        function toggleNotifications() {
+            if (!('Notification' in window)) {
+                window.smToast('Browser tidak mendukung notifikasi', 'error');
+                return;
+            }
+            if (notifEnabled) {
+                notifEnabled = false;
+                localStorage.setItem('notifEnabled', 'false');
+                updateNotifButton();
+                return;
+            }
+            Notification.requestPermission().then(perm => {
+                notifEnabled = perm === 'granted';
+                localStorage.setItem('notifEnabled', notifEnabled ? 'true' : 'false');
+                updateNotifButton();
+                if (perm === 'denied') window.smToast('Izin notifikasi ditolak', 'error');
+            });
+        }
+
+        let tempChart;
+
+        const roomLastUpdate = {};
+
+        function setRoomLastUpdate(roomId) {
+
+            if (!roomId) return;
+
+            roomLastUpdate[roomId] = Date.now();
+
+            const el = document.getElementById(`dashboard-room-last-${roomId}`);
+
+            if (el) {
+                el.innerHTML =
+                    `<span class="live-dot"></span> Last update: baru saja`;
+            }
+        }
+
+        function tickRoomLastUpdate() {
+
+            const now = Date.now();
+
+            for (const [roomId, ts] of Object.entries(roomLastUpdate)) {
+
+                const el = document.getElementById(
+                    `dashboard-room-last-${roomId}`
+                );
+
+                if (!el) continue;
+
+                const sec = Math.floor((now - ts) / 1000);
+
+                let text = 'baru saja';
+
+                if (sec >= 60) {
+                    text = `${Math.floor(sec / 60)} menit lalu`;
+                } else if (sec >= 5) {
+                    text = `${sec} detik lalu`;
+                }
+
+                el.innerHTML =
+                    `<span class="live-dot"></span> Last update: ${text}`;
+            }
+        }
+
+        setInterval(tickRoomLastUpdate, 1000);
+
+        function initChart() {
+            const canvas = document.getElementById('tempChart');
+            if (!canvas) return;
+
+            tempChart = new Chart(canvas, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                plugins: [glowLinePlugin, crosshairGlowPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'nearest',
+                        intersect: false,
+                        axis: 'x'
+                    },
+
+                    animation: {
+                        duration: 450
+                    },
+
+                    elements: {
+                        line: {
+                            tension: 0.48,
+                            borderWidth: 2.5,
+                            borderCapStyle: 'round',
+                            borderJoinStyle: 'round',
+                        },
+                        point: {
+                            radius: 0,
+                            hitRadius: 12,
+                            hoverRadius: 5
+                        }
+                    },
+
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            align: 'end',
+                            labels: {
+                                color: '#94a3b8',
+                                font: {
+                                    family: 'Inter',
+                                    size: 11
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'circle',
+                                boxWidth: 8,
+                                boxHeight: 8,
+                                padding: 12,
+                            }
+                        },
+
+                        tooltip: {
+                            enabled: true,
+                            displayColors: false,
+                            backgroundColor: 'rgba(7,16,31,0.95)',
+                            borderColor: 'rgba(255,255,255,0.12)',
+                            borderWidth: 1,
+                            padding: 10,
+                            cornerRadius: 10,
+                            mode: 'nearest',
+                            intersect: false,
+                            caretSize: 6,
+                            caretPadding: 8,
+                            titleColor: '#e2e8f0',
+                            bodyColor: '#f8fafc',
+                            titleFont: {
+                                family: 'Inter',
+                                size: 11,
+                                weight: '700'
+                            },
+                            bodyFont: {
+                                family: 'Inter',
+                                size: 12,
+                                weight: '800'
+                            },
+                            callbacks: {
+                                title: (items) => items?.[0]?.label ?? '',
+                                label: (item) => {
+                                    const v = item.parsed.y;
+                                    if (v === null || Number.isNaN(v)) return `${item.dataset.label}: —`;
+                                    return `${item.dataset.label}: ${v.toFixed(1)}°C`;
+                                }
+                            }
+                        }
+                    },
+
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#64748b',
+                                maxRotation: 0,
+                                font: {
+                                    size: 10
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            suggestedMin: 20,
+                            suggestedMax: 35,
+                            ticks: {
+                                color: '#64748b',
+                                font: {
+                                    size: 10
+                                },
+                                callback: v => v + '°C'
+                            },
+                            grid: {
+                                color: 'rgba(103,232,249,0.12)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function refreshTemperature() {
+            fetch('/temperature')
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (!data) return;
+                    data.forEach(room => {
+                        const tempEl = document.getElementById(`dashboard-room-temp-${room.id}`);
+                        if (!tempEl) return;
+                        const temp = parseFloat(room.temp);
+                        tempEl.textContent = isNaN(temp) ? '-- \u00b0C' : `${temp.toFixed(1)}\u00b0C`;
+
+                        setRoomLastUpdate(room.id);
+                    });
+                })
+                .catch(() => {});
+        }
+
+        function getTrendLimit() {
+            const saved = localStorage.getItem('trendLimit');
+            return saved !== null ? saved : '5';
+        }
+
+        function getTrendRange() {
+            const saved = localStorage.getItem('trendRange');
+            return saved !== null ? saved : '1h';
+        }
+
+        const RANGE_LABELS = {
+            '1h': 'Trend 1 jam terakhir',
+            '3h': 'Trend 3 jam terakhir',
+            '6h': 'Trend 6 jam terakhir',
+            '24h': 'Trend 24 jam terakhir',
+        };
+
+        function refreshTrendChart() {
+            if (!tempChart) return;
+
+            const limit = getTrendLimit();
+            const range = getTrendRange();
+
+            const labelEl = document.getElementById('trendRangeLabel');
+            if (labelEl) labelEl.textContent = RANGE_LABELS[range] || RANGE_LABELS['1h'];
+
+            fetch(`/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
+                .then(r => (r.ok ? r.json() : null))
+                .then(data => {
+                    if (!data || !tempChart) return;
+
+                    const hasAnyData = (data.datasets || []).some(ds =>
+                        (ds.data || []).some(v => v !== null && !isNaN(v))
+                    );
+
+                    const emptyEl = document.getElementById('tempChartEmpty');
+                    const canvasEl = document.getElementById('tempChart');
+                    if (emptyEl && canvasEl) {
+                        emptyEl.style.display = hasAnyData ? 'none' : 'flex';
+                        canvasEl.style.display = hasAnyData ? 'block' : 'none';
+                    }
+
+                    tempChart.data.labels = data.labels || [];
+
+                    tempChart.data.datasets = (data.datasets || []).map(ds => {
+                        const tempStr = ds.current_temp !== null && ds.current_temp !== undefined ?
+                            `${Number(ds.current_temp).toFixed(1)}°C` :
+                            '—';
+
+                        const lineColor = ds.is_offline ?
+                            'rgba(148,163,184,0.45)' :
+                            '#67e8f9';
+
+                        return {
+                            label: `${ds.room} (${tempStr})`,
+                            data: ds.data,
+
+                            borderColor: lineColor,
+                            borderWidth: ds.is_offline ? 1.8 : 3.2,
+
+                            tension: 0.48,
+                            cubicInterpolationMode: 'monotone',
+
+                            pointRadius: 2,
+                            pointHitRadius: 40,
+                            pointHoverRadius: 5,
+                            pointBackgroundColor: '#67e8f9',
+                            pointBorderWidth: 0,
+
+                            fill: true,
+                            backgroundColor: (ctx) => {
+                                const chart = ctx.chart;
+                                const base = ds.is_offline ? (ds.color || '#64748b') : (ds.color ||
+                                    '#22d3ee');
+                                return makeAreaGradient(chart, base);
+                            },
+
+                            spanGaps: true,
+                            _isOffline: ds.is_offline,
+                            _offlineSince: ds.offline_since,
+                        };
+                    });
+
+                    tempChart.update();
+
+                    const infoEl = document.getElementById('trendInfo');
+                    if (infoEl) {
+                        if ((data.total_rooms || 0) > (data.shown || 0)) {
+                            infoEl.textContent =
+                                `Menampilkan ${data.shown} dari ${data.total_rooms} ruangan (urutkan: suhu tertinggi).`;
+                        } else {
+                            infoEl.textContent =
+                                `Menampilkan ${data.shown || (data.datasets || []).length} ruangan.`;
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
+
+        setInterval(refreshTemperature, 5000);
+        setInterval(refreshTrendChart, 5000);
+
+        function refreshDashboardRoomStatuses() {
+            fetch('/device-status', {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    cache: 'no-store'
+                })
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (!Array.isArray(data)) return;
+
+                    data.forEach(device => {
+                        const row = document.querySelector(
+                            `[data-dashboard-room-id="${device.room_id}"]`);
+                        const statusEl = row?.querySelector('.dashboard-room-status');
+                        if (!statusEl) return;
+
+                        const isOnline = device.is_online === true || device.status === 'online';
+                        statusEl.classList.toggle('online', isOnline);
+                        statusEl.classList.toggle('offline', !isOnline);
+                        statusEl.textContent = isOnline ? 'ONLINE' : 'OFFLINE';
+                    });
+                })
+                .catch(() => {});
+        }
+
+        setInterval(refreshDashboardRoomStatuses, 5000);
+
+        function refreshDashboardStats() {
+            fetch('/dashboard/stats', {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    cache: 'no-store'
+                })
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (!data) return;
+                    const set = (id, v) => {
+                        const el = document.getElementById(id);
+                        if (el && v !== undefined && v !== null) el.textContent = v;
+                    };
+                    set('statTotalAc', data.total_ac);
+                    set('statActiveAc', data.active_ac);
+                    set('statInactiveAc', data.inactive_ac);
+                })
+                .catch(() => {});
+        }
+
+        function setSystemStatus(online) {
+            const el = document.getElementById('systemStatus');
+            if (!el) return;
+            el.className = 'pill ' + (online ? 'pill-online' : 'pill-offline');
+            el.innerHTML = `<span class="dot"></span><span>${online ? 'Online' : 'Offline'}</span>`;
+        }
+        window.addEventListener('online', () => setSystemStatus(true));
+        window.addEventListener('offline', () =>
+            setSystemStatus(false));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            setSystemStatus(navigator.onLine);
+            updateNotifButton();
+
+            // Real-time via Reverb: trigger refresh segera saat event masuk
+            if (window.Echo) {
+                window.Echo.channel('device-status')
+                    .listen('.DeviceStatusUpdated', () => {
+                        refreshDashboardRoomStatuses();
+                        refreshTemperature();
+                    })
+                    .listen('.RoomTemperatureUpdated', () => {
+                        refreshTemperature();
+                        refreshTrendChart();
+                    })
+                    .listen('.AcStatusUpdated', () => {
+                        // AC power/mode/temp berubah dari user/tab lain → refresh trend, status, counter
+                        refreshTrendChart();
+                        refreshDashboardRoomStatuses();
+                        refreshDashboardStats();
+                    })
+                    .listen('.UserLogCreated', () => {
+                        if (typeof refreshRecentActivities === 'function') {
+                            refreshRecentActivities();
+                        }
+                    })
+                    .listen('.NotificationCreated', () => {
+                        if (typeof updateNotifButton === 'function') {
+                            updateNotifButton();
+                        }
+                    });
+            }
+
+            // Setup trend filter dropdowns
+            const trendSelect = document.getElementById('trendLimit');
+            if (trendSelect) {
+                trendSelect.value = getTrendLimit();
+                trendSelect.addEventListener('change', (e) => {
+                    localStorage.setItem('trendLimit', e.target.value);
+                    refreshTrendChart();
+                });
+            }
+            const rangeSelect = document.getElementById('trendRange');
+            if (rangeSelect) {
+                rangeSelect.value = getTrendRange();
+                rangeSelect.addEventListener('change', (e) => {
+                    localStorage.setItem('trendRange', e.target.value);
+                    refreshTrendChart();
+                });
+            }
+
+            setTimeout(refreshTemperature, 400);
+            setTimeout(refreshTrendChart, 500);
+            setTimeout(refreshDashboardRoomStatuses, 600);
+            setTimeout(refreshDashboardStats, 700);
+
+            // Recent Activity live polling
+            const activityList = document.getElementById('activityList');
+            const liveBadge = document.getElementById('activityLiveBadge');
+            const allowedTones = ['cyan', 'mint', 'lavender', 'coral', 'amber', 'sky', 'slate'];
+            const allowedIconPrefix = /^fa-(solid|regular|brands)\s+fa-[a-z0-9-]+$/i;
+
+            function escapeHtml(str) {
+                return String(str ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function safeIcon(icon) {
+                const v = String(icon || '').trim();
+                return allowedIconPrefix.test(v) ? v : 'fa-solid fa-circle-info';
+            }
+
+            function safeTone(tone) {
+                return allowedTones.includes(tone) ? tone : 'slate';
+            }
+
+            function renderActivity(item) {
+                const tone = safeTone(item.tone);
+                const icon = safeIcon(item.icon);
+                const name = escapeHtml(item.user_name || 'System');
+                const initial = escapeHtml(item.user_initial || (item.user_name || '?').charAt(0)
+                    .toUpperCase());
+                const desc = escapeHtml(item.description || item.raw_activity || '');
+                const time = escapeHtml(item.time || '');
+                const room = item.room ?
+                    `<span class="chip"><i class="fa-solid fa-door-open"></i>${escapeHtml(item.room)}</span>` :
+                    '';
+                const ac = item.ac ?
+                    `<span class="chip"><i class="fa-solid fa-snowflake"></i>${escapeHtml(item.ac)}</span>` :
+                    '';
+                const chips = (room || ac) ? `<div class="activity-chips">${room}${ac}</div>` : '';
+
+                const avatar = item.user_avatar ?
+                    `<img src="${escapeHtml(item.user_avatar)}" alt="${name}" class="activity-avatar-img">` :
+                    `<div class="activity-avatar-fallback">${initial}</div>`;
+
+                return `
+            <div class="activity-item tone-${tone}" data-id="${item.id}">
+                <div class="activity-rail"></div>
+                <div class="activity-avatar-wrap">
+                    ${avatar}
+                    <span class="activity-icon-badge"><i class="${icon}"></i></span>
+                </div>
+                <div class="activity-body">
+                    <div class="activity-line">
+                        <span class="activity-user">${name}</span>
+                        <span class="activity-time">${time}</span>
+                    </div>
+                    <p class="activity-desc">${desc}</p>
+                    ${chips}
+                </div>
+            </div>
+        `;
+            }
+
+            async function refreshRecentActivities() {
+                if (!activityList) return;
+                try {
+                    const res = await fetch('/dashboard/recent-activities', {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    if (!res.ok) throw new Error('fetch failed');
+                    const data = await res.json();
+                    if (!Array.isArray(data) || data.length === 0) return;
+                    activityList.innerHTML = data.map(renderActivity).join('');
+                    if (liveBadge) liveBadge.style.opacity = '1';
+                } catch (e) {
+                    if (liveBadge) liveBadge.style.opacity = '0.5';
+                }
+            }
+
+            setInterval(refreshRecentActivities, 12000);
+        });
+    </script>
+    <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+</body>
+
+</html>
+<?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/dashboard/dashboard.blade.php ENDPATH**/ ?>

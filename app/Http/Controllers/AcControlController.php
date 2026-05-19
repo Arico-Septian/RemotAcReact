@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Log;
 class AcControlController extends Controller
 {
     private const MODES = ['COOL', 'HEAT', 'DRY', 'FAN', 'AUTO'];
+
     private const FAN_SPEEDS = ['AUTO', 'LOW', 'MEDIUM', 'HIGH'];
+
     private const SWINGS = ['OFF', 'FULL', 'HALF', 'DOWN'];
 
     private $mqtt;
@@ -23,6 +25,7 @@ class AcControlController extends Controller
     {
         $this->mqtt = null;
     }
+
     private function statusFor(AcUnit $ac): AcStatus
     {
         return AcStatus::firstOrCreate(
@@ -81,16 +84,16 @@ class AcControlController extends Controller
     private function sendFullState(AcUnit $ac, Room $room, AcStatus $status): bool
     {
         try {
-            $this->mqtt ??= new MqttService();
+            $this->mqtt ??= new MqttService;
 
             $this->mqtt->publish(
-                'room/' . MqttService::roomToTopic($room->name) . "/ac/{$ac->ac_number}/control",
+                'room/'.MqttService::roomToTopic($room->name)."/ac/{$ac->ac_number}/control",
                 json_encode([
-                    "power" => $status->power ?? 'OFF',
-                    "mode"  => $status->mode ?? 'COOL',
-                    "temp"  => $this->normalizeTemperature($status->set_temperature ?? 24),
-                    "fan_speed" => $status->fan_speed ?? 'AUTO',
-                    "swing" => $status->swing ?? 'OFF',
+                    'power' => $status->power ?? 'OFF',
+                    'mode' => $status->mode ?? 'COOL',
+                    'temp' => $this->normalizeTemperature($status->set_temperature ?? 24),
+                    'fan_speed' => $status->fan_speed ?? 'AUTO',
+                    'swing' => $status->swing ?? 'OFF',
                 ]),
                 1,
                 true
@@ -123,8 +126,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => 'on'
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => 'on',
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
@@ -145,8 +148,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => 'off'
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => 'off',
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
@@ -168,8 +171,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => 'set_temp_' . $value
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => 'set_temp_'.$value,
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
@@ -183,7 +186,7 @@ class AcControlController extends Controller
 
         $targetTemp = $this->normalizeTemperature($targetTemp);
 
-        if ((int)$status->set_temperature === $targetTemp) {
+        if ((int) $status->set_temperature === $targetTemp) {
             return true;
         }
 
@@ -209,8 +212,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => 'mode_' . $mode
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => 'mode_'.$mode,
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
@@ -232,8 +235,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => 'fan_speed_' . $speed
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => 'fan_speed_'.$speed,
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
@@ -255,21 +258,23 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => 'swing_' . $swing
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => 'swing_'.$swing,
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function togglePower($id)
+    public function togglePower(Request $request, $id)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
 
         $status = $this->statusFor($ac);
 
-        $status->power = ($status->power == 'ON') ? 'OFF' : 'ON';
+        $status->power = $request->filled('power')
+            ? $this->normalizePower($request->input('power'))
+            : (($status->power == 'ON') ? 'OFF' : 'ON');
         $status->save();
 
         $sent = $this->sendFullState($ac, $room, $status);
@@ -277,8 +282,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number . ($ac->name ? ' ' . $ac->name : ''),
-            'activity' => strtolower($status->power)
+            'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+            'activity' => strtolower($status->power),
         ]);
 
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
@@ -287,8 +292,8 @@ class AcControlController extends Controller
     public function bulkPower(Request $request, $roomId)
     {
         $power = $this->normalizePower($request->input('power'));
-        $room  = Room::findOrFail($roomId);
-        $acs   = AcUnit::where('room_id', $roomId)->get();
+        $room = Room::findOrFail($roomId);
+        $acs = AcUnit::where('room_id', $roomId)->get();
 
         $allSent = true;
         foreach ($acs as $ac) {
@@ -300,12 +305,13 @@ class AcControlController extends Controller
 
         UserLog::create([
             'user_id' => Auth::id(),
-            'room'    => $room->name,
-            'ac'      => 'Semua AC (' . $acs->count() . ' unit)',
+            'room' => $room->name,
+            'ac' => 'Semua AC ('.$acs->count().' unit)',
             'activity' => $power === 'ON' ? 'bulk_on' : 'bulk_off',
         ]);
 
         $action = $power === 'ON' ? 'dinyalakan' : 'dimatikan';
+
         return $allSent
             ? back()->with('success', "Semua AC di {$room->name} berhasil {$action}")
             : back()->with('warning', "Semua AC di {$room->name} {$action}, tetapi sebagian perintah gagal terkirim ke perangkat.");
@@ -337,8 +343,8 @@ class AcControlController extends Controller
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,
-            'ac' => 'AC ' . $ac->ac_number,
-            'activity' => 'control_ac'
+            'ac' => 'AC '.$ac->ac_number,
+            'activity' => 'control_ac',
         ]);
 
         return response()->json(['success' => true]);
