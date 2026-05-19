@@ -73,10 +73,11 @@ class RoomController extends Controller
                 $currentCreatedAt = $tempHistory->first()->created_at;
                 $previousCreatedAt = $tempHistory[1]->created_at;
                 $timeDiffSeconds = max(1, $currentCreatedAt->diffInSeconds($previousCreatedAt));
-                $tempDiff = $currentTemp - $previousTemp;
 
+                // Use absolute temperature diff (consistent with RunFuzzyLogic).
+                // Drop the value if readings are >5 min apart (sensor was likely offline).
                 if ($timeDiffSeconds <= 300) {
-                    $deltaT = $tempDiff / $timeDiffSeconds;
+                    $deltaT = $currentTemp - $previousTemp;
                 }
             }
 

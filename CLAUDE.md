@@ -76,7 +76,7 @@ Auth middleware stack on protected routes: `auth` → `activity` (updates `last_
 - `AcUnit` — belongs to Room; has `ac_number`, `brand`, `timer_on`, `timer_off`
 - `AcStatus` — one-to-one with AcUnit; stores `power`, `mode`, `set_temperature`, `fan_speed`, `swing`
 - `RoomTemperature` — append-only time-series; use `RoomTemperature::normalizeRoomName()` and `latestByNormalizedRoom()` for lookups
-- `Notification` — broadcast (null `user_id`) or per-user; use static helpers `Notification::deviceOffline()` and `Notification::tempAlert()` which deduplicate via Cache
+- `Notification` — broadcast (null `user_id`) or per-user; static helpers `Notification::deviceOffline()`, `Notification::deviceOnline()`, `Notification::fuzzyAction()`, `Notification::fuzzyWarning()`, `Notification::fuzzyRecovery()` — semua deduplicate via Cache key per-room
 
 ### AC Control Flow
 

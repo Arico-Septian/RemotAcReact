@@ -279,14 +279,14 @@ class AcUnitController extends Controller
         $previousCreatedAt = $tempHistory[1]->created_at;
 
         $timeDiffSeconds = max(1, $currentCreatedAt->diffInSeconds($previousCreatedAt));
-        $tempDiff = $currentTemp - $previousTemp;
 
-        // Jika jarak waktu > 5 menit, sensor mungkin offline kemudian online
+        // Jika jarak waktu > 5 menit, sensor mungkin offline kemudian online — diff tidak meaningful
         if ($timeDiffSeconds > 300) {
             return 0;
         }
 
-        return $tempDiff / $timeDiffSeconds;
+        // Absolute temperature diff (consistent with RunFuzzyLogic + fuzzy membership ranges ±2)
+        return $currentTemp - $previousTemp;
     }
 
     private function setCurrentDeviceStatus(Room $room): void
