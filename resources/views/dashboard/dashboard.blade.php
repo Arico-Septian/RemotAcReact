@@ -760,11 +760,6 @@
             }
         }
 
-        /* Dashboard stat card base styling */
-        .grid.grid-cols-2.lg\:grid-cols-4 .stat-card {
-            padding: 18px 20px;
-        }
-
         /* Lock badge ikon: cegah glyph (mis. fa-bolt) menarik badge jadi lebih besar */
         .stat-card .stat-icon {
             box-sizing: border-box;
@@ -927,16 +922,10 @@
                 padding: 14px 16px;
             }
 
-            .stat-card .flex.items-start > div:first-child {
-                min-width: 0;
-                flex: 1;
-            }
-
             .stat-card .stat-label-sm,
             .stat-card .stat-label {
-                font-size: 9px;
+                font-size: 9.5px;
                 letter-spacing: 0.08em;
-                white-space: nowrap;
             }
 
             .stat-card .stat-num-lg {
@@ -948,9 +937,6 @@
             .stat-card .stat-meta {
                 font-size: 10px;
                 line-height: 1.35;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
 
             .stat-card .stat-icon {
@@ -975,7 +961,6 @@
             .stat-card .stat-label {
                 font-size: 8.5px;
                 letter-spacing: 0.06em;
-                white-space: nowrap;
             }
 
             .stat-card .stat-num-lg {
@@ -987,9 +972,6 @@
             .stat-card .stat-meta {
                 font-size: 9.5px;
                 line-height: 1.3;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
 
             .stat-card .stat-icon {
@@ -1067,7 +1049,6 @@
             .stat-card .stat-label {
                 font-size: 8px;
                 letter-spacing: 0.05em;
-                white-space: nowrap;
             }
 
             .stat-card .stat-num-lg {
@@ -1079,9 +1060,6 @@
             .stat-card .stat-meta {
                 font-size: 9px;
                 line-height: 1.3;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
 
             .stat-card .stat-icon {
@@ -1120,10 +1098,6 @@
             .dashboard-room-row {
                 padding: 12px 14px;
                 min-height: 72px;
-            }
-
-            .stat-card {
-                min-height: 100px;
             }
         }
 
@@ -1231,7 +1205,7 @@
                                     <div>
                                         <p class="stat-label-sm">Rooms</p>
                                         <p class="stat-num-lg">{{ $rooms->count() }}</p>
-                                        <p class="stat-sub">Total registered</p>
+                                        <p class="stat-sub">Terdaftar</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-server"></i></div>
                                 </div>
@@ -1242,7 +1216,7 @@
                                     <div>
                                         <p class="stat-label-sm">AC Units</p>
                                         <p class="stat-num-lg" id="statTotalAc">{{ $totalAc }}</p>
-                                        <p class="stat-sub">Across all rooms</p>
+                                        <p class="stat-sub">Total unit</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-snowflake"></i></div>
                                 </div>
@@ -1253,7 +1227,7 @@
                                     <div>
                                         <p class="stat-label-sm">AC Active</p>
                                         <p class="stat-num-lg" id="statActiveAc">{{ $activeAc }}</p>
-                                        <p class="stat-sub">Currently powered on</p>
+                                        <p class="stat-sub">Menyala</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-bolt"></i></div>
                                 </div>
@@ -1264,7 +1238,7 @@
                                     <div>
                                         <p class="stat-label-sm">AC Idle</p>
                                         <p class="stat-num-lg" id="statInactiveAc">{{ $inactiveAc }}</p>
-                                        <p class="stat-sub">Powered off</p>
+                                        <p class="stat-sub">Tidak aktif</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-power-off"></i></div>
                                 </div>
