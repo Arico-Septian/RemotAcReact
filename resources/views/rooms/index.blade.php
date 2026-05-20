@@ -375,6 +375,203 @@
                 grid-template-columns: 1fr !important;
             }
         }
+
+        /* Compact Add Room modal on tablets */
+        @media (min-width: 601px) and (max-width: 900px) {
+            #modal.modal-backdrop {
+                padding: 12px;
+            }
+
+            #modal .modal {
+                max-width: 390px;
+                border-radius: 16px;
+            }
+
+            #modal .modal-header {
+                padding: 14px 18px 6px;
+                gap: 7px;
+            }
+
+            #modal .eyebrow {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 14px;
+                line-height: 1.15;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 10.5px;
+                line-height: 1.3;
+                margin-top: 5px;
+            }
+
+            #modal .modal-close {
+                width: 26px;
+                height: 26px;
+                font-size: 13px;
+            }
+
+            #modal .modal-body {
+                padding: 5px 18px 7px;
+            }
+
+            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+                margin-top: 7px !important;
+            }
+
+            #modal .field {
+                gap: 4px;
+            }
+
+            #modal .field-label {
+                font-size: 10px;
+                letter-spacing: 0.045em;
+            }
+
+            #modal .input {
+                min-height: 36px;
+                padding: 0 12px;
+                border-radius: 10px;
+                font-size: 11.5px;
+            }
+
+            #modal .field-help {
+                font-size: 10px;
+                line-height: 1.3;
+            }
+
+            #modal .modal-footer {
+                padding: 7px 18px 14px;
+                gap: 8px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 34px;
+                padding: 0 14px;
+                font-size: 11.5px;
+            }
+        }
+
+        /* Compact Add Room modal on mobile S/M/L */
+        @media (max-width: 600px) {
+            #modal.modal-backdrop {
+                padding: 10px;
+            }
+
+            #modal .modal {
+                max-width: min(330px, calc(100vw - 44px));
+                border-radius: 16px;
+            }
+
+            #modal .modal-header {
+                padding: 12px 14px 4px;
+                gap: 6px;
+            }
+
+            #modal .eyebrow {
+                font-size: 9px;
+                margin-bottom: 3px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 14px;
+                line-height: 1.1;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 10px;
+                line-height: 1.25;
+                margin-top: 4px;
+            }
+
+            #modal .modal-close {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+
+            #modal .modal-body {
+                padding: 4px 14px 6px;
+            }
+
+            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+                margin-top: 6px !important;
+            }
+
+            #modal .field {
+                gap: 3px;
+            }
+
+            #modal .field-label {
+                font-size: 9px;
+                letter-spacing: 0.04em;
+            }
+
+            #modal .input {
+                min-height: 34px;
+                padding: 0 10px;
+                border-radius: 10px;
+                font-size: 11px;
+            }
+
+            #modal .field-help {
+                display: none;
+            }
+
+            #modal .modal-footer {
+                padding: 6px 14px 12px;
+                gap: 7px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 34px;
+                padding: 0 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            #modal .modal {
+                max-width: min(310px, calc(100vw - 44px));
+            }
+        }
+
+        @media (max-width: 360px) {
+            #modal.modal-backdrop {
+                padding: 8px;
+            }
+
+            #modal .modal {
+                max-width: min(286px, calc(100vw - 34px));
+                border-radius: 15px;
+            }
+
+            #modal .modal-header {
+                padding: 10px 12px 3px;
+            }
+
+            #modal .modal-body {
+                padding: 3px 12px 5px;
+            }
+
+            #modal .input {
+                min-height: 32px;
+                font-size: 10.5px;
+            }
+
+            #modal .modal-footer {
+                padding: 5px 12px 10px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 32px;
+                padding: 0 10px;
+                font-size: 10.5px;
+            }
+        }
     </style>
 </head>
 
@@ -637,8 +834,6 @@
                             <h2>Tambah Ruangan</h2>
                             <p class="sub">Daftarkan ruangan baru beserta ESP device-nya</p>
                         </div>
-                        <button type="button" class="modal-close" onclick="closeModal()"><i
-                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="addRoomForm" method="POST" action="/rooms">
                         @csrf

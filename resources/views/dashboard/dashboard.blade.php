@@ -1715,7 +1715,6 @@
 
                             borderColor: lineColor,
                             borderWidth: ds.is_offline ? 2.4 : 3.2,
-                            borderDash: ds.is_offline ? [6, 4] : [],
 
                             tension: 0.48,
                             cubicInterpolationMode: 'monotone',

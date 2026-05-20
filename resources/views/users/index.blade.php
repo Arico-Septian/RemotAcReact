@@ -665,6 +665,192 @@
             .tbl-toolbar > div > .btn { flex: 1 1 100%; }
             .tbl-toolbar .segmented .seg { font-size: 10px; padding: 0 4px; }
         }
+
+        /* Compact Add User modal on tablets */
+        @media (min-width: 601px) and (max-width: 900px) {
+            #modal.modal-backdrop {
+                padding: 12px;
+            }
+
+            #modal .modal {
+                max-width: 390px;
+                border-radius: 16px;
+            }
+
+            #modal .modal-header {
+                padding: 14px 18px 6px;
+                gap: 7px;
+            }
+
+            #modal .eyebrow {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 14px;
+                line-height: 1.15;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 10.5px;
+                line-height: 1.3;
+                margin-top: 5px;
+            }
+
+            #modal .modal-body {
+                padding: 5px 18px 7px;
+            }
+
+            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+                margin-top: 7px !important;
+            }
+
+            #modal .field {
+                gap: 4px;
+            }
+
+            #modal .field-label {
+                font-size: 10px;
+                letter-spacing: 0.045em;
+            }
+
+            #modal .input {
+                min-height: 36px;
+                padding: 0 12px;
+                border-radius: 10px;
+                font-size: 11.5px;
+            }
+
+            #modal .field-hint {
+                font-size: 10px !important;
+                line-height: 1.3;
+                margin-top: 2px !important;
+            }
+
+            #modal .modal-footer {
+                padding: 7px 18px 14px;
+                gap: 8px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 34px;
+                padding: 0 14px;
+                font-size: 11.5px;
+            }
+        }
+
+        /* Compact Add User modal on mobile S/M/L */
+        @media (max-width: 600px) {
+            #modal.modal-backdrop {
+                padding: 10px;
+            }
+
+            #modal .modal {
+                max-width: min(330px, calc(100vw - 44px));
+                border-radius: 16px;
+            }
+
+            #modal .modal-header {
+                padding: 12px 14px 4px;
+                gap: 6px;
+            }
+
+            #modal .eyebrow {
+                font-size: 9px;
+                margin-bottom: 3px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 14px;
+                line-height: 1.1;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 10px;
+                line-height: 1.25;
+                margin-top: 4px;
+            }
+
+            #modal .modal-body {
+                padding: 4px 14px 6px;
+            }
+
+            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+                margin-top: 6px !important;
+            }
+
+            #modal .field {
+                gap: 3px;
+            }
+
+            #modal .field-label {
+                font-size: 9px;
+                letter-spacing: 0.04em;
+            }
+
+            #modal .input {
+                min-height: 34px;
+                padding: 0 10px;
+                border-radius: 10px;
+                font-size: 11px;
+            }
+
+            #modal .field-hint {
+                display: none;
+            }
+
+            #modal .modal-footer {
+                padding: 6px 14px 12px;
+                gap: 7px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 34px;
+                padding: 0 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 430px) {
+            #modal .modal {
+                max-width: min(310px, calc(100vw - 44px));
+            }
+        }
+
+        @media (max-width: 360px) {
+            #modal.modal-backdrop {
+                padding: 8px;
+            }
+
+            #modal .modal {
+                max-width: min(286px, calc(100vw - 34px));
+                border-radius: 15px;
+            }
+
+            #modal .modal-header {
+                padding: 10px 12px 3px;
+            }
+
+            #modal .modal-body {
+                padding: 3px 12px 5px;
+            }
+
+            #modal .input {
+                min-height: 32px;
+                font-size: 10.5px;
+            }
+
+            #modal .modal-footer {
+                padding: 5px 12px 10px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 32px;
+                padding: 0 10px;
+                font-size: 10.5px;
+            }
+        }
     </style>
 </head>
 
@@ -1021,11 +1207,9 @@
             <div class="modal-header">
                 <div>
                     <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
-                    <h2>Add new user</h2>
-                    <p class="sub">Pengguna baru akan menerima akses dengan role yang dipilih</p>
+                    <h2>Tambah User</h2>
+                    <p class="sub">Buat akun baru dengan peran akses yang sesuai</p>
                 </div>
-                <button type="button" class="modal-close" onclick="closeModal()"><i
-                        class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="addUserForm" method="POST" action="/users">
                 @csrf
@@ -1033,21 +1217,21 @@
                     <div class="field">
                         <label class="field-label">Username</label>
                         <input class="input" type="text" name="name" id="newUserName"
-                            placeholder="contoh: Admin"
+                            placeholder="contoh: admin"
                             minlength="3" maxlength="20"
                             pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
                             title="Username 3–20 karakter, huruf/angka/underscore, diawali huruf"
                             autocomplete="off" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3–20 karakter, hanya huruf/angka/underscore, diawali huruf.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3-20 karakter, awali dengan huruf.</p>
                     </div>
                     <div class="field">
                         <label class="field-label">Password</label>
-                        <input class="input" type="password" name="password" placeholder="Min 8 + huruf + angka"
+                        <input class="input" type="password" name="password" placeholder="min. 8 karakter"
                             minlength="8" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Minimal 8 karakter — wajib mengandung huruf besar, huruf kecil, dan angka.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Min. 8 karakter, huruf besar/kecil + angka.</p>
                     </div>
                     <div class="field">
-                        <label class="field-label">Role</label>
+                        <label class="field-label">Peran</label>
                         <select class="input select" name="role">
                             <option value="admin">Admin</option>
                             <option value="operator">Operator</option>
@@ -1056,8 +1240,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Create user</button>
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">Buat User</button>
                 </div>
             </form>
         </div>
