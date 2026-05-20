@@ -60,6 +60,13 @@ class DashboardController extends Controller
             }
         }
 
+        // Urut: online dulu, lalu floor naik, lalu nama naik
+        $rooms = $rooms->sortBy([
+            ['device_status', 'desc'], // 'online' > 'offline' alfabetis → online di atas
+            ['floor', 'asc'],
+            ['name', 'asc'],
+        ])->values();
+
         $totalRooms = $rooms->count();
 
         $allAcUnits = $rooms->flatMap->acUnits;

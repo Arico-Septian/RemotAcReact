@@ -42,18 +42,19 @@
             box-shadow: var(--inset-hi);
         }
 
-        /* Bottom row: Server Rooms + Recent Activity (side-by-side desktop) */
+        /* Bottom row: Server Rooms + Recent Activity */
         .dashboard-bottom-row {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: 12px;
         }
 
-        @media (min-width: 1024px) {
+        /* Tablet (≥ 768px) & laptop: berjajar 2 kolom */
+        @media (min-width: 768px) {
             .dashboard-bottom-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
-                align-items: stretch;
+                align-items: start;
             }
         }
 
@@ -116,7 +117,7 @@
         }
 
         .activity-title {
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 700;
             line-height: 1.15;
             color: var(--ink-0);
@@ -176,13 +177,21 @@
             position: relative;
             display: grid;
             grid-template-columns: 4px 34px 1fr;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px 10px 8px;
-            border-radius: 12px;
+            align-items: start;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 14px;
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
             border: 1px solid var(--line-soft);
             transition: all 0.18s ease;
+        }
+
+        .activity-item .activity-rail {
+            align-self: stretch;
+        }
+
+        .activity-item .activity-avatar-wrap {
+            margin-top: 2px;
         }
 
         .activity-item:hover {
@@ -192,12 +201,11 @@
         }
 
         .activity-rail {
-            width: 3px;
-            min-height: 28px;
+            width: 4px;
             border-radius: 999px;
             align-self: stretch;
+            margin: 4px 0;
             background: var(--tone, #94a3b8);
-            box-shadow: 0 0 8px -1px var(--tone, transparent);
             opacity: 0.85;
         }
 
@@ -368,7 +376,7 @@
             }
 
             .activity-title {
-                font-size: 14px;
+                font-size: 16px;
             }
 
             .activity-title-icon {
@@ -378,12 +386,18 @@
 
             .activity-list {
                 max-height: 420px;
+                gap: 10px;
             }
 
             .activity-item {
-                grid-template-columns: 3px 30px 1fr;
-                padding: 9px 10px 9px 7px;
-                gap: 8px;
+                grid-template-columns: 4px 30px 1fr;
+                padding: 12px;
+                gap: 10px;
+                border-radius: 12px;
+            }
+
+            .activity-item .activity-rail {
+                margin: 0;
             }
 
             .activity-icon-wrap {
@@ -427,17 +441,19 @@
         }
 
         .dashboard-rooms-title {
-            font-size: 19px;
+            font-size: 17px;
             font-weight: 700;
             line-height: 1.15;
             color: var(--ink-0);
+            margin: 0;
+            letter-spacing: -0.01em;
         }
 
         .dashboard-rooms-subtitle {
-            margin-top: 4px;
-            font-size: 16px;
-            line-height: 1.25;
-            color: var(--ink-2);
+            margin-top: 3px;
+            font-size: 12px;
+            line-height: 1.3;
+            color: var(--ink-3);
         }
 
         .dashboard-rooms-action {
@@ -472,7 +488,7 @@
 
         .dashboard-room-row {
             min-height: 72px;
-            padding: 14px 16px 14px 18px;
+            padding: 14px 14px 14px 20px;
             border-radius: 14px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -480,7 +496,7 @@
             display: grid;
             grid-template-columns: 1fr auto;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
             position: relative;
             transition: var(--t-base);
         }
@@ -494,17 +510,16 @@
             width: 4px;
             border-radius: 999px;
             background: #fca5a5;
-            transition: background var(--t-base), box-shadow var(--t-base);
+            opacity: 0.85;
+            transition: background var(--t-base);
         }
 
-        /* Indikator status via warna garis kiri */
+        /* Indikator status via warna garis kiri (tanpa glow, match activity rail) */
         .dashboard-room-row[data-status="online"]::before {
             background: #34d399;
-            box-shadow: 0 0 10px rgba(52, 211, 153, 0.55);
         }
         .dashboard-room-row[data-status="offline"]::before {
             background: #fb7185;
-            box-shadow: 0 0 10px rgba(251, 113, 133, 0.45);
         }
 
         /* Dashboard sections spacing */
@@ -520,7 +535,6 @@
 
         .dashboard-room-main {
             min-width: 0;
-            padding-left: 24px;
         }
 
         .dashboard-room-name {
@@ -541,38 +555,6 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        .dashboard-room-last {
-            margin-top: 3px;
-            font-size: 11px;
-            color: var(--ink-4);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .dashboard-room-last .live-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 999px;
-            background: #67e8f9;
-            box-shadow: 0 0 0 0 rgba(103, 232, 249, .55);
-            animation: lastPulse 1.8s ease-out infinite;
-        }
-
-        @keyframes lastPulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(103, 232, 249, .55);
-            }
-
-            70% {
-                box-shadow: 0 0 0 7px rgba(103, 232, 249, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(103, 232, 249, 0);
-            }
         }
 
         .dashboard-room-temp {
@@ -630,8 +612,8 @@
             .dashboard-room-row {
                 grid-template-columns: 1fr auto;
                 gap: 10px;
-                padding: 12px 14px;
-                min-height: 68px;
+                padding: 10px 14px 10px 18px;
+                min-height: 56px;
             }
 
             .dashboard-room-temp {
@@ -659,13 +641,11 @@
                 margin-top: 2px;
             }
 
-            .dashboard-room-main {
-                padding-left: 16px;
-            }
-
             .dashboard-room-row::before {
                 width: 4px;
-                left: 14px;
+                left: 6px;
+                top: 10px;
+                bottom: 10px;
             }
         }
 
@@ -677,9 +657,15 @@
             }
 
             .dashboard-rooms-panel .panel-header {
-                flex-direction: column;
-                gap: 10px;
-                align-items: stretch;
+                flex-direction: row;
+                gap: 8px;
+                align-items: center;
+                flex-wrap: nowrap;
+            }
+
+            .dashboard-rooms-panel .panel-header > div:first-child {
+                min-width: 0;
+                flex: 1;
             }
 
             .dashboard-rooms-title {
@@ -687,11 +673,12 @@
             }
 
             .dashboard-rooms-action {
-                width: 100%;
+                flex-shrink: 0;
+                width: auto;
                 justify-content: center;
-                min-height: 44px;
+                min-height: 36px;
                 font-size: 11px;
-                padding: 8px 12px;
+                padding: 6px 10px;
             }
 
             .dashboard-room-list {
@@ -701,18 +688,19 @@
             .dashboard-room-row {
                 grid-template-columns: 1fr auto;
                 gap: 8px;
-                padding: 10px 12px;
-                min-height: 64px;
+                padding: 10px 12px 10px 16px;
+                min-height: 56px;
                 border-radius: 12px;
             }
 
             .dashboard-room-row::before {
                 width: 3px;
-                left: 12px;
+                left: 6px;
+                top: 9px;
+                bottom: 9px;
             }
 
             .dashboard-room-main {
-                padding-left: 12px;
                 min-width: 0;
             }
 
@@ -877,24 +865,6 @@
                 font-size: 13px;
             }
 
-            .dashboard-room-last {
-                margin-top: 3px;
-                font-size: 11px;
-                color: var(--ink-4);
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
-
-            .dashboard-room-last .live-dot {
-                width: 6px;
-                height: 6px;
-                border-radius: 999px;
-                background: #67e8f9;
-                box-shadow: 0 0 0 0 rgba(103, 232, 249, .55);
-                animation: livePulse 1.8s ease-out infinite;
-            }
-
             .dashboard-room-status {
                 font-size: 10px;
                 padding: 4px 8px;
@@ -1017,14 +987,17 @@
             }
 
             .dashboard-room-row {
-                padding: 10px 12px;
-                min-height: 56px;
+                padding: 8px 10px 8px 14px;
+                min-height: 48px;
                 gap: 8px;
                 border-radius: 10px;
             }
 
             .dashboard-room-row::before {
                 width: 3px;
+                left: 5px;
+                top: 8px;
+                bottom: 8px;
             }
 
             .dashboard-room-name {
@@ -1394,7 +1367,7 @@
                                 </div>
 
                                 @php
-                                    $previewRooms = $rooms->take(4);
+                                    $previewRooms = $rooms->take(5);
                                 @endphp
 
                                 @if ($previewRooms->isNotEmpty())
@@ -1412,10 +1385,6 @@
                                                     <p class="dashboard-room-meta">
                                                         {{ $room->acUnits->count() }} unit &middot;
                                                         {{ $room->device_id ?: '-' }}
-                                                    </p>
-                                                    <p class="dashboard-room-last"
-                                                        id="dashboard-room-last-{{ $room->id }}">
-                                                        Last update: —
                                                     </p>
                                                 </div>
                                                 <div id="dashboard-room-temp-{{ $room->id }}"
@@ -1466,13 +1435,17 @@
                                                     <span class="activity-time">{{ $log['time'] }}</span>
                                                 </div>
                                                 <p class="activity-desc">{{ $log['description'] }}</p>
-                                                @if ($log['room'] || $log['ac'])
+                                                @php
+                                                    $hasRoom = !empty($log['room']) && $log['room'] !== '-';
+                                                    $hasAc = !empty($log['ac']) && $log['ac'] !== '-';
+                                                @endphp
+                                                @if ($hasRoom || $hasAc)
                                                     <div class="activity-chips">
-                                                        @if ($log['room'])
+                                                        @if ($hasRoom)
                                                             <span class="chip"><i
                                                                     class="fa-solid fa-door-open"></i>{{ $log['room'] }}</span>
                                                         @endif
-                                                        @if ($log['ac'])
+                                                        @if ($hasAc)
                                                             <span class="chip"><i
                                                                     class="fa-solid fa-snowflake"></i>{{ $log['ac'] }}</span>
                                                         @endif
@@ -1629,51 +1602,6 @@
         }
 
         let tempChart;
-
-        const roomLastUpdate = {};
-
-        function setRoomLastUpdate(roomId) {
-
-            if (!roomId) return;
-
-            roomLastUpdate[roomId] = Date.now();
-
-            const el = document.getElementById(`dashboard-room-last-${roomId}`);
-
-            if (el) {
-                el.innerHTML =
-                    `<span class="live-dot"></span> Last update: baru saja`;
-            }
-        }
-
-        function tickRoomLastUpdate() {
-
-            const now = Date.now();
-
-            for (const [roomId, ts] of Object.entries(roomLastUpdate)) {
-
-                const el = document.getElementById(
-                    `dashboard-room-last-${roomId}`
-                );
-
-                if (!el) continue;
-
-                const sec = Math.floor((now - ts) / 1000);
-
-                let text = 'baru saja';
-
-                if (sec >= 60) {
-                    text = `${Math.floor(sec / 60)} menit lalu`;
-                } else if (sec >= 5) {
-                    text = `${sec} detik lalu`;
-                }
-
-                el.innerHTML =
-                    `<span class="live-dot"></span> Last update: ${text}`;
-            }
-        }
-
-        setInterval(tickRoomLastUpdate, 1000);
 
         function chartSizingForViewport() {
             const w = window.innerWidth;
@@ -1853,8 +1781,6 @@
                         if (!tempEl) return;
                         const temp = parseFloat(room.temp ?? room.last_temp ?? room.temperature);
                         tempEl.textContent = isNaN(temp) ? '-- \u00b0C' : `${temp.toFixed(1)}\u00b0C`;
-
-                        setRoomLastUpdate(room.id);
                     });
                 })
                 .catch(() => {});
@@ -2115,10 +2041,12 @@
                     .toUpperCase());
                 const desc = escapeHtml(item.description || item.raw_activity || '');
                 const time = escapeHtml(item.time || '');
-                const room = item.room ?
+                const hasRoom = item.room && item.room !== '-';
+                const hasAc = item.ac && item.ac !== '-';
+                const room = hasRoom ?
                     `<span class="chip"><i class="fa-solid fa-door-open"></i>${escapeHtml(item.room)}</span>` :
                     '';
-                const ac = item.ac ?
+                const ac = hasAc ?
                     `<span class="chip"><i class="fa-solid fa-snowflake"></i>${escapeHtml(item.ac)}</span>` :
                     '';
                 const chips = (room || ac) ? `<div class="activity-chips">${room}${ac}</div>` : '';
