@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AcUnit;
-use App\Models\Room;
 use App\Models\User;
 use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
@@ -240,7 +237,11 @@ class UserController extends Controller
             return back()->withErrors(['current_password' => 'Password saat ini salah.']);
         }
 
-        // Update password + invalidate session lain (mis. perangkat yang dicuri),
+        $user->forceFill([
+            'password' => Hash::make($request->password),
+        ])->save();
+
+        // Invalidate session lain (mis. perangkat yang dicuri),
         // lalu rotate session ID milik device saat ini untuk cegah session fixation.
         Auth::logoutOtherDevices($request->password);
         $request->session()->regenerate();

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'avatar',
@@ -14,7 +17,7 @@ class User extends Authenticatable
         'is_online',
         'last_activity',
         'last_login_at',
-        'last_logout_at'
+        'last_logout_at',
     ];
 
     protected $hidden = [
@@ -33,7 +36,7 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->avatar ? asset('storage/' . $this->avatar) : null;
+        return $this->avatar ? asset('storage/'.$this->avatar) : null;
     }
 
     public function isAdmin()
