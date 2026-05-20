@@ -26,7 +26,6 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'role' => 'user',
-            'is_online' => false,
             'last_activity' => null,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
