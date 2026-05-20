@@ -265,12 +265,26 @@
             }
         }
 
-        /* ===== Auto-fit room grid (overrides Tailwind grid-cols on .floor-section) ===== */
+        /* ===== Room grid: 2 cols (mobile) / 3 cols (tablet) / 5 cols (laptop) ===== */
         .floor-section > .grid {
             display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 260px)) !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 12px !important;
-            justify-content: start;
+            justify-content: stretch;
+        }
+
+        /* Tablet (≥ 768px): 3 cols */
+        @media (min-width: 768px) {
+            .floor-section > .grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+        }
+
+        /* Laptop (≥ 1024px): 5 cols */
+        @media (min-width: 1024px) {
+            .floor-section > .grid {
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            }
         }
 
         /* Toolbar wraps to 2 rows on tiny phones so search field gets its full width */
@@ -352,13 +366,12 @@
             /* Shrink the Online pill to just the dot on tiny screens */
             .main-header > .flex.items-center.gap-2 #systemStatus span:not(.dot) { display: none; }
             .main-header > .flex.items-center.gap-2 #systemStatus { padding: 4px 6px; }
-            .main-header > .flex.items-center.gap-2 .btn-icon { width: 32px; height: 32px; }
+            .main-header > .flex.items-center.gap-2 .btn-icon { width: 28px; height: 28px; }
         }
 
-        /* Phones (≤ 600 px): tighter card, stretch with 1fr so 2-col fills row */
+        /* Phones (≤ 600 px): tighter card spacing — grid tetap 2 kolom */
         @media (max-width: 600px) {
             .floor-section > .grid {
-                grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
                 gap: 10px !important;
             }
 
@@ -369,11 +382,12 @@
             .room-card .label-tag { font-size: 8.5px !important; margin-top: 2px !important; }
         }
 
-        /* Tiny phones (≤ 360 px): 1-col so card stays legible */
+        /* Tiny phones (≤ 360 px): grid tetap 2 kolom, lebih rapat */
         @media (max-width: 360px) {
             .floor-section > .grid {
-                grid-template-columns: 1fr !important;
+                gap: 8px !important;
             }
+            .room-card { padding: 9px; gap: 6px; }
         }
 
         /* Compact Add Room modal on tablets */
@@ -586,7 +600,7 @@
             <header class="main-header">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
-                        <i class="fa-solid fa-bars"></i>
+                        <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
                         <h1>Rooms &amp; AC Units</h1>

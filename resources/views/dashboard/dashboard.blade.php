@@ -93,7 +93,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .activity-title-group {
@@ -165,7 +165,7 @@
         .activity-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 10px;
             flex: 1;
             overflow-y: auto;
             min-height: 0;
@@ -355,9 +355,16 @@
             opacity: 0.7;
         }
 
+        @media (max-width: 640px) {
+            .dashboard-activity-panel {
+                padding: 16px;
+            }
+        }
+
         @media (max-width: 480px) {
             .dashboard-activity-panel {
-                padding: 14px 12px 12px;
+                padding: 12px;
+                border-radius: 16px;
             }
 
             .activity-title {
@@ -1177,7 +1184,7 @@
             <header class="main-header">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
-                        <i class="fa-solid fa-bars"></i>
+                        <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
                         <h1>Dashboard</h1>

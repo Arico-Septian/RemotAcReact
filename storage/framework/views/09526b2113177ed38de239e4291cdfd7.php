@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Monitoring Suhu Server – SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite('resources/js/app.js')
-    @include('components.sidebar-styles')
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    <?php echo $__env->make('components.sidebar-styles', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <style>
         .raspi-card {
             background: var(--panel-1);
@@ -140,13 +140,13 @@
     <div id="overlay"></div>
 
     <div class="layout">
-        @include('components.sidebar')
+        <?php echo $__env->make('components.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
-                        <i class="fa-solid fa-bars-staggered"></i>
+                        <i class="fa-solid fa-bars"></i>
                     </button>
                     <div class="app-header-title">
                         <h1>Monitoring Suhu Server</h1>
@@ -154,7 +154,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    @include('components.notification-bell')
+                    <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                     <span id="systemStatus" class="pill pill-online">
                         <span class="dot"></span>
                         <span>Online</span>
@@ -182,11 +182,11 @@
                 </div>
             </div>
 
-            @include('components.bottom-nav')
+            <?php echo $__env->make('components.bottom-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         </div>
     </div>
 
-    @include('components.sidebar-scripts')
+    <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <script>
         function getSuhu() {
             fetch('/suhu-raspi?_=' + Date.now(), {
@@ -246,3 +246,4 @@
 </html>
 
 
+<?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/server/monitoring.blade.php ENDPATH**/ ?>

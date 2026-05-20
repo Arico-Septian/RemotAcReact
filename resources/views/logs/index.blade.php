@@ -476,7 +476,7 @@
             <header class="main-header">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
-                        <i class="fa-solid fa-bars"></i>
+                        <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
                         <h1>Activity Log</h1>

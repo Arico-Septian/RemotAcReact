@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server Rooms – SmartAC</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="/js/chart.umd.js"></script>
-    @vite('resources/js/app.js')
-    @include('components.sidebar-styles')
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    <?php echo $__env->make('components.sidebar-styles', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <style>
         .room-card {
             position: relative;
@@ -433,7 +433,7 @@
     <div id="overlay"></div>
 
     <div class="layout">
-        @include('components.sidebar')
+        <?php echo $__env->make('components.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <div class="main-content">
             <header class="main-header">
@@ -443,11 +443,11 @@
                     </button>
                     <div class="app-header-title">
                         <h1>Server Rooms</h1>
-                        <p>{{ $rooms->count() }} ruangan · AC monitoring</p>
+                        <p><?php echo e($rooms->count()); ?> ruangan · AC monitoring</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    @include('components.notification-bell')
+                    <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                     <span id="systemStatus" class="pill pill-online">
                         <span class="dot"></span>
                         <span>Online</span>
@@ -459,7 +459,7 @@
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
 
-                        {{-- Toolbar --}}
+                        
                         <div class="flex flex-row items-center gap-2">
                             <label class="search-input flex-1 min-w-0">
                                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -479,23 +479,23 @@
 
                         <p id="roomCount" class="text-mono text-xs" style="color:var(--ink-3);"></p>
 
-                        @if ($rooms->count() > 0)
+                        <?php if($rooms->count() > 0): ?>
                             <div id="allSections">
-                                @foreach ($roomsByFloor as $floorName => $floorRooms)
-                                    <div class="floor-section" data-section-floor="{{ $floorName }}">
-                                        @if ($roomsByFloor->count() > 1)
+                                <?php $__currentLoopData = $roomsByFloor; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floorName => $floorRooms): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <div class="floor-section" data-section-floor="<?php echo e($floorName); ?>">
+                                        <?php if($roomsByFloor->count() > 1): ?>
                                             <div class="floor-section-header">
                                                 <i class="fa-solid fa-layer-group text-[10px]"
                                                     style="color:var(--lavender);"></i>
-                                                <span class="floor-label">{{ ucfirst($floorName) }}</span>
+                                                <span class="floor-label"><?php echo e(ucfirst($floorName)); ?></span>
                                                 <div class="floor-divider"></div>
-                                                <span class="floor-count">{{ $floorRooms->count() }} ruangan</span>
+                                                <span class="floor-count"><?php echo e($floorRooms->count()); ?> ruangan</span>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div
                                             class="floor-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 mb-6">
-                                            @foreach ($floorRooms as $room)
-                                                @php
+                                            <?php $__currentLoopData = $floorRooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php
                                                     $activeCount = $room->acUnits
                                                         ->filter(fn($ac) => optional($ac->status)->power === 'ON')
                                                         ->count();
@@ -512,34 +512,35 @@
                                                                 : ($temp > 25
                                                                     ? 'warm'
                                                                     : 'cool'));
-                                                @endphp
-                                                <div class="room-card" data-room-id="{{ $room->id }}"
-                                                    data-name="{{ strtolower($room->name) }}"
-                                                    data-status="{{ $status }}" data-floor="{{ $floorName }}">
+                                                ?>
+                                                <div class="room-card" data-room-id="<?php echo e($room->id); ?>"
+                                                    data-name="<?php echo e(strtolower($room->name)); ?>"
+                                                    data-status="<?php echo e($status); ?>" data-floor="<?php echo e($floorName); ?>">
                                                     <div class="flex items-start justify-between gap-2">
                                                         <h3 class="font-semibold text-tight"
                                                             style="color:var(--ink-0);line-height:1.25;font-size:16px;">
-                                                            {{ ucfirst($room->name) }}
+                                                            <?php echo e(ucfirst($room->name)); ?>
+
                                                         </h3>
                                                         <span
-                                                            class="pill room-status-pill {{ $status === 'online' ? 'pill-online' : 'pill-offline' }}"
+                                                            class="pill room-status-pill <?php echo e($status === 'online' ? 'pill-online' : 'pill-offline'); ?>"
                                                             style="padding:3px 8px;font-size:10px;">
                                                             <span class="dot"></span><span
-                                                                class="room-status-text">{{ $status === 'online' ? 'Online' : 'Offline' }}</span>
+                                                                class="room-status-text"><?php echo e($status === 'online' ? 'Online' : 'Offline'); ?></span>
                                                         </span>
                                                     </div>
 
-                                                    <div class="temp-chip {{ $room->temperature_is_offline ? 'idle' : $tempClass }}"
+                                                    <div class="temp-chip <?php echo e($room->temperature_is_offline ? 'idle' : $tempClass); ?>"
                                                         style="justify-content:space-between;width:100%;">
                                                         <span style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
                                                             <i class="fa-solid fa-temperature-half text-[10px]"></i>Suhu
                                                         </span>
                                                         <span style="display:inline-flex;align-items:center;gap:5px;">
-                                                            @if ($room->temperature_is_offline)
+                                                            <?php if($room->temperature_is_offline): ?>
                                                                 <i class="fa-solid fa-wifi-slash temp-offline-icon" style="font-size:11px;color:var(--coral);"></i>
-                                                            @endif
-                                                            <span id="temp-{{ $room->id }}" class="text-mono" data-offline="{{ $room->temperature_is_offline ? 'true' : 'false' }}">
-                                                                {{ $temp ?? '–' }}°C
+                                                            <?php endif; ?>
+                                                            <span id="temp-<?php echo e($room->id); ?>" class="text-mono" data-offline="<?php echo e($room->temperature_is_offline ? 'true' : 'false'); ?>">
+                                                                <?php echo e($temp ?? '–'); ?>°C
                                                             </span>
                                                         </span>
                                                     </div>
@@ -547,34 +548,34 @@
                                                     <div class="ac-mini">
                                                         <div>
                                                             <p class="num" style="color:var(--mint);"
-                                                                id="ov-active-{{ $room->id }}">
-                                                                {{ $activeCount }}</p>
+                                                                id="ov-active-<?php echo e($room->id); ?>">
+                                                                <?php echo e($activeCount); ?></p>
                                                             <p class="lbl">Active</p>
                                                         </div>
                                                         <div>
                                                             <p class="num" style="color:var(--ink-2);"
-                                                                id="ov-idle-{{ $room->id }}">
-                                                                {{ $inactiveCount }}</p>
+                                                                id="ov-idle-<?php echo e($room->id); ?>">
+                                                                <?php echo e($inactiveCount); ?></p>
                                                             <p class="lbl">Idle</p>
                                                         </div>
                                                     </div>
 
                                                     <div class="flex gap-1.5 mt-auto pt-1">
-                                                        <a href="/rooms/{{ $room->id }}/status"
+                                                        <a href="/rooms/<?php echo e($room->id); ?>/status"
                                                             class="btn btn-primary btn-sm flex-1">
                                                             Detail
                                                         </a>
                                                         <button type="button"
-                                                            onclick="openHistory({{ $room->id }}, '{{ ucfirst($room->name) }}')"
+                                                            onclick="openHistory(<?php echo e($room->id); ?>, '<?php echo e(ucfirst($room->name)); ?>')"
                                                             class="btn-icon lavender" title="Histori suhu 24 jam">
                                                             <i class="fa-solid fa-chart-line text-[10px]"></i>
                                                         </button>
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
                                     </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
 
                             <div id="emptyState" class="empty-state" hidden>
@@ -582,13 +583,13 @@
                                 <p class="empty-title">Tidak ditemukan</p>
                                 <p class="empty-sub">Coba kata kunci atau filter lain</p>
                             </div>
-                        @else
+                        <?php else: ?>
                             <div class="empty-state">
                                 <div class="empty-icon"><i class="fa-solid fa-server"></i></div>
                                 <p class="empty-title">Belum ada ruangan</p>
                                 <p class="empty-sub">Hubungi administrator untuk menambahkan ruangan</p>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                     </div>
                 </div>
@@ -596,7 +597,7 @@
         </div>
     </div>
 
-    {{-- HISTORY MODAL --}}
+    
     <div id="historyModal" class="modal-backdrop">
         <div class="modal modal-lg">
             <div class="modal-header">
@@ -625,7 +626,7 @@
         </div>
     </div>
 
-    @include('components.bottom-nav')
+    <?php echo $__env->make('components.bottom-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script>
         /* ===== SEARCH, STATUS & FLOOR FILTER ===== */
@@ -927,7 +928,8 @@
             }
         });
     </script>
-    @include('components.sidebar-scripts')
+    <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/rooms/overview.blade.php ENDPATH**/ ?>

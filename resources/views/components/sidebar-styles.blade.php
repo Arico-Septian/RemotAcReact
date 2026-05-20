@@ -211,6 +211,51 @@
         .main-header button[onclick*="toggleSidebar"] { display: inline-flex !important; }
     }
 
+    /* Hamburger button — ikon polos tanpa kotak (global, semua halaman) */
+    .main-header button[onclick*="toggleSidebar"] {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        width: auto !important;
+        height: auto !important;
+        padding: 6px !important;
+        color: var(--ink-0) !important;
+        font-size: 18px !important;
+        border-radius: 0 !important;
+    }
+    .main-header button[onclick*="toggleSidebar"] i {
+        font-size: 18px !important;
+    }
+    .main-header button[onclick*="toggleSidebar"]:hover {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: var(--cyan) !important;
+        transform: none !important;
+    }
+
+    /* Mobile (≤ 480px): hamburger lebih kecil */
+    @media (max-width: 480px) {
+        .main-header button[onclick*="toggleSidebar"],
+        .main-header button[onclick*="toggleSidebar"] i {
+            font-size: 16px !important;
+        }
+        .main-header button[onclick*="toggleSidebar"] {
+            padding: 4px !important;
+        }
+    }
+
+    /* Mobile S (≤ 360px): paling kecil */
+    @media (max-width: 360px) {
+        .main-header button[onclick*="toggleSidebar"],
+        .main-header button[onclick*="toggleSidebar"] i {
+            font-size: 14px !important;
+        }
+        .main-header button[onclick*="toggleSidebar"] {
+            padding: 3px !important;
+        }
+    }
+
     /* Hide mobile/tablet toggle button on desktop (≥1024px) */
     @media (min-width: 1025px) {
         .main-header .lg\:hidden,
