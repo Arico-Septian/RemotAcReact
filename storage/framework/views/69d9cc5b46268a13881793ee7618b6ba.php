@@ -478,7 +478,7 @@
             border: 1px solid var(--line-soft);
             color: inherit;
             display: grid;
-            grid-template-columns: 1fr auto auto;
+            grid-template-columns: 1fr auto;
             align-items: center;
             gap: 18px;
             position: relative;
@@ -488,12 +488,23 @@
         .dashboard-room-row::before {
             content: '';
             position: absolute;
-            left: 18px;
-            top: 15px;
-            bottom: 15px;
-            width: 5px;
+            left: 6px;
+            top: 12px;
+            bottom: 12px;
+            width: 4px;
             border-radius: 999px;
             background: #fca5a5;
+            transition: background var(--t-base), box-shadow var(--t-base);
+        }
+
+        /* Indikator status via warna garis kiri */
+        .dashboard-room-row[data-status="online"]::before {
+            background: #34d399;
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.55);
+        }
+        .dashboard-room-row[data-status="offline"]::before {
+            background: #fb7185;
+            box-shadow: 0 0 10px rgba(251, 113, 133, 0.45);
         }
 
         /* Dashboard sections spacing */
@@ -1085,13 +1096,91 @@
         /* Temperature chart height responsive */
         @media (max-width: 768px) {
             div[style*="height:300px"] {
-                height: 250px !important;
+                height: 260px !important;
+            }
+        }
+
+        /* Tablet (≤ 1023px): teks chart sedikit lebih kecil */
+        @media (max-width: 1023px) {
+            .temp-chart-panel .panel-title {
+                font-size: 13px !important;
+            }
+            .temp-chart-panel .eyebrow {
+                font-size: 9.5px !important;
+            }
+            .temp-chart-panel .trend-filter-select {
+                font-size: 10px !important;
+                padding: 4px 6px !important;
+                border-radius: 7px !important;
             }
         }
 
         @media (max-width: 480px) {
             div[style*="height:300px"] {
-                height: 200px !important;
+                height: 240px !important;
+            }
+            /* Panel temperatur lebih kompak di mobile */
+            .temp-chart-panel {
+                padding: 14px 12px !important;
+            }
+            /* Title kiri, filter kanan — tetap 1 baris, tidak boleh wrap */
+            .temp-chart-panel .panel-header {
+                margin-bottom: 10px !important;
+                gap: 8px !important;
+                flex-wrap: nowrap !important;
+                align-items: center !important;
+            }
+            .temp-chart-panel .panel-header > div:first-child {
+                min-width: 0;
+                flex: 1;
+                overflow: hidden;
+            }
+            .temp-chart-panel .panel-header > div:last-child {
+                flex-shrink: 0;
+                gap: 6px !important;
+            }
+            .temp-chart-panel .panel-title {
+                font-size: 12px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .temp-chart-panel .eyebrow {
+                font-size: 8.5px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                gap: 4px !important;
+            }
+            .temp-chart-panel .eyebrow i {
+                font-size: 9px !important;
+            }
+            .temp-chart-panel .trend-filter-select {
+                font-size: 9.5px !important;
+                padding: 3px 5px !important;
+                border-radius: 6px !important;
+                min-width: 0;
+            }
+        }
+
+        @media (max-width: 360px) {
+            div[style*="height:300px"] {
+                height: 220px !important;
+            }
+            .temp-chart-panel {
+                padding: 12px 10px !important;
+            }
+            .temp-chart-panel .panel-title {
+                font-size: 11px !important;
+            }
+            .temp-chart-panel .eyebrow {
+                font-size: 8px !important;
+                letter-spacing: 0.06em !important;
+            }
+            .temp-chart-panel .trend-filter-select {
+                font-size: 9px !important;
+                padding: 2px 4px !important;
+                border-radius: 5px !important;
             }
         }
 
@@ -1184,7 +1273,7 @@
             <header class="main-header">
                 <div class="flex items-center gap-3">
                     <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
-                        <i class="fa-solid fa-bars"></i>
+                        <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
                         <h1>Dashboard</h1>
@@ -1253,7 +1342,7 @@
                         </div>
 
                         
-                        <div class="panel">
+                        <div class="panel temp-chart-panel">
                             <div class="panel-header">
                                 <div>
                                     <p class="eyebrow"><i class="fa-solid fa-chart-line"></i> <span
@@ -1316,7 +1405,8 @@
                                                 $status = $room->device_status === 'online' ? 'online' : 'offline';
                                             ?>
                                             <a href="<?php echo e(route('rooms.overview')); ?>" class="dashboard-room-row"
-                                                data-dashboard-room-id="<?php echo e($room->id); ?>">
+                                                data-dashboard-room-id="<?php echo e($room->id); ?>"
+                                                data-status="<?php echo e($status); ?>">
                                                 <div class="dashboard-room-main">
                                                     <h3 class="dashboard-room-name"><?php echo e($room->name); ?></h3>
                                                     <p class="dashboard-room-meta">
@@ -1336,10 +1426,6 @@
                                                     <?php else: ?>
                                                         -- &deg;C
                                                     <?php endif; ?>
-                                                </div>
-                                                <div class="dashboard-room-status <?php echo e($status); ?>">
-                                                    <?php echo e(strtoupper($status)); ?>
-
                                                 </div>
                                             </a>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -1591,9 +1677,51 @@
 
         setInterval(tickRoomLastUpdate, 1000);
 
+        function chartSizingForViewport() {
+            const w = window.innerWidth;
+            if (w <= 480) {
+                // Mobile
+                return {
+                    legendFontSize: 9.5, legendBoxSize: 6, legendPadding: 8,
+                    legendAlign: 'center',
+                    tickFontSize: 9, xMaxTicks: 5, yMaxTicks: 4,
+                };
+            } else if (w <= 1023) {
+                // Tablet
+                return {
+                    legendFontSize: 10.5, legendBoxSize: 7, legendPadding: 10,
+                    legendAlign: 'center',
+                    tickFontSize: 10, xMaxTicks: 7, yMaxTicks: 5,
+                };
+            }
+            // Laptop / desktop — nilai asli
+            return {
+                legendFontSize: 11, legendBoxSize: 8, legendPadding: 12,
+                legendAlign: 'end',
+                tickFontSize: 10, xMaxTicks: undefined, yMaxTicks: undefined,
+            };
+        }
+
+        function applyChartSizing() {
+            if (!tempChart) return;
+            const s = chartSizingForViewport();
+            tempChart.options.plugins.legend.align = s.legendAlign;
+            tempChart.options.plugins.legend.labels.font.size = s.legendFontSize;
+            tempChart.options.plugins.legend.labels.boxWidth = s.legendBoxSize;
+            tempChart.options.plugins.legend.labels.boxHeight = s.legendBoxSize;
+            tempChart.options.plugins.legend.labels.padding = s.legendPadding;
+            tempChart.options.scales.x.ticks.font.size = s.tickFontSize;
+            tempChart.options.scales.y.ticks.font.size = s.tickFontSize;
+            tempChart.options.scales.x.ticks.maxTicksLimit = s.xMaxTicks;
+            tempChart.options.scales.y.ticks.maxTicksLimit = s.yMaxTicks;
+            tempChart.update('none');
+        }
+
         function initChart() {
             const canvas = document.getElementById('tempChart');
             if (!canvas) return;
+
+            const s = chartSizingForViewport();
 
             tempChart = new Chart(canvas, {
                 type: 'line',
@@ -1632,18 +1760,18 @@
                     plugins: {
                         legend: {
                             position: 'top',
-                            align: 'end',
+                            align: s.legendAlign,
                             labels: {
                                 color: '#94a3b8',
                                 font: {
                                     family: 'Inter',
-                                    size: 11
+                                    size: s.legendFontSize
                                 },
                                 usePointStyle: true,
                                 pointStyle: 'circle',
-                                boxWidth: 8,
-                                boxHeight: 8,
-                                padding: 12,
+                                boxWidth: s.legendBoxSize,
+                                boxHeight: s.legendBoxSize,
+                                padding: s.legendPadding,
                             }
                         },
 
@@ -1688,8 +1816,10 @@
                                 color: '#64748b',
                                 maxRotation: 0,
                                 font: {
-                                    size: 10
-                                }
+                                    size: s.tickFontSize
+                                },
+                                maxTicksLimit: s.xMaxTicks,
+                                autoSkip: true
                             },
                             grid: {
                                 display: false
@@ -1701,8 +1831,9 @@
                             ticks: {
                                 color: '#64748b',
                                 font: {
-                                    size: 10
+                                    size: s.tickFontSize
                                 },
+                                maxTicksLimit: s.yMaxTicks,
                                 callback: v => v + '°C'
                             },
                             grid: {
@@ -1847,13 +1978,10 @@
                     data.forEach(device => {
                         const row = document.querySelector(
                             `[data-dashboard-room-id="${device.room_id}"]`);
-                        const statusEl = row?.querySelector('.dashboard-room-status');
-                        if (!statusEl) return;
+                        if (!row) return;
 
                         const isOnline = device.is_online === true || device.status === 'online';
-                        statusEl.classList.toggle('online', isOnline);
-                        statusEl.classList.toggle('offline', !isOnline);
-                        statusEl.textContent = isOnline ? 'ONLINE' : 'OFFLINE';
+                        row.setAttribute('data-status', isOnline ? 'online' : 'offline');
                     });
                 })
                 .catch(() => {});
@@ -1894,6 +2022,14 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initChart();
+
+            // Adapt chart sizing on viewport changes (rotate / resize)
+            let resizeTimer = null;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(applyChartSizing, 150);
+            });
+
             setSystemStatus(navigator.onLine);
             updateNotifButton();
 

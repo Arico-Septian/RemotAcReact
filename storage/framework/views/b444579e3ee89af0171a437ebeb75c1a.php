@@ -205,6 +205,38 @@
         .sidebar-toggle.desktop-only { display: none !important; }
     }
 
+    /* Phone (≤ 600px): sidebar setengah layar + nav-link kompak */
+    @media (max-width: 600px) {
+        .app-sidebar {
+            width: 50vw !important;
+            min-width: 200px !important;
+            max-width: 260px !important;
+        }
+
+        /* Kecilkan nav supaya label panjang muat 1 baris */
+        .app-sidebar .nav-link {
+            padding: 8px 10px !important;
+            font-size: 12px !important;
+            gap: 9px !important;
+        }
+        .app-sidebar .nav-link i {
+            width: 24px !important;
+            height: 24px !important;
+            font-size: 11px !important;
+            border-radius: 7px !important;
+        }
+
+        /* Section heading (OVERVIEW / MANAGEMENT / ADMINISTRATION) */
+        .app-sidebar .nav-section-label {
+            font-size: 9.5px !important;
+            letter-spacing: 0.12em !important;
+        }
+
+        /* Footer user info compact */
+        .app-sidebar .sidebar-footer .profile-info .name { font-size: 12px !important; }
+        .app-sidebar .sidebar-footer .profile-info .role { font-size: 9.5px !important; }
+    }
+
     /* Show toggle button on mobile/tablet only */
     @media (max-width: 1024px) {
         .main-header .lg\:hidden { display: inline-flex !important; visibility: visible !important; }
@@ -449,12 +481,22 @@
         background: rgba(14, 165, 233, 0.06);
         border: 1px solid rgba(14, 165, 233, 0.10);
         display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
+        align-items: center !important;
+        justify-content: center !important;
         font-size: 12px !important;
+        line-height: 1 !important;
+        text-align: center !important;
+        padding: 0 !important;
+        margin: 0 !important;
         color: #7fa0c8 !important;
         transition: all 0.22s ease !important;
         flex-shrink: 0;
+        box-sizing: border-box !important;
+    }
+    .nav-link i::before {
+        display: block;
+        line-height: 1;
+        text-align: center;
     }
 
     .nav-link:hover {
