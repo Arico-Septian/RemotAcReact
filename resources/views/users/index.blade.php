@@ -34,6 +34,23 @@
             color: var(--ink-3);
         }
 
+        /* Lock badge ikon: cegah glyph FA dengan tinggi natural beda menarik badge jadi lebih besar */
+        .stat-card .stat-icon {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            line-height: 1;
+            overflow: hidden;
+        }
+        .stat-card .stat-icon > i {
+            font-size: inherit;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        }
+
         /* Angka utama selalu putih untuk hierarki yang kuat */
         .stat-card .stat-num-lg { color: var(--ink-0); }
 
@@ -631,6 +648,27 @@
         .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
         .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
 
+        /* Stat cards — Mobile L (≤ 640px) */
+        @media (max-width: 640px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 12px; }
+            .stat-card { padding: 14px 16px; }
+            .stat-card .stat-label-sm { font-size: 9.5px; letter-spacing: 0.08em; }
+            .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
+            .stat-card .stat-sub { font-size: 10px; line-height: 1.35; }
+            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
+        }
+
+        /* Stat cards — Mobile M (≤ 480px) */
+        @media (max-width: 480px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 10px; }
+            .stat-card { padding: 12px 14px; }
+            .stat-card .stat-label-sm { font-size: 8.5px; letter-spacing: 0.06em; }
+            .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
+            .stat-card .stat-sub { font-size: 9.5px; line-height: 1.3; }
+            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 9px; font-size: 12px; }
+            .stat-card .accent-bar { top: 12px; bottom: 12px; }
+        }
+
         /* Mobile S (≤ 360 px): shrink header + toolbar so everything fits */
         @media (max-width: 360px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
@@ -647,11 +685,12 @@
 
             /* Stats grid: keep 2-col but compact each card so text doesn't wrap */
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
-            .stat-card { padding: 12px !important; }
-            .stat-label-sm { font-size: 10px !important; letter-spacing: .04em !important; }
-            .stat-num-lg { font-size: 22px !important; line-height: 1.1 !important; }
-            .stat-sub { font-size: 9.5px !important; }
-            .stat-icon { width: 28px !important; height: 28px !important; font-size: 12px !important; }
+            .stat-card { padding: 10px 12px !important; }
+            .stat-card .stat-label-sm { font-size: 8px !important; letter-spacing: 0.05em !important; }
+            .stat-card .stat-num-lg { font-size: 21px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
+            .stat-card .stat-sub { font-size: 9px !important; line-height: 1.3 !important; }
+            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: 8px !important; font-size: 11px !important; }
+            .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
 
             /* User card: tighter padding, fonts match log card */
             .user-card { padding: 12px 14px; gap: 8px; }

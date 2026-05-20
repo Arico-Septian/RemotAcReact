@@ -223,31 +223,6 @@ document.querySelectorAll('.menu-link').forEach(link => {
     });
 });
 
-/* ===== IDLE TIMEOUT ===== */
-(function () {
-    const role  = "<?php echo e(Auth::check() ? Auth::user()->role : ''); ?>";
-    const idleMs = role === 'admin' ? 600000 : role === 'operator' ? 300000 : 120000;
-    let timer;
-
-    function resetTimer() {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            const form = document.createElement('form');
-            form.method = 'POST'; form.action = '/logout'; form.style.display = 'none';
-            const csrf = document.createElement('input');
-            csrf.type = 'hidden'; csrf.name = '_token'; csrf.value = '<?php echo e(csrf_token()); ?>';
-            form.appendChild(csrf);
-            document.body.appendChild(form);
-            form.submit();
-        }, idleMs);
-    }
-    ['mousemove','keypress','click','scroll','touchstart'].forEach(ev => {
-        document.addEventListener(ev, resetTimer, { passive: true });
-    });
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) resetTimer(); });
-    resetTimer();
-})();
-
 /* ===== TOAST helper (used across pages) ===== */
 window.smToast = function (msg, type = 'info') {
     document.querySelectorAll('.toast').forEach(t => t.remove());

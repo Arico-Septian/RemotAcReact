@@ -765,6 +765,23 @@
             padding: 18px 20px;
         }
 
+        /* Lock badge ikon: cegah glyph (mis. fa-bolt) menarik badge jadi lebih besar */
+        .stat-card .stat-icon {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            line-height: 1;
+            overflow: hidden;
+        }
+        .stat-card .stat-icon > i {
+            font-size: inherit;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        }
+
         /* Stat card text styling */
         .stat-card .stat-label-sm {
             font-size: 10px;
@@ -900,7 +917,7 @@
             }
         }
 
-        /* Stat cards optimization for small screens (< 640px) */
+        /* Stat cards optimization for small screens (< 640px) — Mobile L */
         @media (max-width: 640px) {
             .grid.grid-cols-2.lg\:grid-cols-4 {
                 gap: 12px;
@@ -910,26 +927,41 @@
                 padding: 14px 16px;
             }
 
-            .stat-label-sm {
-                font-size: 9px;
-                letter-spacing: 0.08em;
+            .stat-card .flex.items-start > div:first-child {
+                min-width: 0;
+                flex: 1;
             }
 
-            .stat-num-lg {
+            .stat-card .stat-label-sm,
+            .stat-card .stat-label {
+                font-size: 9px;
+                letter-spacing: 0.08em;
+                white-space: nowrap;
+            }
+
+            .stat-card .stat-num-lg {
                 font-size: 28px;
                 margin: 6px 0 4px;
             }
 
-            .stat-sub {
+            .stat-card .stat-sub,
+            .stat-card .stat-meta {
                 font-size: 10px;
+                line-height: 1.35;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
-            .stat-icon {
-                font-size: 16px;
+            .stat-card .stat-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+                font-size: 14px;
             }
         }
 
-        /* Very small screens (< 480px) */
+        /* Mobile M (< 480px) */
         @media (max-width: 480px) {
             .grid.grid-cols-2.lg\:grid-cols-4 {
                 gap: 10px;
@@ -939,22 +971,37 @@
                 padding: 12px 14px;
             }
 
-            .stat-label-sm {
-                font-size: 8px;
-                letter-spacing: 0.08em;
+            .stat-card .stat-label-sm,
+            .stat-card .stat-label {
+                font-size: 8.5px;
+                letter-spacing: 0.06em;
+                white-space: nowrap;
             }
 
-            .stat-num-lg {
+            .stat-card .stat-num-lg {
                 font-size: 24px;
                 margin: 4px 0 2px;
             }
 
-            .stat-sub {
-                font-size: 9px;
+            .stat-card .stat-sub,
+            .stat-card .stat-meta {
+                font-size: 9.5px;
+                line-height: 1.3;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
-            .stat-icon {
-                font-size: 14px;
+            .stat-card .stat-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: 9px;
+                font-size: 12px;
+            }
+
+            .stat-card .accent-bar {
+                top: 12px;
+                bottom: 12px;
             }
 
             .dashboard-rooms-panel {
@@ -1003,6 +1050,50 @@
                 min-width: 70px;
                 padding: 8px 10px;
                 font-size: 11px;
+            }
+        }
+
+        /* Mobile S (≤ 360px) — extra-tight stat cards */
+        @media (max-width: 360px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 10px 12px;
+            }
+
+            .stat-card .stat-label-sm,
+            .stat-card .stat-label {
+                font-size: 8px;
+                letter-spacing: 0.05em;
+                white-space: nowrap;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 21px;
+                margin: 3px 0 2px;
+            }
+
+            .stat-card .stat-sub,
+            .stat-card .stat-meta {
+                font-size: 9px;
+                line-height: 1.3;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .stat-card .stat-icon {
+                width: 26px;
+                height: 26px;
+                border-radius: 8px;
+                font-size: 11px;
+            }
+
+            .stat-card .accent-bar {
+                top: 10px;
+                bottom: 10px;
             }
         }
 
@@ -1149,9 +1240,9 @@
                                 <span class="accent-bar"></span>
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="stat-label">AC Units</p>
+                                        <p class="stat-label-sm">AC Units</p>
                                         <p class="stat-num-lg" id="statTotalAc">{{ $totalAc }}</p>
-                                        <p class="stat-meta">Across all rooms</p>
+                                        <p class="stat-sub">Across all rooms</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-snowflake"></i></div>
                                 </div>
@@ -1160,9 +1251,9 @@
                                 <span class="accent-bar"></span>
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="stat-label">Ac Active</p>
+                                        <p class="stat-label-sm">AC Active</p>
                                         <p class="stat-num-lg" id="statActiveAc">{{ $activeAc }}</p>
-                                        <p class="stat-meta">Currently powered on</p>
+                                        <p class="stat-sub">Currently powered on</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-bolt"></i></div>
                                 </div>
@@ -1171,11 +1262,11 @@
                                 <span class="accent-bar"></span>
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="stat-label">Ac Idle</p>
+                                        <p class="stat-label-sm">AC Idle</p>
                                         <p class="stat-num-lg" id="statInactiveAc">{{ $inactiveAc }}</p>
-                                        <p class="stat-meta">Powered off</p>
+                                        <p class="stat-sub">Powered off</p>
                                     </div>
-                                    <div class="stat-icon"><i class="fa-regular fa-circle"></i></div>
+                                    <div class="stat-icon"><i class="fa-solid fa-power-off"></i></div>
                                 </div>
                             </div>
                         </div>
