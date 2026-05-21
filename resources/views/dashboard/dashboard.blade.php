@@ -58,6 +58,37 @@
             }
         }
 
+        /* Force uniform card height — semua card persis sama tinggi */
+        .dashboard-room-row,
+        .activity-item {
+            height: 92px !important;
+            min-height: 92px !important;
+        }
+
+        @media (max-width: 640px) {
+            .dashboard-room-row,
+            .activity-item {
+                height: 76px !important;
+                min-height: 76px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-room-row,
+            .activity-item {
+                height: 68px !important;
+                min-height: 68px !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .dashboard-room-row,
+            .activity-item {
+                height: 60px !important;
+                min-height: 60px !important;
+            }
+        }
+
         .dashboard-rooms-panel,
         .dashboard-activity-panel {
             min-width: 0;
@@ -91,7 +122,7 @@
 
         .activity-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 16px;
@@ -123,6 +154,13 @@
             color: var(--ink-0);
             margin: 0;
             letter-spacing: -0.01em;
+        }
+
+        .activity-subtitle {
+            margin: 3px 0 0;
+            font-size: 12px;
+            line-height: 1.3;
+            color: var(--ink-3);
         }
 
         .live-badge {
@@ -170,34 +208,30 @@
             flex: 1;
             overflow-y: auto;
             min-height: 0;
-            max-height: 420px;
+            max-height: 540px;
         }
 
         .activity-item {
             position: relative;
             display: grid;
-            grid-template-columns: 4px 34px 1fr;
+            grid-template-columns: 4px 36px 1fr;
             align-items: start;
             gap: 12px;
             padding: 14px;
             border-radius: 14px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+            background: var(--panel-2);
             border: 1px solid var(--line-soft);
-            transition: all 0.18s ease;
+            transition: var(--t-base);
         }
 
         .activity-item .activity-rail {
             align-self: stretch;
         }
 
-        .activity-item .activity-avatar-wrap {
-            margin-top: 2px;
-        }
-
         .activity-item:hover {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
-            border-color: rgba(148, 163, 184, 0.25);
-            transform: translateX(2px);
+            background: var(--panel-2);
+            border-color: var(--line);
+            transform: translateY(-1px);
         }
 
         .activity-rail {
@@ -226,20 +260,20 @@
         /* Avatar with activity icon badge overlay */
         .activity-avatar-wrap {
             position: relative;
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             flex-shrink: 0;
         }
 
         .activity-avatar-img,
         .activity-avatar-fallback {
-            width: 34px;
-            height: 34px;
+            width: 36px;
+            height: 36px;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             object-fit: cover;
             background: linear-gradient(135deg, color-mix(in srgb, var(--tone, #94a3b8) 35%, #1e293b), color-mix(in srgb, var(--tone, #94a3b8) 18%, #0f172a));
@@ -251,15 +285,15 @@
             position: absolute;
             right: -3px;
             bottom: -3px;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: var(--tone, #94a3b8);
             color: #0b1220;
-            font-size: 9px;
+            font-size: 8px;
             border: 2px solid var(--panel-1);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
         }
@@ -311,7 +345,7 @@
         }
 
         .activity-user {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--ink-0);
             letter-spacing: -0.005em;
@@ -322,50 +356,100 @@
 
         .activity-time {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
+            font-size: 11px;
             color: var(--ink-4);
             flex-shrink: 0;
         }
 
+        .activity-desc-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 3px;
+            min-width: 0;
+        }
+
         .activity-desc {
-            margin: 2px 0 0;
-            font-size: 12px;
-            line-height: 1.4;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.3;
             color: var(--ink-2);
             overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+            min-width: 0;
         }
 
         .activity-chips {
-            display: flex;
-            flex-wrap: wrap;
+            display: inline-flex;
+            flex-wrap: nowrap;
             gap: 4px;
-            margin-top: 6px;
+            flex-shrink: 0;
         }
 
         .activity-chips .chip {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 2px 6px;
-            border-radius: 6px;
+            gap: 3px;
+            padding: 1px 5px;
+            border-radius: 5px;
             background: rgba(148, 163, 184, 0.10);
             border: 1px solid rgba(148, 163, 184, 0.18);
             color: var(--ink-3);
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 600;
         }
 
         .activity-chips .chip i {
-            font-size: 8px;
+            font-size: 7px;
             opacity: 0.7;
         }
 
         @media (max-width: 640px) {
             .dashboard-activity-panel {
                 padding: 16px;
+            }
+
+            .activity-list {
+                gap: 8px;
+            }
+
+            .activity-item {
+                grid-template-columns: 4px 32px 1fr;
+                padding: 12px;
+                gap: 10px;
+                min-height: 64px;
+            }
+
+            .activity-avatar-wrap,
+            .activity-avatar-img,
+            .activity-avatar-fallback {
+                width: 32px;
+                height: 32px;
+            }
+
+            .activity-avatar-img,
+            .activity-avatar-fallback {
+                font-size: 12px;
+            }
+
+            .activity-icon-badge {
+                width: 14px;
+                height: 14px;
+                font-size: 7px;
+            }
+
+            .activity-user {
+                font-size: 12.5px;
+            }
+
+            .activity-desc {
+                font-size: 11.5px;
+            }
+
+            .activity-time {
+                font-size: 10px;
             }
         }
 
@@ -391,9 +475,10 @@
 
             .activity-item {
                 grid-template-columns: 4px 30px 1fr;
-                padding: 12px;
+                padding: 10px 12px;
                 gap: 10px;
                 border-radius: 12px;
+                min-height: 60px;
             }
 
             .activity-item .activity-rail {
@@ -487,7 +572,6 @@
         }
 
         .dashboard-room-row {
-            min-height: 72px;
             padding: 14px 14px 14px 20px;
             border-radius: 14px;
             background: var(--panel-2);
@@ -612,8 +696,8 @@
             .dashboard-room-row {
                 grid-template-columns: 1fr auto;
                 gap: 10px;
-                padding: 10px 14px 10px 18px;
-                min-height: 56px;
+                padding: 12px 14px 12px 18px;
+                min-height: 64px;
             }
 
             .dashboard-room-temp {
@@ -689,7 +773,7 @@
                 grid-template-columns: 1fr auto;
                 gap: 8px;
                 padding: 10px 12px 10px 16px;
-                min-height: 56px;
+                min-height: 60px;
                 border-radius: 12px;
             }
 
@@ -988,9 +1072,25 @@
 
             .dashboard-room-row {
                 padding: 8px 10px 8px 14px;
-                min-height: 48px;
+                min-height: 52px;
                 gap: 8px;
                 border-radius: 10px;
+            }
+
+            .dashboard-activity-panel {
+                padding: 12px;
+                border-radius: 14px;
+            }
+
+            .activity-item {
+                padding: 8px 10px;
+                gap: 8px;
+                border-radius: 10px;
+                min-height: 52px;
+            }
+
+            .activity-list {
+                gap: 8px;
             }
 
             .dashboard-room-row::before {
@@ -1410,12 +1510,15 @@
                             {{-- Recent Activity widget --}}
                             <section class="panel dashboard-activity-panel">
                                 <div class="activity-header">
-                                    <h2 class="activity-title">Aktivitas Terkini</h2>
+                                    <div>
+                                        <h2 class="activity-title">Aktivitas Terkini</h2>
+                                        <p class="activity-subtitle">{{ count($recentActivities) }} aktivitas terbaru</p>
+                                    </div>
                                     <span class="activity-title-icon"><i class="fa-solid fa-bolt"></i></span>
                                 </div>
 
                                 <div class="activity-list" id="activityList">
-                                    @forelse ($recentActivities as $log)
+                                    @forelse ($recentActivities->take(5) as $log)
                                         <div class="activity-item tone-{{ $log['tone'] }}">
                                             <div class="activity-rail"></div>
                                             <div class="activity-avatar-wrap">
@@ -1434,23 +1537,23 @@
                                                     <span class="activity-user">{{ $log['user_name'] }}</span>
                                                     <span class="activity-time">{{ $log['time'] }}</span>
                                                 </div>
-                                                <p class="activity-desc">{{ $log['description'] }}</p>
                                                 @php
                                                     $hasRoom = !empty($log['room']) && $log['room'] !== '-';
                                                     $hasAc = !empty($log['ac']) && $log['ac'] !== '-';
                                                 @endphp
-                                                @if ($hasRoom || $hasAc)
-                                                    <div class="activity-chips">
-                                                        @if ($hasRoom)
-                                                            <span class="chip"><i
-                                                                    class="fa-solid fa-door-open"></i>{{ $log['room'] }}</span>
-                                                        @endif
-                                                        @if ($hasAc)
-                                                            <span class="chip"><i
-                                                                    class="fa-solid fa-snowflake"></i>{{ $log['ac'] }}</span>
-                                                        @endif
-                                                    </div>
-                                                @endif
+                                                <div class="activity-desc-row">
+                                                    <p class="activity-desc">{{ $log['description'] }}</p>
+                                                    @if ($hasRoom || $hasAc)
+                                                        <span class="activity-chips">
+                                                            @if ($hasRoom)
+                                                                <span class="chip"><i class="fa-solid fa-door-open"></i>{{ $log['room'] }}</span>
+                                                            @endif
+                                                            @if ($hasAc)
+                                                                <span class="chip"><i class="fa-solid fa-snowflake"></i>{{ $log['ac'] }}</span>
+                                                            @endif
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     @empty
@@ -2049,7 +2152,7 @@
                 const ac = hasAc ?
                     `<span class="chip"><i class="fa-solid fa-snowflake"></i>${escapeHtml(item.ac)}</span>` :
                     '';
-                const chips = (room || ac) ? `<div class="activity-chips">${room}${ac}</div>` : '';
+                const chips = (room || ac) ? `<span class="activity-chips">${room}${ac}</span>` : '';
 
                 const avatar = item.user_avatar ?
                     `<img src="${escapeHtml(item.user_avatar)}" alt="${name}" class="activity-avatar-img">` :
@@ -2067,8 +2170,10 @@
                         <span class="activity-user">${name}</span>
                         <span class="activity-time">${time}</span>
                     </div>
-                    <p class="activity-desc">${desc}</p>
-                    ${chips}
+                    <div class="activity-desc-row">
+                        <p class="activity-desc">${desc}</p>
+                        ${chips}
+                    </div>
                 </div>
             </div>
         `;
@@ -2085,7 +2190,7 @@
                     if (!res.ok) throw new Error('fetch failed');
                     const data = await res.json();
                     if (!Array.isArray(data) || data.length === 0) return;
-                    activityList.innerHTML = data.map(renderActivity).join('');
+                    activityList.innerHTML = data.slice(0, 5).map(renderActivity).join('');
                     if (liveBadge) liveBadge.style.opacity = '1';
                 } catch (e) {
                     if (liveBadge) liveBadge.style.opacity = '0.5';
