@@ -28,7 +28,6 @@ class RoomController extends Controller
             ->orderBy('name')
             ->get();
 
-        // Batch fetch: 2 latest temperature records per room in a single query (not N+1)
         $recentByRoom = RoomTemperature::recentByNormalizedRoom(perRoom: 2, maxAgeSeconds: 600);
 
         $fuzzyService = new FuzzyMamdaniService;
@@ -80,8 +79,6 @@ class RoomController extends Controller
                 $previousCreatedAt = $tempHistory[1]->created_at;
                 $timeDiffSeconds = max(1, $currentCreatedAt->diffInSeconds($previousCreatedAt));
 
-                // Use absolute temperature diff (consistent with RunFuzzyLogic).
-                // Drop the value if readings are >5 min apart (sensor was likely offline).
                 if ($timeDiffSeconds <= 300) {
                     $deltaT = $currentTemp - $previousTemp;
                 }

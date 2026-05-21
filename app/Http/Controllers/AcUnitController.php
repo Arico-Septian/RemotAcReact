@@ -281,12 +281,10 @@ class AcUnitController extends Controller
 
         $timeDiffSeconds = max(1, $currentCreatedAt->diffInSeconds($previousCreatedAt));
 
-        // Jika jarak waktu > 5 menit, sensor mungkin offline kemudian online — diff tidak meaningful
         if ($timeDiffSeconds > 300) {
             return 0;
         }
 
-        // Absolute temperature diff (consistent with RunFuzzyLogic + fuzzy membership ranges ±2)
         return $currentTemp - $previousTemp;
     }
 

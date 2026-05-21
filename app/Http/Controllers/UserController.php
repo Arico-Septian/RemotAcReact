@@ -242,7 +242,6 @@ class UserController extends Controller
         ])->save();
 
         // Invalidate session lain (mis. perangkat yang dicuri),
-        // lalu rotate session ID milik device saat ini untuk cegah session fixation.
         Auth::logoutOtherDevices($request->password);
         $request->session()->regenerate();
 

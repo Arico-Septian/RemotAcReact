@@ -145,10 +145,8 @@ public function destroyAll(Request $request)
 
         $totalDeleted = UserLog::count();
 
-        // Delete all rows but keep autoincrement and FK behavior consistent
         UserLog::query()->delete();
 
-        // Write a fresh audit entry AFTER the wipe so the action itself is traceable
         UserLog::create([
             'user_id' => $user->id,
             'room' => '-',
