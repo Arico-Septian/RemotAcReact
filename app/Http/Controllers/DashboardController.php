@@ -60,9 +60,8 @@ class DashboardController extends Controller
             }
         }
 
-        // Urut: online dulu, lalu floor naik, lalu nama naik
         $rooms = $rooms->sortBy([
-            ['device_status', 'desc'], // 'online' > 'offline' alfabetis → online di atas
+            ['device_status', 'desc'],
             ['floor', 'asc'],
             ['name', 'asc'],
         ])->values();
@@ -134,7 +133,29 @@ class DashboardController extends Controller
     {
         $name = $log->user->name ?? 'System';
         $activity = (string) $log->activity;
+        $acRaw = (string) ($log->ac ?? '');
+
+        $extraDetail = null;
+        if ($activity === 'set_timer' && preg_match('/^(.*?)\s*\[(.+)\]$/', $acRaw, $m)) {
+            $acRaw = trim($m[1]);
+            $extraDetail = trim($m[2]);
+        }
+
         $meta = $this->describeActivity($activity);
+
+        if ($extraDetail !== null) {
+            if ($extraDetail === 'dihapus') {
+                $meta['description'] = 'Hapus timer';
+                $meta['tone'] = 'coral';
+            } else {
+                $on = preg_match('/ON\s+(\d{2}:\d{2})/i', $extraDetail, $mOn) ? 'ON '.$mOn[1] : null;
+                $off = preg_match('/OFF\s+(\d{2}:\d{2})/i', $extraDetail, $mOff) ? 'OFF '.$mOff[1] : null;
+
+                $parts = array_filter([$on, $off]);
+                $meta['description'] = 'Timer '.implode(' · ', $parts);
+                $meta['tone'] = 'amber';
+            }
+        }
 
         return [
             'id' => $log->id,
@@ -147,7 +168,7 @@ class DashboardController extends Controller
             'icon' => $meta['icon'],
             'tone' => $meta['tone'],
             'room' => $log->room,
-            'ac' => $log->ac,
+            'ac' => $acRaw,
             'time' => $log->created_at?->format('H:i'),
             'time_human' => $log->created_at?->diffForHumans(),
         ];
@@ -197,6 +218,25 @@ class DashboardController extends Controller
         }
         if (str_contains($a, 'update') || str_contains($a, 'edit')) {
             return ['description' => ucfirst(str_replace('_', ' ', $activity)), 'icon' => 'fa-solid fa-pen-to-square', 'tone' => 'amber'];
+        }
+        if ($a === 'set_timer_delete') {
+            return ['description' => 'Hapus timer', 'icon' => 'fa-solid fa-clock', 'tone' => 'coral'];
+        }
+        if (str_starts_with($a, 'set_timer:')) {
+            $detail = substr($activity, 10); // "ON 20:31,OFF 22:00"
+            $on = preg_match('/ON\s+(\d{2}:\d{2})/i', $detail, $mOn) ? 'ON '.$mOn[1] : null;
+            $off = preg_match('/OFF\s+(\d{2}:\d{2})/i', $detail, $mOff) ? 'OFF '.$mOff[1] : null;
+
+            $parts = array_filter([$on, $off]);
+            $desc = 'Timer '.implode(' · ', $parts);
+
+            return ['description' => $desc, 'icon' => 'fa-solid fa-clock', 'tone' => 'amber'];
+        }
+        if (str_starts_with($a, 'timer_on')) {
+            return ['description' => 'Timer ON', 'icon' => 'fa-solid fa-clock', 'tone' => 'mint'];
+        }
+        if (str_starts_with($a, 'timer_off')) {
+            return ['description' => 'Timer OFF', 'icon' => 'fa-solid fa-clock', 'tone' => 'slate'];
         }
         if (str_contains($a, 'timer') || str_contains($a, 'schedule')) {
             return ['description' => ucfirst(str_replace('_', ' ', $activity)), 'icon' => 'fa-solid fa-clock', 'tone' => 'amber'];

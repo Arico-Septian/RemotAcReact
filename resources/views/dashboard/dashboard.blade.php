@@ -58,58 +58,23 @@
             }
         }
 
-        /* Tablet (768-1023px): semua text dikecilkan agar muat inline */
+        /* Tablet (768-1023px): kecilkan text supaya muat inline */
         @media (min-width: 768px) and (max-width: 1023px) {
-            .activity-user {
-                font-size: 13px !important;
-            }
-            .activity-time {
-                font-size: 10px !important;
-            }
             .activity-desc {
-                font-size: 11.5px !important;
+                font-size: 9.5px;
             }
             .activity-chips .chip {
-                padding: 1px 4px !important;
-                font-size: 9px !important;
-                gap: 2px !important;
+                font-size: 8px;
+                padding: 1px 4px;
             }
             .activity-chips .chip i {
-                font-size: 6px !important;
+                font-size: 5.5px;
             }
             .activity-chips {
-                gap: 3px !important;
+                gap: 3px;
             }
             .activity-desc-row {
-                gap: 6px !important;
-            }
-
-            /* On tablet keep both chips visible but smaller so the
-               description (`.activity-desc`) can remain on one line. */
-            .activity-chips .chip {
-                padding: 0 4px !important;
-                font-size: 8.5px !important;
-                gap: 4px !important;
-                border-radius: 6px !important;
-                max-width: 8.5rem !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-            }
-
-            .activity-chips .chip i {
-                font-size: 6px !important;
-            }
-
-            /* Slightly reduce description size and force single-line
-               behaviour so it stays inline with the chips. */
-            .activity-desc {
-                font-size: 11px !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                flex: 1 1 auto !important;
-                min-width: 0 !important;
+                gap: 5px;
             }
         }
 

@@ -76,8 +76,6 @@ class MqttSubscribe extends Command
                         $this->line("PING: {$deviceId}");
 
                         // Kirim config jika belum pernah dikirim sejak mqtt:subscribe start
-                        // Ini menangani kasus: mqtt:subscribe restart saat ESP sudah online
-                        // sehingga pesan 'online' tidak diterima (retained di-skip)
                         if (! Cache::get("device_{$deviceId}_config_sent")) {
                             $mqtt->resendConfig($deviceId);
                             Cache::put("device_{$deviceId}_config_sent", true, 300);
@@ -112,7 +110,6 @@ class MqttSubscribe extends Command
                                 'device_status' => 'offline',
                             ]);
 
-                            // Persistent notification so admins see this regardless of dashboard polling
                             $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
                             if ($room) {
                                 Notification::deviceOffline($room->name, $deviceId);
@@ -340,7 +337,6 @@ class MqttSubscribe extends Command
                         $room = RoomTemperature::normalizeRoomName($room);
 
                         // Drop pesan dari ruangan yang tidak terdaftar di DB
-                        // (proteksi dari ESP32 lama / topic asing di public broker)
                         $knownRooms = Cache::remember('known_room_names', 30, fn () => Room::pluck('name')
                             ->map(RoomTemperature::normalizeRoomName(...))
                             ->all());

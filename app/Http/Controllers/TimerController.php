@@ -97,11 +97,13 @@ class TimerController extends Controller
                 $detail[] = 'dihapus';
             }
 
+            $activityDetail = $isDeletingTimer ? 'set_timer_delete' : 'set_timer:'.implode(',', $detail);
+
             UserLog::create([
                 'user_id' => Auth::id(),
                 'room' => optional($ac->room)->name,
-                'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : '').' ['.implode(', ', $detail).']',
-                'activity' => 'set_timer',
+                'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+                'activity' => $activityDetail,
             ]);
 
             event(new AcTimerUpdated($ac->fresh()->load('room')));

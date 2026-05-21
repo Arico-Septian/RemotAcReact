@@ -11,37 +11,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
-/**
- * Run AC timer ON/OFF with anti-double-execution and anti-miss logic.
- *
- * TIMING MECHANISM (3-layer approach):
- * ────────────────
- * 1. WINDOW (-30 to +60 seconds):
- *    Timer fires if current time within ±30s before or +60s after scheduled time.
- *    Recovers from delayed executions (e.g., system reboot at scheduled time).
- *
- * 2. LOCK (10 seconds):
- *    Cache::lock prevents concurrent executions across multiple cron instances.
- *    Expires after 10s to handle process crashes.
- *
- * 3. COOLDOWN (5 seconds):
- *    Per-AC cooldown prevents spam if command runs multiple times per minute.
- *
- * VERSION TRACKING:
- * ────────────────
- * Cache key includes version number (timer_version_{ac_id}) to handle timer updates.
- * When user changes timer, version increments → old cache keys stale → new execution allowed.
- *
- * EXECUTION FLOW:
- * ───────────────
- * 1. Acquire global lock (anti-concurrent)
- * 2. For each AC with timer_on or timer_off:
- *    a. Skip if in cooldown (anti-spam within 5s)
- *    b. Check if current time in execution window
- *    c. Check if already executed today (versioned cache key)
- *    d. Acquire cache lock, double-check, then execute MQTT publish
- *    e. Log execution and set cooldown + versioned cache
- */
 class RunAcTimer extends Command
 {
     protected $signature = 'ac:run-timer';
