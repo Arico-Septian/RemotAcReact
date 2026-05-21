@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 class UpdateLastActivity
 {
-    /**
-     * Minimum jeda antar write last_activity ke DB (detik).
-     * Online-window di app = 120 detik, jadi 60s di sini masih aman.
-     */
     private const THROTTLE_SECONDS = 60;
 
     public function handle(Request $request, Closure $next)
