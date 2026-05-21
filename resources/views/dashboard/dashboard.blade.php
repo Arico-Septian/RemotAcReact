@@ -49,26 +49,51 @@
             gap: 12px;
         }
 
-        /* Tablet (≥ 768px) & laptop: berjajar 2 kolom */
+        /* Tablet (≥ 768px) & laptop: berjajar 2 kolom + panel sama tinggi */
         @media (min-width: 768px) {
             .dashboard-bottom-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
-                align-items: start;
+                align-items: stretch;
             }
         }
 
-        /* Force uniform card height — semua card persis sama tinggi */
+        /* Tablet (768-1023px): semua text dikecilkan agar muat inline */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .activity-user {
+                font-size: 12px !important;
+            }
+            .activity-time {
+                font-size: 9px !important;
+            }
+            .activity-desc {
+                font-size: 10.5px !important;
+            }
+            .activity-chips .chip {
+                padding: 1px 4px !important;
+                font-size: 8px !important;
+                gap: 2px !important;
+            }
+            .activity-chips .chip i {
+                font-size: 6px !important;
+            }
+            .activity-chips {
+                gap: 3px !important;
+            }
+            .activity-desc-row {
+                gap: 6px !important;
+            }
+        }
+
+        /* Card min-height untuk visual rhythm konsisten — content boleh grow di atasnya */
         .dashboard-room-row,
         .activity-item {
-            height: 92px !important;
             min-height: 92px !important;
         }
 
         @media (max-width: 640px) {
             .dashboard-room-row,
             .activity-item {
-                height: 76px !important;
                 min-height: 76px !important;
             }
         }
@@ -76,7 +101,6 @@
         @media (max-width: 480px) {
             .dashboard-room-row,
             .activity-item {
-                height: 68px !important;
                 min-height: 68px !important;
             }
         }
@@ -84,7 +108,6 @@
         @media (max-width: 360px) {
             .dashboard-room-row,
             .activity-item {
-                height: 60px !important;
                 min-height: 60px !important;
             }
         }
@@ -98,17 +121,10 @@
         .dashboard-activity-panel {
             padding: 24px;
             border-radius: 20px;
-            background:
-                linear-gradient(180deg, rgba(34, 211, 238, 0.06) 0%, transparent 40%),
-                var(--panel-1);
+            background: var(--panel-1);
             border: 1px solid var(--line-soft);
-            box-shadow:
-                0 1px 0 rgba(255, 255, 255, 0.04) inset,
-                0 10px 30px -18px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
+            box-shadow: var(--inset-hi);
             position: relative;
-            overflow: hidden;
         }
 
         .dashboard-activity-panel::before {
@@ -202,13 +218,8 @@
         }
 
         .activity-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
             gap: 10px;
-            flex: 1;
-            overflow-y: auto;
-            min-height: 0;
-            max-height: 540px;
         }
 
         .activity-item {
@@ -407,19 +418,79 @@
         }
 
         @media (max-width: 640px) {
+            .dashboard-rooms-panel,
             .dashboard-activity-panel {
                 padding: 16px;
             }
 
-            .activity-list {
-                gap: 8px;
+            .dashboard-rooms-panel .panel-header,
+            .activity-header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .dashboard-rooms-title,
+            .activity-title {
+                font-size: 17px;
+                flex: 1;
+            }
+
+            .dashboard-rooms-action {
+                min-width: 80px;
+                min-height: 44px;
+                padding: 8px 12px;
+                font-size: 12px;
+                flex-shrink: 0;
+            }
+
+            .dashboard-room-row,
+            .activity-item {
+                grid-template-columns: 1fr auto;
+                gap: 10px;
+                padding: 12px 14px 12px 18px;
+                min-height: 64px;
             }
 
             .activity-item {
                 grid-template-columns: 4px 32px 1fr;
                 padding: 12px;
                 gap: 10px;
-                min-height: 64px;
+            }
+
+            .dashboard-room-temp {
+                grid-column: 2;
+                grid-row: 1;
+                min-width: 60px;
+                font-size: 13px;
+                text-align: right;
+            }
+
+            .dashboard-room-status {
+                grid-column: 2;
+                grid-row: 2;
+                min-width: 72px;
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            .dashboard-room-name {
+                font-size: 14px;
+            }
+
+            .dashboard-room-meta {
+                font-size: 12px;
+                margin-top: 2px;
+            }
+
+            .dashboard-room-row::before {
+                width: 4px;
+                left: 6px;
+                top: 10px;
+                bottom: 10px;
+            }
+
+            .activity-list {
+                gap: 8px;
             }
 
             .activity-avatar-wrap,
@@ -521,8 +592,30 @@
         }
 
         .dashboard-rooms-panel .panel-header {
+            display: flex;
             align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
             margin-bottom: 16px;
+        }
+
+        .dashboard-rooms-title-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .dashboard-rooms-title-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.18));
+            border: 1px solid rgba(34, 211, 238, 0.30);
+            color: var(--cyan);
+            font-size: 11px;
         }
 
         .dashboard-rooms-title {
@@ -919,19 +1012,23 @@
 
         /* Device compatibility - Tablet & Below (768px) */
         @media (max-width: 768px) {
-            .dashboard-rooms-panel {
+            .dashboard-rooms-panel,
+            .dashboard-activity-panel {
                 padding: 16px;
             }
 
-            .dashboard-rooms-title {
+            .dashboard-rooms-title,
+            .activity-title {
                 font-size: 17px;
             }
 
-            .dashboard-rooms-subtitle {
-                font-size: 14px;
+            .dashboard-rooms-subtitle,
+            .activity-subtitle {
+                font-size: 12px;
             }
 
-            .dashboard-room-row {
+            .dashboard-room-row,
+            .activity-item {
                 padding: 12px 14px;
                 min-height: 64px;
                 gap: 10px;
@@ -1058,64 +1155,21 @@
                 bottom: 12px;
             }
 
-            .dashboard-rooms-panel {
-                padding: 12px;
-            }
-
-            .dashboard-rooms-title {
-                font-size: 15px;
-            }
-
-            .dashboard-rooms-subtitle {
-                font-size: 12px;
-            }
-
-            .dashboard-room-row {
-                padding: 8px 10px 8px 14px;
-                min-height: 52px;
-                gap: 8px;
-                border-radius: 10px;
-            }
-
+            .dashboard-rooms-panel,
             .dashboard-activity-panel {
                 padding: 12px;
-                border-radius: 14px;
+                border-radius: 16px;
             }
 
-            .activity-item {
-                padding: 8px 10px;
-                gap: 8px;
-                border-radius: 10px;
-                min-height: 52px;
+            .dashboard-rooms-title,
+            .activity-title {
+                font-size: 16px;
             }
 
-            .activity-list {
-                gap: 8px;
-            }
-
-            .dashboard-room-row::before {
-                width: 3px;
-                left: 5px;
-                top: 8px;
-                bottom: 8px;
-            }
-
-            .dashboard-room-name {
-                font-size: 12px;
-            }
-
-            .dashboard-room-meta {
-                font-size: 11px;
-            }
-
-            .dashboard-room-temp {
-                font-size: 12px;
-            }
-
-            .dashboard-room-status {
-                font-size: 9px;
-                padding: 3px 6px;
-                min-width: 56px;
+            .dashboard-rooms-title-icon,
+            .activity-title-icon {
+                width: 24px;
+                height: 24px;
             }
 
             .dashboard-rooms-action {
@@ -1123,6 +1177,94 @@
                 min-width: 70px;
                 padding: 8px 10px;
                 font-size: 11px;
+            }
+
+            .dashboard-room-list,
+            .activity-list {
+                gap: 8px;
+            }
+
+            .dashboard-room-row,
+            .activity-item {
+                padding: 10px 12px;
+                gap: 8px;
+                border-radius: 12px;
+                min-height: 60px;
+            }
+
+            .dashboard-room-row::before {
+                width: 3px;
+                left: 6px;
+                top: 9px;
+                bottom: 9px;
+            }
+
+            .dashboard-room-main {
+                min-width: 0;
+            }
+
+            .dashboard-room-name {
+                font-size: 13px;
+                font-weight: 600;
+            }
+
+            .dashboard-room-meta {
+                font-size: 11px;
+            }
+
+            .dashboard-room-temp {
+                min-width: 50px;
+                font-size: 12px;
+                padding: 0 4px;
+            }
+
+            .dashboard-room-status {
+                min-width: 60px;
+                font-size: 9px;
+                padding: 3px 6px;
+            }
+
+            .activity-item {
+                grid-template-columns: 4px 30px 1fr;
+            }
+
+            .activity-icon-wrap {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+
+            .activity-avatar-wrap {
+                width: 30px;
+                height: 30px;
+            }
+
+            .activity-avatar-img,
+            .activity-avatar-fallback {
+                width: 30px;
+                height: 30px;
+                font-size: 11px;
+            }
+
+            .activity-icon-badge {
+                width: 15px;
+                height: 15px;
+                font-size: 8px;
+                border-width: 1.5px;
+            }
+
+            .activity-user,
+            .activity-desc {
+                font-size: 11px;
+            }
+
+            .activity-time {
+                font-size: 9px;
+            }
+
+            .trend-filter-select {
+                font-size: 10px;
+                padding: 5px 8px;
             }
         }
 
@@ -1163,6 +1305,105 @@
             .stat-card .accent-bar {
                 top: 10px;
                 bottom: 10px;
+            }
+
+            .dashboard-rooms-panel,
+            .dashboard-activity-panel {
+                padding: 10px;
+                border-radius: 12px;
+            }
+
+            .dashboard-rooms-title,
+            .activity-title {
+                font-size: 14px;
+            }
+
+            .dashboard-rooms-title-icon,
+            .activity-title-icon {
+                width: 22px;
+                height: 22px;
+                font-size: 10px;
+            }
+
+            .dashboard-rooms-action {
+                min-height: 32px;
+                min-width: 60px;
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+
+            .dashboard-room-list,
+            .activity-list {
+                gap: 6px;
+            }
+
+            .dashboard-room-row,
+            .activity-item {
+                padding: 8px 10px;
+                gap: 6px;
+                border-radius: 10px;
+                min-height: 54px;
+            }
+
+            .dashboard-room-row::before {
+                width: 3px;
+                left: 5px;
+                top: 7px;
+                bottom: 7px;
+            }
+
+            .dashboard-room-name {
+                font-size: 12px;
+            }
+
+            .dashboard-room-meta {
+                font-size: 10px;
+            }
+
+            .dashboard-room-temp {
+                min-width: 45px;
+                font-size: 11px;
+            }
+
+            .dashboard-room-status {
+                min-width: 54px;
+                font-size: 8px;
+                padding: 2px 5px;
+            }
+
+            .activity-item {
+                grid-template-columns: 3px 28px 1fr;
+                padding: 8px 10px;
+            }
+
+            .activity-icon-wrap {
+                width: 26px;
+                height: 26px;
+                font-size: 10px;
+            }
+
+            .activity-avatar-wrap,
+            .activity-avatar-img,
+            .activity-avatar-fallback {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+
+            .activity-icon-badge {
+                width: 14px;
+                height: 14px;
+                font-size: 7px;
+                border-width: 1px;
+            }
+
+            .activity-user,
+            .activity-desc {
+                font-size: 10px;
+            }
+
+            .activity-time {
+                font-size: 8px;
             }
         }
 
@@ -1456,8 +1697,13 @@
                             <section class="panel dashboard-rooms-panel">
                                 <div class="panel-header">
                                     <div>
-                                        <h2 class="dashboard-rooms-title">Server Rooms</h2>
-                                        <p class="dashboard-rooms-subtitle">{{ $totalRooms }} ruangan terdaftar</p>
+                                        <div class="dashboard-rooms-title-group">
+                                            <span class="dashboard-rooms-title-icon"><i class="fa-solid fa-server"></i></span>
+                                            <div>
+                                                <h2 class="dashboard-rooms-title">Server Rooms</h2>
+                                                <p class="dashboard-rooms-subtitle">{{ $totalRooms }} ruangan terdaftar</p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <a href="{{ route('rooms.overview') }}" class="dashboard-rooms-action"
                                         aria-label="Lihat semua server rooms">
