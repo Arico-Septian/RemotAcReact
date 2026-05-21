@@ -22,10 +22,12 @@ class TimerController extends Controller
 
         $ac = AcUnit::with('room')->findOrFail($id);
 
-        // VALIDASI LOGIKA
+        // VALIDASI LOGIKA: pastikan OFF > ON untuk menghindari ambiguitas cross-midnight
         if ($request->timer_on && $request->timer_off) {
-            if ($request->timer_on === $request->timer_off) {
-                return back()->with('error', 'Timer ON dan OFF tidak boleh sama');
+            if ($request->timer_off <= $request->timer_on) {
+                return back()->withErrors([
+                    'Timer OFF harus lebih besar dari ON',
+                ])->withInput();
             }
         }
 
@@ -57,17 +59,26 @@ class TimerController extends Controller
                 $mqtt = new MqttService;
                 $topic = 'room/'.MqttService::roomToTopic($ac->room->name)."/ac/{$ac->ac_number}/timer";
 
-                $payload = [
-                    'timer_on' => $newTimerOn,
-                    'timer_off' => $newTimerOff,
-                ];
+                if ($isDeletingTimer) {
+                    // Hapus retained message di broker saat timer dihapus
+                    $mqtt->clearRetained($topic);
+                    Log::info('Timer retained cleared from MQTT', [
+                        'ac_id' => $ac->id,
+                        'topic' => $topic,
+                    ]);
+                } else {
+                    $payload = [
+                        'timer_on' => $newTimerOn,
+                        'timer_off' => $newTimerOff,
+                    ];
 
-                $mqtt->publish($topic, json_encode($payload), 1, true);
-                Log::info('Timer published to MQTT', [
-                    'ac_id' => $ac->id,
-                    'topic' => $topic,
-                    'payload' => $payload,
-                ]);
+                    $mqtt->publish($topic, json_encode($payload), 1, true);
+                    Log::info('Timer published to MQTT', [
+                        'ac_id' => $ac->id,
+                        'topic' => $topic,
+                        'payload' => $payload,
+                    ]);
+                }
             } catch (\Throwable $e) {
                 Log::warning('Failed to publish timer to MQTT', [
                     'ac_id' => $ac->id,

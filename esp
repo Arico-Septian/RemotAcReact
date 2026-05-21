@@ -176,7 +176,7 @@ String nowClock() {
 void printSep(const char* text) {
   int cols = 0;
 
-  for (int i = 0; text[i] != '\0'; ) {
+  for (int i = 0; text[i] != '\0';) {
     uint8_t c = (uint8_t)text[i];
 
     if (c < 0x80) {
@@ -313,46 +313,46 @@ void applyMode(ACDevice& ac) {
 void applyFanSpeed(ACDevice& ac) {
   switch (ac.brand) {
     case BRAND_GREE:
-      if      (ac.fanSpeed == "LOW")    ac.gree.setFan(kGreeFanMin);
+      if (ac.fanSpeed == "LOW") ac.gree.setFan(kGreeFanMin);
       else if (ac.fanSpeed == "MEDIUM") ac.gree.setFan(kGreeFanMed);
-      else if (ac.fanSpeed == "HIGH")   ac.gree.setFan(kGreeFanMax);
-      else                              ac.gree.setFan(kGreeFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.gree.setFan(kGreeFanMax);
+      else ac.gree.setFan(kGreeFanAuto);
       break;
     case BRAND_DAIKIN:
-      if      (ac.fanSpeed == "LOW")    ac.daikin.setFan(kDaikinFanMin);
+      if (ac.fanSpeed == "LOW") ac.daikin.setFan(kDaikinFanMin);
       else if (ac.fanSpeed == "MEDIUM") ac.daikin.setFan(kDaikinFanMed);
-      else if (ac.fanSpeed == "HIGH")   ac.daikin.setFan(kDaikinFanMax);
-      else                              ac.daikin.setFan(kDaikinFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.daikin.setFan(kDaikinFanMax);
+      else ac.daikin.setFan(kDaikinFanAuto);
       break;
     case BRAND_PANASONIC:
-      if      (ac.fanSpeed == "LOW")    ac.panasonic.setFan(kPanasonicAcFanLow);
+      if (ac.fanSpeed == "LOW") ac.panasonic.setFan(kPanasonicAcFanLow);
       else if (ac.fanSpeed == "MEDIUM") ac.panasonic.setFan(kPanasonicAcFanMed);
-      else if (ac.fanSpeed == "HIGH")   ac.panasonic.setFan(kPanasonicAcFanHigh);
-      else                              ac.panasonic.setFan(kPanasonicAcFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.panasonic.setFan(kPanasonicAcFanHigh);
+      else ac.panasonic.setFan(kPanasonicAcFanAuto);
       break;
     case BRAND_LG:
-      if      (ac.fanSpeed == "LOW")    ac.lg.setFan(kLgAcFanLow);
+      if (ac.fanSpeed == "LOW") ac.lg.setFan(kLgAcFanLow);
       else if (ac.fanSpeed == "MEDIUM") ac.lg.setFan(kLgAcFanMedium);
-      else if (ac.fanSpeed == "HIGH")   ac.lg.setFan(kLgAcFanHigh);
-      else                              ac.lg.setFan(kLgAcFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.lg.setFan(kLgAcFanHigh);
+      else ac.lg.setFan(kLgAcFanAuto);
       break;
     case BRAND_MITSUBISHI:
-      if      (ac.fanSpeed == "LOW")    ac.mitsubishi.setFan(1);
+      if (ac.fanSpeed == "LOW") ac.mitsubishi.setFan(1);
       else if (ac.fanSpeed == "MEDIUM") ac.mitsubishi.setFan(3);
-      else if (ac.fanSpeed == "HIGH")   ac.mitsubishi.setFan(kMitsubishiAcFanRealMax);
-      else                              ac.mitsubishi.setFan(kMitsubishiAcFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.mitsubishi.setFan(kMitsubishiAcFanRealMax);
+      else ac.mitsubishi.setFan(kMitsubishiAcFanAuto);
       break;
     case BRAND_SHARP:
-      if      (ac.fanSpeed == "LOW")    ac.sharp.setFan(kSharpAcFanMin);
+      if (ac.fanSpeed == "LOW") ac.sharp.setFan(kSharpAcFanMin);
       else if (ac.fanSpeed == "MEDIUM") ac.sharp.setFan(kSharpAcFanMed);
-      else if (ac.fanSpeed == "HIGH")   ac.sharp.setFan(kSharpAcFanHigh);
-      else                              ac.sharp.setFan(kSharpAcFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.sharp.setFan(kSharpAcFanHigh);
+      else ac.sharp.setFan(kSharpAcFanAuto);
       break;
     case BRAND_TOSHIBA:
-      if      (ac.fanSpeed == "LOW")    ac.toshiba.setFan(kToshibaAcFanMin);
+      if (ac.fanSpeed == "LOW") ac.toshiba.setFan(kToshibaAcFanMin);
       else if (ac.fanSpeed == "MEDIUM") ac.toshiba.setFan(kToshibaAcFanMed);
-      else if (ac.fanSpeed == "HIGH")   ac.toshiba.setFan(kToshibaAcFanMax);
-      else                              ac.toshiba.setFan(kToshibaAcFanAuto);
+      else if (ac.fanSpeed == "HIGH") ac.toshiba.setFan(kToshibaAcFanMax);
+      else ac.toshiba.setFan(kToshibaAcFanAuto);
       break;
   }
 }
@@ -360,38 +360,38 @@ void applyFanSpeed(ACDevice& ac) {
 void applySwing(ACDevice& ac) {
   switch (ac.brand) {
     case BRAND_GREE:
-      if      (ac.swing == "FULL") ac.gree.setSwingVertical(true,  kGreeSwingAuto);
+      if (ac.swing == "FULL") ac.gree.setSwingVertical(true, kGreeSwingAuto);
       else if (ac.swing == "HALF") ac.gree.setSwingVertical(false, kGreeSwingMiddle);
       else if (ac.swing == "DOWN") ac.gree.setSwingVertical(false, kGreeSwingDown);
-      else                         ac.gree.setSwingVertical(false, kGreeSwingLastPos);
+      else ac.gree.setSwingVertical(false, kGreeSwingLastPos);
       break;
     case BRAND_DAIKIN:
       // IRDaikinESP hanya support on/off — HALF & DOWN fallback ke off
       ac.daikin.setSwingVertical(ac.swing == "FULL");
       break;
     case BRAND_PANASONIC:
-      if      (ac.swing == "FULL") ac.panasonic.setSwingVertical(kPanasonicAcSwingVAuto);
+      if (ac.swing == "FULL") ac.panasonic.setSwingVertical(kPanasonicAcSwingVAuto);
       else if (ac.swing == "HALF") ac.panasonic.setSwingVertical(kPanasonicAcSwingVMiddle);
       else if (ac.swing == "DOWN") ac.panasonic.setSwingVertical(kPanasonicAcSwingVLow);
-      else                         ac.panasonic.setSwingVertical(kPanasonicAcSwingVMiddle);
+      else ac.panasonic.setSwingVertical(kPanasonicAcSwingVMiddle);
       break;
     case BRAND_LG:
-      if      (ac.swing == "FULL") ac.lg.setSwingV(kLgAcSwingVSwing);
+      if (ac.swing == "FULL") ac.lg.setSwingV(kLgAcSwingVSwing);
       else if (ac.swing == "HALF") ac.lg.setSwingV(kLgAcSwingVMiddle);
       else if (ac.swing == "DOWN") ac.lg.setSwingV(kLgAcSwingVLow);
-      else                         ac.lg.setSwingV(kLgAcSwingVOff);
+      else ac.lg.setSwingV(kLgAcSwingVOff);
       break;
     case BRAND_MITSUBISHI:
-      if      (ac.swing == "FULL") ac.mitsubishi.setVane(kMitsubishiAcVaneSwing);
+      if (ac.swing == "FULL") ac.mitsubishi.setVane(kMitsubishiAcVaneSwing);
       else if (ac.swing == "HALF") ac.mitsubishi.setVane(kMitsubishiAcVaneMiddle);
       else if (ac.swing == "DOWN") ac.mitsubishi.setVane(kMitsubishiAcVaneLow);
-      else                         ac.mitsubishi.setVane(kMitsubishiAcVaneAuto);
+      else ac.mitsubishi.setVane(kMitsubishiAcVaneAuto);
       break;
     case BRAND_SHARP:
-      if      (ac.swing == "FULL") ac.sharp.setSwingV(kSharpAcSwingVToggle);
+      if (ac.swing == "FULL") ac.sharp.setSwingV(kSharpAcSwingVToggle);
       else if (ac.swing == "HALF") ac.sharp.setSwingV(kSharpAcSwingVMid);
       else if (ac.swing == "DOWN") ac.sharp.setSwingV(kSharpAcSwingVLow);
-      else                         ac.sharp.setSwingV(kSharpAcSwingVOff);
+      else ac.sharp.setSwingV(kSharpAcSwingVOff);
       break;
     case BRAND_TOSHIBA:
       // Toshiba hanya support on/off — HALF & DOWN fallback ke off
@@ -513,7 +513,7 @@ void publishSensorStatus(const char* status, bool retain = true) {
   doc["device_id"] = DEVICE_ID;
   doc["room"] = currentRoom;
   doc["sensor_status"] = status;
-  doc["ts_ms"] = (uint32_t) millis();
+  doc["ts_ms"] = (uint32_t)millis();
 
   char buf[192];
   serializeJson(doc, buf, sizeof(buf));
@@ -548,10 +548,10 @@ void publishDHT(bool forceSend = false, bool forceLog = false) {
 
   StaticJsonDocument<256> doc;
   doc["device_id"] = DEVICE_ID;
-  doc["room"]      = currentRoom;
+  doc["room"] = currentRoom;
   doc["sensor_status"] = "online";
-  doc["suhu"]      = temp;
-  doc["ts_ms"]     = (uint32_t) millis();
+  doc["suhu"] = temp;
+  doc["ts_ms"] = (uint32_t)millis();
 
   char buf[256];
   serializeJson(doc, buf, sizeof(buf));
@@ -799,20 +799,20 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 // ============== WiFi diagnostics ==============
 const char* wifiDisconnectReason(uint8_t reason) {
   switch (reason) {
-    case 2:   return "AUTH_EXPIRE (password salah/expired)";
-    case 3:   return "AUTH_LEAVE";
-    case 4:   return "ASSOC_EXPIRE";
-    case 5:   return "ASSOC_TOOMANY (router penuh)";
-    case 6:   return "NOT_AUTHED";
-    case 7:   return "NOT_ASSOCED";
-    case 8:   return "ASSOC_LEAVE";
-    case 15:  return "4WAY_HANDSHAKE_TIMEOUT (WPA mismatch / RSSI lemah)";
+    case 2: return "AUTH_EXPIRE (password salah/expired)";
+    case 3: return "AUTH_LEAVE";
+    case 4: return "ASSOC_EXPIRE";
+    case 5: return "ASSOC_TOOMANY (router penuh)";
+    case 6: return "NOT_AUTHED";
+    case 7: return "NOT_ASSOCED";
+    case 8: return "ASSOC_LEAVE";
+    case 15: return "4WAY_HANDSHAKE_TIMEOUT (WPA mismatch / RSSI lemah)";
     case 200: return "BEACON_TIMEOUT";
     case 201: return "NO_AP_FOUND (SSID tidak ditemukan — router 5GHz only?)";
     case 202: return "AUTH_FAIL (password salah)";
     case 203: return "ASSOC_FAIL (router menolak)";
     case 204: return "HANDSHAKE_TIMEOUT";
-    default:  return "UNKNOWN";
+    default: return "UNKNOWN";
   }
 }
 
@@ -840,8 +840,7 @@ void scanWiFi() {
       WiFi.RSSI(i),
       WiFi.channel(i),
       WiFi.BSSIDstr(i).c_str(),
-      WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "OPEN" : "ENC"
-    );
+      WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "OPEN" : "ENC");
   }
 
   Serial.println();
@@ -883,7 +882,7 @@ void connectWiFi() {
             WiFi.channel());
   } else {
     logLine("WiFi", "❌", "FAIL (timeout setelah 15 detik)");
-    scanWiFi();   // scan otomatis kalau gagal, tampilkan diagnose
+    scanWiFi();  // scan otomatis kalau gagal, tampilkan diagnose
   }
 }
 
