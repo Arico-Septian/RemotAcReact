@@ -88,27 +88,27 @@
         /* Card min-height untuk visual rhythm konsisten — content boleh grow di atasnya */
         .dashboard-room-row,
         .activity-item {
-            min-height: 80px !important;
+            min-height: 72px !important;
         }
 
         @media (max-width: 640px) {
             .dashboard-room-row,
             .activity-item {
-                min-height: 68px !important;
+                min-height: 64px !important;
             }
         }
 
         @media (max-width: 480px) {
             .dashboard-room-row,
             .activity-item {
-                min-height: 62px !important;
+                min-height: 58px !important;
             }
         }
 
         @media (max-width: 360px) {
             .dashboard-room-row,
             .activity-item {
-                min-height: 56px !important;
+                min-height: 52px !important;
             }
         }
 
@@ -225,10 +225,10 @@
         .activity-item {
             position: relative;
             display: grid;
-            grid-template-columns: 4px 36px 1fr;
+            grid-template-columns: 36px 1fr;
             align-items: center;
-            gap: 16px;
-            padding: 12px 14px;
+            gap: 12px;
+            padding: 10px 14px 10px 18px;
             border-radius: 14px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -246,10 +246,12 @@
         }
 
         .activity-rail {
+            position: absolute;
+            left: 6px;
+            top: 10px;
+            bottom: 10px;
             width: 4px;
             border-radius: 999px;
-            align-self: stretch;
-            margin: 10px 0;
             background: var(--tone, #94a3b8);
             opacity: 1;
             /* Efek menyala yang lebih nyata */
@@ -384,7 +386,7 @@
 
         .activity-desc {
             margin: 0;
-            font-size: 13.5px;
+            font-size: 13px;
             line-height: 1.3;
             color: var(--ink-2);
             overflow: hidden;
@@ -454,22 +456,18 @@
             }
 
             .activity-item {
-                grid-template-columns: 3px 32px 1fr;
-                padding: 10px 12px;
+                grid-template-columns: 32px 1fr;
+                padding: 10px 14px 10px 16px;
                 gap: 10px;
             }
 
             .dashboard-room-temp {
-                grid-column: 2;
-                grid-row: 1;
                 min-width: 60px;
                 font-size: 13px;
                 text-align: right;
             }
 
             .dashboard-room-status {
-                grid-column: 2;
-                grid-row: 2;
                 min-width: 72px;
                 font-size: 10px;
                 padding: 4px 8px;
@@ -547,15 +545,17 @@
             }
 
             .activity-item {
-                grid-template-columns: 4px 30px 1fr;
-                padding: 8px 10px;
+                grid-template-columns: 28px 1fr;
+                padding: 8px 10px 8px 14px;
                 gap: 8px;
                 border-radius: 12px;
                 min-height: 60px;
             }
 
             .activity-item .activity-rail {
-                margin: 8px 0;
+                left: 6px;
+                top: 9px;
+                bottom: 9px;
             }
 
             .activity-icon-wrap {
@@ -581,6 +581,12 @@
                 height: 15px;
                 font-size: 8px;
                 border-width: 1.5px;
+            }
+
+            .activity-item .activity-rail {
+                left: 5px;
+                top: 7px;
+                bottom: 7px;
             }
 
             .activity-user,
@@ -667,7 +673,7 @@
         }
 
         .dashboard-room-row {
-            padding: 12px 12px 12px 18px;
+            padding: 10px 12px 10px 18px;
             border-radius: 14px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -684,8 +690,8 @@
             content: '';
             position: absolute;
             left: 6px;
-            top: 14px;
-            bottom: 14px;
+            top: 10px;
+            bottom: 10px;
             width: 4px;
             border-radius: 999px;
             background: #fca5a5;
@@ -719,7 +725,7 @@
         }
 
         .dashboard-room-name {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             line-height: 1.15;
             color: var(--ink-0);
@@ -731,7 +737,7 @@
         .dashboard-room-meta {
             margin-top: 3px;
             color: var(--ink-3);
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.25;
             white-space: nowrap;
             overflow: hidden;
@@ -793,7 +799,7 @@
             .dashboard-room-row {
                 grid-template-columns: 1fr auto;
                 gap: 10px;
-                padding: 12px 14px 12px 18px;
+                padding: 12px 14px 12px 16px;
                 min-height: 64px;
             }
 
@@ -1229,7 +1235,8 @@
             }
 
             .activity-item {
-                grid-template-columns: 4px 30px 1fr;
+                grid-template-columns: 30px 1fr;
+                padding: 8px 10px 8px 16px;
             }
 
             .activity-icon-wrap {
@@ -1343,8 +1350,8 @@
 
             .dashboard-room-row,
             .activity-item {
-                padding: 8px 10px;
-                gap: 6px;
+                padding: 8px 10px 8px 14px;
+                gap: 8px;
                 border-radius: 10px;
                 min-height: 54px;
             }
@@ -1376,8 +1383,8 @@
             }
 
             .activity-item {
-                grid-template-columns: 3px 28px 1fr;
-                padding: 8px 10px;
+                grid-template-columns: 28px 1fr;
+                padding: 8px 10px 8px 14px;
             }
 
             .activity-icon-wrap {
