@@ -35,7 +35,7 @@
         }
 
         .dashboard-rooms-panel {
-            padding: 24px;
+            padding: 20px;
             border-radius: 20px;
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
@@ -61,17 +61,17 @@
         /* Tablet (768-1023px): semua text dikecilkan agar muat inline */
         @media (min-width: 768px) and (max-width: 1023px) {
             .activity-user {
-                font-size: 12px !important;
+                font-size: 13px !important;
             }
             .activity-time {
-                font-size: 9px !important;
+                font-size: 10px !important;
             }
             .activity-desc {
-                font-size: 10.5px !important;
+                font-size: 11.5px !important;
             }
             .activity-chips .chip {
                 padding: 1px 4px !important;
-                font-size: 8px !important;
+                font-size: 9px !important;
                 gap: 2px !important;
             }
             .activity-chips .chip i {
@@ -88,27 +88,27 @@
         /* Card min-height untuk visual rhythm konsisten — content boleh grow di atasnya */
         .dashboard-room-row,
         .activity-item {
-            min-height: 92px !important;
+            min-height: 80px !important;
         }
 
         @media (max-width: 640px) {
-            .dashboard-room-row,
-            .activity-item {
-                min-height: 76px !important;
-            }
-        }
-
-        @media (max-width: 480px) {
             .dashboard-room-row,
             .activity-item {
                 min-height: 68px !important;
             }
         }
 
+        @media (max-width: 480px) {
+            .dashboard-room-row,
+            .activity-item {
+                min-height: 62px !important;
+            }
+        }
+
         @media (max-width: 360px) {
             .dashboard-room-row,
             .activity-item {
-                min-height: 60px !important;
+                min-height: 56px !important;
             }
         }
 
@@ -119,7 +119,7 @@
 
         /* ===== Recent Activity widget — premium ===== */
         .dashboard-activity-panel {
-            padding: 24px;
+            padding: 20px;
             border-radius: 20px;
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
@@ -141,7 +141,7 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .activity-title-group {
@@ -226,9 +226,9 @@
             position: relative;
             display: grid;
             grid-template-columns: 4px 36px 1fr;
-            align-items: start;
-            gap: 12px;
-            padding: 14px;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 14px;
             border-radius: 14px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -249,9 +249,11 @@
             width: 4px;
             border-radius: 999px;
             align-self: stretch;
-            margin: 4px 0;
+            margin: 10px 0;
             background: var(--tone, #94a3b8);
-            opacity: 0.85;
+            opacity: 1;
+            /* Efek menyala yang lebih nyata */
+            box-shadow: 0 0 10px color-mix(in srgb, var(--tone) 40%, transparent);
         }
 
         .activity-icon-wrap {
@@ -356,7 +358,7 @@
         }
 
         .activity-user {
-            font-size: 14px;
+            font-size: 14.5px;
             font-weight: 700;
             color: var(--ink-0);
             letter-spacing: -0.005em;
@@ -382,7 +384,7 @@
 
         .activity-desc {
             margin: 0;
-            font-size: 13px;
+            font-size: 13.5px;
             line-height: 1.3;
             color: var(--ink-2);
             overflow: hidden;
@@ -420,7 +422,7 @@
         @media (max-width: 640px) {
             .dashboard-rooms-panel,
             .dashboard-activity-panel {
-                padding: 16px;
+                padding: 14px;
             }
 
             .dashboard-rooms-panel .panel-header,
@@ -452,8 +454,8 @@
             }
 
             .activity-item {
-                grid-template-columns: 4px 32px 1fr;
-                padding: 12px;
+                grid-template-columns: 3px 32px 1fr;
+                padding: 10px 12px;
                 gap: 10px;
             }
 
@@ -512,15 +514,15 @@
             }
 
             .activity-user {
-                font-size: 12.5px;
+                font-size: 13px;
             }
 
             .activity-desc {
-                font-size: 11.5px;
+                font-size: 12px;
             }
 
             .activity-time {
-                font-size: 10px;
+                font-size: 10.5px;
             }
         }
 
@@ -546,14 +548,14 @@
 
             .activity-item {
                 grid-template-columns: 4px 30px 1fr;
-                padding: 10px 12px;
-                gap: 10px;
+                padding: 8px 10px;
+                gap: 8px;
                 border-radius: 12px;
                 min-height: 60px;
             }
 
             .activity-item .activity-rail {
-                margin: 0;
+                margin: 8px 0;
             }
 
             .activity-icon-wrap {
@@ -583,11 +585,11 @@
 
             .activity-user,
             .activity-desc {
-                font-size: 11px;
+                font-size: 12px;
             }
 
             .activity-time {
-                font-size: 9px;
+                font-size: 10px;
             }
         }
 
@@ -596,7 +598,7 @@
             align-items: flex-start;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .dashboard-rooms-title-group {
@@ -665,7 +667,7 @@
         }
 
         .dashboard-room-row {
-            padding: 14px 14px 14px 20px;
+            padding: 12px 12px 12px 18px;
             border-radius: 14px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -682,13 +684,15 @@
             content: '';
             position: absolute;
             left: 6px;
-            top: 12px;
-            bottom: 12px;
+            top: 14px;
+            bottom: 14px;
             width: 4px;
             border-radius: 999px;
             background: #fca5a5;
-            opacity: 0.85;
+            opacity: 1;
             transition: background var(--t-base);
+            /* Tambahkan glow pada baris ruangan agar seragam */
+            box-shadow: 0 0 8px color-mix(in srgb, currentColor 30%, transparent);
         }
 
         /* Indikator status via warna garis kiri (tanpa glow, match activity rail) */
@@ -726,7 +730,7 @@
 
         .dashboard-room-meta {
             margin-top: 3px;
-            color: var(--ink-2);
+            color: var(--ink-3);
             font-size: 14px;
             line-height: 1.25;
             white-space: nowrap;
@@ -882,12 +886,12 @@
             }
 
             .dashboard-room-name {
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 600;
             }
 
             .dashboard-room-meta {
-                font-size: 11px;
+                font-size: 12px;
             }
 
             .dashboard-room-temp {
@@ -1353,16 +1357,16 @@
             }
 
             .dashboard-room-name {
-                font-size: 12px;
+                font-size: 13px;
             }
 
             .dashboard-room-meta {
-                font-size: 10px;
+                font-size: 11px;
             }
 
             .dashboard-room-temp {
-                min-width: 45px;
-                font-size: 11px;
+                min-width: 50px;
+                font-size: 12px;
             }
 
             .dashboard-room-status {
@@ -1698,7 +1702,6 @@
                                 <div class="panel-header">
                                     <div>
                                         <div class="dashboard-rooms-title-group">
-                                            <span class="dashboard-rooms-title-icon"><i class="fa-solid fa-server"></i></span>
                                             <div>
                                                 <h2 class="dashboard-rooms-title">Server Rooms</h2>
                                                 <p class="dashboard-rooms-subtitle"><?php echo e($totalRooms); ?> ruangan terdaftar</p>
