@@ -74,6 +74,16 @@ class RunFuzzyLogic extends Command
                 continue;
             }
 
+            $activeAcUnits = $room->acUnits->filter(
+                fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
+            );
+
+            if ($activeAcUnits->isEmpty()) {
+                $skipped++;
+
+                continue;
+            }
+
             Notification::fuzzyRecovery($room->name);
 
             $currentTemp = $latestTemp->temperature;
@@ -88,7 +98,7 @@ class RunFuzzyLogic extends Command
             $fuzzyResult = $fuzzyService->calculate($currentTemp, $deltaT);
 
             $currentSetpoint = (int) round(
-                $room->acUnits
+                $activeAcUnits
                     ->map(fn ($ac) => $ac->status?->set_temperature ?? 24)
                     ->avg()
             );
@@ -110,7 +120,7 @@ class RunFuzzyLogic extends Command
 
             $acController = new AcControlController;
 
-            foreach ($room->acUnits as $ac) {
+            foreach ($activeAcUnits as $ac) {
                 $acController->fuzzySetTemp(
                     $ac,
                     $decision['setpoint_after']
