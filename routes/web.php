@@ -218,7 +218,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
     });
 
     Route::get('/temperature/trend', function (Request $request) use ($roomDeviceIsOnline) {
-        $limit = (int) $request->query('limit', 5);
+        $limit = 5; // Dibatasi ketat hanya 5 ruangan
         $range = $request->query('range', '1h');
 
         // Konfigurasi range: total jam, interval menit, label format
@@ -237,13 +237,18 @@ Route::middleware(['auth', 'activity'])->group(function () {
         $startTime = now()->subHours($cfg['hours']);
         $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
-        // Sort by latest temperature DESC (hottest first)
-        $rooms = $rooms->sortByDesc(function ($room) use ($latestTemperatures) {
-            $temp = optional(
-                $latestTemperatures->get(RoomTemperature::normalizeRoomName($room->name))
-            )->temperature;
+        // Urutkan: 1. Online vs Offline, 2. Suhu Tertinggi
+        $rooms = $rooms->sort(function ($a, $b) use ($roomDeviceIsOnline, $latestTemperatures) {
+            $aOnline = $roomDeviceIsOnline($a);
+            $bOnline = $roomDeviceIsOnline($b);
 
-            return $temp ?? -999;
+            if ($aOnline && !$bOnline) return -1;
+            if (!$aOnline && $bOnline) return 1;
+
+            $aTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($a->name)))->temperature ?? -999;
+            $bTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($b->name)))->temperature ?? -999;
+
+            return $bTemp <=> $aTemp;
         })->values();
 
         $totalRooms = $rooms->count();

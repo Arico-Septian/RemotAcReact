@@ -1674,11 +1674,6 @@
                                         <option value="6h">6 Jam</option>
                                         <option value="24h">24 Jam</option>
                                     </select>
-                                    <select id="trendLimit" class="trend-filter-select" title="Pilih jumlah ruangan">
-                                        <option value="5">Top 5</option>
-                                        <option value="10">Top 10</option>
-                                        <option value="0">Semua</option>
-                                    </select>
                                 </div>
                             </div>
                             <div style="height:300px;position:relative;">
@@ -2009,7 +2004,34 @@
                     labels: [],
                     datasets: []
                 },
-                plugins: [glowLinePlugin, crosshairGlowPlugin],
+                plugins: [glowLinePlugin, crosshairGlowPlugin, {
+                    id: 'hoverFocus',
+                    afterEvent(chart, args) {
+                        const { event } = args;
+                        if (event.type !== 'mousemove' && event.type !== 'mouseout') return;
+
+                        const activeElements = chart.getElementsAtEventForMode(event, 'nearest', { intersect: false }, true);
+
+                        chart.data.datasets.forEach((ds, i) => {
+                            if (activeElements.length > 0) {
+                                const activeIndex = activeElements[0].datasetIndex;
+                                if (i === activeIndex) {
+                                    ds.borderColor = ds._originalColor;
+                                    ds.borderWidth = 4;
+                                } else {
+                                    ds.borderColor = hexToRgba(ds._originalHex, 0.1);
+                                    ds.borderWidth = 1.5;
+                                }
+                            } else {
+                                // Reset to original
+                                ds.borderColor = ds._originalColor;
+                                ds.borderWidth = ds._isOffline ? 2.4 : 3.2;
+                            }
+                        });
+
+                        chart.update('none');
+                    }
+                }],
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -2184,38 +2206,43 @@
 
                     tempChart.data.labels = data.labels || [];
 
+                    // Warna seragam untuk room offline → sinyal visual jelas
+                    const OFFLINE_HEX = '#64748b';
+                    const OFFLINE_LINE_ALPHA = 0.4;
+
                     tempChart.data.datasets = (data.datasets || []).map(ds => {
                         const tempStr = ds.current_temp !== null && ds.current_temp !== undefined ?
                             `${Number(ds.current_temp).toFixed(1)}°C` :
                             '—';
 
+                        // Online → pakai warna palette dari backend (tiap room beda).
+                        // Offline → seragam abu-abu redup agar terlihat "non-aktif".
+                        const effectiveHex = ds.is_offline ? OFFLINE_HEX : ds.color;
                         const lineColor = ds.is_offline ?
-                            'rgba(148,163,184,0.9)' :
-                            '#67e8f9';
+                            hexToRgba(OFFLINE_HEX, OFFLINE_LINE_ALPHA) :
+                            ds.color;
 
                         return {
                             label: `${ds.room} (${tempStr})`,
                             data: ds.data,
 
                             borderColor: lineColor,
-                            borderWidth: ds.is_offline ? 2.4 : 3.2,
+                            borderDash: ds.is_offline ? [4, 4] : [],
+                            _originalColor: lineColor,
+                            _originalHex: effectiveHex,
+                            borderWidth: ds.is_offline ? 2 : 3.2,
 
                             tension: 0.48,
                             cubicInterpolationMode: 'monotone',
 
-                            pointRadius: 2,
+                            pointRadius: ds.is_offline ? 0 : 2,
                             pointHitRadius: 40,
-                            pointHoverRadius: 5,
-                            pointBackgroundColor: '#67e8f9',
+                            pointHoverRadius: ds.is_offline ? 0 : 5,
+                            pointBackgroundColor: ds.is_offline ? hexToRgba(OFFLINE_HEX, 0.6) : '#67e8f9',
                             pointBorderWidth: 0,
 
                             fill: true,
-                            backgroundColor: (ctx) => {
-                                const chart = ctx.chart;
-                                const base = ds.is_offline ? (ds.color || '#64748b') : (ds.color ||
-                                    '#22d3ee');
-                                return makeAreaGradient(chart, base);
-                            },
+                            backgroundColor: (ctx) => makeAreaGradient(ctx.chart, effectiveHex),
 
                             spanGaps: true,
                             _isOffline: ds.is_offline,
@@ -2227,13 +2254,10 @@
 
                     const infoEl = document.getElementById('trendInfo');
                     if (infoEl) {
-                        if ((data.total_rooms || 0) > (data.shown || 0)) {
-                            infoEl.textContent =
-                                `Menampilkan ${data.shown} dari ${data.total_rooms} ruangan (urutkan: suhu tertinggi).`;
-                        } else {
-                            infoEl.textContent =
-                                `Menampilkan ${data.shown || (data.datasets || []).length} ruangan.`;
-                        }
+                        const shown = (data.datasets || []).length;
+                        const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
+                        const offlineCount = shown - onlineCount;
+                        infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline (Last Temp).`;
                     }
                 })
                 .catch(() => {});
@@ -2341,14 +2365,6 @@
             }
 
             // Setup trend filter dropdowns
-            const trendSelect = document.getElementById('trendLimit');
-            if (trendSelect) {
-                trendSelect.value = getTrendLimit();
-                trendSelect.addEventListener('change', (e) => {
-                    localStorage.setItem('trendLimit', e.target.value);
-                    refreshTrendChart();
-                });
-            }
             const rangeSelect = document.getElementById('trendRange');
             if (rangeSelect) {
                 rangeSelect.value = getTrendRange();
