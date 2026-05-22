@@ -6,6 +6,7 @@ use App\Http\Controllers\AcControlController;
 use App\Models\Notification;
 use App\Models\Room;
 use App\Models\RoomTemperature;
+use App\Models\UserLog;
 use App\Services\FuzzyMamdaniService;
 use Carbon\Carbon;
 use Illuminate\Console\Attributes\Description;
@@ -125,6 +126,13 @@ class RunFuzzyLogic extends Command
                     $ac,
                     $decision['setpoint_after']
                 );
+
+                UserLog::create([
+                    'user_id' => null,
+                    'room' => $room->name,
+                    'ac' => 'AC '.$ac->ac_number.($ac->name ? ' '.$ac->name : ''),
+                    'activity' => 'fuzzy_'.strtolower($decision['action']).'_'.$decision['setpoint_after'],
+                ]);
             }
 
             $processed++;
