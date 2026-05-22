@@ -325,7 +325,7 @@
                             </div>
                             <p id="cpMatchHint" class="field-help" style="display:none;color:#ff5577;margin-top:6px;">Password baru tidak cocok</p>
                             <div class="profile-pwd-actions">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" id="changePwdBtn" class="btn btn-primary">
                                     <i class="fa-solid fa-key text-[11px]"></i>
                                     <span>Update Password</span>
                                 </button>
@@ -448,11 +448,18 @@
     }
     newPwd.addEventListener('input', checkMatch);
     confirm.addEventListener('input', checkMatch);
+    const submitBtn = document.getElementById('changePwdBtn');
     form.addEventListener('submit', (e) => {
         if (!checkMatch()) {
             e.preventDefault();
             (window.smToast || alert)('Password baru tidak cocok', 'error');
             confirm.focus();
+            return;
+        }
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.classList.add('is-loading');
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[11px]"></i><span>Menyimpan...</span>';
         }
     });
 })();

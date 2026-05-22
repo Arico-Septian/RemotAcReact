@@ -303,10 +303,13 @@ function markAllNotifRead() {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content,
             'Accept': 'application/json',
         },
-    }).then(() => {
+    }).then(r => {
+        if (!r.ok) throw new Error(r.status);
         loadNotifPanel();
         updateNotifBadge(0);
         if (window.smToast) window.smToast('Semua notifikasi ditandai dibaca', 'success');
+    }).catch(() => {
+        if (window.smToast) window.smToast('Gagal menandai semua notifikasi', 'error');
     });
 }
 

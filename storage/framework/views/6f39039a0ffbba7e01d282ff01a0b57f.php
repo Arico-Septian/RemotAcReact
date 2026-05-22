@@ -689,6 +689,9 @@
             text.textContent = online ? 'Online' : 'Offline';
         }
 
+        let _statusFetchFailed = false;
+        let _tempFetchFailed = false;
+
         function refreshRoomStatuses() {
             fetch('/device-status', {
                     headers: {
@@ -698,6 +701,7 @@
                 })
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
+                    _statusFetchFailed = false;
                     if (!Array.isArray(data)) return;
 
                     data.forEach(device => {
@@ -709,7 +713,12 @@
 
                     applyFilter();
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_statusFetchFailed) {
+                        _statusFetchFailed = true;
+                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                    }
+                });
         }
 
         setInterval(refreshRoomStatuses, 5000);
@@ -874,9 +883,15 @@
 
         function refreshTemps() {
             fetch('/temperature').then(r => r.ok ? r.json() : null).then(data => {
+                _tempFetchFailed = false;
                 if (!data) return;
                 data.forEach(updateRoomTemperature);
-            }).catch(() => {});
+            }).catch(() => {
+                if (!_tempFetchFailed) {
+                    _tempFetchFailed = true;
+                    window.smToast?.('Gagal memuat data suhu ruangan', 'error');
+                }
+            });
         }
         setInterval(refreshTemps, 5000);
 

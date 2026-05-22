@@ -1750,6 +1750,8 @@
             });
         });
 
+        let _espFetchFailed = false;
+
         function updateEspStatus() {
             const pill = document.getElementById('espStatusPill');
             const text = document.getElementById('espStatusText');
@@ -1764,6 +1766,7 @@
                 })
                 .then(response => response.ok ? response.json() : Promise.reject())
                 .then(devices => {
+                    _espFetchFailed = false;
                     const current = Array.isArray(devices) ?
                         devices.find(device => Number(device.room_id) === roomId) :
                         null;
@@ -1775,7 +1778,12 @@
                     pill.classList.toggle('pill-error', !online);
                     text.textContent = `ESP ${online ? 'Online' : 'Offline'}`;
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_espFetchFailed) {
+                        _espFetchFailed = true;
+                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                    }
+                });
         }
 
         document.addEventListener('DOMContentLoaded', () => {

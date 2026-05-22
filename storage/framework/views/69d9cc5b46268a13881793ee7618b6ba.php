@@ -901,7 +901,7 @@
 
             .dashboard-room-status {
                 min-width: 60px;
-                font-size: 9px;
+                font-size: 10px;
                 padding: 3px 6px;
             }
 
@@ -1223,7 +1223,7 @@
 
             .dashboard-room-status {
                 min-width: 60px;
-                font-size: 9px;
+                font-size: 10px;
                 padding: 3px 6px;
             }
 
@@ -1263,7 +1263,7 @@
             }
 
             .activity-time {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .trend-filter-select {
@@ -1284,7 +1284,7 @@
 
             .stat-card .stat-label-sm,
             .stat-card .stat-label {
-                font-size: 8px;
+                font-size: 9px;
                 letter-spacing: 0.05em;
             }
 
@@ -1685,6 +1685,9 @@
                                         <p class="empty-sub">Belum ada data suhu dalam 1 jam terakhir</p>
                                     </div>
                                 </div>
+                                <div id="tempChartLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none;">
+                                    <i class="fa-solid fa-spinner fa-spin" style="font-size:20px;color:var(--ink-4);opacity:0.5;"></i>
+                                </div>
                             </div>
                             <p id="trendInfo" class="panel-meta"
                                 style="margin-top:8px;font-size:11px;color:var(--ink-4);"></p>
@@ -1840,17 +1843,19 @@
             return `rgba(${r},${g},${b},${a})`;
         }
 
+        const _gradCache = new Map();
         function makeAreaGradient(chart, hex) {
-            const {
-                ctx,
-                chartArea
-            } = chart;
+            const { ctx, chartArea } = chart;
             if (!chartArea) return hexToRgba(hex, 0.12);
+
+            const key = `${hex}:${Math.round(chartArea.top)}:${Math.round(chartArea.bottom)}`;
+            if (_gradCache.has(key)) return _gradCache.get(key);
 
             const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
             g.addColorStop(0, hexToRgba(hex, 0.55));
             g.addColorStop(0.6, hexToRgba(hex, 0.22));
             g.addColorStop(1, hexToRgba(hex, 0.0));
+            _gradCache.set(key, g);
             return g;
         }
 
@@ -1861,19 +1866,13 @@
                 const tooltip = chart.tooltip;
                 if (!tooltip || !tooltip.getActiveElements || tooltip.getActiveElements().length === 0) return;
 
-                const {
-                    ctx,
-                    chartArea: {
-                        top,
-                        bottom
-                    }
-                } = chart;
+                const { ctx, chartArea: { top, bottom } } = chart;
                 const active = tooltip.getActiveElements()[0];
                 const x = active.element.x;
                 const y = active.element.y;
 
-                // vertical line
                 ctx.save();
+                // garis vertikal
                 ctx.beginPath();
                 ctx.moveTo(x, top);
                 ctx.lineTo(x, bottom);
@@ -1881,9 +1880,7 @@
                 ctx.strokeStyle = 'rgba(103,232,249,0.25)';
                 ctx.stroke();
 
-                // glow point
-                ctx.shadowBlur = 16;
-                ctx.shadowColor = 'rgba(255,255,255,0.25)';
+                // titik aktif — tanpa shadowBlur (mahal di canvas)
                 ctx.fillStyle = 'rgba(255,255,255,0.9)';
                 ctx.beginPath();
                 ctx.arc(x, y, 3.5, 0, Math.PI * 2);
@@ -1896,12 +1893,10 @@
         const glowLinePlugin = {
             id: 'glowLine',
             beforeDatasetsDraw(chart) {
-                const {
-                    ctx
-                } = chart;
-                ctx.save();
-                ctx.shadowBlur = 18;
-                ctx.shadowColor = 'rgba(103,232,249,0.35)';
+                chart.ctx.save();
+                // shadowBlur dikurangi drastis — nilai tinggi paksa GPU blur tiap frame
+                chart.ctx.shadowBlur = 6;
+                chart.ctx.shadowColor = 'rgba(103,232,249,0.20)';
             },
             afterDatasetsDraw(chart) {
                 chart.ctx.restore();
@@ -2006,15 +2001,20 @@
                 },
                 plugins: [glowLinePlugin, crosshairGlowPlugin, {
                     id: 'hoverFocus',
+                    _lastActive: -1,
                     afterEvent(chart, args) {
                         const { event } = args;
                         if (event.type !== 'mousemove' && event.type !== 'mouseout') return;
 
                         const activeElements = chart.getElementsAtEventForMode(event, 'nearest', { intersect: false }, true);
+                        const activeIndex = activeElements.length > 0 ? activeElements[0].datasetIndex : -1;
+
+                        // update() hanya dipanggil saat dataset aktif benar-benar berubah
+                        if (activeIndex === this._lastActive) return;
+                        this._lastActive = activeIndex;
 
                         chart.data.datasets.forEach((ds, i) => {
-                            if (activeElements.length > 0) {
-                                const activeIndex = activeElements[0].datasetIndex;
+                            if (activeIndex >= 0) {
                                 if (i === activeIndex) {
                                     ds.borderColor = ds._originalColor;
                                     ds.borderWidth = 4;
@@ -2023,7 +2023,6 @@
                                     ds.borderWidth = 1.5;
                                 }
                             } else {
-                                // Reset to original
                                 ds.borderColor = ds._originalColor;
                                 ds.borderWidth = ds._isOffline ? 2.4 : 3.2;
                             }
@@ -2147,10 +2146,12 @@
             });
         }
 
+        let _tempFetchFailed = false;
         function refreshTemperature() {
             fetch('/temperature')
-                .then(r => r.ok ? r.json() : null)
+                .then(r => r.ok ? r.json() : Promise.reject())
                 .then(data => {
+                    _tempFetchFailed = false;
                     if (!data) return;
                     data.forEach(room => {
                         const tempEl = document.getElementById(`dashboard-room-temp-${room.id}`);
@@ -2159,7 +2160,12 @@
                         tempEl.textContent = isNaN(temp) ? '-- \u00b0C' : `${temp.toFixed(1)}\u00b0C`;
                     });
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_tempFetchFailed) {
+                        _tempFetchFailed = true;
+                        window.smToast?.('Gagal memuat data suhu ruangan', 'error');
+                    }
+                });
         }
 
         function getTrendLimit() {
@@ -2179,7 +2185,7 @@
             '24h': 'Trend 24 jam terakhir',
         };
 
-        function refreshTrendChart() {
+        function refreshTrendChart(showLoader = false) {
             if (!tempChart) return;
 
             const limit = getTrendLimit();
@@ -2188,9 +2194,15 @@
             const labelEl = document.getElementById('trendRangeLabel');
             if (labelEl) labelEl.textContent = RANGE_LABELS[range] || RANGE_LABELS['1h'];
 
+            if (showLoader) {
+                const spinner = document.getElementById('tempChartLoading');
+                if (spinner) spinner.style.display = 'flex';
+            }
+
             fetch(`/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
-                .then(r => (r.ok ? r.json() : null))
+                .then(r => (r.ok ? r.json() : Promise.reject(r.status)))
                 .then(data => {
+                    document.getElementById('tempChartLoading')?.style.setProperty('display', 'none');
                     if (!data || !tempChart) return;
 
                     const hasAnyData = (data.datasets || []).some(ds =>
@@ -2202,6 +2214,11 @@
                     if (emptyEl && canvasEl) {
                         emptyEl.style.display = hasAnyData ? 'none' : 'flex';
                         canvasEl.style.display = hasAnyData ? 'block' : 'none';
+                        const emptyTextEl = emptyEl.querySelector('.empty-sub');
+                        if (emptyTextEl) {
+                            const rangeText = { '1h': '1 jam terakhir', '3h': '3 jam terakhir', '6h': '6 jam terakhir', '24h': '24 jam terakhir' };
+                            emptyTextEl.textContent = `Belum ada data suhu dalam ${rangeText[range] || range}`;
+                        }
                     }
 
                     tempChart.data.labels = data.labels || [];
@@ -2260,11 +2277,17 @@
                         infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline (Last Temp).`;
                     }
                 })
-                .catch(() => {});
+                .catch(() => {
+                    document.getElementById('tempChartLoading')?.style.setProperty('display', 'none');
+                    window.smToast?.('Gagal memuat data grafik suhu', 'error');
+                });
         }
 
         setInterval(refreshTemperature, 15000);
         setInterval(refreshTrendChart, 15000);
+
+        let _statusFetchFailed = false;
+        let _statsFetchFailed = false;
 
         function refreshDashboardRoomStatuses() {
             fetch('/device-status', {
@@ -2275,6 +2298,7 @@
                 })
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
+                    _statusFetchFailed = false;
                     if (!Array.isArray(data)) return;
 
                     data.forEach(device => {
@@ -2286,7 +2310,12 @@
                         row.setAttribute('data-status', isOnline ? 'online' : 'offline');
                     });
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_statusFetchFailed) {
+                        _statusFetchFailed = true;
+                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                    }
+                });
         }
 
         setInterval(refreshDashboardRoomStatuses, 15000);
@@ -2300,6 +2329,7 @@
                 })
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
+                    _statsFetchFailed = false;
                     if (!data) return;
                     const set = (id, v) => {
                         const el = document.getElementById(id);
@@ -2309,7 +2339,12 @@
                     set('statActiveAc', data.active_ac);
                     set('statInactiveAc', data.inactive_ac);
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_statsFetchFailed) {
+                        _statsFetchFailed = true;
+                        window.smToast?.('Gagal memuat statistik dashboard', 'error');
+                    }
+                });
         }
 
         function setSystemStatus(online) {
@@ -2370,7 +2405,7 @@
                 rangeSelect.value = getTrendRange();
                 rangeSelect.addEventListener('change', (e) => {
                     localStorage.setItem('trendRange', e.target.value);
-                    refreshTrendChart();
+                    refreshTrendChart(true);
                 });
             }
 

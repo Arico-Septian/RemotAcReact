@@ -274,13 +274,13 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json',
                 },
-            }).then(() => {
-                if (redirectTo) {
-                    window.location.href = redirectTo;
-                    return;
-                }
+            }).then(r => {
+                if (!r.ok) throw new Error(r.status);
+                if (redirectTo) { window.location.href = redirectTo; return; }
                 const item = document.querySelector(`.nlist-item[data-id="${id}"]`);
                 if (item) item.classList.remove('unread');
+            }).catch(() => {
+                if (window.smToast) window.smToast('Gagal menandai notifikasi', 'error');
             });
         }
 
@@ -292,20 +292,32 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json',
                 },
-            }).then(() => {
+            }).then(r => {
+                if (!r.ok) throw new Error(r.status);
                 document.querySelector(`.nlist-item[data-id="${id}"]`)?.remove();
                 if (window.smToast) window.smToast('Notifikasi dihapus', 'success');
+            }).catch(() => {
+                if (window.smToast) window.smToast('Gagal menghapus notifikasi', 'error');
             });
         }
 
+        let _markAllPending = false;
         function bulkMarkAllRead() {
+            if (_markAllPending) return;
+            _markAllPending = true;
             fetch('/notifications/read-all', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json',
                 },
-            }).then(() => location.reload());
+            }).then(r => {
+                if (!r.ok) throw new Error(r.status);
+                location.reload();
+            }).catch(() => {
+                _markAllPending = false;
+                if (window.smToast) window.smToast('Gagal menandai semua notifikasi', 'error');
+            });
         }
 
         function setSystemStatus(online) {

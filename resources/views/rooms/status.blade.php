@@ -323,10 +323,12 @@ function formatTime(t) {
         return isNaN(d.getTime()) ? '' : d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
     } catch { return ''; }
 }
+let _statusFetchFailed = false;
 function loadStatus() {
     fetch('/api/ac-status', { headers: { 'Accept':'application/json','X-Requested-With':'XMLHttpRequest' } })
-        .then(r => r.ok ? r.json() : null)
+        .then(r => r.ok ? r.json() : Promise.reject(r.status))
         .then(data => {
+            _statusFetchFailed = false;
             if (!Array.isArray(data)) return;
             data.forEach(item => {
                 // Laravel serialize relationship sebagai snake_case (ac_unit), bukan acUnit
@@ -355,7 +357,12 @@ function loadStatus() {
                     }
                 }
             });
-        }).catch(() => {});
+        }).catch(() => {
+            if (!_statusFetchFailed) {
+                _statusFetchFailed = true;
+                if (window.smToast) window.smToast('Gagal memuat status AC', 'error');
+            }
+        });
 }
 setInterval(loadStatus, 5000);
 

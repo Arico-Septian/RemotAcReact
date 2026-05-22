@@ -189,14 +189,14 @@
     @include('components.sidebar-scripts')
     <script>
         function getSuhu() {
-            fetch('/suhu-raspi?_=' + Date.now(), {
-                    cache: 'no-store'
+            fetch('/suhu-raspi?_=' + Date.now(), { cache: 'no-store' })
+                .then(res => {
+                    if (!res.ok) throw new Error(res.status);
+                    return res.json();
                 })
-                .then(res => res.json())
                 .then(data => {
                     const el = document.getElementById('raspi-temp');
                     const st = document.getElementById('raspi-status');
-                    const dot = document.getElementById('raspi-dot');
 
                     if (data.value !== null && data.value !== undefined) {
                         el.innerHTML = data.value + '<span class="raspi-unit">°C</span>';
@@ -205,18 +205,25 @@
                             data.value >= 55 ? 'temp-warm' :
                             'temp-cool'
                         );
-                        dot.className = 'raspi-indicator online';
-                        st.innerHTML =
-                            '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Update tiap 1 menit';
+                        st.innerHTML = '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Update tiap 1 menit';
                     } else {
                         el.innerText = '--';
                         el.className = 'raspi-temp temp-muted';
-                        dot.className = 'raspi-indicator offline';
                         st.innerHTML = '<span class="raspi-indicator offline" id="raspi-dot"></span>Menunggu data...';
                     }
                 })
-                .catch(() => {
-                    document.getElementById('raspi-status').innerText = 'Gagal mengambil data';
+                .catch(err => {
+                    const el = document.getElementById('raspi-temp');
+                    const st = document.getElementById('raspi-status');
+                    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    if (el) {
+                        el.innerText = '—';
+                        el.className = 'raspi-temp temp-muted';
+                    }
+                    if (st) {
+                        const code = err?.message && /^\d+$/.test(err.message) ? ` (${err.message})` : '';
+                        st.innerHTML = `<span class="raspi-indicator offline" id="raspi-dot"></span>Gagal terhubung${code} · ${now} · Mencoba lagi...`;
+                    }
                 });
         }
 

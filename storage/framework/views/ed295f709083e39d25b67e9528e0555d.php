@@ -746,7 +746,7 @@
             /* Stats grid: keep 2-col but compact each card so text doesn't wrap */
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
             .stat-card { padding: 10px 12px !important; }
-            .stat-card .stat-label-sm { font-size: 8px !important; letter-spacing: 0.05em !important; }
+            .stat-card .stat-label-sm { font-size: 9px !important; letter-spacing: 0.05em !important; }
             .stat-card .stat-num-lg { font-size: 21px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
             .stat-card .stat-sub { font-size: 9px !important; line-height: 1.3 !important; }
             .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: 8px !important; font-size: 11px !important; }

@@ -1075,6 +1075,9 @@
             }
         }
 
+        let _tempFetchFailed = false;
+        let _statusFetchFailed = false;
+
         function refreshTemps() {
             fetch('/temperature', {
                     headers: {
@@ -1083,9 +1086,15 @@
                 })
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
+                    _tempFetchFailed = false;
                     if (!Array.isArray(data)) return;
                     data.forEach(updateRoomTemperature);
-                }).catch(() => {});
+                }).catch(() => {
+                    if (!_tempFetchFailed) {
+                        _tempFetchFailed = true;
+                        window.smToast?.('Gagal memuat data suhu ruangan', 'error');
+                    }
+                });
         }
 
         setInterval(refreshTemps, 5000);
@@ -1111,6 +1120,7 @@
                 })
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
+                    _statusFetchFailed = false;
                     if (!Array.isArray(data)) return;
 
                     data.forEach(device => {
@@ -1122,7 +1132,12 @@
 
                     applyRoomFilter();
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_statusFetchFailed) {
+                        _statusFetchFailed = true;
+                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                    }
+                });
         }
 
         setInterval(refreshRoomStatuses, 5000);
