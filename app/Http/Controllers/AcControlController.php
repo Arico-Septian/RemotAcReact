@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class AcControlController extends Controller
 {
-    private const MODES = ['COOL', 'HEAT', 'DRY', 'FAN', 'AUTO'];
+    private const MODES = ['COOL', 'HEAT', 'DRY', 'FAN'];
 
     private const FAN_SPEEDS = ['AUTO', 'LOW', 'MEDIUM', 'HIGH'];
 

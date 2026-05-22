@@ -1588,10 +1588,20 @@
                 return;
             }
 
-            document.querySelectorAll(`#ac-${id} .ctrl-row .ctrl-btn`).forEach(b => {
+            // Disable kedua tombol, tampilkan spinner di tombol yang baru saja diklik
+            // (deteksi arah dari target temp vs current temp).
+            const ctrlBtns = document.querySelectorAll(`#ac-${id} .ctrl-row .ctrl-btn`);
+            const clickedBtn = !isNaN(current) ?
+                (temp < current ? ctrlBtns[0] : ctrlBtns[ctrlBtns.length - 1]) :
+                null;
+            ctrlBtns.forEach(b => {
                 b.disabled = true;
                 b.style.opacity = '0.5';
             });
+            if (clickedBtn) {
+                clickedBtn.style.opacity = '1';
+                clickedBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i>';
+            }
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `/ac/${id}/temp/${temp}`;

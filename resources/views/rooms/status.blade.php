@@ -255,7 +255,7 @@
                                     </div>
                                     <div class="ac-stat ic-mode">
                                         <span class="label"><i class="fa-solid fa-fan"></i>Mode</span>
-                                        <span id="mode-{{ $ac->id }}" class="value">{{ strtoupper($ac->status?->mode ?? 'AUTO') }}</span>
+                                        <span id="mode-{{ $ac->id }}" class="value">{{ strtoupper($ac->status?->mode ?? 'COOL') }}</span>
                                     </div>
                                     <div class="ac-stat ic-fan">
                                         <span class="label"><i class="fa-solid fa-wind"></i>Fan</span>
@@ -335,7 +335,7 @@ function loadStatus() {
                 if (!id) return;
                 updateElement('power-' + id, (item.power || 'OFF').toUpperCase());
                 updateElement('temp-'  + id, (item.set_temperature ?? 24) + '°C');
-                updateElement('mode-'  + id, (item.mode || 'AUTO').toUpperCase());
+                updateElement('mode-'  + id, (item.mode || 'COOL').toUpperCase());
                 updateElement('fan-'   + id, (item.fan_speed || 'AUTO').toUpperCase());
                 updateElement('swing-' + id, (item.swing || 'OFF').toUpperCase());
                 const timerEl = document.getElementById('timer-' + id);

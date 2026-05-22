@@ -622,7 +622,7 @@ class MqttSubscribe extends Command
     {
         $mode = strtoupper(trim((string) $value));
 
-        return in_array($mode, ['COOL', 'HEAT', 'DRY', 'FAN', 'AUTO'], true) ? $mode : 'COOL';
+        return in_array($mode, ['COOL', 'HEAT', 'DRY', 'FAN'], true) ? $mode : 'COOL';
     }
 
     private function normalizeTemperature($value)
