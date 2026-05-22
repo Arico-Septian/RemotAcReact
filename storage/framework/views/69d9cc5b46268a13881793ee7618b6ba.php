@@ -2263,8 +2263,8 @@
                 .catch(() => {});
         }
 
-        setInterval(refreshTemperature, 5000);
-        setInterval(refreshTrendChart, 5000);
+        setInterval(refreshTemperature, 15000);
+        setInterval(refreshTrendChart, 15000);
 
         function refreshDashboardRoomStatuses() {
             fetch('/device-status', {
@@ -2289,7 +2289,7 @@
                 .catch(() => {});
         }
 
-        setInterval(refreshDashboardRoomStatuses, 5000);
+        setInterval(refreshDashboardRoomStatuses, 15000);
 
         function refreshDashboardStats() {
             fetch('/dashboard/stats', {

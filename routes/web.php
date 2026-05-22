@@ -229,122 +229,136 @@ Route::middleware(['auth', 'activity'])->group(function () {
             '24h' => ['hours' => 24, 'interval' => 60, 'slots' => 24, 'label' => 'H:00'],
         ];
         $cfg = $rangeConfig[$range] ?? $rangeConfig['1h'];
-        $interval = $cfg['interval'];
-        $totalSlots = $cfg['slots'];
-        $labelFormat = $cfg['label'];
 
-        $rooms = Room::orderBy('name')->get();
-        $startTime = now()->subHours($cfg['hours']);
-        $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
+        $payload = Cache::remember(
+            "temperature_trend:{$range}:{$limit}",
+            10,
+            function () use ($cfg, $range, $limit, $roomDeviceIsOnline) {
+                $interval = $cfg['interval'];
+                $totalSlots = $cfg['slots'];
+                $labelFormat = $cfg['label'];
 
-        // Urutkan: 1. Online vs Offline, 2. Suhu Tertinggi
-        $rooms = $rooms->sort(function ($a, $b) use ($roomDeviceIsOnline, $latestTemperatures) {
-            $aOnline = $roomDeviceIsOnline($a);
-            $bOnline = $roomDeviceIsOnline($b);
+                $rooms = Room::orderBy('name')->get();
+                $startTime = now()->subHours($cfg['hours']);
+                $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
-            if ($aOnline && !$bOnline) return -1;
-            if (!$aOnline && $bOnline) return 1;
+                // Urutkan: 1. Online vs Offline, 2. Suhu Tertinggi
+                $rooms = $rooms->sort(function ($a, $b) use ($roomDeviceIsOnline, $latestTemperatures) {
+                    $aOnline = $roomDeviceIsOnline($a);
+                    $bOnline = $roomDeviceIsOnline($b);
 
-            $aTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($a->name)))->temperature ?? -999;
-            $bTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($b->name)))->temperature ?? -999;
+                    if ($aOnline && ! $bOnline) return -1;
+                    if (! $aOnline && $bOnline) return 1;
 
-            return $bTemp <=> $aTemp;
-        })->values();
+                    $aTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($a->name)))->temperature ?? -999;
+                    $bTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($b->name)))->temperature ?? -999;
 
-        $totalRooms = $rooms->count();
+                    return $bTemp <=> $aTemp;
+                })->values();
 
-        if ($limit > 0) {
-            $rooms = $rooms->take($limit);
-        }
+                $totalRooms = $rooms->count();
 
-        // Helper: bikin slot key (include tanggal supaya 24h tidak konflik antar hari)
-        $slotKeyFor = function (Carbon $time) use ($interval) {
-            if ($interval >= 60) {
-                return $time->copy()->startOfHour()->format('Y-m-d H');
-            }
-            $minute = floor($time->minute / $interval) * $interval;
-
-            return $time->copy()->setMinute($minute)->setSecond(0)->format('Y-m-d H:i');
-        };
-
-        // Generate slots
-        $slots = collect();
-        if ($interval >= 60) {
-            $base = now()->copy()->startOfHour();
-            for ($i = $totalSlots - 1; $i >= 0; $i--) {
-                $slots->push($base->copy()->subHours($i));
-            }
-        } else {
-            $currentMinute = floor(now()->minute / $interval) * $interval;
-            $latestSlot = now()->copy()->startOfMinute()->setMinute($currentMinute)->setSecond(0);
-            for ($i = $totalSlots - 1; $i >= 0; $i--) {
-                $slots->push($latestSlot->copy()->subMinutes($i * $interval));
-            }
-        }
-
-        $labels = $slots->map(fn ($t) => $t->format($labelFormat));
-
-        $palette = [
-            '#fb7185', '#fbbf24', '#4dd4ff', '#a78bfa',
-            '#34d399', '#f472b6', '#60a5fa', '#fb923c',
-            '#facc15', '#22d3ee', '#c084fc', '#f87171',
-        ];
-
-        $datasets = $rooms->values()->map(function ($room, $idx) use ($startTime, $slots, $palette, $latestTemperatures, $slotKeyFor, $roomDeviceIsOnline) {
-            $normalized = RoomTemperature::normalizeRoomName($room->name);
-
-            $rows = RoomTemperature::where('room', $normalized)
-                ->where('created_at', '>=', $startTime)
-                ->orderBy('created_at')
-                ->get();
-
-            $grouped = $rows->groupBy(fn ($t) => $slotKeyFor($t->created_at))
-                ->map(fn ($g) => round($g->avg('temperature'), 1));
-
-            $data = $slots->map(fn ($t) => $grouped->get($slotKeyFor($t)));
-
-            $lastRecord = $latestTemperatures->get($normalized);
-            $currentTemp = optional($lastRecord)->temperature;
-            $lastKnownTemp = $currentTemp;
-
-            // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
-            $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
-            $offlineSince = null;
-            if ($lastRecord && $lastRecord->created_at) {
-                $secondsAgo = now()->diffInSeconds($lastRecord->created_at, true);
-                $isOffline = $isOffline || $secondsAgo > 30;
-                if ($isOffline) {
-                    $offlineSince = $lastRecord->created_at->format('H:i');
+                if ($limit > 0) {
+                    $rooms = $rooms->take($limit);
                 }
-            } else {
-                $isOffline = true;
+
+                // Helper: bikin slot key (include tanggal supaya 24h tidak konflik antar hari)
+                $slotKeyFor = function (Carbon $time) use ($interval) {
+                    if ($interval >= 60) {
+                        return $time->copy()->startOfHour()->format('Y-m-d H');
+                    }
+                    $minute = floor($time->minute / $interval) * $interval;
+
+                    return $time->copy()->setMinute($minute)->setSecond(0)->format('Y-m-d H:i');
+                };
+
+                // SQL expression untuk slot key — match dengan $slotKeyFor di PHP
+                // Group by langsung di DB, jadi PHP cuma terima ~24 row hasil agregasi (bukan ribuan row mentah)
+                $slotExpr = $interval >= 60
+                    ? "DATE_FORMAT(created_at, '%Y-%m-%d %H')"
+                    : "CONCAT(DATE_FORMAT(created_at, '%Y-%m-%d %H:'), LPAD(FLOOR(MINUTE(created_at) / {$interval}) * {$interval}, 2, '0'))";
+
+                // Generate slots
+                $slots = collect();
+                if ($interval >= 60) {
+                    $base = now()->copy()->startOfHour();
+                    for ($i = $totalSlots - 1; $i >= 0; $i--) {
+                        $slots->push($base->copy()->subHours($i));
+                    }
+                } else {
+                    $currentMinute = floor(now()->minute / $interval) * $interval;
+                    $latestSlot = now()->copy()->startOfMinute()->setMinute($currentMinute)->setSecond(0);
+                    for ($i = $totalSlots - 1; $i >= 0; $i--) {
+                        $slots->push($latestSlot->copy()->subMinutes($i * $interval));
+                    }
+                }
+
+                $labels = $slots->map(fn ($t) => $t->format($labelFormat));
+
+                $palette = [
+                    '#fb7185', '#fbbf24', '#4dd4ff', '#a78bfa',
+                    '#34d399', '#f472b6', '#60a5fa', '#fb923c',
+                    '#facc15', '#22d3ee', '#c084fc', '#f87171',
+                ];
+
+                $datasets = $rooms->values()->map(function ($room, $idx) use ($startTime, $slots, $palette, $latestTemperatures, $slotKeyFor, $slotExpr, $roomDeviceIsOnline) {
+                    $normalized = RoomTemperature::normalizeRoomName($room->name);
+
+                    $grouped = RoomTemperature::where('room', $normalized)
+                        ->where('created_at', '>=', $startTime)
+                        ->selectRaw("{$slotExpr} as slot_key, AVG(temperature) as avg_temp")
+                        ->groupBy('slot_key')
+                        ->pluck('avg_temp', 'slot_key')
+                        ->map(fn ($v) => round((float) $v, 1));
+
+                    $data = $slots->map(fn ($t) => $grouped->get($slotKeyFor($t)));
+
+                    $lastRecord = $latestTemperatures->get($normalized);
+                    $currentTemp = optional($lastRecord)->temperature;
+                    $lastKnownTemp = $currentTemp;
+
+                    // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
+                    $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
+                    $offlineSince = null;
+                    if ($lastRecord && $lastRecord->created_at) {
+                        $secondsAgo = now()->diffInSeconds($lastRecord->created_at, true);
+                        $isOffline = $isOffline || $secondsAgo > 30;
+                        if ($isOffline) {
+                            $offlineSince = $lastRecord->created_at->format('H:i');
+                        }
+                    } else {
+                        $isOffline = true;
+                    }
+
+                    // Saat offline: isi slot kosong dengan suhu terakhir agar garis tetap muncul (statis)
+                    if ($isOffline && $lastKnownTemp !== null) {
+                        $data = $data->map(fn ($v) => $v ?? $lastKnownTemp);
+                    }
+
+                    return [
+                        'room' => ucfirst($room->name),
+                        'room_id' => $room->id,
+                        'current_temp' => $currentTemp,
+                        'is_offline' => $isOffline,
+                        'offline_since' => $offlineSince,
+                        'data' => $data->values()->all(),
+                        'color' => $palette[$idx % count($palette)],
+                    ];
+                });
+
+                return [
+                    'labels' => $labels->values()->all(),
+                    'datasets' => $datasets->values()->all(),
+                    'total_rooms' => $totalRooms,
+                    'shown' => $datasets->count(),
+                    'limit' => $limit,
+                    'range' => $range,
+                    'interval_minutes' => $interval,
+                ];
             }
+        );
 
-            // Saat offline: isi slot kosong dengan suhu terakhir agar garis tetap muncul (statis)
-            if ($isOffline && $lastKnownTemp !== null) {
-                $data = $data->map(fn ($v) => $v ?? $lastKnownTemp);
-            }
-
-            return [
-                'room' => ucfirst($room->name),
-                'room_id' => $room->id,
-                'current_temp' => $currentTemp,
-                'is_offline' => $isOffline,
-                'offline_since' => $offlineSince,
-                'data' => $data->values(),
-                'color' => $palette[$idx % count($palette)],
-            ];
-        });
-
-        return response()->json([
-            'labels' => $labels->values(),
-            'datasets' => $datasets->values(),
-            'total_rooms' => $totalRooms,
-            'shown' => $datasets->count(),
-            'limit' => $limit,
-            'range' => $range,
-            'interval_minutes' => $interval,
-        ]);
+        return response()->json($payload);
     });
 
     Route::middleware(['role:admin,operator'])->group(function () {
