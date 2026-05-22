@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $room->name }} — AC Control</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo e($room->name); ?> — AC Control</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite('resources/js/app.js')
-    @include('components.sidebar-styles')
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
+    <?php echo $__env->make('components.sidebar-styles', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <style>
         .ac-panel {
             transition: opacity .2s, transform .2s;
@@ -940,7 +940,7 @@
     <div id="overlay"></div>
 
     <div class="layout">
-        @include('components.sidebar')
+        <?php echo $__env->make('components.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <div class="main-content">
             <header class="main-header">
@@ -949,16 +949,16 @@
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
-                        <h1>{{ $room->name }}</h1>
+                        <h1><?php echo e($room->name); ?></h1>
                         <p>AC control panel</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span id="espStatusPill" data-room-id="{{ $room->id }}"
-                        class="pill {{ ($room->device_status ?? 'offline') === 'online' ? 'pill-online' : 'pill-error' }}">
+                    <span id="espStatusPill" data-room-id="<?php echo e($room->id); ?>"
+                        class="pill <?php echo e(($room->device_status ?? 'offline') === 'online' ? 'pill-online' : 'pill-error'); ?>">
                         <span class="dot"></span>
                         <span id="espStatusText">ESP
-                            {{ ($room->device_status ?? 'offline') === 'online' ? 'Online' : 'Offline' }}</span>
+                            <?php echo e(($room->device_status ?? 'offline') === 'online' ? 'Online' : 'Offline'); ?></span>
                     </span>
                 </div>
             </header>
@@ -966,65 +966,68 @@
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-3">
-                        @php $firstAc = $acs->first(); @endphp
+                        <?php $firstAc = $acs->first(); ?>
 
-                        {{-- AC SELECTOR + ACTIONS --}}
+                        
                         <div class="selector-bar">
                             <div class="flex items-center gap-3 min-w-0 flex-1">
                                 <div class="selector" onclick="toggleDropdown()">
                                     <i class="fa-solid fa-snowflake" style="color:var(--cyan);font-size:11px;"></i>
                                     <span id="selectedAC" style="text-transform:capitalize;">
-                                        {{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : 'No AC' }}
+                                        <?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : 'No AC'); ?>
+
                                     </span>
                                     <i class="fa-solid fa-chevron-down"></i>
 
                                     <div id="dropdownAC">
-                                        @foreach ($acs as $ac)
-                                            <div data-id="{{ $ac->id }}"
-                                                data-label="AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}"
-                                                onclick="selectAC({{ $ac->id }}, 'AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}')">
-                                                <span class="num">#{{ $ac->ac_number }}</span>
-                                                <span style="text-transform:capitalize;">{{ $ac->name }}@if ($ac->brand) <span style="opacity:.65;font-size:11px;">· {{ $ac->brand }}</span>@endif</span>
+                                        <?php $__currentLoopData = $acs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ac): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div data-id="<?php echo e($ac->id); ?>"
+                                                data-label="AC <?php echo e($ac->ac_number); ?> · <?php echo e($ac->name); ?><?php echo e($ac->brand ? ' · ' . $ac->brand : ''); ?>"
+                                                onclick="selectAC(<?php echo e($ac->id); ?>, 'AC <?php echo e($ac->ac_number); ?> · <?php echo e($ac->name); ?><?php echo e($ac->brand ? ' · ' . $ac->brand : ''); ?>')">
+                                                <span class="num">#<?php echo e($ac->ac_number); ?></span>
+                                                <span style="text-transform:capitalize;"><?php echo e($ac->name); ?><?php if($ac->brand): ?> <span style="opacity:.65;font-size:11px;">· <?php echo e($ac->brand); ?></span><?php endif; ?></span>
                                             </div>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
                                 </div>
-                                <span class="kbd hidden sm:inline">{{ $room->name }}</span>
+                                <span class="kbd hidden sm:inline"><?php echo e($room->name); ?></span>
                             </div>
 
-                            @auth
-                                @if (in_array(Auth::user()->role, ['admin', 'operator']))
+                            <?php if(auth()->guard()->check()): ?>
+                                <?php if(in_array(Auth::user()->role, ['admin', 'operator'])): ?>
                                     <div class="flex items-center gap-1.5">
-                                        <button type="button" {{ $acs->count() >= 15 ? 'disabled' : '' }}
-                                            onclick="{{ $acs->count() >= 15 ? '' : 'openModal()' }}"
-                                            class="btn btn-primary btn-sm {{ $acs->count() >= 15 ? 'disabled' : '' }}">
+                                        <button type="button" <?php echo e($acs->count() >= 15 ? 'disabled' : ''); ?>
+
+                                            onclick="<?php echo e($acs->count() >= 15 ? '' : 'openModal()'); ?>"
+                                            class="btn btn-primary btn-sm <?php echo e($acs->count() >= 15 ? 'disabled' : ''); ?>">
                                             <i class="fa-solid fa-plus text-[10px]"></i>
                                             <span class="hidden sm:inline">Add AC</span>
                                         </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
-                                            action="{{ $firstAc ? '/ac/' . $firstAc->id : '#' }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" {{ !$firstAc ? 'disabled' : '' }}
-                                                class="btn-icon danger {{ !$firstAc ? 'disabled' : '' }}"
+                                            action="<?php echo e($firstAc ? '/ac/' . $firstAc->id : '#'); ?>">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
+                                            <button type="submit" <?php echo e(!$firstAc ? 'disabled' : ''); ?>
+
+                                                class="btn-icon danger <?php echo e(!$firstAc ? 'disabled' : ''); ?>"
                                                 title="Delete AC">
                                                 <i class="fa-solid fa-trash text-[10px]"></i>
                                             </button>
                                         </form>
                                     </div>
-                                @endif
-                            @endauth
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
 
-                        {{-- AC PANELS --}}
-                        @foreach ($acs as $ac)
-                            <div id="ac-{{ $ac->id }}" class="ac-panel {{ $loop->first ? '' : 'hidden' }}"
-                                data-ac-id="{{ $ac->id }}" data-ac-number="{{ $ac->ac_number }}"
-                                data-ac-name="{{ $ac->name }}" data-ac-brand="{{ $ac->brand }}">
+                        
+                        <?php $__currentLoopData = $acs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ac): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div id="ac-<?php echo e($ac->id); ?>" class="ac-panel <?php echo e($loop->first ? '' : 'hidden'); ?>"
+                                data-ac-id="<?php echo e($ac->id); ?>" data-ac-number="<?php echo e($ac->ac_number); ?>"
+                                data-ac-name="<?php echo e($ac->name); ?>" data-ac-brand="<?php echo e($ac->brand); ?>">
                                 <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[340px_1fr] gap-3">
 
-                                    {{-- LEFT: Temp ring + Power + Stepper --}}
-                                    @php
+                                    
+                                    <?php
                                         $curTemp = $ac->status?->set_temperature ?? 24;
                                         $curMode = ucfirst(strtolower($ac->status?->mode ?? 'Cool'));
                                         $curFan = ucfirst(strtolower($ac->status?->fan_speed ?? 'Auto'));
@@ -1037,42 +1040,42 @@
                                             default => ucfirst($curSwing),
                                         };
                                         $isPowerOn = ($ac->status?->power ?? 'OFF') === 'ON';
-                                    @endphp
+                                    ?>
                                     <div class="panel"
                                         style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px 20px;">
-                                        @php
+                                        <?php
                                             $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
-                                        @endphp
-                                        <div class="temp-ring temp-{{ $tempCategory }}" id="tempRing-{{ $ac->id }}">
+                                        ?>
+                                        <div class="temp-ring temp-<?php echo e($tempCategory); ?>" id="tempRing-<?php echo e($ac->id); ?>">
                                             <div class="temp-ring-inner">
                                                 <p class="ring-label">Suhu Ac</p>
                                                 <div class="ring-temp">
-                                                    <span class="temp-value">{{ $curTemp }}</span><span
+                                                    <span class="temp-value"><?php echo e($curTemp); ?></span><span
                                                         class="unit">°C</span>
                                                 </div>
-                                                <p class="ring-summary" style="text-transform:capitalize;">{{ $curMode }} · {{ $curFan }} ·
-                                                    {{ $swingLabel }}</p>
+                                                <p class="ring-summary" style="text-transform:capitalize;"><?php echo e($curMode); ?> · <?php echo e($curFan); ?> ·
+                                                    <?php echo e($swingLabel); ?></p>
                                             </div>
                                         </div>
                                         <div class="ctrl-row">
                                             <button type="button" class="ctrl-btn"
-                                                onclick="setTemp({{ $ac->id }}, {{ $curTemp - 1 }})"
+                                                onclick="setTemp(<?php echo e($ac->id); ?>, <?php echo e($curTemp - 1); ?>)"
                                                 title="Turunkan suhu">
                                                 <i class="fa-solid fa-minus"></i>
                                             </button>
-                                            <form action="/ac/{{ $ac->id }}/toggle" method="POST"
+                                            <form action="/ac/<?php echo e($ac->id); ?>/toggle" method="POST"
                                                 class="power-form power-form-inline"
-                                                data-ac-name="AC {{ $ac->ac_number }}{{ $ac->name ? ' · ' . $ac->name : '' }}"
-                                                data-ac-power="{{ $ac->status?->power ?? 'OFF' }}">
-                                                @csrf
-                                                <input type="hidden" name="power" value="{{ $isPowerOn ? 'OFF' : 'ON' }}">
-                                                <button type="submit" class="power-btn {{ $isPowerOn ? 'on' : '' }}"
+                                                data-ac-name="AC <?php echo e($ac->ac_number); ?><?php echo e($ac->name ? ' · ' . $ac->name : ''); ?>"
+                                                data-ac-power="<?php echo e($ac->status?->power ?? 'OFF'); ?>">
+                                                <?php echo csrf_field(); ?>
+                                                <input type="hidden" name="power" value="<?php echo e($isPowerOn ? 'OFF' : 'ON'); ?>">
+                                                <button type="submit" class="power-btn <?php echo e($isPowerOn ? 'on' : ''); ?>"
                                                     title="Toggle power">
                                                     <i class="fa-solid fa-power-off"></i>
                                                 </button>
                                             </form>
                                             <button type="button" class="ctrl-btn"
-                                                onclick="setTemp({{ $ac->id }}, {{ $curTemp + 1 }})"
+                                                onclick="setTemp(<?php echo e($ac->id); ?>, <?php echo e($curTemp + 1); ?>)"
                                                 title="Naikkan suhu">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
@@ -1084,111 +1087,113 @@
                                         </div>
                                     </div>
 
-                                    {{-- RIGHT --}}
+                                    
                                     <div class="flex flex-col gap-3">
 
-                                        {{-- Mode --}}
+                                        
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Mode</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                @foreach (['cool' => ['fa-snowflake', 'Cool'], 'heat' => ['fa-fire', 'Heat'], 'dry' => ['fa-droplet', 'Dry'], 'fan' => ['fa-fan', 'Fan']] as $m => [$icon, $lbl])
-                                                    <form action="/ac/{{ $ac->id }}/mode/{{ $m }}"
+                                                <?php $__currentLoopData = ['cool' => ['fa-snowflake', 'Cool'], 'heat' => ['fa-fire', 'Heat'], 'dry' => ['fa-droplet', 'Dry'], 'fan' => ['fa-fan', 'Fan']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <form action="/ac/<?php echo e($ac->id); ?>/mode/<?php echo e($m); ?>"
                                                         method="POST" class="control-form">
-                                                        @csrf
+                                                        <?php echo csrf_field(); ?>
                                                         <button type="submit"
-                                                            class="mode-btn-h {{ strtolower($ac->status?->mode ?? 'cool') === $m ? 'active' : '' }}">
+                                                            class="mode-btn-h <?php echo e(strtolower($ac->status?->mode ?? 'cool') === $m ? 'active' : ''); ?>">
                                                             <i
-                                                                class="fa-solid {{ $icon }}"></i><span>{{ $lbl }}</span>
+                                                                class="fa-solid <?php echo e($icon); ?>"></i><span><?php echo e($lbl); ?></span>
                                                         </button>
                                                     </form>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </div>
 
-                                        {{-- Fan --}}
+                                        
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Fan Speed</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                @foreach (['auto' => ['fa-rotate', 'Auto'], 'low' => ['fa-equals', 'Low'], 'medium' => ['fa-bars', 'Med'], 'high' => ['fa-gauge-high', 'High']] as $s => [$icon, $lbl])
+                                                <?php $__currentLoopData = ['auto' => ['fa-rotate', 'Auto'], 'low' => ['fa-equals', 'Low'], 'medium' => ['fa-bars', 'Med'], 'high' => ['fa-gauge-high', 'High']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <form
-                                                        action="/ac/{{ $ac->id }}/fan-speed/{{ $s }}"
+                                                        action="/ac/<?php echo e($ac->id); ?>/fan-speed/<?php echo e($s); ?>"
                                                         method="POST" class="control-form">
-                                                        @csrf
+                                                        <?php echo csrf_field(); ?>
                                                         <button type="submit"
-                                                            class="mode-btn-h {{ strtolower($ac->status?->fan_speed ?? 'auto') === $s ? 'active' : '' }}">
+                                                            class="mode-btn-h <?php echo e(strtolower($ac->status?->fan_speed ?? 'auto') === $s ? 'active' : ''); ?>">
                                                             <i
-                                                                class="fa-solid {{ $icon }}"></i><span>{{ $lbl }}</span>
+                                                                class="fa-solid <?php echo e($icon); ?>"></i><span><?php echo e($lbl); ?></span>
                                                         </button>
                                                     </form>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </div>
 
-                                        {{-- Swing --}}
+                                        
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Swing</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                @foreach (['off' => ['fa-ban', 'Diam'], 'full' => ['fa-arrows-up-down', 'Full'], 'half' => ['fa-equals', '½'], 'down' => ['fa-arrow-down', 'Bawah']] as $sw => [$icon, $lbl])
-                                                    <form action="/ac/{{ $ac->id }}/swing/{{ $sw }}"
+                                                <?php $__currentLoopData = ['off' => ['fa-ban', 'Diam'], 'full' => ['fa-arrows-up-down', 'Full'], 'half' => ['fa-equals', '½'], 'down' => ['fa-arrow-down', 'Bawah']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sw => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <form action="/ac/<?php echo e($ac->id); ?>/swing/<?php echo e($sw); ?>"
                                                         method="POST" class="control-form">
-                                                        @csrf
+                                                        <?php echo csrf_field(); ?>
                                                         <button type="submit"
-                                                            class="mode-btn-h {{ strtolower($ac->status?->swing ?? 'off') === $sw ? 'active' : '' }}">
+                                                            class="mode-btn-h <?php echo e(strtolower($ac->status?->swing ?? 'off') === $sw ? 'active' : ''); ?>">
                                                             <i
-                                                                class="fa-solid {{ $icon }}"></i><span>{{ $lbl }}</span>
+                                                                class="fa-solid <?php echo e($icon); ?>"></i><span><?php echo e($lbl); ?></span>
                                                         </button>
                                                     </form>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </div>
                                         </div>
 
-                                        {{-- Timer --}}
+                                        
                                         <div class="panel">
                                             <div class="flex items-center justify-between mb-3">
                                                 <p class="eyebrow" style="color:var(--amber);margin:0;"><i
                                                         class="fa-solid fa-clock"></i> Set Timer</p>
-                                                <button id="btnTimer-{{ $ac->id }}" type="button"
-                                                    onclick="toggleTimer({{ $ac->id }})"
+                                                <button id="btnTimer-<?php echo e($ac->id); ?>" type="button"
+                                                    onclick="toggleTimer(<?php echo e($ac->id); ?>)"
                                                     class="btn btn-soft btn-xs">
                                                     <i class="fa-solid fa-pen text-[9px]"></i>
                                                     <span>Edit</span>
                                                 </button>
                                             </div>
-                                            <div id="timerView-{{ $ac->id }}">
-                                                @if ($ac->timer_on || $ac->timer_off)
+                                            <div id="timerView-<?php echo e($ac->id); ?>">
+                                                <?php if($ac->timer_on || $ac->timer_off): ?>
                                                     <div class="timer-state">
-                                                        <div class="timer-card {{ $ac->timer_on ? 'is-on' : '' }}">
+                                                        <div class="timer-card <?php echo e($ac->timer_on ? 'is-on' : ''); ?>">
                                                             <span class="t-icon"><i
                                                                     class="fa-solid fa-circle-play"></i></span>
                                                             <div class="t-meta">
                                                                 <p class="t-label">Turn On</p>
-                                                                @if ($ac->timer_on)
+                                                                <?php if($ac->timer_on): ?>
                                                                     <p class="t-value">
-                                                                        {{ \Carbon\Carbon::parse($ac->timer_on)->setTimezone('Asia/Jakarta')->format('H:i') }}
+                                                                        <?php echo e(\Carbon\Carbon::parse($ac->timer_on)->setTimezone('Asia/Jakarta')->format('H:i')); ?>
+
                                                                     </p>
-                                                                @else
+                                                                <?php else: ?>
                                                                     <p class="t-value empty">—</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </div>
                                                         </div>
-                                                        <div class="timer-card {{ $ac->timer_off ? 'is-off' : '' }}">
+                                                        <div class="timer-card <?php echo e($ac->timer_off ? 'is-off' : ''); ?>">
                                                             <span class="t-icon"><i
                                                                     class="fa-solid fa-circle-stop"></i></span>
                                                             <div class="t-meta">
                                                                 <p class="t-label">Turn Off</p>
-                                                                @if ($ac->timer_off)
+                                                                <?php if($ac->timer_off): ?>
                                                                     <p class="t-value">
-                                                                        {{ \Carbon\Carbon::parse($ac->timer_off)->setTimezone('Asia/Jakarta')->format('H:i') }}
+                                                                        <?php echo e(\Carbon\Carbon::parse($ac->timer_off)->setTimezone('Asia/Jakarta')->format('H:i')); ?>
+
                                                                     </p>
-                                                                @else
+                                                                <?php else: ?>
                                                                     <p class="t-value empty">—</p>
-                                                                @endif
+                                                                <?php endif; ?>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <form action="/ac/{{ $ac->id }}/schedule" method="POST"
+                                                    <form action="/ac/<?php echo e($ac->id); ?>/schedule" method="POST"
                                                         class="delete-timer-form mt-3">
-                                                        @csrf
+                                                        <?php echo csrf_field(); ?>
                                                         <input type="hidden" name="timer_on" value="">
                                                         <input type="hidden" name="timer_off" value="">
                                                         <button type="submit" class="btn btn-ghost btn-sm btn-block">
@@ -1196,24 +1201,24 @@
                                                             <span>Hapus Timer</span>
                                                         </button>
                                                     </form>
-                                                @else
+                                                <?php else: ?>
                                                     <div class="timer-empty">
                                                         <i class="fa-regular fa-clock"></i>
                                                         Belum ada timer terpasang
                                                     </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
-                                            <form id="timerEdit-{{ $ac->id }}" class="hidden timer-form"
-                                                action="/ac/{{ $ac->id }}/schedule" method="POST">
-                                                @csrf
-                                                <input type="hidden" name="ac_id" value="{{ $ac->id }}">
+                                            <form id="timerEdit-<?php echo e($ac->id); ?>" class="hidden timer-form"
+                                                action="/ac/<?php echo e($ac->id); ?>/schedule" method="POST">
+                                                <?php echo csrf_field(); ?>
+                                                <input type="hidden" name="ac_id" value="<?php echo e($ac->id); ?>">
                                                 <div class="grid grid-cols-2 gap-3 mb-3">
                                                     <div class="field">
                                                         <label class="field-label"><i
                                                                 class="fa-solid fa-circle-play text-[9px]"
                                                                 style="color:var(--mint);"></i> Turn ON</label>
                                                         <input class="input text-mono" type="time" name="timer_on"
-                                                            value="{{ $ac->timer_on ? \Carbon\Carbon::parse($ac->timer_on)->format('H:i') : '' }}">
+                                                            value="<?php echo e($ac->timer_on ? \Carbon\Carbon::parse($ac->timer_on)->format('H:i') : ''); ?>">
                                                     </div>
                                                     <div class="field">
                                                         <label class="field-label"><i
@@ -1221,12 +1226,12 @@
                                                                 style="color:var(--coral);"></i> Turn OFF</label>
                                                         <input class="input text-mono" type="time"
                                                             name="timer_off"
-                                                            value="{{ $ac->timer_off ? \Carbon\Carbon::parse($ac->timer_off)->format('H:i') : '' }}">
+                                                            value="<?php echo e($ac->timer_off ? \Carbon\Carbon::parse($ac->timer_off)->format('H:i') : ''); ?>">
                                                     </div>
                                                 </div>
                                                 <div class="flex gap-2">
                                                     <button type="button" class="btn btn-ghost btn-sm flex-1"
-                                                        onclick="toggleTimer({{ $ac->id }})">Batal</button>
+                                                        onclick="toggleTimer(<?php echo e($ac->id); ?>)">Batal</button>
                                                     <button type="submit"
                                                         class="btn btn-primary btn-sm flex-1 save-timer-btn">
                                                         <i class="fa-solid fa-check text-[10px]"></i>
@@ -1238,9 +1243,9 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                        @if ($acs->count() === 0)
+                        <?php if($acs->count() === 0): ?>
                             <div class="panel">
                                 <div class="empty-state">
                                     <div class="empty-icon"><i class="fa-solid fa-snowflake"></i></div>
@@ -1248,16 +1253,16 @@
                                     <p class="empty-sub">Tambahkan AC unit pertama untuk mulai mengontrol</p>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    @include('components.bottom-nav')
+    <?php echo $__env->make('components.bottom-nav', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    {{-- Power confirm modal --}}
+    
     <div id="powerModal" class="modal-backdrop">
         <div class="modal" style="max-width:380px;">
             <div class="modal-body text-center" style="padding-top:22px;">
@@ -1273,8 +1278,8 @@
         </div>
     </div>
 
-    {{-- Bulk modal --}}
-    @if (in_array(Auth::user()->role, ['admin', 'operator']))
+    
+    <?php if(in_array(Auth::user()->role, ['admin', 'operator'])): ?>
         <div id="bulkModal" class="modal-backdrop">
             <div class="modal" style="max-width:400px;">
                 <div class="modal-body text-center" style="padding-top:22px;">
@@ -1282,14 +1287,14 @@
                     <h2 style="font-size:16px;font-weight:600;color:var(--ink-0);margin:0 0 4px;">Kontrol Semua AC</h2>
                     <p id="bulkModalDesc" class="text-sm" style="color:var(--ink-2);margin:0 0 4px;"></p>
                     <p class="text-xs" style="color:var(--ink-3);"><span
-                            style="color:var(--ink-0);font-weight:600;">{{ $room->name }}</span> ·
-                        {{ $acs->count() }} unit</p>
+                            style="color:var(--ink-0);font-weight:600;"><?php echo e($room->name); ?></span> ·
+                        <?php echo e($acs->count()); ?> unit</p>
                 </div>
                 <div class="modal-footer" style="padding-top:6px;">
                     <button type="button" onclick="closeBulkModal()" class="btn btn-ghost flex-1">Batal</button>
-                    <form id="bulkForm" method="POST" action="/rooms/{{ $room->id }}/ac/bulk-power"
+                    <form id="bulkForm" method="POST" action="/rooms/<?php echo e($room->id); ?>/ac/bulk-power"
                         class="flex-1">
-                        @csrf
+                        <?php echo csrf_field(); ?>
                         <input type="hidden" name="power" id="bulkPowerInput" value="">
                         <button id="bulkModalConfirm" type="submit"
                             class="btn btn-primary btn-block">Lanjutkan</button>
@@ -1297,11 +1302,11 @@
                 </div>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 
-    {{-- Add AC modal --}}
-    @auth
-        @if (in_array(Auth::user()->role, ['admin', 'operator']))
+    
+    <?php if(auth()->guard()->check()): ?>
+        <?php if(in_array(Auth::user()->role, ['admin', 'operator'])): ?>
             <div id="modal" class="modal-backdrop">
                 <div class="modal">
                     <div class="modal-header">
@@ -1312,8 +1317,8 @@
                         <button type="button" class="modal-close" onclick="closeModal()"><i
                                 class="fa-solid fa-xmark"></i></button>
                     </div>
-                    <form id="addACForm" method="POST" action="/rooms/{{ $room->id }}/ac">
-                        @csrf
+                    <form id="addACForm" method="POST" action="/rooms/<?php echo e($room->id); ?>/ac">
+                        <?php echo csrf_field(); ?>
                         <div class="modal-body space-y-3">
                             <div class="field">
                                 <label class="field-label">Nomor AC</label>
@@ -1356,8 +1361,8 @@
                                 class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="editACForm" method="POST" action="">
-                        @csrf
-                        @method('PUT')
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('PUT'); ?>
                         <div class="modal-body space-y-3">
                             <div class="field">
                                 <label class="field-label">Nomor AC</label>
@@ -1388,8 +1393,8 @@
                     </form>
                 </div>
             </div>
-        @endif
-    @endauth
+        <?php endif; ?>
+    <?php endif; ?>
 
     <script>
         let currentAcId = null;
@@ -1548,7 +1553,7 @@
         });
 
         function openModal() {
-            if ({{ $acs->count() }} >= 15) {
+            if (<?php echo e($acs->count()); ?> >= 15) {
                 window.smToast('Maksimal 15 AC sudah tercapai', 'error');
                 return;
             }
@@ -1931,41 +1936,41 @@
                     .listen('.AcTimerUpdated', (e) => updateTimerPanel(e));
             }
 
-            @if (session('new_ac_id'))
-                const id = "{{ session('new_ac_id') }}";
+            <?php if(session('new_ac_id')): ?>
+                const id = "<?php echo e(session('new_ac_id')); ?>";
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
-                    "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : '' }}");
-                @if (session('success'))
-                    window.smToast("{{ session('success') }}", 'success');
-                @endif
-            @else
+                    "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : ''); ?>");
+                <?php if(session('success')): ?>
+                    window.smToast("<?php echo e(session('success')); ?>", 'success');
+                <?php endif; ?>
+            <?php else: ?>
                 const saved = localStorage.getItem('selectedAC');
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
-                        "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : '' }}");
+                        "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : ''); ?>");
                 } else {
                     localStorage.removeItem('selectedAC');
-                    @if ($firstAc)
-                        selectAC({{ $firstAc->id }},
-                            "{{ 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name }}");
-                    @endif
+                    <?php if($firstAc): ?>
+                        selectAC(<?php echo e($firstAc->id); ?>,
+                            "<?php echo e('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name); ?>");
+                    <?php endif; ?>
                 }
-            @endif
-            @if (session('success') && !session('new_ac_id'))
-                window.smToast("{{ session('success') }}", 'success');
-            @endif
-            @if (session('error'))
-                window.smToast("{{ session('error') }}", 'error');
-            @endif
-            @if (session('warning'))
-                window.smToast("{{ session('warning') }}", 'warn');
-            @endif
-            @if ($errors->any())
-                window.smToast("{{ $errors->first() }}", 'error');
-            @endif
+            <?php endif; ?>
+            <?php if(session('success') && !session('new_ac_id')): ?>
+                window.smToast("<?php echo e(session('success')); ?>", 'success');
+            <?php endif; ?>
+            <?php if(session('error')): ?>
+                window.smToast("<?php echo e(session('error')); ?>", 'error');
+            <?php endif; ?>
+            <?php if(session('warning')): ?>
+                window.smToast("<?php echo e(session('warning')); ?>", 'warn');
+            <?php endif; ?>
+            <?php if($errors->any()): ?>
+                window.smToast("<?php echo e($errors->first()); ?>", 'error');
+            <?php endif; ?>
         });
 
         document.addEventListener('keydown', e => {
@@ -2091,7 +2096,8 @@
         };
         window.updateEspStatus = updateEspStatusWithTemp;
     </script>
-    @include('components.sidebar-scripts')
+    <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/ac/index.blade.php ENDPATH**/ ?>

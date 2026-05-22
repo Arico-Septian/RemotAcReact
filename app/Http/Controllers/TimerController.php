@@ -22,13 +22,10 @@ class TimerController extends Controller
 
         $ac = AcUnit::with('room')->findOrFail($id);
 
-        // VALIDASI LOGIKA: pastikan OFF > ON untuk menghindari ambiguitas cross-midnight
-        if ($request->timer_on && $request->timer_off) {
-            if ($request->timer_off <= $request->timer_on) {
-                return back()->withErrors([
-                    'Timer OFF harus lebih besar dari ON',
-                ])->withInput();
-            }
+        if ($request->timer_on && $request->timer_off && $request->timer_on === $request->timer_off) {
+            return back()->withErrors([
+                'Timer ON dan OFF tidak boleh sama',
+            ])->withInput();
         }
 
         $newTimerOn = $request->timer_on ?: null;

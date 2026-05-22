@@ -333,12 +333,11 @@ class AcUnitController extends Controller
             'timer_off' => 'nullable|date_format:H:i',
         ]);
 
-        if ($request->timer_on && $request->timer_off) {
-            if ($request->timer_off <= $request->timer_on) {
-                return back()->withErrors([
-                    'Timer OFF harus lebih besar dari ON',
-                ])->withInput();
-            }
+        // OFF & ON boleh kapan saja (termasuk cross-midnight). Yang dilarang hanya identik.
+        if ($request->timer_on && $request->timer_off && $request->timer_on === $request->timer_off) {
+            return back()->withErrors([
+                'Timer ON dan OFF tidak boleh sama',
+            ])->withInput();
         }
 
         $ac = AcUnit::findOrFail($id);

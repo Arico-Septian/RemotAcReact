@@ -16,8 +16,10 @@ class RunAcTimer extends Command
     protected $signature = 'ac:run-timer';
     protected $description = 'Run AC timer ON/OFF (Anti Miss + Anti Double)';
 
+    // Window simetris ±30s — tidak overlap antara slot 1 menit, jadi timer ON & OFF
+    // berjarak 1 menit tidak saling ke-trigger di iterasi yang sama.
     const WINDOW_BEFORE = -30;
-    const WINDOW_AFTER = 60;
+    const WINDOW_AFTER = 30;
     const EXECUTION_BUFFER = 60;
     const COOLDOWN_SECONDS = 5;
 
