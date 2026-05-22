@@ -33,8 +33,6 @@
             font-size: 11px;
             color: var(--ink-3);
         }
-
-        /* Lock badge ikon: cegah glyph FA dengan tinggi natural beda menarik badge jadi lebih besar */
         .stat-card .stat-icon {
             box-sizing: border-box;
             flex-shrink: 0;
@@ -531,7 +529,7 @@
             opacity: 1;
         }
 
-        /* Mobile cards view - only for very small screens */
+        /* Mobile user list — clean simple layout */
         .user-cards {
             display: none;
         }
@@ -543,69 +541,120 @@
                 width: 100%;
             }
 
+            /* Sama ukuran dengan log activity row */
             .user-card {
-                padding: 14px 16px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+                padding: 10px 12px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
                 display: flex;
-                flex-direction: column;
+                align-items: center;
                 gap: 10px;
                 width: 100%;
+                min-height: 56px;
             }
             .user-card:last-child {
                 border-bottom: none;
             }
 
-            .user-card-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 10px;
+            /* Header & footer wrappers transparent — children jadi direct child .user-card */
+            .user-card-header,
+            .user-card-footer {
+                display: contents;
             }
 
             .user-card-info {
                 display: flex;
                 align-items: center;
-                gap: 12px;
+                gap: 10px;
                 flex: 1;
                 min-width: 0;
+            }
+
+            .user-card .user-avatar-sm {
+                width: 34px !important;
+                height: 34px !important;
+                border-radius: 9px !important;
+                font-size: 13px !important;
+                font-weight: 600 !important;
+                flex-shrink: 0;
             }
 
             .user-card-name {
                 display: flex;
                 flex-direction: column;
-                gap: 3px;
+                gap: 1px;
                 min-width: 0;
+                overflow: hidden;
             }
 
             .user-card-name-text {
-                font-size: 15px;
+                font-size: 13px;
                 font-weight: 600;
                 color: var(--ink-0);
+                line-height: 1.2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .user-card-handle {
-                font-size: 11.5px;
+                font-size: 10.5px;
                 color: var(--ink-3);
+                line-height: 1.2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
+            /* Email disembunyikan di single-row */
+            .user-card-name > span:nth-child(3) {
+                display: none !important;
+            }
+
+            .user-card .badge-role {
+                font-size: 9px !important;
+                padding: 3px 6px !important;
+                height: auto !important;
+                min-width: 0 !important;
+                border-radius: 5px !important;
+                letter-spacing: 0.04em !important;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            /* Status — teks Online/Offline */
             .user-card-status {
-                display: flex;
-                gap: 8px;
+                display: inline-flex;
                 align-items: center;
-                font-size: 13px;
-                color: var(--ink-2);
+                font-size: 10px;
+                font-weight: 600;
+                color: var(--ink-3);
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                flex-shrink: 0;
             }
 
-            .user-card-role {
-                font-size: 11px;
-                font-weight: 600;
-                text-transform: uppercase;
+            /* Dot disembunyikan, hanya teks */
+            .user-card-status .status-dot {
+                display: none;
+            }
+
+            /* Color berdasarkan parent status (online/offline) */
+            .user-card-status:has(.status-dot.online) {
+                color: var(--mint);
             }
 
             .user-card-actions {
                 display: flex;
-                gap: 6px;
+                gap: 4px;
                 justify-content: flex-end;
+                flex-shrink: 0;
+            }
+
+            .user-card-actions .btn-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 10.5px;
+                border-radius: 8px;
             }
 
             .user-table {
@@ -680,8 +729,19 @@
             .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }
 
-            /* User card action buttons: compact at 320 */
-            .user-card-actions .btn-icon { width: 32px; height: 32px; font-size: 12px; }
+            /* User card — tighter at 320 */
+            .user-card { padding: 12px 14px; gap: 8px; }
+            .user-card-info { gap: 10px; }
+            .user-card .user-avatar-sm {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 13px !important;
+                border-radius: 9px !important;
+            }
+            .user-card-name-text { font-size: 13px; }
+            .user-card-handle { font-size: 10.5px; }
+            .user-card .badge-role { font-size: 9px !important; padding: 3px 6px !important; }
+            .user-card-actions .btn-icon { width: 32px; height: 32px; font-size: 11px; }
 
             /* Stats grid: keep 2-col but compact each card so text doesn't wrap */
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
@@ -1064,25 +1124,25 @@
                                             </div>
                                             <span class="badge-role {{ $user->role }}" style="font-size:10px;padding:4px 8px;">{{ $roleLabel }}</span>
                                         </div>
-                                        <div style="display:flex;gap:10px;font-size:12px;color:var(--ink-3);">
+                                        <div class="user-card-footer">
                                             <div class="user-card-status">
                                                 <span class="status-dot {{ $isOnline ? 'online' : '' }}"></span>
                                                 {{ $isOnline ? 'Online' : 'Offline' }}
                                             </div>
+                                            @if ($user->id !== Auth::user()->id)
+                                                <div class="user-card-actions">
+                                                    <button
+                                                        onclick="editRole({{ $user->id }}, '{{ $user->role }}')"
+                                                        type="button" class="btn-icon lavender" title="Edit role">
+                                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                                    </button>
+                                                    <button onclick="deleteUser({{ $user->id }})" type="button"
+                                                        class="btn-icon danger" title="Delete user">
+                                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </div>
-                                        @if ($user->id !== Auth::user()->id)
-                                            <div class="user-card-actions">
-                                                <button
-                                                    onclick="editRole({{ $user->id }}, '{{ $user->role }}')"
-                                                    type="button" class="btn-icon lavender" title="Edit role">
-                                                    <i class="fa-solid fa-pen text-[10px]"></i>
-                                                </button>
-                                                <button onclick="deleteUser({{ $user->id }})" type="button"
-                                                    class="btn-icon danger" title="Delete user">
-                                                    <i class="fa-solid fa-trash text-[10px]"></i>
-                                                </button>
-                                            </div>
-                                        @endif
                                     </div>
                                 @empty
                                     <div class="empty-state" style="margin: 20px;">
