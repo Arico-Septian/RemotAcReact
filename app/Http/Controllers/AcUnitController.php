@@ -87,8 +87,8 @@ class AcUnitController extends Controller
         ]);
 
         $request->validate([
-            'name' => 'required|string|max:50',
-            'brand' => 'required|string|max:50',
+            'name' => 'required|string|max:50|regex:/^\S*$/u',
+            'brand' => 'required|string|max:50|regex:/^\S*$/u',
             'ac_number' => [
                 'required',
                 'integer',
@@ -137,8 +137,8 @@ class AcUnitController extends Controller
         ]);
 
         $request->validate([
-            'name' => 'required|string|max:50',
-            'brand' => 'required|string|max:50',
+            'name' => 'required|string|max:50|regex:/^\S*$/u',
+            'brand' => 'required|string|max:50|regex:/^\S*$/u',
             'ac_number' => [
                 'required',
                 'integer',
