@@ -34,6 +34,24 @@
             border-color: var(--cyan);
         }
 
+        .trend-demo-toggle {
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+            color: var(--ink-2);
+            border-radius: var(--r-md);
+            padding: 6px 10px;
+            font-size: 11px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: var(--t-base);
+        }
+
+        .trend-demo-toggle.active {
+            color: var(--cyan);
+            border-color: rgba(77, 212, 255, 0.35);
+            background: rgba(77, 212, 255, 0.1);
+        }
+
         .dashboard-rooms-panel {
             padding: 20px;
             border-radius: 20px;
@@ -1413,7 +1431,7 @@
 
         /* Temperature chart height responsive */
         @media (max-width: 768px) {
-            div[style*="height:300px"] {
+            .temp-chart-wrap {
                 height: 260px !important;
             }
         }
@@ -1431,10 +1449,15 @@
                 padding: 4px 6px !important;
                 border-radius: 7px !important;
             }
+            .temp-chart-panel .trend-demo-toggle {
+                font-size: 10px !important;
+                padding: 4px 7px !important;
+                border-radius: 7px !important;
+            }
         }
 
         @media (max-width: 480px) {
-            div[style*="height:300px"] {
+            .temp-chart-wrap {
                 height: 240px !important;
             }
             /* Panel temperatur lebih kompak di mobile */
@@ -1479,10 +1502,15 @@
                 border-radius: 6px !important;
                 min-width: 0;
             }
+            .temp-chart-panel .trend-demo-toggle {
+                font-size: 9.5px !important;
+                padding: 3px 6px !important;
+                border-radius: 6px !important;
+            }
         }
 
         @media (max-width: 360px) {
-            div[style*="height:300px"] {
+            .temp-chart-wrap {
                 height: 220px !important;
             }
             .temp-chart-panel {
@@ -1498,6 +1526,11 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 9px !important;
                 padding: 2px 4px !important;
+                border-radius: 5px !important;
+            }
+            .temp-chart-panel .trend-demo-toggle {
+                font-size: 9px !important;
+                padding: 2px 5px !important;
                 border-radius: 5px !important;
             }
         }
@@ -1676,7 +1709,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div style="height:300px;position:relative;">
+                            <div class="temp-chart-wrap" style="height:300px;position:relative;">
                                 <canvas id="tempChart"></canvas>
                                 <div id="tempChartEmpty" class="empty-state"
                                     style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;">
@@ -1954,22 +1987,33 @@
                 return {
                     legendFontSize: 9.5, legendBoxSize: 6, legendPadding: 8,
                     legendAlign: 'center',
-                    tickFontSize: 9, xMaxTicks: 5, yMaxTicks: 4,
+                    tickFontSize: 9, xMaxTicks: 5, yMaxTicks: 4, legendRoomNameMax: 10,
                 };
             } else if (w <= 1023) {
                 // Tablet
                 return {
                     legendFontSize: 10.5, legendBoxSize: 7, legendPadding: 10,
                     legendAlign: 'center',
-                    tickFontSize: 10, xMaxTicks: 7, yMaxTicks: 5,
+                    tickFontSize: 10, xMaxTicks: 7, yMaxTicks: 5, legendRoomNameMax: 16,
                 };
             }
             // Laptop / desktop — nilai asli
             return {
                 legendFontSize: 11, legendBoxSize: 8, legendPadding: 12,
                 legendAlign: 'end',
-                tickFontSize: 10, xMaxTicks: undefined, yMaxTicks: undefined,
+                tickFontSize: 10, xMaxTicks: undefined, yMaxTicks: undefined, legendRoomNameMax: 999,
             };
+        }
+
+        function truncateLegendText(text, maxLength) {
+            const value = String(text ?? '');
+            if (value.length <= maxLength) return value;
+            return `${value.slice(0, Math.max(0, maxLength - 1))}\u2026`;
+        }
+
+        function makeTrendDatasetLabel(roomName, tempText) {
+            const s = chartSizingForViewport();
+            return `${truncateLegendText(roomName, s.legendRoomNameMax)} (${tempText})`;
         }
 
         function applyChartSizing() {
@@ -1984,6 +2028,11 @@
             tempChart.options.scales.y.ticks.font.size = s.tickFontSize;
             tempChart.options.scales.x.ticks.maxTicksLimit = s.xMaxTicks;
             tempChart.options.scales.y.ticks.maxTicksLimit = s.yMaxTicks;
+            tempChart.data.datasets.forEach(ds => {
+                if (ds._roomName && ds._tempText) {
+                    ds.label = makeTrendDatasetLabel(ds._roomName, ds._tempText);
+                }
+            });
             tempChart.update('none');
         }
 
@@ -2228,20 +2277,22 @@
                     const OFFLINE_LINE_ALPHA = 0.4;
 
                     tempChart.data.datasets = (data.datasets || []).map(ds => {
-                        const tempStr = ds.current_temp !== null && ds.current_temp !== undefined ?
-                            `${Number(ds.current_temp).toFixed(1)}°C` :
-                            '—';
+                        const hasCurrentTemp = ds.current_temp !== null && ds.current_temp !== undefined;
+                        const hasLastTemp = ds.last_temp !== null && ds.last_temp !== undefined;
+                        const tempStr = ds.is_offline ?
+                            (hasLastTemp ? `Last ${Number(ds.last_temp).toFixed(1)}\u00b0C` : 'Offline') :
+                            (hasCurrentTemp ? `${Number(ds.current_temp).toFixed(1)}\u00b0C` : 'No data');
 
-                        // Online → pakai warna palette dari backend (tiap room beda).
-                        // Offline → seragam abu-abu redup agar terlihat "non-aktif".
                         const effectiveHex = ds.is_offline ? OFFLINE_HEX : ds.color;
                         const lineColor = ds.is_offline ?
                             hexToRgba(OFFLINE_HEX, OFFLINE_LINE_ALPHA) :
                             ds.color;
 
                         return {
-                            label: `${ds.room} (${tempStr})`,
+                            label: makeTrendDatasetLabel(ds.room, tempStr),
                             data: ds.data,
+                            _roomName: ds.room,
+                            _tempText: tempStr,
 
                             borderColor: lineColor,
                             borderDash: ds.is_offline ? [4, 4] : [],
@@ -2274,7 +2325,7 @@
                         const shown = (data.datasets || []).length;
                         const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
                         const offlineCount = shown - onlineCount;
-                        infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline (Last Temp).`;
+                        infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline. Grafik hanya memakai data historis yang tercatat.`;
                     }
                 })
                 .catch(() => {
