@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -1001,6 +1001,10 @@
                                             <i class="fa-solid fa-plus text-[10px]"></i>
                                             <span class="hidden sm:inline">Add AC</span>
                                         </button>
+                                        <button type="button" onclick="openEditModal()"
+                                            class="btn-icon lavender" title="Edit AC">
+                                            <i class="fa-solid fa-pen text-[10px]"></i>
+                                        </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
                                             action="{{ $firstAc ? '/ac/' . $firstAc->id : '#' }}">
                                             @csrf
@@ -1309,8 +1313,6 @@
                             <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
                             <h2>Tambah AC Unit</h2>
                         </div>
-                        <button type="button" class="modal-close" onclick="closeModal()"><i
-                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="addACForm" method="POST" action="/rooms/{{ $room->id }}/ac">
                         @csrf
@@ -1352,8 +1354,6 @@
                             <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
                             <h2>Edit AC Unit</h2>
                         </div>
-                        <button type="button" class="modal-close" onclick="closeEditModal()"><i
-                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="editACForm" method="POST" action="">
                         @csrf
@@ -1954,7 +1954,7 @@
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
-                    "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : '' }}");
+                    "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}");
                 @if (session('success'))
                     window.smToast("{{ session('success') }}", 'success');
                 @endif
@@ -1963,12 +1963,12 @@
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
-                        "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : '' }}");
+                        "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}");
                 } else {
                     localStorage.removeItem('selectedAC');
                     @if ($firstAc)
                         selectAC({{ $firstAc->id }},
-                            "{{ 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name }}");
+                            "{{ 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') }}");
                     @endif
                 }
             @endif

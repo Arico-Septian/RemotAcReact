@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -1003,6 +1003,10 @@
                                             <i class="fa-solid fa-plus text-[10px]"></i>
                                             <span class="hidden sm:inline">Add AC</span>
                                         </button>
+                                        <button type="button" onclick="openEditModal()"
+                                            class="btn-icon lavender" title="Edit AC">
+                                            <i class="fa-solid fa-pen text-[10px]"></i>
+                                        </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
                                             action="<?php echo e($firstAc ? '/ac/' . $firstAc->id : '#'); ?>">
                                             <?php echo csrf_field(); ?>
@@ -1755,6 +1759,8 @@
             });
         });
 
+        let _espFetchFailed = false;
+
         function updateEspStatus() {
             const pill = document.getElementById('espStatusPill');
             const text = document.getElementById('espStatusText');
@@ -1769,6 +1775,7 @@
                 })
                 .then(response => response.ok ? response.json() : Promise.reject())
                 .then(devices => {
+                    _espFetchFailed = false;
                     const current = Array.isArray(devices) ?
                         devices.find(device => Number(device.room_id) === roomId) :
                         null;
@@ -1780,7 +1787,12 @@
                     pill.classList.toggle('pill-error', !online);
                     text.textContent = `ESP ${online ? 'Online' : 'Offline'}`;
                 })
-                .catch(() => {});
+                .catch(() => {
+                    if (!_espFetchFailed) {
+                        _espFetchFailed = true;
+                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                    }
+                });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1951,7 +1963,7 @@
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
-                    "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : ''); ?>");
+                    "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : ''); ?>");
                 <?php if(session('success')): ?>
                     window.smToast("<?php echo e(session('success')); ?>", 'success');
                 <?php endif; ?>
@@ -1960,12 +1972,12 @@
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
-                        "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name : ''); ?>");
+                        "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : ''); ?>");
                 } else {
                     localStorage.removeItem('selectedAC');
                     <?php if($firstAc): ?>
                         selectAC(<?php echo e($firstAc->id); ?>,
-                            "<?php echo e('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name); ?>");
+                            "<?php echo e('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '')); ?>");
                     <?php endif; ?>
                 }
             <?php endif; ?>

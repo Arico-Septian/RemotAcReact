@@ -849,6 +849,8 @@
                             <h2>Tambah Ruangan</h2>
                             <p class="sub">Daftarkan ruangan baru beserta ESP device-nya</p>
                         </div>
+                        <button type="button" class="modal-close" onclick="closeModal()"><i
+                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="addRoomForm" method="POST" action="/rooms">
                         <?php echo csrf_field(); ?>

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1354,8 +1354,6 @@
                     <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
                     <h2>Edit user role</h2>
                 </div>
-                <button type="button" class="modal-close" onclick="closeEditModal()"><i
-                        class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="editRoleForm" method="POST">
                 @csrf
