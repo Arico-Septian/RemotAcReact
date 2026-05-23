@@ -218,7 +218,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
     });
 
     Route::get('/temperature/trend', function (Request $request) use ($roomDeviceIsOnline) {
-        $limit = 5; // Dibatasi ketat hanya 5 ruangan
+        $limit = min(max((int) $request->query('limit', 5), 1), 5);
         $range = $request->query('range', '1h');
 
         // Konfigurasi range: total jam, interval menit, label format
@@ -318,8 +318,8 @@ Route::middleware(['auth', 'activity'])->group(function () {
                     $data = $slots->map(fn ($t) => $grouped->get($slotKeyFor($t)));
 
                     $lastRecord = $latestTemperatures->get($normalized);
-                    $currentTemp = optional($lastRecord)->temperature;
-                    $lastKnownTemp = $currentTemp;
+                    $lastKnownTemp = optional($lastRecord)->temperature;
+                    $currentTemp = $lastKnownTemp;
 
                     // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
                     $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
@@ -329,20 +329,18 @@ Route::middleware(['auth', 'activity'])->group(function () {
                         $isOffline = $isOffline || $secondsAgo > 30;
                         if ($isOffline) {
                             $offlineSince = $lastRecord->created_at->format('H:i');
+                            $currentTemp = null;
                         }
                     } else {
                         $isOffline = true;
-                    }
-
-                    // Saat offline: isi slot kosong dengan suhu terakhir agar garis tetap muncul (statis)
-                    if ($isOffline && $lastKnownTemp !== null) {
-                        $data = $data->map(fn ($v) => $v ?? $lastKnownTemp);
+                        $currentTemp = null;
                     }
 
                     return [
                         'room' => ucfirst($room->name),
                         'room_id' => $room->id,
                         'current_temp' => $currentTemp,
+                        'last_temp' => $lastKnownTemp,
                         'is_offline' => $isOffline,
                         'offline_since' => $offlineSince,
                         'data' => $data->values()->all(),

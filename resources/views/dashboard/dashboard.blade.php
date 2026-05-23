@@ -2226,12 +2226,12 @@
                     const OFFLINE_LINE_ALPHA = 0.4;
 
                     tempChart.data.datasets = (data.datasets || []).map(ds => {
-                        const tempStr = ds.current_temp !== null && ds.current_temp !== undefined ?
-                            `${Number(ds.current_temp).toFixed(1)}°C` :
-                            '—';
+                        const hasCurrentTemp = ds.current_temp !== null && ds.current_temp !== undefined;
+                        const hasLastTemp = ds.last_temp !== null && ds.last_temp !== undefined;
+                        const tempStr = ds.is_offline ?
+                            (hasLastTemp ? `Last ${Number(ds.last_temp).toFixed(1)}\u00b0C` : 'Offline') :
+                            (hasCurrentTemp ? `${Number(ds.current_temp).toFixed(1)}\u00b0C` : 'No data');
 
-                        // Online → pakai warna palette dari backend (tiap room beda).
-                        // Offline → seragam abu-abu redup agar terlihat "non-aktif".
                         const effectiveHex = ds.is_offline ? OFFLINE_HEX : ds.color;
                         const lineColor = ds.is_offline ?
                             hexToRgba(OFFLINE_HEX, OFFLINE_LINE_ALPHA) :
@@ -2272,7 +2272,7 @@
                         const shown = (data.datasets || []).length;
                         const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
                         const offlineCount = shown - onlineCount;
-                        infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline (Last Temp).`;
+                        infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline. Grafik hanya memakai data historis yang tercatat.`;
                     }
                 })
                 .catch(() => {
