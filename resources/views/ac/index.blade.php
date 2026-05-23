@@ -1772,13 +1772,6 @@
                     pill.classList.toggle('pill-online', online);
                     pill.classList.toggle('pill-error', !online);
                     text.textContent = `ESP ${online ? 'Online' : 'Offline'}`;
-
-                    // Sinkronisasi warna ring setiap kali status diperbarui
-                    document.querySelectorAll('[id^="tempRing-"]').forEach(ring => {
-                        const acId = ring.id.replace('tempRing-', '');
-                        const temp = parseInt(ring.closest('.ac-panel')?.querySelector('.temp-value')?.textContent) || 24;
-                        updateTempRingColor(acId, temp);
-                    });
                 })
                 .catch(() => {
                     if (!_espFetchFailed) {
@@ -1842,9 +1835,16 @@
 
                     // +/- temp button onclick handlers (selalu refer ke nilai temp saat ini)
                     const ctrlBtns = panel.querySelectorAll('.ctrl-row .ctrl-btn');
-                    if (ctrlBtns.length >= 2) {
-                        ctrlBtns[0].setAttribute('onclick', `setTemp(${payload.ac_unit_id}, ${temp - 1})`);
-                        ctrlBtns[1].setAttribute('onclick', `setTemp(${payload.ac_unit_id}, ${temp + 1})`);
+                    const btnMinus = panel.querySelector('.ctrl-btn[title*="Turunkan"]');
+                    const btnPlus = panel.querySelector('.ctrl-btn[title*="Naikkan"]');
+
+                    if (btnMinus) {
+                        btnMinus.setAttribute('onclick', `setTemp(${payload.ac_unit_id}, ${temp - 1})`);
+                        btnMinus.disabled = (temp <= 16);
+                    }
+                    if (btnPlus) {
+                        btnPlus.setAttribute('onclick', `setTemp(${payload.ac_unit_id}, ${temp + 1})`);
+                        btnPlus.disabled = (temp >= 30);
                     }
 
                     // Mode / Fan / Swing buttons — toggle .active sesuai value baru
@@ -1998,21 +1998,6 @@
         });
         if (window.history.replaceState) window.history.replaceState(null, null, window.location.href);
 
-        /* #10 Temperature ring color indicator */
-        function updateTempRingColor(acId, temp) {
-            const ring = document.getElementById(`tempRing-${acId}`);
-            if (!ring) return;
-
-            ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
-            if (temp <= 20) {
-                ring.classList.add('temp-cool');
-            } else if (temp <= 25) {
-                ring.classList.add('temp-warm');
-            } else {
-                ring.classList.add('temp-hot');
-            }
-        }
-
         /* #5 Control feedback toast for temperature changes */
         document.querySelectorAll('#ac-' + currentAcId + ' .ctrl-row').forEach(row => {
             row.addEventListener('submit', function(e) {
@@ -2081,36 +2066,15 @@
             flushPendingToast();
         }
 
-        /* Update temperature ring color on page load and when temperature changes via WebSocket */
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('[id^="tempRing-"]').forEach(ring => {
-                const acId = ring.id.replace('tempRing-', '');
-                const temp = parseInt(ring.closest('.ac-panel')?.querySelector('.temp-value')?.textContent) || 24;
-                updateTempRingColor(acId, temp);
-            });
-        });
+        // Jalankan interval status perangkat
+        setInterval(updateEspStatus, 5000);
 
-        /* Listen for temperature updates via WebSocket or polling */
-        const originalUpdateEspStatus = updateEspStatus;
-        const updateEspStatusWithTemp = function() {
-            originalUpdateEspStatus();
-            setTimeout(() => {
-                document.querySelectorAll('[id^="temp-"]').forEach(el => {
-                    const tempText = el.textContent.match(/\d+/);
-                    if (tempText) {
-                        const temp = parseInt(tempText[0]);
-                        const acPanel = el.closest('.ac-panel');
-                        if (acPanel) {
-                            const acId = acPanel.id.replace('ac-', '');
-                            updateTempRingColor(acId, temp);
-                        }
-                    }
-                });
-            }, 100);
-        };
-
-        // Jalankan interval menggunakan fungsi yang sudah di-enhance
-        setInterval(updateEspStatusWithTemp, 5000);
+        function updateTempRingColor(acId, temp) {
+            const ring = document.getElementById(`tempRing-${acId}`);
+            if (!ring) return;
+            ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
+            ring.classList.add(temp <= 20 ? 'temp-cool' : (temp <= 25 ? 'temp-warm' : 'temp-hot'));
+        }
     </script>
     @include('components.sidebar-scripts')
 </body>

@@ -1435,22 +1435,25 @@
                 return true;
             }
 
+            if (username.length < 3) return false;
+
             try {
-                const response = await fetch(`/users?search=${encodeURIComponent(username)}&sort=name&order=asc`, {
+                // Gunakan endpoint khusus (jika ada) atau pastikan response minimalis
+                const response = await fetch(`/users?search=${encodeURIComponent(username)}&check_only=1`, {
                     headers: {
-                        'Accept': 'text/html'
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
                     },
                     cache: 'no-store'
                 });
 
-                if (!response.ok) {
-                    return false;
+                if (response.ok) {
+                    const data = await response.json();
+                    // Asumsi server mengembalikan { exists: true/false } atau list user
+                    return data.exists || (Array.isArray(data) && data.length > 0);
                 }
 
-                const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
-
-                return Array.from(doc.querySelectorAll('.user-name, .user-card-name-text'))
-                    .some(el => normalizeFormValue(el.textContent) === username);
+                return false;
             } catch (error) {
                 return false;
             }
