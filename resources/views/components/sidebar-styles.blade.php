@@ -584,4 +584,48 @@
         border-color: rgba(255, 85, 119, 0.40) !important;
         transform: translateY(-1px);
     }
+
+    /* Mobile polish: keep operational labels readable without changing layout. */
+    @media (max-width: 480px) {
+        .main-header .app-header-title p,
+        .stat-card .stat-sub,
+        .nlist-item .text-mono,
+        .profile-info-label {
+            font-size: 10px !important;
+            line-height: 1.3 !important;
+        }
+
+        .stat-card .stat-label-sm,
+        .label-tag,
+        .ac-mini .lbl,
+        .notif-msg,
+        .notif-time,
+        .room-status-pill,
+        .badge-role {
+            font-size: 10px !important;
+            line-height: 1.25 !important;
+            letter-spacing: 0.04em !important;
+        }
+
+        .tbl-toolbar .btn,
+        .modal-footer .btn,
+        .selector-bar .btn-icon,
+        .user-card-actions .btn-icon {
+            min-height: 36px !important;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .main-header .app-header-title p {
+            font-size: 10px !important;
+        }
+
+        .stat-card .stat-label-sm,
+        .stat-card .stat-sub,
+        .label-tag,
+        .ac-mini .lbl,
+        .nlist-item .text-mono {
+            font-size: 9.75px !important;
+        }
+    }
 </style>
