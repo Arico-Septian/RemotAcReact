@@ -44,12 +44,20 @@
             font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: var(--t-base);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
 
         .trend-demo-toggle.active {
             color: var(--cyan);
             border-color: rgba(77, 212, 255, 0.35);
             background: rgba(77, 212, 255, 0.1);
+        }
+
+        .trend-demo-toggle i {
+            font-size: 10px;
         }
 
         .dashboard-rooms-panel {
@@ -1506,6 +1514,12 @@
                 font-size: 9.5px !important;
                 padding: 3px 6px !important;
                 border-radius: 6px !important;
+                gap: 4px !important;
+            }
+            .temp-chart-panel #trendInfo {
+                margin-top: 6px !important;
+                font-size: 10px !important;
+                line-height: 1.35 !important;
             }
         }
 
@@ -1532,6 +1546,10 @@
                 font-size: 9px !important;
                 padding: 2px 5px !important;
                 border-radius: 5px !important;
+                gap: 3px !important;
+            }
+            .temp-chart-panel #trendInfo {
+                font-size: 9.5px !important;
             }
         }
 
@@ -1707,6 +1725,11 @@
                                         <option value="6h">6 Jam</option>
                                         <option value="24h">24 Jam</option>
                                     </select>
+                                    <button id="trendDemoToggle" type="button" class="trend-demo-toggle"
+                                        title="Tampilkan data contoh">
+                                        <i class="fa-solid fa-flask"></i>
+                                        <span>Demo Data</span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="temp-chart-wrap" style="height:300px;position:relative;">
@@ -1934,6 +1957,31 @@
             }
         };
 
+        const temperatureThresholdPlugin = {
+            id: 'temperatureThreshold',
+            afterDraw(chart) {
+                const yScale = chart.scales.y;
+                const { ctx, chartArea } = chart;
+                if (!yScale || !chartArea) return;
+
+                const y = yScale.getPixelForValue(30);
+                ctx.save();
+                ctx.setLineDash([5, 5]);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = 'rgba(251,191,36,0.45)';
+                ctx.beginPath();
+                ctx.moveTo(chartArea.left, y);
+                ctx.lineTo(chartArea.right, y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = 'rgba(251,191,36,0.85)';
+                ctx.font = '10px Inter, sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText('30\u00b0C', chartArea.right - 2, y - 6);
+                ctx.restore();
+            }
+        };
+
         /* ===== NOTIFICATIONS ===== */
         let notifEnabled = localStorage.getItem('notifEnabled') === 'true';
         const notifCooldown = {};
@@ -1983,23 +2031,23 @@
             if (w <= 480) {
                 // Mobile
                 return {
-                    legendFontSize: 9.5, legendBoxSize: 6, legendPadding: 8,
+                    legendFontSize: 9, legendBoxSize: 5, legendPadding: 6,
                     legendAlign: 'center',
-                    tickFontSize: 9, xMaxTicks: 5, yMaxTicks: 4, legendRoomNameMax: 10,
+                    tickFontSize: 9, xMaxTicks: 5, yMaxTicks: 9, legendRoomNameMax: 8, compactLegend: true,
                 };
             } else if (w <= 1023) {
                 // Tablet
                 return {
-                    legendFontSize: 10.5, legendBoxSize: 7, legendPadding: 10,
+                    legendFontSize: 10, legendBoxSize: 7, legendPadding: 9,
                     legendAlign: 'center',
-                    tickFontSize: 10, xMaxTicks: 7, yMaxTicks: 5, legendRoomNameMax: 16,
+                    tickFontSize: 10, xMaxTicks: 7, yMaxTicks: 9, legendRoomNameMax: 18, compactLegend: false,
                 };
             }
             // Laptop / desktop — nilai asli
             return {
                 legendFontSize: 11, legendBoxSize: 8, legendPadding: 12,
                 legendAlign: 'end',
-                tickFontSize: 10, xMaxTicks: undefined, yMaxTicks: undefined, legendRoomNameMax: 999,
+                tickFontSize: 10, xMaxTicks: undefined, yMaxTicks: undefined, legendRoomNameMax: 999, compactLegend: false,
             };
         }
 
@@ -2011,7 +2059,12 @@
 
         function makeTrendDatasetLabel(roomName, tempText) {
             const s = chartSizingForViewport();
-            return `${truncateLegendText(roomName, s.legendRoomNameMax)} (${tempText})`;
+            const room = truncateLegendText(roomName, s.legendRoomNameMax);
+            if (!s.compactLegend) return `${room} (${tempText})`;
+
+            const tempMatch = String(tempText).match(/(\d+(?:\.\d+)?)/);
+            if (!tempMatch) return room;
+            return `${room} ${Math.round(Number(tempMatch[1]))}\u00b0`;
         }
 
         function applyChartSizing() {
@@ -2046,7 +2099,7 @@
                     labels: [],
                     datasets: []
                 },
-                plugins: [glowLinePlugin, crosshairGlowPlugin, {
+                plugins: [glowLinePlugin, temperatureThresholdPlugin, crosshairGlowPlugin, {
                     id: 'hoverFocus',
                     _lastActive: -1,
                     afterEvent(chart, args) {
@@ -2174,14 +2227,15 @@
                             }
                         },
                         y: {
-                            suggestedMin: 20,
-                            suggestedMax: 35,
+                            min: 20,
+                            max: 36,
                             ticks: {
                                 color: '#64748b',
                                 font: {
                                     size: s.tickFontSize
                                 },
                                 maxTicksLimit: s.yMaxTicks,
+                                stepSize: 2,
                                 callback: v => v + '°C'
                             },
                             grid: {
@@ -2232,22 +2286,122 @@
             '24h': 'Trend 24 jam terakhir',
         };
 
+        function isTrendDemoMode() {
+            return localStorage.getItem('trendDemoMode') === 'true';
+        }
+
+        function updateTrendDemoToggle() {
+            const btn = document.getElementById('trendDemoToggle');
+            if (!btn) return;
+            const active = isTrendDemoMode();
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+            const label = btn.querySelector('span');
+            if (label) label.textContent = active ? 'Demo ON' : 'Demo Data';
+        }
+
+        function padTime(value) {
+            return String(value).padStart(2, '0');
+        }
+
+        function makeDemoLabels(range) {
+            const config = {
+                '1h': { slots: 12, interval: 5, hourly: false },
+                '3h': { slots: 18, interval: 10, hourly: false },
+                '6h': { slots: 24, interval: 15, hourly: false },
+                '24h': { slots: 24, interval: 60, hourly: true },
+            }[range] || { slots: 12, interval: 5, hourly: false };
+
+            const now = new Date();
+            const labels = [];
+            for (let i = config.slots - 1; i >= 0; i--) {
+                const date = new Date(now);
+                date.setMinutes(now.getMinutes() - (i * config.interval), 0, 0);
+                if (config.hourly) {
+                    labels.push(`${padTime(date.getHours())}:00`);
+                } else {
+                    labels.push(`${padTime(date.getHours())}:${padTime(date.getMinutes())}`);
+                }
+            }
+
+            return labels;
+        }
+
+        function makeDemoSeries(slots, baseTemp, swing, offset = 0) {
+            return Array.from({ length: slots }, (_, i) => {
+                const wave = Math.sin((i + offset) / 2.2) * swing;
+                const drift = i * 0.04;
+                return Number((baseTemp + wave + drift).toFixed(1));
+            });
+        }
+
+        function generateDemoTrendPayload(range, limit) {
+            const labels = makeDemoLabels(range);
+            const slots = labels.length;
+            const count = Math.min(Math.max(Number(limit) || 5, 1), 5);
+            const palette = ['#fb7185', '#fbbf24', '#4dd4ff', '#a78bfa', '#34d399'];
+            const rooms = [
+                { room: 'Server A', base: 24.6, swing: 0.7, offline: false },
+                { room: 'Server B', base: 26.1, swing: 0.9, offline: false },
+                { room: 'Network Rack', base: 28.4, swing: 1.1, offline: false },
+                { room: 'Storage Cold', base: 22.9, swing: 0.5, offline: false },
+                { room: 'Backup Room', base: 25.2, swing: 0.6, offline: true },
+            ].slice(0, count);
+
+            const datasets = rooms.map((room, idx) => {
+                let data = makeDemoSeries(slots, room.base, room.swing, idx);
+                if (room.offline) {
+                    data = data.map((value, pointIdx) => pointIdx >= slots - 4 ? null : value);
+                }
+
+                const visibleValues = data.filter(value => value !== null && !Number.isNaN(value));
+                const lastValue = visibleValues.length ? visibleValues[visibleValues.length - 1] : null;
+
+                return {
+                    room: room.room,
+                    room_id: `demo-${idx + 1}`,
+                    current_temp: room.offline ? null : lastValue,
+                    last_temp: lastValue,
+                    is_offline: room.offline,
+                    offline_since: room.offline ? labels[Math.max(0, slots - 5)] : null,
+                    data,
+                    color: palette[idx % palette.length],
+                };
+            });
+
+            return {
+                labels,
+                datasets,
+                total_rooms: rooms.length,
+                shown: datasets.length,
+                limit: count,
+                range,
+                interval_minutes: null,
+                demo: true,
+            };
+        }
+
         function refreshTrendChart(showLoader = false) {
             if (!tempChart) return;
 
             const limit = getTrendLimit();
             const range = getTrendRange();
+            const demoMode = isTrendDemoMode();
 
             const labelEl = document.getElementById('trendRangeLabel');
-            if (labelEl) labelEl.textContent = RANGE_LABELS[range] || RANGE_LABELS['1h'];
+            if (labelEl) labelEl.textContent = demoMode ? `Demo ${range.toUpperCase()}` : (RANGE_LABELS[range] || RANGE_LABELS['1h']);
 
             if (showLoader) {
                 const spinner = document.getElementById('tempChartLoading');
                 if (spinner) spinner.style.display = 'flex';
             }
 
-            fetch(`/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
-                .then(r => (r.ok ? r.json() : Promise.reject(r.status)))
+            const trendRequest = demoMode ?
+                Promise.resolve(generateDemoTrendPayload(range, limit)) :
+                fetch(`/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
+                    .then(r => (r.ok ? r.json() : Promise.reject(r.status)));
+
+            trendRequest
                 .then(data => {
                     document.getElementById('tempChartLoading')?.style.setProperty('display', 'none');
                     if (!data || !tempChart) return;
@@ -2323,7 +2477,9 @@
                         const shown = (data.datasets || []).length;
                         const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
                         const offlineCount = shown - onlineCount;
-                        infoEl.textContent = `Prioritas: ${onlineCount} Online, ${offlineCount} Offline. Grafik hanya memakai data historis yang tercatat.`;
+                        infoEl.textContent = demoMode ?
+                            `Demo: ${shown} room contoh, ${offlineCount} offline. Data asli aman.` :
+                            `${onlineCount} online, ${offlineCount} offline. Grafik memakai data historis tercatat.`;
                     }
                 })
                 .catch(() => {
@@ -2454,6 +2610,16 @@
                 rangeSelect.value = getTrendRange();
                 rangeSelect.addEventListener('change', (e) => {
                     localStorage.setItem('trendRange', e.target.value);
+                    refreshTrendChart(true);
+                });
+            }
+
+            const demoToggle = document.getElementById('trendDemoToggle');
+            updateTrendDemoToggle();
+            if (demoToggle) {
+                demoToggle.addEventListener('click', () => {
+                    localStorage.setItem('trendDemoMode', isTrendDemoMode() ? 'false' : 'true');
+                    updateTrendDemoToggle();
                     refreshTrendChart(true);
                 });
             }
