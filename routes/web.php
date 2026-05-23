@@ -247,8 +247,12 @@ Route::middleware(['auth', 'activity'])->group(function () {
                     $aOnline = $roomDeviceIsOnline($a);
                     $bOnline = $roomDeviceIsOnline($b);
 
-                    if ($aOnline && ! $bOnline) return -1;
-                    if (! $aOnline && $bOnline) return 1;
+                    if ($aOnline && ! $bOnline) {
+                        return -1;
+                    }
+                    if (! $aOnline && $bOnline) {
+                        return 1;
+                    }
 
                     $aTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($a->name)))->temperature ?? -999;
                     $bTemp = optional($latestTemperatures->get(RoomTemperature::normalizeRoomName($b->name)))->temperature ?? -999;
@@ -376,8 +380,8 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
         // AC control endpoints with rate limiting (30 req/min per user)
         Route::middleware('throttle:30,1')->group(function () {
-            Route::get('/ac/{id}/on', [AcControlController::class, 'powerOn']);
-            Route::get('/ac/{id}/off', [AcControlController::class, 'powerOff']);
+            Route::post('/ac/{id}/on', [AcControlController::class, 'powerOn']);
+            Route::post('/ac/{id}/off', [AcControlController::class, 'powerOff']);
             Route::post('/ac/{id}/temp/{value}', [AcControlController::class, 'setTemp']);
             Route::post('/ac/{id}/mode/{mode}', [AcControlController::class, 'setMode']);
             Route::post('/ac/{id}/fan-speed/{speed}', [AcControlController::class, 'setFanSpeed']);
@@ -394,7 +398,8 @@ Route::middleware(['auth', 'activity'])->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::get('/users/check-exists', function (Request $request) {
             $name = strtolower(trim($request->query('name')));
-            $exists = \App\Models\User::whereRaw('LOWER(name) = ?', [$name])->exists();
+            $exists = User::whereRaw('LOWER(name) = ?', [$name])->exists();
+
             return response()->json(['exists' => $exists]);
         });
         Route::post('/users', [UserController::class, 'store'])->name('users.store');

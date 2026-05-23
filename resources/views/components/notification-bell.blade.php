@@ -239,10 +239,18 @@ function renderNotifItems(items) {
         return;
     }
 
-    body.innerHTML = items.map(n => `
-        <a href="${n.link || '#'}" class="notif-item ${n.is_unread ? 'unread' : ''}"
-           data-id="${n.id}" onclick="markNotifRead(event, ${n.id}, '${n.link || ''}')">
-            <span class="notif-icon ${n.severity}"><i class="fa-solid ${notifIconFor(n.severity, n.type)}"></i></span>
+    const validSeverity = ['info', 'warning', 'error', 'success'];
+    body.innerHTML = items.map(n => {
+        const id = Number(n.id);
+        if (!id) return '';
+
+        const severity = validSeverity.includes(n.severity) ? n.severity : 'info';
+        const link = n.link ? escapeHtml(n.link) : '#';
+
+        return `
+        <a href="${link}" class="notif-item ${n.is_unread ? 'unread' : ''}"
+           data-id="${id}" data-redirect-to="${link}" onclick="markNotifRead(event, ${id}, this.dataset.redirectTo || '')">
+            <span class="notif-icon ${severity}"><i class="fa-solid ${notifIconFor(severity, n.type)}"></i></span>
             <div class="notif-meta">
                 <p class="notif-title">
                     ${n.is_unread ? '<span class="notif-unread-dot"></span>' : ''}
@@ -251,7 +259,8 @@ function renderNotifItems(items) {
                 ${n.message ? `<p class="notif-msg">${escapeHtml(n.message)}</p>` : ''}
                 <p class="notif-time"><i class="fa-regular fa-clock text-[9px]"></i> ${escapeHtml(n.time_ago)}</p>
             </div>
-        </a>`).join('');
+        </a>`;
+    }).join('');
 }
 
 function loadNotifPanel() {

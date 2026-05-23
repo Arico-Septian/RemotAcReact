@@ -876,7 +876,7 @@
     @include('components.sidebar-scripts')
 
     <script>
-        // Quick category buttons â†' set activity = auth/ac/room/user
+        // Quick category buttons -> set activity = auth/ac/room/user
         document.querySelectorAll('[data-quick]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const val = btn.getAttribute('data-quick');
@@ -917,9 +917,8 @@
                         'Semua log berhasil dihapus');
                     setTimeout(() => location.reload(), 800);
                 })
-                .catch(err => {
+                .catch(() => {
                     window.smToast ? window.smToast('Gagal menghapus log', 'error') : alert('Gagal menghapus log');
-                    console.error('Delete error:', err);
                 });
         }
 
@@ -1127,6 +1126,5 @@
 </body>
 
 </html>
-
 
 

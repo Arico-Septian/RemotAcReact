@@ -18,9 +18,10 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
-// Debug log koneksi Reverb (lihat di Console DevTools)
-const pusher = window.Echo.connector.pusher;
-pusher.connection.bind('connected', () => console.log('%c[Reverb] CONNECTED', 'color:#22c55e;font-weight:bold'));
-pusher.connection.bind('disconnected', () => console.log('%c[Reverb] DISCONNECTED', 'color:#ef4444;font-weight:bold'));
-pusher.connection.bind('error', (err) => console.error('[Reverb] ERROR', err));
-pusher.connection.bind('state_change', (states) => console.log(`[Reverb] state: ${states.previous} -> ${states.current}`));
+if (import.meta.env.DEV) {
+    const pusher = window.Echo.connector.pusher;
+    pusher.connection.bind('connected', () => console.log('%c[Reverb] CONNECTED', 'color:#22c55e;font-weight:bold'));
+    pusher.connection.bind('disconnected', () => console.log('%c[Reverb] DISCONNECTED', 'color:#ef4444;font-weight:bold'));
+    pusher.connection.bind('error', (err) => console.error('[Reverb] ERROR', err));
+    pusher.connection.bind('state_change', (states) => console.log(`[Reverb] state: ${states.previous} -> ${states.current}`));
+}

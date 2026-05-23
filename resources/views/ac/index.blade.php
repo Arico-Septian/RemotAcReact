@@ -1059,9 +1059,17 @@
 
                                     <div id="dropdownAC">
                                         @foreach ($acs as $ac)
+                                            @php
+                                                $acLabel =
+                                                    'AC ' .
+                                                    $ac->ac_number .
+                                                    ' · ' .
+                                                    $ac->name .
+                                                    ($ac->brand ? ' · ' . $ac->brand : '');
+                                            @endphp
                                             <div data-id="{{ $ac->id }}"
-                                                data-label="AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}"
-                                                onclick="selectAC({{ $ac->id }}, 'AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}')">
+                                                data-label="{{ $acLabel }}"
+                                                onclick="selectAC({{ $ac->id }}, @js($acLabel))">
                                                 <span class="num">#{{ $ac->ac_number }}</span>
                                                 <span style="text-transform:capitalize;">{{ $ac->name }}
                                                     @if ($ac->brand)
@@ -2051,42 +2059,42 @@
             }
 
             @if (session('new_ac_id'))
-                const id = "{{ session('new_ac_id') }}";
+                const id = @js(session('new_ac_id'));
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
-                    "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}"
+                    @js($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '')
                     );
                 @if (session('success'))
-                    window.smToast("{{ session('success') }}", 'success');
+                    window.smToast(@js(session('success')), 'success');
                 @endif
             @else
                 const saved = localStorage.getItem('selectedAC');
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
-                        "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}"
+                        @js($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '')
                         );
                 } else {
                     localStorage.removeItem('selectedAC');
                     @if ($firstAc)
                         selectAC({{ $firstAc->id }},
-                            "{{ 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') }}"
+                            @js('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : ''))
                             );
                     @endif
                 }
             @endif
             @if (session('success') && !session('new_ac_id'))
-                window.smToast("{{ session('success') }}", 'success');
+                window.smToast(@js(session('success')), 'success');
             @endif
             @if (session('error'))
-                window.smToast("{{ session('error') }}", 'error');
+                window.smToast(@js(session('error')), 'error');
             @endif
             @if (session('warning'))
-                window.smToast("{{ session('warning') }}", 'warn');
+                window.smToast(@js(session('warning')), 'warn');
             @endif
             @if ($errors->any())
-                window.smToast("{{ $errors->first() }}", 'error');
+                window.smToast(@js($errors->first()), 'error');
             @endif
         });
 

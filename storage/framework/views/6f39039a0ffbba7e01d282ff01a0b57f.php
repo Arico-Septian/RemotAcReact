@@ -566,7 +566,7 @@
                                                             Detail
                                                         </a>
                                                         <button type="button"
-                                                            onclick="openHistory(<?php echo e($room->id); ?>, '<?php echo e(ucfirst($room->name)); ?>')"
+                                                            onclick="openHistory(<?php echo e($room->id); ?>, <?php echo \Illuminate\Support\Js::from(ucfirst($room->name))->toHtml() ?>)"
                                                             class="btn-icon lavender" title="Histori suhu 24 jam">
                                                             <i class="fa-solid fa-chart-line text-[10px]"></i>
                                                         </button>

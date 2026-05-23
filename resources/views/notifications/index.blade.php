@@ -205,7 +205,8 @@
                                             @if ($n->link)
                                                 <span>·</span>
                                                 <a href="{{ $n->link }}"
-                                                    onclick="markNotifReadInline(event, {{ $n->id }}, '{{ $n->link }}')"
+                                                    data-redirect-to="{{ $n->link }}"
+                                                    onclick="markNotifReadInline(event, {{ $n->id }}, this.dataset.redirectTo)"
                                                     style="color:var(--cyan);">Buka detail →</a>
                                             @endif
                                         </div>
@@ -369,8 +370,9 @@
                 const now = new Date();
                 const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
                 const dateStr = `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-                const linkHtml = payload.link
-                    ? `<span>·</span><a href="${escapeHtml(payload.link)}" onclick="markNotifReadInline(event, ${id}, '${escapeHtml(payload.link)}')" style="color:var(--cyan);">Buka detail →</a>`
+                const safeLink = payload.link ? escapeHtml(payload.link) : '';
+                const linkHtml = safeLink
+                    ? `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:var(--cyan);">Buka detail →</a>`
                     : '';
                 const deleteBtn = payload.user_id
                     ? `<button onclick="deleteNotif(${id})" class="btn-icon danger" title="Hapus"><i class="fa-solid fa-trash text-[11px]"></i></button>`
@@ -424,4 +426,3 @@
 </body>
 
 </html>
-

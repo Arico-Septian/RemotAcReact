@@ -565,7 +565,7 @@
                                                             Detail
                                                         </a>
                                                         <button type="button"
-                                                            onclick="openHistory({{ $room->id }}, '{{ ucfirst($room->name) }}')"
+                                                            onclick="openHistory({{ $room->id }}, @js(ucfirst($room->name)))"
                                                             class="btn-icon lavender" title="Histori suhu 24 jam">
                                                             <i class="fa-solid fa-chart-line text-[10px]"></i>
                                                         </button>

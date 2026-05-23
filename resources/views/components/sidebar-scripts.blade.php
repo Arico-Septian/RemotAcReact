@@ -228,8 +228,19 @@ window.smToast = function (msg, type = 'info') {
     document.querySelectorAll('.toast').forEach(t => t.remove());
     const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info', warn: 'fa-triangle-exclamation' };
     const t = document.createElement('div');
-    t.className = `toast ${type}`;
-    t.innerHTML = `<span class="icon"><i class="fa-solid ${icons[type] || icons.info}"></i></span><span>${msg}</span>`;
+    const safeType = Object.prototype.hasOwnProperty.call(icons, type) ? type : 'info';
+    t.className = `toast ${safeType}`;
+
+    const iconWrap = document.createElement('span');
+    iconWrap.className = 'icon';
+    const icon = document.createElement('i');
+    icon.className = `fa-solid ${icons[safeType]}`;
+    iconWrap.appendChild(icon);
+
+    const message = document.createElement('span');
+    message.textContent = String(msg ?? '');
+
+    t.append(iconWrap, message);
     document.body.appendChild(t);
     setTimeout(() => { t.classList.add('toast-out'); setTimeout(() => t.remove(), 240); }, 2800);
 };

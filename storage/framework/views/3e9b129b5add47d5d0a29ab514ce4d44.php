@@ -1060,9 +1060,17 @@
 
                                     <div id="dropdownAC">
                                         <?php $__currentLoopData = $acs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ac): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php
+                                                $acLabel =
+                                                    'AC ' .
+                                                    $ac->ac_number .
+                                                    ' · ' .
+                                                    $ac->name .
+                                                    ($ac->brand ? ' · ' . $ac->brand : '');
+                                            ?>
                                             <div data-id="<?php echo e($ac->id); ?>"
-                                                data-label="AC <?php echo e($ac->ac_number); ?> · <?php echo e($ac->name); ?><?php echo e($ac->brand ? ' · ' . $ac->brand : ''); ?>"
-                                                onclick="selectAC(<?php echo e($ac->id); ?>, 'AC <?php echo e($ac->ac_number); ?> · <?php echo e($ac->name); ?><?php echo e($ac->brand ? ' · ' . $ac->brand : ''); ?>')">
+                                                data-label="<?php echo e($acLabel); ?>"
+                                                onclick="selectAC(<?php echo e($ac->id); ?>, <?php echo \Illuminate\Support\Js::from($acLabel)->toHtml() ?>)">
                                                 <span class="num">#<?php echo e($ac->ac_number); ?></span>
                                                 <span style="text-transform:capitalize;"><?php echo e($ac->name); ?>
 
@@ -2057,42 +2065,42 @@
             }
 
             <?php if(session('new_ac_id')): ?>
-                const id = "<?php echo e(session('new_ac_id')); ?>";
+                const id = <?php echo \Illuminate\Support\Js::from(session('new_ac_id'))->toHtml() ?>;
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
-                    "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : ''); ?>"
+                    <?php echo \Illuminate\Support\Js::from($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '')->toHtml() ?>
                     );
                 <?php if(session('success')): ?>
-                    window.smToast("<?php echo e(session('success')); ?>", 'success');
+                    window.smToast(<?php echo \Illuminate\Support\Js::from(session('success'))->toHtml() ?>, 'success');
                 <?php endif; ?>
             <?php else: ?>
                 const saved = localStorage.getItem('selectedAC');
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
-                        "<?php echo e($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : ''); ?>"
+                        <?php echo \Illuminate\Support\Js::from($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '')->toHtml() ?>
                         );
                 } else {
                     localStorage.removeItem('selectedAC');
                     <?php if($firstAc): ?>
                         selectAC(<?php echo e($firstAc->id); ?>,
-                            "<?php echo e('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '')); ?>"
+                            <?php echo \Illuminate\Support\Js::from('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : ''))->toHtml() ?>
                             );
                     <?php endif; ?>
                 }
             <?php endif; ?>
             <?php if(session('success') && !session('new_ac_id')): ?>
-                window.smToast("<?php echo e(session('success')); ?>", 'success');
+                window.smToast(<?php echo \Illuminate\Support\Js::from(session('success'))->toHtml() ?>, 'success');
             <?php endif; ?>
             <?php if(session('error')): ?>
-                window.smToast("<?php echo e(session('error')); ?>", 'error');
+                window.smToast(<?php echo \Illuminate\Support\Js::from(session('error'))->toHtml() ?>, 'error');
             <?php endif; ?>
             <?php if(session('warning')): ?>
-                window.smToast("<?php echo e(session('warning')); ?>", 'warn');
+                window.smToast(<?php echo \Illuminate\Support\Js::from(session('warning'))->toHtml() ?>, 'warn');
             <?php endif; ?>
             <?php if($errors->any()): ?>
-                window.smToast("<?php echo e($errors->first()); ?>", 'error');
+                window.smToast(<?php echo \Illuminate\Support\Js::from($errors->first())->toHtml() ?>, 'error');
             <?php endif; ?>
         });
 

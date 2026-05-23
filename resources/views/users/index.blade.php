@@ -1620,13 +1620,13 @@
             // Poll juga tiap 30s sebagai fallback (kalau WS putus)
             setInterval(refreshUsersOnline, 30000);
             @if (session('success'))
-                window.smToast("{{ session('success') }}", 'success');
+                window.smToast(@js(session('success')), 'success');
             @endif
             @if (session('error'))
-                window.smToast("{{ session('error') }}", 'error');
+                window.smToast(@js(session('error')), 'error');
             @endif
             @if ($errors->any())
-                window.smToast("{{ $errors->first() }}", 'error');
+                window.smToast(@js($errors->first()), 'error');
             @endif
         });
         window.addEventListener('beforeunload', () => {
