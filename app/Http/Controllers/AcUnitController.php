@@ -163,6 +163,9 @@ class AcUnitController extends Controller
             'ac_number' => $request->ac_number,
         ]);
 
+        // Kirim ulang konfigurasi agar ESP32 tahu perubahan nomor/brand AC
+        (new MqttService)->resendConfig($room->device_id);
+
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => $room->name,

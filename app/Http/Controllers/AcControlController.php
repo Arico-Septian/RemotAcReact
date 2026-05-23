@@ -274,7 +274,7 @@ class AcControlController extends Controller
 
         $status->power = $request->filled('power')
             ? $this->normalizePower($request->input('power'))
-            : (($status->power == 'ON') ? 'OFF' : 'ON');
+            : (($status->power === 'ON') ? 'OFF' : 'ON');
         $status->save();
 
         $sent = $this->sendFullState($ac, $room, $status);

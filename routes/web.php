@@ -384,8 +384,10 @@ Route::middleware(['auth', 'activity'])->group(function () {
             Route::post('/ac/{id}/swing/{swing}', [AcControlController::class, 'setSwing']);
             Route::post('/ac/{id}/toggle', [AcControlController::class, 'togglePower']);
             Route::post('/ac/{id}/schedule', [TimerController::class, 'schedule']);
+            Route::post('/ac/{id}/control', [AcControlController::class, 'control']);
         });
 
+        Route::post('/rooms/{id}/ac/fuzzy/apply', [AcUnitController::class, 'applyFuzzy'])->name('ac.fuzzy.apply');
     });
 
     Route::middleware(['role:admin'])->group(function () {
@@ -446,8 +448,4 @@ Route::middleware(['auth', 'activity'])->group(function () {
             ->header('Expires', '0');
     })->name('monitoring');
 
-    Route::post(
-        '/rooms/{id}/ac/fuzzy/apply',
-        [AcUnitController::class, 'applyFuzzy']
-    )->name('ac.fuzzy.apply');
 });

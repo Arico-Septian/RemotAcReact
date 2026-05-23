@@ -664,14 +664,14 @@
                 padding: 8px;
             }
 
-            .selector-bar > div:first-child {
+            .selector-bar>div:first-child {
                 flex: 1;
                 min-width: 160px;
                 max-width: 400px;
                 order: 1;
             }
 
-            .selector-bar > div:last-child {
+            .selector-bar>div:last-child {
                 order: 2;
                 display: flex;
                 flex-wrap: nowrap;
@@ -698,11 +698,14 @@
                 gap: 6px;
             }
 
-            .selector-bar > div:first-child {
+            .selector-bar>div:first-child {
                 flex: 1 1 auto;
                 min-width: 0;
             }
-            .selector { width: 100%; }
+
+            .selector {
+                width: 100%;
+            }
 
             .selector {
                 padding: 6px 10px;
@@ -713,13 +716,15 @@
                 font-size: 9px;
             }
 
-            .selector-bar > div:last-child {
+            .selector-bar>div:last-child {
                 display: inline-flex;
                 gap: 6px;
                 flex-shrink: 0;
             }
 
-            .selector { min-height: 40px; }
+            .selector {
+                min-height: 40px;
+            }
 
             .selector-bar .btn.btn-sm {
                 padding: 0 !important;
@@ -732,7 +737,9 @@
                 font-size: 14px;
             }
 
-            .selector-bar .btn.btn-sm span { display: none; }
+            .selector-bar .btn.btn-sm span {
+                display: none;
+            }
 
             .selector-bar .btn.btn-sm i {
                 margin: 0 !important;
@@ -753,7 +760,7 @@
                 gap: 10px;
             }
 
-            .selector-bar > div:first-child {
+            .selector-bar>div:first-child {
                 flex: 1;
             }
 
@@ -791,18 +798,25 @@
                 font-size: 13px;
                 min-height: 42px;
             }
+
             .selector-bar .btn.btn-sm i {
                 font-size: 13px;
             }
+
             .selector-bar .btn.btn-sm span {
                 display: inline !important;
             }
+
             .selector-bar .btn-icon {
                 width: 42px;
                 height: 42px;
                 font-size: 14px;
             }
-            .selector { min-height: 42px; padding: 9px 14px; }
+
+            .selector {
+                min-height: 42px;
+                padding: 9px 14px;
+            }
         }
 
         /* #3 Mobile layout optimization */
@@ -848,13 +862,16 @@
         }
 
         /* Always-on fix: Tailwind didn't ship .grid-cols-4 in compiled CSS, so supply it ourselves */
-        .panel > .grid.grid-cols-4 {
+        .panel>.grid.grid-cols-4 {
             grid-template-columns: repeat(4, minmax(0, 1fr));
         }
 
         /* Selector text: truncate instead of wrap (prevents "Panasonic" jumping to a new line) */
-        .selector { max-width: 100%; }
-        .selector > #selectedAC {
+        .selector {
+            max-width: 100%;
+        }
+
+        .selector>#selectedAC {
             min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -865,24 +882,41 @@
 
         /* Mobile (≤ 480 px): 2-col mode/fan/swing — 4 buttons cramped at this width */
         @media (max-width: 480px) {
-            .panel > .grid.grid-cols-4 {
+            .panel>.grid.grid-cols-4 {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 7px !important;
             }
+
             .mode-btn-h {
                 padding: 10px 8px !important;
                 font-size: 11.5px !important;
                 min-height: 40px !important;
                 gap: 5px;
             }
-            .mode-btn-h i { font-size: 11px !important; }
+
+            .mode-btn-h i {
+                font-size: 11px !important;
+            }
         }
 
         /* Mobile S (≤ 360 px): tighter selector bar + header */
         @media (max-width: 360px) {
-            .selector-bar { padding: 6px !important; gap: 6px !important; }
-            .selector { padding: 8px 10px !important; font-size: 11px !important; min-height: 38px; }
-            .selector-bar > div:first-child { flex: 1 1 auto !important; min-width: 0 !important; }
+            .selector-bar {
+                padding: 6px !important;
+                gap: 6px !important;
+            }
+
+            .selector {
+                padding: 8px 10px !important;
+                font-size: 11px !important;
+                min-height: 38px;
+            }
+
+            .selector-bar>div:first-child {
+                flex: 1 1 auto !important;
+                min-width: 0 !important;
+            }
+
             .selector-bar .btn.btn-sm {
                 padding: 0 !important;
                 width: 38px !important;
@@ -892,20 +926,65 @@
                 align-items: center;
                 justify-content: center;
             }
-            .selector-bar .btn.btn-sm i { font-size: 13px !important; margin: 0 !important; }
-            .selector-bar .btn-icon { width: 38px !important; height: 38px !important; font-size: 13px; }
 
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
-            .main-header > .flex.items-center.gap-2 #espStatusPill span:not(.dot) { display: none; }
-            .main-header > .flex.items-center.gap-2 #espStatusPill { padding: 4px 6px; }
-            .main-header > .flex.items-center.gap-2 .btn-icon { width: 32px; height: 32px; }
+            .selector-bar .btn.btn-sm i {
+                font-size: 13px !important;
+                margin: 0 !important;
+            }
 
-            .temp-ring { width: 180px; height: 180px; }
-            .temp-value { font-size: 56px !important; }
-            .ctrl-btn { width: 42px !important; height: 42px !important; }
-            .power-btn { width: 54px !important; height: 54px !important; }
+            .selector-bar .btn-icon {
+                width: 38px !important;
+                height: 38px !important;
+                font-size: 13px;
+            }
+
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 9.5px;
+                line-height: 1.2;
+            }
+
+            .main-header>.flex.items-center.gap-2 #espStatusPill span:not(.dot) {
+                display: none;
+            }
+
+            .main-header>.flex.items-center.gap-2 #espStatusPill {
+                padding: 4px 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .temp-ring {
+                width: 180px;
+                height: 180px;
+            }
+
+            .temp-value {
+                font-size: 56px !important;
+            }
+
+            .ctrl-btn {
+                width: 42px !important;
+                height: 42px !important;
+            }
+
+            .power-btn {
+                width: 54px !important;
+                height: 54px !important;
+            }
         }
 
         /* Landscape mode optimization */
@@ -984,7 +1063,12 @@
                                                 data-label="AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}"
                                                 onclick="selectAC({{ $ac->id }}, 'AC {{ $ac->ac_number }} · {{ $ac->name }}{{ $ac->brand ? ' · ' . $ac->brand : '' }}')">
                                                 <span class="num">#{{ $ac->ac_number }}</span>
-                                                <span style="text-transform:capitalize;">{{ $ac->name }}@if ($ac->brand) <span style="opacity:.65;font-size:11px;">· {{ $ac->brand }}</span>@endif</span>
+                                                <span style="text-transform:capitalize;">{{ $ac->name }}
+                                                    @if ($ac->brand)
+                                                        <span style="opacity:.65;font-size:11px;">·
+                                                            {{ $ac->brand }}</span>
+                                                    @endif
+                                                </span>
                                             </div>
                                         @endforeach
                                     </div>
@@ -995,14 +1079,8 @@
                             @auth
                                 @if (in_array(Auth::user()->role, ['admin', 'operator']))
                                     <div class="flex items-center gap-1.5">
-                                        <button type="button" {{ $acs->count() >= 15 ? 'disabled' : '' }}
-                                            onclick="{{ $acs->count() >= 15 ? '' : 'openModal()' }}"
-                                            class="btn btn-primary btn-sm {{ $acs->count() >= 15 ? 'disabled' : '' }}">
-                                            <i class="fa-solid fa-plus text-[10px]"></i>
-                                            <span class="hidden sm:inline">Add AC</span>
-                                        </button>
-                                        <button type="button" onclick="openEditModal()"
-                                            class="btn-icon lavender" title="Edit AC">
+                                        <button type="button" onclick="openEditModal()" class="btn-icon lavender"
+                                            title="Edit AC">
                                             <i class="fa-solid fa-pen text-[10px]"></i>
                                         </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
@@ -1015,6 +1093,12 @@
                                                 <i class="fa-solid fa-trash text-[10px]"></i>
                                             </button>
                                         </form>
+                                        <button type="button" {{ $acs->count() >= 15 ? 'disabled' : '' }}
+                                            onclick="{{ $acs->count() >= 15 ? '' : 'openModal()' }}"
+                                            class="btn btn-primary btn-sm {{ $acs->count() >= 15 ? 'disabled' : '' }}">
+                                            <i class="fa-solid fa-plus text-[10px]"></i>
+                                            <span class="hidden sm:inline">Add AC</span>
+                                        </button>
                                     </div>
                                 @endif
                             @endauth
@@ -1047,31 +1131,32 @@
                                         @php
                                             $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
                                         @endphp
-                                        <div class="temp-ring temp-{{ $tempCategory }}" id="tempRing-{{ $ac->id }}">
+                                        <div class="temp-ring temp-{{ $tempCategory }}"
+                                            id="tempRing-{{ $ac->id }}">
                                             <div class="temp-ring-inner">
                                                 <p class="ring-label">Suhu Ac</p>
                                                 <div class="ring-temp">
                                                     <span class="temp-value">{{ $curTemp }}</span><span
                                                         class="unit">°C</span>
                                                 </div>
-                                                <p class="ring-summary" style="text-transform:capitalize;">{{ $curMode }} · {{ $curFan }} ·
+                                                <p class="ring-summary" style="text-transform:capitalize;">
+                                                    {{ $curMode }} · {{ $curFan }} ·
                                                     {{ $swingLabel }}</p>
                                             </div>
                                         </div>
                                         <div class="ctrl-row">
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp({{ $ac->id }}, {{ $curTemp - 1 }})"
-                                                title="Turunkan suhu"
-                                                aria-label="Turunkan suhu">
+                                                title="Turunkan suhu" aria-label="Turunkan suhu">
                                                 <i class="fa-solid fa-minus"></i>
                                             </button>
                                             <form action="/ac/{{ $ac->id }}/toggle" method="POST"
-                                                class="power-form power-form-inline"
-                                                aria-label="Kontrol Power AC"
+                                                class="power-form power-form-inline" aria-label="Kontrol Power AC"
                                                 data-ac-name="AC {{ $ac->ac_number }}{{ $ac->name ? ' · ' . $ac->name : '' }}"
                                                 data-ac-power="{{ $ac->status?->power ?? 'OFF' }}">
                                                 @csrf
-                                                <input type="hidden" name="power" value="{{ $isPowerOn ? 'OFF' : 'ON' }}">
+                                                <input type="hidden" name="power"
+                                                    value="{{ $isPowerOn ? 'OFF' : 'ON' }}">
                                                 <button type="submit" class="power-btn {{ $isPowerOn ? 'on' : '' }}"
                                                     title="Toggle power">
                                                     <i class="fa-solid fa-power-off"></i>
@@ -1079,8 +1164,7 @@
                                             </form>
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp({{ $ac->id }}, {{ $curTemp + 1 }})"
-                                                title="Naikkan suhu"
-                                                aria-label="Naikkan suhu">
+                                                title="Naikkan suhu" aria-label="Naikkan suhu">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                         </div>
@@ -1322,24 +1406,22 @@
                         <div class="modal-body space-y-3">
                             <div class="field">
                                 <label class="field-label">Nomor AC</label>
-                                <input class="input text-mono" type="number" name="ac_number" min="1" max="15"
-                                    placeholder="1" required>
+                                <input class="input text-mono" type="number" name="ac_number" min="1"
+                                    max="15" placeholder="1" required>
                             </div>
                             <div class="field">
                                 <label class="field-label">Nama AC</label>
-                                <input class="input" type="text" name="name" placeholder="unit_a"
-                                    pattern="\S+"
-                                    title="Nama AC tidak boleh mengandung spasi"
-                                    required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak boleh ada spasi</p>
+                                <input class="input" type="text" name="name" placeholder="unit_a" pattern="\S+"
+                                    title="Nama AC tidak boleh mengandung spasi" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
+                                    boleh ada spasi</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
-                                <input class="input" type="text" name="brand" placeholder="daikin"
-                                    pattern="\S+"
-                                    title="Brand tidak boleh mengandung spasi"
-                                    required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak boleh ada spasi</p>
+                                <input class="input" type="text" name="brand" placeholder="daikin" pattern="\S+"
+                                    title="Brand tidak boleh mengandung spasi" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
+                                    boleh ada spasi</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1369,19 +1451,17 @@
                             </div>
                             <div class="field">
                                 <label class="field-label">Nama AC</label>
-                                <input class="input" id="editAcName" type="text" name="name"
-                                    pattern="\S+"
-                                    title="Nama AC tidak boleh mengandung spasi"
-                                    required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak boleh ada spasi</p>
+                                <input class="input" id="editAcName" type="text" name="name" pattern="\S+"
+                                    title="Nama AC tidak boleh mengandung spasi" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
+                                    boleh ada spasi</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
-                                <input class="input" id="editAcBrand" type="text" name="brand"
-                                    pattern="\S+"
-                                    title="Brand tidak boleh mengandung spasi"
-                                    required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak boleh ada spasi</p>
+                                <input class="input" id="editAcBrand" type="text" name="brand" pattern="\S+"
+                                    title="Brand tidak boleh mengandung spasi" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
+                                    boleh ada spasi</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1478,7 +1558,11 @@
 
         document.getElementById('addACForm')?.addEventListener('submit', e => {
             const form = e.currentTarget;
-            const { numberInput, nameInput, brandInput } = normalizeAcForm(form);
+            const {
+                numberInput,
+                nameInput,
+                brandInput
+            } = normalizeAcForm(form);
 
             if (!validateNoSpaces(nameInput, 'Nama AC')) {
                 e.preventDefault();
@@ -1506,7 +1590,11 @@
 
         document.getElementById('editACForm')?.addEventListener('submit', e => {
             const form = e.currentTarget;
-            const { numberInput, nameInput, brandInput } = normalizeAcForm(form);
+            const {
+                numberInput,
+                nameInput,
+                brandInput
+            } = normalizeAcForm(form);
 
             if (!validateNoSpaces(nameInput, 'Nama AC')) {
                 e.preventDefault();
@@ -1685,7 +1773,8 @@
                 e.preventDefault();
                 pendingPowerForm = this;
                 const targetPower = (this.querySelector('[name="power"]')?.value || '').toUpperCase();
-                const turnOn = targetPower ? targetPower === 'ON' : (this.dataset.acPower || 'OFF').toUpperCase() !== 'ON';
+                const turnOn = targetPower ? targetPower === 'ON' : (this.dataset.acPower || 'OFF')
+                    .toUpperCase() !== 'ON';
                 const icon = document.getElementById('powerModalIcon');
                 const desc = document.getElementById('powerModalDesc');
                 const conf = document.getElementById('powerModalConfirm');
@@ -1761,7 +1850,12 @@
             if (!pill || !text) return;
 
             const roomId = Number(pill.dataset.roomId);
-            fetch('/device-status', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
+            fetch('/device-status', {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    cache: 'no-store'
+                })
                 .then(r => r.ok ? r.json() : Promise.reject())
                 .then(devices => {
                     _espFetchFailed = false;
@@ -1788,7 +1882,12 @@
             if (window.Echo) {
                 const currentRoomId = Number(document.getElementById('espStatusPill')?.dataset.roomId);
 
-                const swingLabelMap = { off: 'Diam', full: 'Full', half: '½', down: 'Bawah' };
+                const swingLabelMap = {
+                    off: 'Diam',
+                    full: 'Full',
+                    half: '½',
+                    down: 'Bawah'
+                };
                 const ucfirst = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
 
                 function updateAcPanel(payload) {
@@ -1818,7 +1917,8 @@
                     // Ring summary: "Cool · Auto · Diam"
                     const summary = panel.querySelector('.ring-summary');
                     if (summary) {
-                        summary.textContent = `${ucfirst(mode)} · ${ucfirst(fan)} · ${swingLabelMap[swing] || ucfirst(swing)}`;
+                        summary.textContent =
+                            `${ucfirst(mode)} · ${ucfirst(fan)} · ${swingLabelMap[swing] || ucfirst(swing)}`;
                     }
 
                     // Power button (toggle .on)
@@ -1955,7 +2055,8 @@
                 localStorage.setItem('selectedAC', id);
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
-                    "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}");
+                    "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}"
+                    );
                 @if (session('success'))
                     window.smToast("{{ session('success') }}", 'success');
                 @endif
@@ -1964,12 +2065,14 @@
                 if (saved && document.getElementById('ac-' + saved)) {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
-                        "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}");
+                        "{{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '' }}"
+                        );
                 } else {
                     localStorage.removeItem('selectedAC');
                     @if ($firstAc)
                         selectAC({{ $firstAc->id }},
-                            "{{ 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') }}");
+                            "{{ 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') }}"
+                            );
                     @endif
                 }
             @endif
@@ -1998,25 +2101,15 @@
         });
         if (window.history.replaceState) window.history.replaceState(null, null, window.location.href);
 
-        /* #5 Control feedback toast for temperature changes */
-        document.querySelectorAll('#ac-' + currentAcId + ' .ctrl-row').forEach(row => {
-            row.addEventListener('submit', function(e) {
-                if (this.classList.contains('temperature-form')) {
-                    const temp = this.dataset.temp;
-                    if (window.smToast) {
-                        setTimeout(() => {
-                            window.smToast(`Temperature set to ${temp}°C`, 'success');
-                        }, 500);
-                    }
-                }
-            });
-        });
-
         /* #5 Control feedback toast — disimpan ke sessionStorage sebelum form submit
            karena page langsung navigate; toast dibaca & ditampilkan setelah reload. */
         function queuePendingToast(msg, type = 'success') {
             try {
-                sessionStorage.setItem('pendingToast', JSON.stringify({ msg, type, t: Date.now() }));
+                sessionStorage.setItem('pendingToast', JSON.stringify({
+                    msg,
+                    type,
+                    t: Date.now()
+                }));
             } catch (e) {}
         }
 
@@ -2025,7 +2118,11 @@
                 const raw = sessionStorage.getItem('pendingToast');
                 if (!raw) return;
                 sessionStorage.removeItem('pendingToast');
-                const { msg, type, t } = JSON.parse(raw);
+                const {
+                    msg,
+                    type,
+                    t
+                } = JSON.parse(raw);
                 // Buang toast usang (> 8 detik) untuk hindari muncul di navigasi lain
                 if (!msg || (Date.now() - (t || 0)) > 8000) return;
                 if (window.smToast) window.smToast(msg, type || 'success');
@@ -2052,8 +2149,8 @@
         document.querySelectorAll('.power-form').forEach(form => {
             form.addEventListener('submit', function() {
                 const acName = this.dataset.acName || 'AC';
-                const newState = (this.querySelector('[name="power"]')?.value || '').toUpperCase()
-                    || (((this.dataset.acPower || 'OFF').toUpperCase() === 'ON') ? 'OFF' : 'ON');
+                const newState = (this.querySelector('[name="power"]')?.value || '').toUpperCase() ||
+                    (((this.dataset.acPower || 'OFF').toUpperCase() === 'ON') ? 'OFF' : 'ON');
 
                 queuePendingToast(`${acName} power ${newState}`);
             });
