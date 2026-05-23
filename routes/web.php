@@ -390,6 +390,11 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/check-exists', function (Request $request) {
+            $name = strtolower(trim($request->query('name')));
+            $exists = \App\Models\User::whereRaw('LOWER(name) = ?', [$name])->exists();
+            return response()->json(['exists' => $exists]);
+        });
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::patch('/users/{id}', [UserController::class, 'update']);

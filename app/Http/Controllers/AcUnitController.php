@@ -96,6 +96,10 @@ class AcUnitController extends Controller
                 'max:15',
                 Rule::unique('ac_units')->where(fn ($q) => $q->where('room_id', $roomId)),
             ],
+        ], [
+            'name.regex' => 'Nama AC tidak boleh mengandung spasi.',
+            'brand.regex' => 'Brand tidak boleh mengandung spasi.',
+            'ac_number.unique' => 'Nomor AC ini sudah terdaftar di ruangan ini.',
         ]);
 
         $ac = AcUnit::create([
@@ -148,6 +152,9 @@ class AcUnitController extends Controller
                     ->where(fn ($q) => $q->where('room_id', $ac->room_id))
                     ->ignore($ac->id),
             ],
+        ], [
+            'name.regex' => 'Nama AC tidak boleh mengandung spasi.',
+            'brand.regex' => 'Brand tidak boleh mengandung spasi.',
         ]);
 
         $ac->update([
@@ -343,10 +350,36 @@ class AcUnitController extends Controller
 
         $ac = AcUnit::findOrFail($id);
 
+        // UX: Cek jika data tidak berubah untuk menghemat resource
+        if ($ac->timer_on === $request->timer_on && $ac->timer_off === $request->timer_off) {
+            return back();
+        }
+
         $ac->update([
             'timer_on' => $request->timer_on,
             'timer_off' => $request->timer_off,
         ]);
+
+        // Security & Sync: Kirim ke MQTT agar ESP32 tahu ada perubahan timer
+        try {
+            $mqtt = new MqttService;
+            $room = Room::findOrFail($ac->room_id);
+            $topic = 'room/'.MqttService::roomToTopic($room->name)."/ac/{$ac->ac_number}/timer";
+
+            if (!$request->timer_on && !$request->timer_off) {
+                $mqtt->clearRetained($topic);
+            } else {
+                $mqtt->publish($topic, json_encode([
+                    'timer_on' => $request->timer_on,
+                    'timer_off' => $request->timer_off,
+                ]), 1, true);
+            }
+        } catch (\Throwable $e) {
+            \Log::warning('MQTT Timer sync failed in AcUnitController', [
+                'ac_id' => $ac->id,
+                'error' => $e->getMessage()
+            ]);
+        }
 
         return back()->with('success', 'Timer disimpan');
     }
