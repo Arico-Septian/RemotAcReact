@@ -1064,11 +1064,13 @@
                                         <div class="ctrl-row">
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp(<?php echo e($ac->id); ?>, <?php echo e($curTemp - 1); ?>)"
-                                                title="Turunkan suhu">
+                                                title="Turunkan suhu"
+                                                aria-label="Turunkan suhu">
                                                 <i class="fa-solid fa-minus"></i>
                                             </button>
                                             <form action="/ac/<?php echo e($ac->id); ?>/toggle" method="POST"
                                                 class="power-form power-form-inline"
+                                                aria-label="Kontrol Power AC"
                                                 data-ac-name="AC <?php echo e($ac->ac_number); ?><?php echo e($ac->name ? ' · ' . $ac->name : ''); ?>"
                                                 data-ac-power="<?php echo e($ac->status?->power ?? 'OFF'); ?>">
                                                 <?php echo csrf_field(); ?>
@@ -1080,7 +1082,8 @@
                                             </form>
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp(<?php echo e($ac->id); ?>, <?php echo e($curTemp + 1); ?>)"
-                                                title="Naikkan suhu">
+                                                title="Naikkan suhu"
+                                                aria-label="Naikkan suhu">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                         </div>
@@ -1318,8 +1321,6 @@
                             <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
                             <h2>Tambah AC Unit</h2>
                         </div>
-                        <button type="button" class="modal-close" onclick="closeModal()"><i
-                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="addACForm" method="POST" action="/rooms/<?php echo e($room->id); ?>/ac">
                         <?php echo csrf_field(); ?>
@@ -1361,8 +1362,6 @@
                             <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
                             <h2>Edit AC Unit</h2>
                         </div>
-                        <button type="button" class="modal-close" onclick="closeEditModal()"><i
-                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="editACForm" method="POST" action="">
                         <?php echo csrf_field(); ?>
@@ -1761,31 +1760,30 @@
 
         let _espFetchFailed = false;
 
-        function updateEspStatus() {
+        const updateEspStatus = () => {
             const pill = document.getElementById('espStatusPill');
             const text = document.getElementById('espStatusText');
             if (!pill || !text) return;
 
             const roomId = Number(pill.dataset.roomId);
-            fetch('/device-status', {
-                    headers: {
-                        'Accept': 'application/json'
-                    },
-                    cache: 'no-store'
-                })
-                .then(response => response.ok ? response.json() : Promise.reject())
+            fetch('/device-status', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
+                .then(r => r.ok ? r.json() : Promise.reject())
                 .then(devices => {
                     _espFetchFailed = false;
-                    const current = Array.isArray(devices) ?
-                        devices.find(device => Number(device.room_id) === roomId) :
-                        null;
-
+                    const current = Array.isArray(devices) ? devices.find(d => Number(d.room_id) === roomId) : null;
                     if (!current) return;
 
                     const online = current.is_online === true || current.status === 'online';
                     pill.classList.toggle('pill-online', online);
                     pill.classList.toggle('pill-error', !online);
                     text.textContent = `ESP ${online ? 'Online' : 'Offline'}`;
+
+                    // Sinkronisasi warna ring setiap kali status diperbarui
+                    document.querySelectorAll('[id^="tempRing-"]').forEach(ring => {
+                        const acId = ring.id.replace('tempRing-', '');
+                        const temp = parseInt(ring.closest('.ac-panel')?.querySelector('.temp-value')?.textContent) || 24;
+                        updateTempRingColor(acId, temp);
+                    });
                 })
                 .catch(() => {
                     if (!_espFetchFailed) {
@@ -1793,7 +1791,7 @@
                         window.smToast?.('Gagal memuat status perangkat', 'error');
                     }
                 });
-        }
+        };
 
         document.addEventListener('DOMContentLoaded', () => {
             updateEspStatus();

@@ -1456,7 +1456,16 @@
             }
         }
 
-        document.getElementById('newUserName')?.addEventListener('input', e => validateNoSpaces(e.currentTarget, 'Username'));
+        let usernameTimeout;
+        document.getElementById('newUserName')?.addEventListener('input', e => {
+            const input = e.currentTarget;
+            validateNoSpaces(input, 'Username');
+            // Debounce check to avoid flooding the server
+            clearTimeout(usernameTimeout);
+            usernameTimeout = setTimeout(() => {
+                if (input.value.length >= 3) usernameExists(input.value.toLowerCase());
+            }, 500);
+        });
 
         document.getElementById('addUserForm')?.addEventListener('submit', async e => {
             e.preventDefault();

@@ -795,7 +795,7 @@
                                                     <div class="flex flex-col gap-1.5 mt-auto">
                                                         <a href="/rooms/<?php echo e($room->id); ?>/ac"
                                                             class="btn btn-primary btn-sm">
-                                                            <i class="fa-solid fa-sliders text-[10px]"></i>Control AC
+                                                            <i class="fa-solid fa-sliders text-[10px]" aria-hidden="true"></i>Control AC
                                                         </a>
                                                         <?php if(auth()->guard()->check()): ?>
                                                             <?php if(in_array(Auth::user()->role, ['admin', 'operator'])): ?>
@@ -804,7 +804,8 @@
                                                                     <?php echo csrf_field(); ?>
                                                                     <?php echo method_field('DELETE'); ?>
                                                                     <button type="submit"
-                                                                        class="btn btn-danger btn-sm btn-block">
+                                                                        class="btn btn-danger btn-sm btn-block"
+                                                                        aria-label="Hapus ruangan <?php echo e($room->name); ?>">
                                                                         <i class="fa-solid fa-trash text-[10px]"></i>Hapus
                                                                     </button>
                                                                 </form>
@@ -849,8 +850,6 @@
                             <h2>Tambah Ruangan</h2>
                             <p class="sub">Daftarkan ruangan baru beserta ESP device-nya</p>
                         </div>
-                        <button type="button" class="modal-close" onclick="closeModal()"><i
-                                class="fa-solid fa-xmark"></i></button>
                     </div>
                     <form id="addRoomForm" method="POST" action="/rooms">
                         <?php echo csrf_field(); ?>

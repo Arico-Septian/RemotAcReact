@@ -794,7 +794,7 @@
                                                     <div class="flex flex-col gap-1.5 mt-auto">
                                                         <a href="/rooms/{{ $room->id }}/ac"
                                                             class="btn btn-primary btn-sm">
-                                                            <i class="fa-solid fa-sliders text-[10px]"></i>Control AC
+                                                            <i class="fa-solid fa-sliders text-[10px]" aria-hidden="true"></i>Control AC
                                                         </a>
                                                         @auth
                                                             @if (in_array(Auth::user()->role, ['admin', 'operator']))
@@ -803,7 +803,8 @@
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit"
-                                                                        class="btn btn-danger btn-sm btn-block">
+                                                                        class="btn btn-danger btn-sm btn-block"
+                                                                        aria-label="Hapus ruangan {{ $room->name }}">
                                                                         <i class="fa-solid fa-trash text-[10px]"></i>Hapus
                                                                     </button>
                                                                 </form>
