@@ -63,7 +63,7 @@ class MqttService
         // agar handshake selesai sebelum koneksi ditutup.
         if (! $this->isSubscriber && $qos > 0) {
             try {
-                $this->mqtt->loop(false, true, 2);
+                $this->mqtt->loopOnce(microtime(true), true);
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::warning('MQTT loop after publish failed', [
                     'topic' => $topic,

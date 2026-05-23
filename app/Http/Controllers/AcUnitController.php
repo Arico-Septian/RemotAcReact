@@ -285,7 +285,8 @@ class AcUnitController extends Controller
             return 0;
         }
 
-        return $currentTemp - $previousTemp;
+        // Normalisasi menjadi perubahan derajat per menit
+        return ($currentTemp - $previousTemp) / ($timeDiffSeconds / 60);
     }
 
     private function setCurrentDeviceStatus(Room $room): void

@@ -1790,7 +1790,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             updateEspStatus();
-            setInterval(updateEspStatus, 5000);
 
             // Real-time: ESP status + AC state push via Reverb (update DOM langsung tanpa reload)
             if (window.Echo) {
@@ -2109,7 +2108,9 @@
                 });
             }, 100);
         };
-        window.updateEspStatus = updateEspStatusWithTemp;
+
+        // Jalankan interval menggunakan fungsi yang sudah di-enhance
+        setInterval(updateEspStatusWithTemp, 5000);
     </script>
     @include('components.sidebar-scripts')
 </body>
