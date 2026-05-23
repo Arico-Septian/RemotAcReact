@@ -99,6 +99,13 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
+        UserLog::create([
+            'user_id' => Auth::id(),
+            'room' => '-',
+            'ac' => $user->name.' ('.$user->role.')',
+            'activity' => 'add_user',
+        ]);
+
         return back()->with('success', 'User berhasil ditambahkan');
     }
 
@@ -123,8 +130,17 @@ class UserController extends Controller
             return $this->respondError($request, 'Tidak bisa mengubah role admin terakhir.', 422);
         }
 
+        $previousRole = $user->role;
+
         $user->role = $request->role;
         $user->save();
+
+        UserLog::create([
+            'user_id' => Auth::id(),
+            'room' => '-',
+            'ac' => $user->name.' ('.$previousRole.' -> '.$user->role.')',
+            'activity' => 'update_role',
+        ]);
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true]);
@@ -146,7 +162,17 @@ class UserController extends Controller
             return $this->respondError($request, 'Tidak bisa menghapus admin terakhir.', 422);
         }
 
+        $deletedUserName = $user->name;
+        $deletedUserRole = $user->role;
+
         $user->delete();
+
+        UserLog::create([
+            'user_id' => Auth::id(),
+            'room' => '-',
+            'ac' => $deletedUserName.' ('.$deletedUserRole.')',
+            'activity' => 'delete_user',
+        ]);
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['success' => true]);

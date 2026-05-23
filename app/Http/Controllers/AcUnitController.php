@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class AcUnitController extends Controller
@@ -118,7 +119,7 @@ class AcUnitController extends Controller
             'swing' => 'OFF',
         ]);
 
-        (new MqttService)->resendConfig($room->device_id);
+        $mqttSynced = $this->syncRoomConfig($room);
 
         UserLog::create([
             'user_id' => Auth::id(),
@@ -127,7 +128,11 @@ class AcUnitController extends Controller
             'activity' => 'add_ac',
         ]);
 
-        return back()->with('new_ac_id', $ac->id);
+        $response = back()->with('new_ac_id', $ac->id);
+
+        return $mqttSynced
+            ? $response
+            : $response->with('warning', 'AC berhasil ditambahkan, tetapi konfigurasi MQTT gagal dikirim ke perangkat.');
     }
 
     public function update(Request $request, $id)
@@ -163,8 +168,7 @@ class AcUnitController extends Controller
             'ac_number' => $request->ac_number,
         ]);
 
-        // Kirim ulang konfigurasi agar ESP32 tahu perubahan nomor/brand AC
-        (new MqttService)->resendConfig($room->device_id);
+        $mqttSynced = $this->syncRoomConfig($room);
 
         UserLog::create([
             'user_id' => Auth::id(),
@@ -173,7 +177,9 @@ class AcUnitController extends Controller
             'activity' => 'edit_ac',
         ]);
 
-        return back()->with('success', 'AC unit berhasil diperbarui');
+        return $mqttSynced
+            ? back()->with('success', 'AC unit berhasil diperbarui')
+            : back()->with('warning', 'AC unit berhasil diperbarui, tetapi konfigurasi MQTT gagal dikirim ke perangkat.');
     }
 
     public function destroy($id)
@@ -195,14 +201,51 @@ class AcUnitController extends Controller
 
         $ac->delete();
 
-        $mqtt = new MqttService;
+        $mqttSynced = $this->clearDeletedAcMqtt($room, $roomTopic, (int) $acNumber);
 
-        $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/control");
-        $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/status");
-        $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/timer");
-        $mqtt->resendConfig($room->device_id);
+        return $mqttSynced
+            ? redirect('/rooms/'.$room_id.'/ac')->with('success', 'AC unit berhasil dihapus')
+            : redirect('/rooms/'.$room_id.'/ac')->with('warning', 'AC unit berhasil dihapus, tetapi sinkronisasi MQTT gagal.');
+    }
 
-        return redirect('/rooms/'.$room_id.'/ac');
+    private function syncRoomConfig(Room $room): bool
+    {
+        try {
+            (new MqttService)->resendConfig($room->device_id);
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::warning('Failed to resend AC room config to MQTT', [
+                'room_id' => $room->id,
+                'device_id' => $room->device_id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    private function clearDeletedAcMqtt(Room $room, string $roomTopic, int $acNumber): bool
+    {
+        try {
+            $mqtt = new MqttService;
+
+            $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/control");
+            $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/status");
+            $mqtt->clearRetained("room/{$roomTopic}/ac/{$acNumber}/timer");
+            $mqtt->resendConfig($room->device_id);
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::warning('Failed to clear deleted AC MQTT retained state', [
+                'room_id' => $room->id,
+                'device_id' => $room->device_id,
+                'ac_number' => $acNumber,
+                'error' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
     }
 
     public function applyFuzzy($id)
@@ -369,7 +412,7 @@ class AcUnitController extends Controller
             $room = Room::findOrFail($ac->room_id);
             $topic = 'room/'.MqttService::roomToTopic($room->name)."/ac/{$ac->ac_number}/timer";
 
-            if (!$request->timer_on && !$request->timer_off) {
+            if (! $request->timer_on && ! $request->timer_off) {
                 $mqtt->clearRetained($topic);
             } else {
                 $mqtt->publish($topic, json_encode([
@@ -380,7 +423,7 @@ class AcUnitController extends Controller
         } catch (\Throwable $e) {
             \Log::warning('MQTT Timer sync failed in AcUnitController', [
                 'ac_id' => $ac->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
 
