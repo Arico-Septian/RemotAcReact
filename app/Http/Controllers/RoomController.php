@@ -79,7 +79,7 @@ class RoomController extends Controller
                 $previousCreatedAt = $tempHistory[1]->created_at;
                 $timeDiffSeconds = max(1, $currentCreatedAt->diffInSeconds($previousCreatedAt));
 
-                if ($timeDiffSeconds <= 300) {
+                if ($timeDiffSeconds <= 300 && $previousTemp !== null) {
                     $deltaT = $currentTemp - $previousTemp;
                 }
             }
