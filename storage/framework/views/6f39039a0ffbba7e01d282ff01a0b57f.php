@@ -425,6 +425,227 @@
                 margin-bottom: 8px;
             }
         }
+
+        .history-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        #historyModal {
+            padding: 18px;
+        }
+
+        #historyModal .modal {
+            width: min(640px, 100%);
+            max-height: calc(100dvh - 36px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #historyModal .modal-header {
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        #historyModal .history-title-group {
+            min-width: 0;
+            flex: 1;
+        }
+
+        #historyModal .history-title-group .eyebrow {
+            line-height: 1.25;
+        }
+
+        #historyTitle {
+            overflow-wrap: anywhere;
+            line-height: 1.2;
+        }
+
+        #historyModal .modal-body {
+            flex: 1;
+            min-height: 0;
+            padding-bottom: 22px;
+        }
+
+        #historyChartWrap {
+            height: clamp(220px, 45vh, 300px);
+            min-height: 0;
+        }
+
+        #historyChartScroller {
+            height: 100%;
+        }
+
+        #historyChart {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        #historyChartWrap.show-full-range {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 2px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+        }
+
+        .history-demo-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 34px;
+            padding: 0 12px;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(167, 139, 250, 0.36);
+            background: rgba(167, 139, 250, 0.12);
+            color: var(--lavender);
+            font-size: 11px;
+            font-weight: 700;
+            transition: var(--t-base);
+        }
+
+        .history-demo-btn:hover {
+            background: rgba(167, 139, 250, 0.18);
+            border-color: rgba(167, 139, 250, 0.52);
+        }
+
+        .history-demo-btn i {
+            font-size: 10px;
+        }
+
+        .history-range-select {
+            min-height: 34px;
+            padding: 0 30px 0 11px;
+            border-radius: var(--r-md);
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            background: rgba(15, 23, 42, 0.32);
+            color: var(--ink-1);
+            font-size: 11px;
+            font-weight: 700;
+            outline: none;
+            appearance: none;
+            background-image:
+                linear-gradient(45deg, transparent 50%, var(--ink-3) 50%),
+                linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
+            background-position:
+                calc(100% - 15px) 14px,
+                calc(100% - 10px) 14px;
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
+        }
+
+        .history-range-select:focus {
+            border-color: rgba(167, 139, 250, 0.55);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+        }
+
+        @media (max-width: 768px) {
+            #historyModal {
+                padding: 14px;
+            }
+
+            #historyModal .modal {
+                max-height: calc(100dvh - 28px);
+            }
+
+            #historyModal .modal-header {
+                padding: 18px 18px 10px;
+            }
+
+            #historyModal .modal-header h2 {
+                font-size: 15px;
+            }
+
+        #historyModal .modal-header .sub {
+            font-size: 11px;
+        }
+
+        #historyMeta {
+            overflow-wrap: anywhere;
+        }
+
+            #historyModal .modal-body {
+                padding: 6px 18px 18px;
+            }
+
+            #historyChartWrap {
+                height: clamp(210px, 42vh, 260px);
+            }
+
+        }
+
+        @media (max-width: 420px) {
+            #historyModal {
+                padding: 10px;
+                align-items: center;
+            }
+
+            #historyModal .modal {
+                max-height: calc(100dvh - 20px);
+                border-radius: 18px;
+            }
+
+            #historyModal .modal-header {
+                padding: 16px 16px 8px;
+                gap: 10px;
+            }
+
+            #historyModal .history-title-group .eyebrow {
+                font-size: 10px;
+                letter-spacing: 0.06em;
+            }
+
+            #historyModal .modal-header h2 {
+                font-size: 14px;
+            }
+
+            #historyModal .modal-header .sub {
+                font-size: 10.5px;
+                line-height: 1.35;
+            }
+
+            #historyModal .modal-body {
+                padding: 4px 14px 16px;
+            }
+
+            #historyChartWrap {
+                height: min(230px, 43vh);
+            }
+
+            .history-actions {
+                gap: 6px;
+            }
+
+            .history-demo-btn span {
+                display: none;
+            }
+
+            .history-demo-btn {
+                width: 36px;
+                min-height: 36px;
+                padding: 0;
+            }
+
+            .history-range-select {
+                width: 58px;
+                min-height: 36px;
+                padding-left: 9px;
+                padding-right: 24px;
+                font-size: 10.5px;
+                background-position:
+                    calc(100% - 13px) 15px,
+                    calc(100% - 8px) 15px;
+            }
+
+            #historyModal .modal-close {
+                width: 36px;
+                height: 36px;
+            }
+        }
     </style>
 </head>
 
@@ -601,14 +822,26 @@
     <div id="historyModal" class="modal-backdrop">
         <div class="modal modal-lg">
             <div class="modal-header">
-                <div>
+                <div class="history-title-group">
                     <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-chart-line"></i> Histori
                         Suhu</p>
                     <h2 id="historyTitle">Ruangan</h2>
-                    <p class="sub">24 jam terakhir · rata-rata per jam</p>
+                    <p id="historyMeta" class="sub">Hari ini · rata-rata per jam</p>
                 </div>
-                <button type="button" class="modal-close" onclick="closeHistory()"><i
-                        class="fa-solid fa-xmark"></i></button>
+                <div class="history-actions">
+                    <select id="historyRange" class="history-range-select" title="Pilih rentang histori">
+                        <option value="1h">1j</option>
+                        <option value="3h">3j</option>
+                        <option value="6h">6j</option>
+                        <option value="today">Hari ini</option>
+                    </select>
+                    <button id="historyDemoButton" type="button" class="history-demo-btn" title="Tampilkan grafik demo"
+                        onclick="showDemoHistory()">
+                        <i class="fa-solid fa-wave-square"></i><span>Demo</span>
+                    </button>
+                    <button type="button" class="modal-close" onclick="closeHistory()"><i
+                            class="fa-solid fa-xmark"></i></button>
+                </div>
             </div>
             <div class="modal-body">
                 <div id="historyLoading" class="empty-state" style="padding:36px 0;">
@@ -619,8 +852,10 @@
                     <div class="empty-icon"><i class="fa-solid fa-temperature-empty"></i></div>
                     <p class="empty-sub">Tidak ada data suhu dalam 24 jam terakhir</p>
                 </div>
-                <div id="historyChartWrap" hidden style="height:280px;">
-                    <canvas id="historyChart"></canvas>
+                <div id="historyChartWrap" hidden>
+                    <div id="historyChartScroller">
+                        <canvas id="historyChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -726,103 +961,383 @@
 
         /* ===== HISTORY MODAL ===== */
         let historyChartInstance = null;
+        let historyDemoRoomName = 'Ruangan';
+        let historyRoomId = null;
+        const historyRangeText = {
+            '1h': '1 jam terakhir',
+            '3h': '3 jam terakhir',
+            '6h': '6 jam terakhir',
+            'today': 'Hari ini'
+        };
+        const historyRangeConfig = {
+            '1h': {
+                intervalMinutes: 5,
+                slots: 12
+            },
+            '3h': {
+                intervalMinutes: 10,
+                slots: 18
+            },
+            '6h': {
+                intervalMinutes: 15,
+                slots: 24
+            },
+            'today': {
+                intervalMinutes: 60,
+                today: true
+            }
+        };
 
-        function openHistory(roomId, roomName) {
-            document.getElementById('historyTitle').textContent = roomName;
-            document.getElementById('historyModal').classList.add('is-open');
-            document.getElementById('historyLoading').hidden = false;
+        function padHour(value) {
+            return String(value).padStart(2, '0');
+        }
+
+        function getHistoryRange() {
+            const saved = localStorage.getItem('historyRange') || 'today';
+            const normalized = saved === '24h' ? 'today' : saved;
+
+            return historyRangeConfig[normalized] ? normalized : 'today';
+        }
+
+        function setHistoryRange(value) {
+            const normalized = value === '24h' ? 'today' : value;
+            const range = historyRangeConfig[normalized] ? normalized : 'today';
+            localStorage.setItem('historyRange', range);
+
+            const select = document.getElementById('historyRange');
+            if (select) select.value = range;
+
+            return range;
+        }
+
+        function currentHistoryRangeText() {
+            return historyRangeText[getHistoryRange()] || historyRangeText.today;
+        }
+
+        function historyStatusText(status) {
+            if (!status) return null;
+
+            return status.is_offline === true ? 'Offline' : 'Online';
+        }
+
+        function historyStatusSuffix(status) {
+            const text = historyStatusText(status);
+
+            return text ? ` · ${text}` : '';
+        }
+
+        function fetchHistoryStatus(roomId) {
+            return fetch('/temperature', {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    cache: 'no-store'
+                })
+                .then(r => r.ok ? r.json() : null)
+                .then(data => Array.isArray(data) ? data.find(room => Number(room.id) === Number(roomId)) : null)
+                .catch(() => null);
+        }
+
+        function historySlotCount(range = getHistoryRange()) {
+            const config = historyRangeConfig[range] || historyRangeConfig.today;
+
+            if (!config.today) return config.slots;
+
+            return alignDateToHistorySlot(new Date(), config.intervalMinutes).getHours() + 1;
+        }
+
+        function alignDateToHistorySlot(date, intervalMinutes) {
+            const aligned = new Date(date);
+            aligned.setSeconds(0, 0);
+
+            if (intervalMinutes >= 60) {
+                aligned.setMinutes(0, 0, 0);
+                return aligned;
+            }
+
+            aligned.setMinutes(Math.floor(aligned.getMinutes() / intervalMinutes) * intervalMinutes, 0, 0);
+
+            return aligned;
+        }
+
+        function makeHistoryTimeLabel(date, intervalMinutes) {
+            if (intervalMinutes >= 60) return `${padHour(date.getHours())}:00`;
+
+            return `${padHour(date.getHours())}:${padHour(date.getMinutes())}`;
+        }
+
+        function makeDemoHistoryData(range = getHistoryRange()) {
+            const config = historyRangeConfig[range] || historyRangeConfig.today;
+            const now = new Date();
+            const latestSlot = alignDateToHistorySlot(now, config.intervalMinutes);
+            const slotCount = historySlotCount(range);
+
+            return Array.from({ length: slotCount }, (_, index) => {
+                const pointTime = new Date(latestSlot);
+                if (config.today) {
+                    pointTime.setHours(index, 0, 0, 0);
+                } else {
+                    const slotOffset = slotCount - 1 - index;
+                    pointTime.setMinutes(latestSlot.getMinutes() - (slotOffset * config.intervalMinutes));
+                }
+
+                const wave = Math.sin(index / 2.35) * 1.9;
+                const coolingCycle = index % 6 === 0 ? -1.1 : 0;
+                const afternoonLoad = pointTime.getHours() >= 12 && pointTime.getHours() <= 16 ? 2.1 : 0;
+                const temp = Math.max(20, Math.min(33, 25.8 + wave + coolingCycle + afternoonLoad));
+
+                return {
+                    time: makeHistoryTimeLabel(pointTime, config.intervalMinutes),
+                    temp: Number(temp.toFixed(1))
+                };
+            });
+        }
+
+        function historyChartOptionsForViewport() {
+            const width = window.innerWidth || document.documentElement.clientWidth || 1024;
+            const range = getHistoryRange();
+            const slotCount = historySlotCount(range);
+
+            if (width <= 420) {
+                return {
+                    pointRadius: 2.8,
+                    pointHoverRadius: 5,
+                    borderWidth: 2,
+                    tickSize: slotCount >= 18 ? 8 : 8.5,
+                    xMaxTicks: slotCount,
+                    xAutoSkip: false,
+                    yMaxTicks: 9,
+                    minWidth: Math.max(420, slotCount * 30),
+                    padding: {
+                        top: 8,
+                        right: 4,
+                        bottom: 0,
+                        left: 0
+                    }
+                };
+            }
+
+            if (width <= 768) {
+                return {
+                    pointRadius: 3.2,
+                    pointHoverRadius: 5.5,
+                    borderWidth: 2,
+                    tickSize: slotCount >= 18 ? 8.5 : 9,
+                    xMaxTicks: slotCount,
+                    xAutoSkip: false,
+                    yMaxTicks: 9,
+                    minWidth: Math.max(520, slotCount * 32),
+                    padding: {
+                        top: 10,
+                        right: 8,
+                        bottom: 0,
+                        left: 0
+                    }
+                };
+            }
+
+            return {
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                borderWidth: 2,
+                tickSize: slotCount >= 18 ? 9 : 10,
+                xMaxTicks: slotCount,
+                xAutoSkip: false,
+                yMaxTicks: 9,
+                minWidth: slotCount >= 18 ? slotCount * 34 : 0,
+                padding: {
+                    top: 12,
+                    right: 10,
+                    bottom: 0,
+                    left: 0
+                }
+            };
+        }
+
+        function renderHistoryChart(data, isDemo = false, status = null) {
+            const chartSizing = historyChartOptionsForViewport();
+
+            document.getElementById('historyLoading').hidden = true;
             document.getElementById('historyEmpty').hidden = true;
-            document.getElementById('historyChartWrap').hidden = true;
+            const chartWrap = document.getElementById('historyChartWrap');
+            chartWrap.hidden = false;
+            chartWrap.classList.add('show-full-range');
+
+            const chartScroller = document.getElementById('historyChartScroller');
+            if (chartScroller) {
+                chartScroller.style.minWidth = chartSizing.minWidth > 0 ? `${chartSizing.minWidth}px` : '';
+            }
 
             if (historyChartInstance) {
                 historyChartInstance.destroy();
                 historyChartInstance = null;
             }
 
-            fetch(`/temperature/history/${roomId}`)
-                .then(r => r.ok ? r.json() : [])
-                .then(data => {
-                    document.getElementById('historyLoading').hidden = true;
-                    if (!data || data.length === 0) {
-                        document.getElementById('historyEmpty').hidden = false;
-                        return;
-                    }
-                    document.getElementById('historyChartWrap').hidden = false;
-                    const labels = data.map(d => d.time);
-                    const temps = data.map(d => d.temp);
-                    const pointColor = t => t > 30 ? '#fb7185' : t > 25 ? '#fbbf24' : '#4dd4ff';
-                    const ctx = document.getElementById('historyChart').getContext('2d');
-                    historyChartInstance = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels,
-                            datasets: [{
-                                label: 'Suhu (°C)',
-                                data: temps,
-                                borderColor: '#4dd4ff',
-                                backgroundColor: 'rgba(77,212,255,0.10)',
-                                pointBackgroundColor: temps.map(pointColor),
-                                pointRadius: 4,
-                                pointHoverRadius: 6,
-                                tension: 0.4,
-                                fill: true,
-                                borderWidth: 2
-                            }]
+            const labels = data.map(d => d.time);
+            const temps = data.map(d => d.temp);
+            const latestPoint = [...data]
+                .reverse()
+                .find(point => point.temp !== null && point.temp !== undefined && !Number.isNaN(Number(point.temp)));
+            const metaEl = document.getElementById('historyMeta');
+
+            if (metaEl) {
+                metaEl.textContent = latestPoint ?
+                    `${isDemo ? 'Demo · ' : ''}${currentHistoryRangeText()} · terakhir ${Number(latestPoint.temp).toFixed(1)}°C pada ${latestPoint.time}${isDemo ? '' : historyStatusSuffix(status)}` :
+                    `${currentHistoryRangeText()} · rata-rata per jam${isDemo ? '' : historyStatusSuffix(status)}`;
+            }
+
+            const pointColor = t => t > 30 ? '#fb7185' : t > 25 ? '#fbbf24' : '#4dd4ff';
+            const ctx = document.getElementById('historyChart').getContext('2d');
+
+            historyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: isDemo ? 'Suhu demo (°C)' : 'Suhu (°C)',
+                        data: temps,
+                        borderColor: isDemo ? '#a78bfa' : '#4dd4ff',
+                        backgroundColor: isDemo ? 'rgba(167,139,250,0.11)' : 'rgba(77,212,255,0.10)',
+                        pointBackgroundColor: temps.map(pointColor),
+                        pointRadius: chartSizing.pointRadius,
+                        pointHoverRadius: chartSizing.pointHoverRadius,
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: chartSizing.borderWidth
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    layout: {
+                        padding: chartSizing.padding
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
                         },
-                        options: {
-                            maintainAspectRatio: false,
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    backgroundColor: 'rgba(7,16,31,0.96)',
-                                    titleColor: '#f5f7fb',
-                                    bodyColor: '#cbd5e1',
-                                    borderColor: 'rgba(77,212,255,0.40)',
-                                    borderWidth: 1,
-                                    padding: 10,
-                                    cornerRadius: 10,
-                                    displayColors: false,
-                                    callbacks: {
-                                        label: c => ` ${c.parsed.y}°C`
-                                    }
-                                }
-                            },
-                            scales: {
-                                x: {
-                                    ticks: {
-                                        color: '#64748b',
-                                        font: {
-                                            size: 10
-                                        }
-                                    },
-                                    grid: {
-                                        color: 'rgba(255,255,255,0.04)'
-                                    }
-                                },
-                                y: {
-                                    suggestedMin: 18,
-                                    suggestedMax: 35,
-                                    ticks: {
-                                        color: '#64748b',
-                                        font: {
-                                            size: 10
-                                        },
-                                        callback: v => v + '°C'
-                                    },
-                                    grid: {
-                                        color: 'rgba(255,255,255,0.04)'
-                                    }
+                        tooltip: {
+                            backgroundColor: 'rgba(7,16,31,0.96)',
+                            titleColor: '#f5f7fb',
+                            bodyColor: '#cbd5e1',
+                            borderColor: isDemo ? 'rgba(167,139,250,0.44)' : 'rgba(77,212,255,0.40)',
+                            borderWidth: 1,
+                            padding: 10,
+                            cornerRadius: 10,
+                            displayColors: false,
+                            callbacks: {
+                                title: items => `Jam: ${items?.[0]?.label ?? '-'}`,
+                                label: c => {
+                                    const value = c.parsed.y;
+                                    if (value === null || Number.isNaN(value)) return 'Suhu: Tidak ada data';
+
+                                    return `Suhu: ${Number(value).toFixed(1)}°C`;
                                 }
                             }
                         }
-                    });
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#64748b',
+                                autoSkip: chartSizing.xAutoSkip,
+                                maxTicksLimit: chartSizing.xMaxTicks,
+                                maxRotation: 0,
+                                minRotation: 0,
+                                font: {
+                                    size: chartSizing.tickSize
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            min: 20,
+                            max: 36,
+                            ticks: {
+                                color: '#64748b',
+                                maxTicksLimit: chartSizing.yMaxTicks,
+                                stepSize: 2,
+                                font: {
+                                    size: chartSizing.tickSize
+                                },
+                                callback: v => v + '°C'
+                            },
+                            grid: {
+                                color: 'rgba(255,255,255,0.04)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function applyHistoryChartResponsiveSizing() {
+            if (!historyChartInstance) return;
+
+            const chartSizing = historyChartOptionsForViewport();
+
+            historyChartInstance.options.layout.padding = chartSizing.padding;
+            historyChartInstance.options.scales.x.ticks.font.size = chartSizing.tickSize;
+            historyChartInstance.options.scales.x.ticks.maxTicksLimit = chartSizing.xMaxTicks;
+            historyChartInstance.options.scales.x.ticks.autoSkip = chartSizing.xAutoSkip;
+            historyChartInstance.options.scales.y.ticks.font.size = chartSizing.tickSize;
+            historyChartInstance.options.scales.y.ticks.maxTicksLimit = chartSizing.yMaxTicks;
+            document.getElementById('historyChartWrap')?.classList.add('show-full-range');
+
+            const chartScroller = document.getElementById('historyChartScroller');
+            if (chartScroller) {
+                chartScroller.style.minWidth = chartSizing.minWidth > 0 ? `${chartSizing.minWidth}px` : '';
+            }
+
+            historyChartInstance.data.datasets.forEach(dataset => {
+                dataset.pointRadius = chartSizing.pointRadius;
+                dataset.pointHoverRadius = chartSizing.pointHoverRadius;
+                dataset.borderWidth = chartSizing.borderWidth;
+            });
+
+            historyChartInstance.update('none');
+        }
+
+        function showDemoHistory() {
+            document.getElementById('historyTitle').textContent = `${historyDemoRoomName} · Demo`;
+            renderHistoryChart(makeDemoHistoryData(), true);
+        }
+
+        function openHistory(roomId, roomName) {
+            historyRoomId = roomId;
+            historyDemoRoomName = roomName;
+            setHistoryRange(getHistoryRange());
+            document.getElementById('historyTitle').textContent = roomName;
+            document.getElementById('historyModal').classList.add('is-open');
+            document.getElementById('historyLoading').hidden = false;
+            document.getElementById('historyEmpty').hidden = true;
+            document.getElementById('historyChartWrap').hidden = true;
+            document.getElementById('historyChartWrap').classList.remove('show-full-range');
+            document.getElementById('historyMeta').textContent = `${currentHistoryRangeText()} · rata-rata per jam`;
+
+            if (historyChartInstance) {
+                historyChartInstance.destroy();
+                historyChartInstance = null;
+            }
+
+            fetch(`/temperature/history/${roomId}?range=${encodeURIComponent(getHistoryRange())}`)
+                .then(r => r.ok ? r.json() : [])
+                .then(data => {
+                    return fetchHistoryStatus(roomId).then(status => ({ data, status }));
+                })
+                .then(({ data, status }) => {
+                    document.getElementById('historyLoading').hidden = true;
+                    if (!data || data.length === 0) {
+                        showDemoHistory();
+                        return;
+                    }
+                    renderHistoryChart(data, false, status);
                 })
                 .catch(() => {
                     document.getElementById('historyLoading').hidden = true;
-                    document.getElementById('historyEmpty').hidden = false;
+                    showDemoHistory();
                 });
         }
 
@@ -838,6 +1353,20 @@
         });
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') closeHistory();
+        });
+
+        document.getElementById('historyRange')?.addEventListener('change', e => {
+            setHistoryRange(e.target.value);
+
+            if (historyRoomId !== null && document.getElementById('historyModal')?.classList.contains('is-open')) {
+                openHistory(historyRoomId, historyDemoRoomName);
+            }
+        });
+
+        let historyResizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(historyResizeTimer);
+            historyResizeTimer = setTimeout(applyHistoryChartResponsiveSizing, 120);
         });
 
         /* ===== LIVE TEMP ===== */

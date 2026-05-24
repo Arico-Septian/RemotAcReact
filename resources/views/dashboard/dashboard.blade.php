@@ -1723,7 +1723,7 @@
                                         <option value="1h">1 Jam</option>
                                         <option value="3h">3 Jam</option>
                                         <option value="6h">6 Jam</option>
-                                        <option value="24h">24 Jam</option>
+                                        <option value="today">Hari ini</option>
                                     </select>
                                     <button id="trendDemoToggle" type="button" class="trend-demo-toggle"
                                         title="Tampilkan data contoh">
@@ -2276,14 +2276,16 @@
 
         function getTrendRange() {
             const saved = localStorage.getItem('trendRange');
-            return saved !== null ? saved : '1h';
+            const normalized = saved === '24h' ? 'today' : saved;
+            const allowed = ['1h', '3h', '6h', 'today'];
+            return allowed.includes(normalized) ? normalized : '1h';
         }
 
         const RANGE_LABELS = {
             '1h': 'Trend 1 jam terakhir',
             '3h': 'Trend 3 jam terakhir',
             '6h': 'Trend 6 jam terakhir',
-            '24h': 'Trend 24 jam terakhir',
+            'today': 'Trend hari ini',
         };
 
         function isTrendDemoMode() {
@@ -2309,11 +2311,20 @@
                 '1h': { slots: 12, interval: 5, hourly: false },
                 '3h': { slots: 18, interval: 10, hourly: false },
                 '6h': { slots: 24, interval: 15, hourly: false },
-                '24h': { slots: 24, interval: 60, hourly: true },
+                'today': { interval: 60, hourly: true, today: true },
             }[range] || { slots: 12, interval: 5, hourly: false };
 
             const now = new Date();
             const labels = [];
+            if (config.today) {
+                const latestHour = now.getHours();
+                for (let hour = 0; hour <= latestHour; hour++) {
+                    labels.push(`${padTime(hour)}:00`);
+                }
+
+                return labels;
+            }
+
             for (let i = config.slots - 1; i >= 0; i--) {
                 const date = new Date(now);
                 date.setMinutes(now.getMinutes() - (i * config.interval), 0, 0);
@@ -2389,7 +2400,7 @@
             const demoMode = isTrendDemoMode();
 
             const labelEl = document.getElementById('trendRangeLabel');
-            if (labelEl) labelEl.textContent = demoMode ? `Demo ${range.toUpperCase()}` : (RANGE_LABELS[range] || RANGE_LABELS['1h']);
+            if (labelEl) labelEl.textContent = demoMode ? `Demo ${range === 'today' ? 'hari ini' : range.toUpperCase()}` : (RANGE_LABELS[range] || RANGE_LABELS['1h']);
 
             if (showLoader) {
                 const spinner = document.getElementById('tempChartLoading');
@@ -2417,7 +2428,7 @@
                         canvasEl.style.display = hasAnyData ? 'block' : 'none';
                         const emptyTextEl = emptyEl.querySelector('.empty-sub');
                         if (emptyTextEl) {
-                            const rangeText = { '1h': '1 jam terakhir', '3h': '3 jam terakhir', '6h': '6 jam terakhir', '24h': '24 jam terakhir' };
+                            const rangeText = { '1h': '1 jam terakhir', '3h': '3 jam terakhir', '6h': '6 jam terakhir', 'today': 'hari ini' };
                             emptyTextEl.textContent = `Belum ada data suhu dalam ${rangeText[range] || range}`;
                         }
                     }

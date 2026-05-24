@@ -202,31 +202,77 @@ Route::middleware(['auth', 'activity'])->group(function () {
     Route::get('/temperature/history/{id}', function ($id) {
         $room = Room::findOrFail($id);
         $normalized = RoomTemperature::normalizeRoomName($room->name);
+        $range = request()->query('range', 'today');
+        $range = $range === '24h' ? 'today' : $range;
+        $rangeConfig = [
+            '1h' => ['hours' => 1,  'interval' => 5,  'slots' => 12, 'label' => 'H:i'],
+            '3h' => ['hours' => 3,  'interval' => 10, 'slots' => 18, 'label' => 'H:i'],
+            '6h' => ['hours' => 6,  'interval' => 15, 'slots' => 24, 'label' => 'H:i'],
+            'today' => ['interval' => 60, 'label' => 'H:00', 'today' => true],
+        ];
+        $cfg = $rangeConfig[$range] ?? $rangeConfig['today'];
+        $interval = $cfg['interval'];
+
+        if ($cfg['today'] ?? false) {
+            $startOfDay = now()->copy()->startOfDay();
+            $latestSlot = now()->copy()->startOfHour();
+            $slotCount = $startOfDay->diffInHours($latestSlot) + 1;
+            $slots = collect(range(0, $slotCount - 1))
+                ->map(fn (int $slotIndex) => $startOfDay->copy()->addHours($slotIndex));
+        } elseif ($interval >= 60) {
+            $latestSlot = now()->copy()->startOfHour();
+            $slots = collect(range($cfg['slots'] - 1, 0))
+                ->map(fn (int $slotIndex) => $latestSlot->copy()->subMinutes($slotIndex * $interval));
+        } else {
+            $currentMinute = floor(now()->minute / $interval) * $interval;
+            $latestSlot = now()->copy()->startOfMinute()->setMinute($currentMinute)->setSecond(0);
+            $slots = collect(range($cfg['slots'] - 1, 0))
+                ->map(fn (int $slotIndex) => $latestSlot->copy()->subMinutes($slotIndex * $interval));
+        }
+
+        $startTime = $slots->first();
+        $slotKeyFor = function (Carbon $time) use ($interval): string {
+            if ($interval >= 60) {
+                return $time->copy()->startOfHour()->format('Y-m-d H');
+            }
+
+            $minute = floor($time->minute / $interval) * $interval;
+
+            return $time->copy()->setMinute($minute)->setSecond(0)->format('Y-m-d H:i');
+        };
 
         $rows = RoomTemperature::where('room', $normalized)
-            ->where('created_at', '>=', now()->subHours(24))
+            ->where('created_at', '>=', $startTime)
             ->orderBy('created_at')
             ->get();
 
         $grouped = $rows
-            ->groupBy(fn ($t) => $t->created_at->format('H:00'))
+            ->groupBy(fn (RoomTemperature $temperature) => $slotKeyFor($temperature->created_at))
             ->map(fn ($g) => round($g->avg('temperature'), 1));
 
-        return response()->json(
-            $grouped->map(fn ($temp, $hour) => ['time' => $hour, 'temp' => $temp])->values()
-        );
+        $history = $slots->map(fn (Carbon $slot): array => [
+            'time' => $slot->format($cfg['label']),
+            'temp' => $grouped->get($slotKeyFor($slot)),
+        ]);
+
+        if ($history->every(fn (array $point) => $point['temp'] === null)) {
+            return response()->json([]);
+        }
+
+        return response()->json($history->values());
     });
 
     Route::get('/temperature/trend', function (Request $request) use ($roomDeviceIsOnline) {
         $limit = min(max((int) $request->query('limit', 5), 1), 5);
         $range = $request->query('range', '1h');
+        $range = $range === '24h' ? 'today' : $range;
 
         // Konfigurasi range: total jam, interval menit, label format
         $rangeConfig = [
             '1h' => ['hours' => 1,  'interval' => 5,  'slots' => 12, 'label' => 'H:i'],
             '3h' => ['hours' => 3,  'interval' => 10, 'slots' => 18, 'label' => 'H:i'],
             '6h' => ['hours' => 6,  'interval' => 15, 'slots' => 24, 'label' => 'H:i'],
-            '24h' => ['hours' => 24, 'interval' => 60, 'slots' => 24, 'label' => 'H:00'],
+            'today' => ['interval' => 60, 'label' => 'H:00', 'today' => true],
         ];
         $cfg = $rangeConfig[$range] ?? $rangeConfig['1h'];
 
@@ -235,11 +281,12 @@ Route::middleware(['auth', 'activity'])->group(function () {
             10,
             function () use ($cfg, $range, $limit, $roomDeviceIsOnline) {
                 $interval = $cfg['interval'];
-                $totalSlots = $cfg['slots'];
                 $labelFormat = $cfg['label'];
 
                 $rooms = Room::orderBy('name')->get();
-                $startTime = now()->subHours($cfg['hours']);
+                $startTime = ($cfg['today'] ?? false)
+                    ? now()->copy()->startOfDay()
+                    : now()->subHours($cfg['hours']);
                 $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
                 // Urutkan: 1. Online vs Offline, 2. Suhu Tertinggi
@@ -266,7 +313,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
                     $rooms = $rooms->take($limit);
                 }
 
-                // Helper: bikin slot key (include tanggal supaya 24h tidak konflik antar hari)
+                // Helper: bikin slot key (include tanggal supaya slot per jam tidak konflik antar hari)
                 $slotKeyFor = function (Carbon $time) use ($interval) {
                     if ($interval >= 60) {
                         return $time->copy()->startOfHour()->format('Y-m-d H');
@@ -284,12 +331,21 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 // Generate slots
                 $slots = collect();
-                if ($interval >= 60) {
+                if ($cfg['today'] ?? false) {
+                    $base = now()->copy()->startOfDay();
+                    $latestSlot = now()->copy()->startOfHour();
+                    $totalSlots = $base->diffInHours($latestSlot) + 1;
+                    for ($i = 0; $i < $totalSlots; $i++) {
+                        $slots->push($base->copy()->addHours($i));
+                    }
+                } elseif ($interval >= 60) {
                     $base = now()->copy()->startOfHour();
+                    $totalSlots = $cfg['slots'];
                     for ($i = $totalSlots - 1; $i >= 0; $i--) {
                         $slots->push($base->copy()->subHours($i));
                     }
                 } else {
+                    $totalSlots = $cfg['slots'];
                     $currentMinute = floor(now()->minute / $interval) * $interval;
                     $latestSlot = now()->copy()->startOfMinute()->setMinute($currentMinute)->setSecond(0);
                     for ($i = $totalSlots - 1; $i >= 0; $i--) {
