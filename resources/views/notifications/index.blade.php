@@ -370,7 +370,7 @@
                 const now = new Date();
                 const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
                 const dateStr = `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-                const safeLink = payload.link ? escapeHtml(payload.link) : '';
+                const safeLink = payload.link && /^(https?:\/\/|\/)/.test(payload.link) ? escapeHtml(payload.link) : '';
                 const linkHtml = safeLink
                     ? `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:var(--cyan);">Buka detail →</a>`
                     : '';

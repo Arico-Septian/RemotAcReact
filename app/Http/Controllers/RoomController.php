@@ -28,7 +28,7 @@ class RoomController extends Controller
             ->orderBy('name')
             ->get();
 
-        $recentByRoom = RoomTemperature::recentByNormalizedRoom(perRoom: 2, maxAgeSeconds: 600);
+        $recentByRoom = RoomTemperature::recentByNormalizedRoom(perRoom: 2, maxAgeSeconds: 3600);
 
         $fuzzyService = new FuzzyMamdaniService;
 

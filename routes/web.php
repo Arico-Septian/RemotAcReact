@@ -149,7 +149,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
         $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
 
         return in_array($status, ['online', 'available'], true)
-            && now()->diffInSeconds($lastSeenAt, true) <= 30;
+            && now()->diffInSeconds($lastSeenAt, true) <= 300;
     };
 
     $temperatureEndpoint = function () use ($roomDeviceIsOnline) {
@@ -157,7 +157,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
         return Room::orderBy('name')
             ->get()
-            ->map(function ($room) use ($latestTemperatures, $roomDeviceIsOnline) {
+            ->map(function (Room $room) use ($latestTemperatures, $roomDeviceIsOnline) {
                 $roomKey = RoomTemperature::normalizeRoomName($room->name);
                 $record = $latestTemperatures->get($roomKey);
                 $lastTemperature = $record?->temperature;
@@ -191,10 +191,10 @@ Route::middleware(['auth', 'activity'])->group(function () {
     Route::get('/temperature', $temperatureEndpoint);
     Route::get('/temperatures', $temperatureEndpoint);
 
-    Route::get('/temperature/history/{id}', function ($id) {
+    Route::get('/temperature/history/{id}', function (Request $request, $id) {
         $room = Room::findOrFail($id);
         $normalized = RoomTemperature::normalizeRoomName($room->name);
-        $range = request()->query('range', 'today');
+        $range = (string) $request->query('range', 'today');
         $range = $range === '24h' ? 'today' : $range;
         $rangeConfig = [
             '1h' => ['hours' => 1,  'interval' => 5,  'slots' => 12, 'label' => 'H:i'],

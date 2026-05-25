@@ -245,7 +245,7 @@ function renderNotifItems(items) {
         if (!id) return '';
 
         const severity = validSeverity.includes(n.severity) ? n.severity : 'info';
-        const link = n.link ? escapeHtml(n.link) : '#';
+        const link = n.link && /^(https?:\/\/|\/)/.test(n.link) ? escapeHtml(n.link) : '#';
 
         return `
         <a href="${link}" class="notif-item ${n.is_unread ? 'unread' : ''}"
