@@ -63,6 +63,11 @@
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span class="menu-text">Activity Log</span>
                 </a>
+                <a href="/settings"
+                   class="nav-link menu-link {{ request()->is('settings*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="menu-text">Pengaturan</span>
+                </a>
             </div>
         @endif
 

@@ -2,56 +2,69 @@
 
 namespace App\Services;
 
+use App\Models\Setting;
+
 class FuzzyMamdaniService
 {
-    // Dingin
-    public function muSuhuDingin($x): float
+    private int $cold;
+    private int $hot;
+    private int $mid;
+
+    public function __construct()
     {
-        if ($x <= 22) {
+        $this->cold = Setting::getInt('fuzzy_temp_cold', 22);
+        $this->hot  = Setting::getInt('fuzzy_temp_hot', 30);
+        $this->mid  = (int) round(($this->cold + $this->hot) / 2);
+    }
+
+    // Dingin
+    public function muSuhuDingin(float $x): float
+    {
+        if ($x <= $this->cold) {
             return 1;
         }
 
-        if ($x > 22 && $x < 26) {
-            return (26 - $x) / 4;
+        if ($x > $this->cold && $x < $this->mid) {
+            return ($this->mid - $x) / ($this->mid - $this->cold);
         }
 
         return 0;
     }
 
     // Normal
-    public function muSuhuNormal($x): float
+    public function muSuhuNormal(float $x): float
     {
-        if ($x <= 22 || $x >= 30) {
+        if ($x <= $this->cold || $x >= $this->hot) {
             return 0;
         }
 
-        if ($x > 22 && $x < 26) {
-            return ($x - 22) / 4;
+        if ($x > $this->cold && $x < $this->mid) {
+            return ($x - $this->cold) / ($this->mid - $this->cold);
         }
 
-        if ($x >= 26 && $x < 30) {
-            return (30 - $x) / 4;
+        if ($x >= $this->mid && $x < $this->hot) {
+            return ($this->hot - $x) / ($this->hot - $this->mid);
         }
 
         return 0;
     }
 
     // Panas
-    public function muSuhuPanas($x): float
+    public function muSuhuPanas(float $x): float
     {
-        if ($x <= 26) {
+        if ($x <= $this->mid) {
             return 0;
         }
 
-        if ($x > 26 && $x < 30) {
-            return ($x - 26) / 4;
+        if ($x > $this->mid && $x < $this->hot) {
+            return ($x - $this->mid) / ($this->hot - $this->mid);
         }
 
         return 1;
     }
 
     // Turun
-    public function muDeltaTurun($dt): float
+    public function muDeltaTurun(float $dt): float
     {
         if ($dt <= -2) {
             return 1;
@@ -65,7 +78,7 @@ class FuzzyMamdaniService
     }
 
     // Stabil
-    public function muDeltaStabil($dt): float
+    public function muDeltaStabil(float $dt): float
     {
         if ($dt <= -2 || $dt >= 2) {
             return 0;
@@ -83,7 +96,7 @@ class FuzzyMamdaniService
     }
 
     // Naik
-    public function muDeltaNaik($dt): float
+    public function muDeltaNaik(float $dt): float
     {
         if ($dt <= 0) {
             return 0;
@@ -97,7 +110,7 @@ class FuzzyMamdaniService
     }
 
     // AC Rendah
-    public function muAcRendah($z): float
+    public function muAcRendah(float $z): float
     {
         if ($z <= 0) {
             return 1;
@@ -111,7 +124,7 @@ class FuzzyMamdaniService
     }
 
     // AC Sedang
-    public function muAcSedang($z): float
+    public function muAcSedang(float $z): float
     {
         if ($z <= 30 || $z >= 70) {
             return 0;
@@ -129,7 +142,7 @@ class FuzzyMamdaniService
     }
 
     // AC Tinggi
-    public function muAcTinggi($z): float
+    public function muAcTinggi(float $z): float
     {
         if ($z <= 60) {
             return 0;
@@ -142,7 +155,7 @@ class FuzzyMamdaniService
         return 1;
     }
 
-    public function calculate($suhu, $deltaT): array
+    public function calculate(float $suhu, float $deltaT): array
     {
         $dingin = $this->muSuhuDingin($suhu);
         $normal = $this->muSuhuNormal($suhu);

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\TimerController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLogController;
 use App\Models\AcStatus;
@@ -455,6 +456,9 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
         Route::get('/logs', [UserLogController::class, 'index']);
         Route::delete('/logs/delete-all', [UserLogController::class, 'destroyAll']);
+
+        Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 
         Route::get('/users-online', function () {
             $total = User::count();
