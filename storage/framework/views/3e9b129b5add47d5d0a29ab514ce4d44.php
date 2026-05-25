@@ -1713,6 +1713,12 @@
                 i.value = csrf;
                 form.appendChild(i);
             }
+            const acPanel = document.getElementById(`ac-${id}`);
+            const acName = acPanel
+                ? `AC ${acPanel.dataset.acNumber}${acPanel.dataset.acName ? ' · ' + acPanel.dataset.acName : ''}`
+                : 'AC';
+            queuePendingToast(`${acName} suhu diubah ke ${temp}°C`);
+
             document.body.appendChild(form);
             form.submit();
         }
@@ -1948,7 +1954,6 @@
                     }
 
                     // +/- temp button onclick handlers (selalu refer ke nilai temp saat ini)
-                    const ctrlBtns = panel.querySelectorAll('.ctrl-row .ctrl-btn');
                     const btnMinus = panel.querySelector('.ctrl-btn[title*="Turunkan"]');
                     const btnPlus = panel.querySelector('.ctrl-btn[title*="Naikkan"]');
 
@@ -2180,12 +2185,6 @@
         // Jalankan interval status perangkat
         setInterval(updateEspStatus, 5000);
 
-        function updateTempRingColor(acId, temp) {
-            const ring = document.getElementById(`tempRing-${acId}`);
-            if (!ring) return;
-            ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
-            ring.classList.add(temp <= 20 ? 'temp-cool' : (temp <= 25 ? 'temp-warm' : 'temp-hot'));
-        }
     </script>
     <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
