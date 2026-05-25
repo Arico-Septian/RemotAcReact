@@ -11,7 +11,7 @@ class RoomTemperatureUpdated implements ShouldBroadcastNow
 
     public $temperature;
 
-    public function __construct(string $room, float $temperature)
+    public function __construct(string $room, ?float $temperature)
     {
         $this->room = $room;
         $this->temperature = $temperature;

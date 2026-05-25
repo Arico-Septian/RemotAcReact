@@ -278,11 +278,13 @@ class AcUnitController extends Controller
             $deltaT
         );
 
-        $currentSetpoint = (int) round(
-            $room->acUnits
-                ->map(fn ($ac) => $ac->status?->set_temperature ?? 24)
-                ->avg()
+        $activeAcUnits = $room->acUnits->filter(
+            fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
         );
+
+        $currentSetpoint = $activeAcUnits->isNotEmpty()
+            ? (int) round($activeAcUnits->map(fn ($ac) => $ac->status?->set_temperature ?? 24)->avg())
+            : 24;
 
         $decision = $fuzzyService->decideAction(
             $fuzzyResult,
@@ -303,10 +305,6 @@ class AcUnitController extends Controller
         }
 
         $acController = new AcControlController;
-
-        $activeAcUnits = $room->acUnits->filter(
-            fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
-        );
 
         if ($activeAcUnits->isEmpty()) {
             return back()->with('warning', 'Tidak ada AC yang aktif');

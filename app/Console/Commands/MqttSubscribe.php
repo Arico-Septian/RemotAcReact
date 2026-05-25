@@ -536,7 +536,7 @@ class MqttSubscribe extends Command
         $now = now();
 
         Cache::put("device_{$deviceId}_last_seen", $now->toDateTimeString(), 300);
-        Cache::put("device_status_{$deviceId}", 'online', 120);
+        Cache::put("device_status_{$deviceId}", 'online', 300);
         Cache::forget("device_unknown_{$deviceId}");
 
         // Track semua device yang pernah ping (untuk `device:list-active`)
@@ -593,7 +593,7 @@ class MqttSubscribe extends Command
 
         $this->warn("ROOM SENSOR [{$room}]: sensor offline");
 
-        event(new RoomTemperatureUpdated($room, (float) ($lastTemp ?? 0)));
+        event(new RoomTemperatureUpdated($room, $lastTemp !== null ? (float) $lastTemp : null));
     }
 
     /* === HELPER: EXTRACT DEVICE ID === */

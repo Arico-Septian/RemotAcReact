@@ -247,7 +247,7 @@ class RoomController extends Controller
 
         $normalizedRoom = RoomTemperature::normalizeRoomName($room->name);
 
-        $deletedTemps = RoomTemperature::whereRaw('LOWER(TRIM(room)) = ?', [$normalizedRoom])->delete();
+        $deletedTemps = RoomTemperature::whereRaw("REPLACE(LOWER(TRIM(room)), ' ', '_') = ?", [$normalizedRoom])->delete();
         $deletedNotifs = Notification::where('meta->room', $room->name)
             ->orWhere('meta->room', $normalizedRoom)
             ->delete();

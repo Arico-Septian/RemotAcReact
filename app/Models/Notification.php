@@ -150,18 +150,14 @@ class Notification extends Model
     {
         $roomKey = self::roomKey($roomName);
         $stateKey = "notification_state:fuzzy_action:{$roomKey}";
-        $prevAction = Cache::get($stateKey);
-        $currentAction = [
-            'action' => $action,
-            'setpoint_before' => $setpointBefore,
-            'setpoint_after' => $setpointAfter,
-        ];
+        $currentKey = "{$action}:{$setpointBefore}:{$setpointAfter}";
+        $prevKey = Cache::get($stateKey);
 
-        if ($prevAction === $currentAction) {
+        if ($prevKey === $currentKey) {
             return null;
         }
 
-        Cache::put($stateKey, $currentAction, now()->addDays(self::STATE_TTL_DAYS));
+        Cache::put($stateKey, $currentKey, now()->addDays(self::STATE_TTL_DAYS));
 
         $title = "Fuzzy Logic: {$roomName}";
         $message = self::buildFuzzyMessage($roomName, $action, $setpointBefore, $setpointAfter);
@@ -225,7 +221,7 @@ class Notification extends Model
         ]);
     }
 
-    public static function fuzzyRecovery(string $roomName): ?self
+    public static function fuzzyRecovery(string $roomName, bool $notify = true): ?self
     {
         // Cek SEMUA reason keys (temperature & device offline)
         $reasons = ['temperature_offline', 'device_offline'];
@@ -241,7 +237,7 @@ class Notification extends Model
         }
 
         // Tidak ada warning sebelumnya → tidak perlu notif recovery
-        if (empty($recoveredReasons)) {
+        if (empty($recoveredReasons) || ! $notify) {
             return null;
         }
 

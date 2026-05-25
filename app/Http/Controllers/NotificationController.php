@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Models\NotificationRead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
@@ -106,30 +107,32 @@ class NotificationController extends Controller
     {
         $userId = Auth::id();
 
-        // Personal notifications: stamp read_at
-        Notification::where('user_id', $userId)
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+        DB::transaction(function () use ($userId) {
+            // Personal notifications: stamp read_at
+            Notification::where('user_id', $userId)
+                ->whereNull('read_at')
+                ->update(['read_at' => now()]);
 
-        // Broadcast notifications: insert pivot rows for those not yet read
-        $alreadyReadIds = NotificationRead::where('user_id', $userId)
-            ->pluck('notification_id');
+            // Broadcast notifications: insert pivot rows for those not yet read
+            $broadcastIds = Notification::whereNull('user_id')
+                ->whereNotExists(function ($q) use ($userId) {
+                    $q->from('notification_reads')
+                        ->whereColumn('notification_reads.notification_id', 'notifications.id')
+                        ->where('notification_reads.user_id', $userId);
+                })
+                ->pluck('id');
 
-        $broadcastIds = Notification::whereNull('user_id')
-            ->whereNotIn('id', $alreadyReadIds)
-            ->pluck('id');
+            if ($broadcastIds->isNotEmpty()) {
+                $now = now();
+                $rows = $broadcastIds->map(fn ($nid) => [
+                    'notification_id' => $nid,
+                    'user_id' => $userId,
+                    'read_at' => $now,
+                ])->all();
 
-        if ($broadcastIds->isNotEmpty()) {
-            $now = now();
-            $rows = $broadcastIds->map(fn ($nid) => [
-                'notification_id' => $nid,
-                'user_id' => $userId,
-                'read_at' => $now,
-            ])->all();
-
-            // insertOrIgnore aman dari race condition bila dipanggil 2x bersamaan
-            NotificationRead::insertOrIgnore($rows);
-        }
+                NotificationRead::insertOrIgnore($rows);
+            }
+        });
 
         return response()->json(['ok' => true]);
     }

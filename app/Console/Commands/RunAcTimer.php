@@ -16,9 +16,9 @@ class RunAcTimer extends Command
     protected $signature = 'ac:run-timer';
     protected $description = 'Run AC timer ON/OFF (Anti Miss + Anti Double)';
 
-    // Window simetris ±30s — tidak overlap antara slot 1 menit, jadi timer ON & OFF
-    // berjarak 1 menit tidak saling ke-trigger di iterasi yang sama.
-    const WINDOW_BEFORE = -30;
+    // Window: 30s sebelum timer hingga 60s setelah timer.
+    // WINDOW_BEFORE harus = -(EXECUTION_BUFFER) agar tidak ada gap "missed" antara window dan buffer.
+    const WINDOW_BEFORE = -60;
     const WINDOW_AFTER = 30;
     const EXECUTION_BUFFER = 60;
     const COOLDOWN_SECONDS = 5;
@@ -102,6 +102,7 @@ class RunAcTimer extends Command
 
                     if (!$lock->get()) {
                         $this->warn("Lock not acquired for AC {$ac->ac_number} {$type}");
+                        $lock = null;
                         continue;
                     }
 

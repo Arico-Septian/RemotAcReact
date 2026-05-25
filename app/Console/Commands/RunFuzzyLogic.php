@@ -25,12 +25,15 @@ class RunFuzzyLogic extends Command
         if ($rooms->isEmpty()) {
             $this->info('No rooms found');
 
-            return Command::SUCCESS;
+            return self::SUCCESS;
         }
 
         $processed = 0;
         $skipped = 0;
         $fuzzyService = new FuzzyMamdaniService;
+
+        // Pre-fetch semua temperature history sekaligus (hindari N+1)
+        $tempHistoryMap = RoomTemperature::recentByNormalizedRoom(perRoom: 2);
 
         foreach ($rooms as $room) {
             $cooldownKey = 'fuzzy_room_'.$room->id;
@@ -42,10 +45,7 @@ class RunFuzzyLogic extends Command
             }
             $normalized = RoomTemperature::normalizeRoomName($room->name);
 
-            $tempHistory = RoomTemperature::where('room', $normalized)
-                ->latest()
-                ->take(2)
-                ->get();
+            $tempHistory = $tempHistoryMap->get($normalized, collect());
 
             $deviceId = strtolower(trim((string) $room->device_id));
             $deviceStatus = Cache::get("device_status_{$deviceId}", $room->device_status ?? 'offline');
@@ -78,13 +78,15 @@ class RunFuzzyLogic extends Command
                 fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
             );
 
-            Notification::fuzzyRecovery($room->name);
-
             if ($activeAcUnits->isEmpty()) {
+                // Bersihkan cache warning jika device/sensor kembali online, tapi tidak kirim notif
+                Notification::fuzzyRecovery($room->name, notify: false);
                 $skipped++;
 
                 continue;
             }
+
+            Notification::fuzzyRecovery($room->name);
 
             $currentTemp = $latestTemp->temperature;
 
@@ -144,7 +146,7 @@ class RunFuzzyLogic extends Command
         $this->newLine();
         $this->info("Fuzzy logic applied to {$processed} room(s), {$skipped} skipped (cooldown)");
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 
     private function lastSeenFrom(mixed $value): ?Carbon

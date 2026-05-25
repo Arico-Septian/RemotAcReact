@@ -84,7 +84,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 if ($lastSeen) {
                     $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
-                    $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= 30;
+                    $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= 300;
                 }
 
                 return [
