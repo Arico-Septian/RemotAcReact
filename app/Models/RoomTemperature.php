@@ -8,7 +8,7 @@ class RoomTemperature extends Model
 {
     protected $fillable = ['room', 'temperature'];
 
-    public static function normalizeRoomName($room): string
+    public static function normalizeRoomName(string $room): string
     {
         // Consistent with MqttService::roomToTopic — strip internal whitespace too
         return strtolower(preg_replace('/\s+/', '_', trim((string) $room)));

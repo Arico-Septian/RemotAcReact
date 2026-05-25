@@ -109,7 +109,7 @@ class UserController extends Controller
         return back()->with('success', 'User berhasil ditambahkan');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int|string $id)
     {
         $request->merge([
             'role' => strtolower(trim((string) $request->role)),
@@ -149,7 +149,7 @@ class UserController extends Controller
         return back()->with('success', 'Role user berhasil diubah');
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int|string $id)
     {
         if ((int) $id === Auth::id()) {
             return $this->respondError($request, 'Tidak bisa hapus diri sendiri', 403);

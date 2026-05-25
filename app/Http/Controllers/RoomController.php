@@ -211,7 +211,7 @@ class RoomController extends Controller
     }
 
     /* === DELETE ROOM === */
-    public function destroy($id)
+    public function destroy(int|string $id)
     {
         $room = Room::with('acUnits:id,room_id,ac_number')->findOrFail($id);
 
@@ -373,7 +373,7 @@ class RoomController extends Controller
     }
 
     /* === DETAIL STATUS AC === */
-    public function status($id)
+    public function status(int|string $id)
     {
         $room = Room::findOrFail($id);
 

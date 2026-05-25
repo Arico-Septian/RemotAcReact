@@ -35,12 +35,13 @@ class NotificationController extends Controller
     {
         $userId = Auth::id();
 
-        $items = Notification::forUserOrBroadcast($userId)
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\Notification> $notifications */
+        $notifications = Notification::forUserOrBroadcast($userId)
             ->with(['reads' => fn ($q) => $q->where('user_id', $userId)])
             ->orderByDesc('created_at')
             ->limit(8)
-            ->get()
-            ->map(fn ($n) => [
+            ->get();
+        $items = $notifications->map(fn (Notification $n) => [
                 'id' => $n->id,
                 'type' => $n->type,
                 'severity' => $n->severity,
@@ -79,7 +80,7 @@ class NotificationController extends Controller
     /**
      * POST /notifications/{id}/read — Mark single as read
      */
-    public function markRead($id)
+    public function markRead(int|string $id)
     {
         $userId = Auth::id();
 
@@ -136,7 +137,7 @@ class NotificationController extends Controller
     /**
      * DELETE /notifications/{id} — Delete one (only personal, not broadcasts)
      */
-    public function destroy($id)
+    public function destroy(int|string $id)
     {
         $userId = Auth::id();
 

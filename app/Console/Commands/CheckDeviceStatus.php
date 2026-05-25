@@ -31,7 +31,7 @@ class CheckDeviceStatus extends Command
         if (! $lock->get()) {
             $this->warn('Another instance is already running');
 
-            return Command::SUCCESS;
+            return self::SUCCESS;
         }
 
         try {
@@ -68,10 +68,10 @@ class CheckDeviceStatus extends Command
             optional($lock)->release();
         }
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 
-    private function checkDeviceStatus($deviceId, $now)
+    private function checkDeviceStatus(string $deviceId, Carbon $now): void
     {
         $lastSeen = $this->lastSeenFrom(Cache::get("device_{$deviceId}_last_seen"))
             ?? $this->lastSeenFrom(Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->value('last_seen'));
@@ -151,7 +151,7 @@ class CheckDeviceStatus extends Command
         }
     }
 
-    private function updateDeviceInDatabase($deviceId, $status, $lastSeen = null)
+    private function updateDeviceInDatabase(string $deviceId, string $status, ?Carbon $lastSeen = null): void
     {
         try {
             $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();

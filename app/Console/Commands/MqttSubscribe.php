@@ -21,7 +21,7 @@ class MqttSubscribe extends Command
 
     protected $description = 'MQTT Listener (Realtime IoT)';
 
-    public function handle()
+    public function handle(): never
     {
         while (true) {
             try {
@@ -529,7 +529,7 @@ class MqttSubscribe extends Command
     }
 
     /* === HELPER: SET ONLINE === */
-    private function setOnline($deviceId)
+    private function setOnline(string $deviceId): void
     {
         $deviceId = $this->normalize($deviceId);
         $now = now();
@@ -596,7 +596,7 @@ class MqttSubscribe extends Command
     }
 
     /* === HELPER: EXTRACT DEVICE ID === */
-    private function extractDeviceId($topic, $type)
+    private function extractDeviceId(string $topic, string $type): ?string
     {
         if (! preg_match("/device\/(.+)\/{$type}/", $topic, $matches)) {
             return null;
@@ -606,40 +606,40 @@ class MqttSubscribe extends Command
     }
 
     /* === HELPER: NORMALIZE ID === */
-    private function normalize($value)
+    private function normalize(string $value): string
     {
         return strtolower(trim($value));
     }
 
-    private function normalizePower($value)
+    private function normalizePower(mixed $value): string
     {
         $power = strtoupper(trim((string) $value));
 
         return in_array($power, ['ON', 'OFF'], true) ? $power : 'OFF';
     }
 
-    private function normalizeMode($value)
+    private function normalizeMode(mixed $value): string
     {
         $mode = strtoupper(trim((string) $value));
 
         return in_array($mode, ['COOL', 'HEAT', 'DRY', 'FAN'], true) ? $mode : 'COOL';
     }
 
-    private function normalizeTemperature($value)
+    private function normalizeTemperature(mixed $value): int
     {
         $temperature = (int) $value;
 
         return min(30, max(16, $temperature ?: 24));
     }
 
-    private function normalizeFanSpeed($value)
+    private function normalizeFanSpeed(mixed $value): string
     {
         $fanSpeed = strtoupper(trim((string) $value));
 
         return in_array($fanSpeed, ['AUTO', 'LOW', 'MEDIUM', 'HIGH'], true) ? $fanSpeed : 'AUTO';
     }
 
-    private function normalizeSwing($value)
+    private function normalizeSwing(mixed $value): string
     {
         $swing = strtoupper(trim((string) $value));
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\NotificationCreated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Notification extends Model
 {
@@ -42,12 +43,12 @@ class Notification extends Model
         });
     }
 
-    public function scopeUnread($query)
+    public function scopeUnread(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
     {
         return $query->whereNull('read_at');
     }
 
-    public function scopeUnreadForUser($query, int $userId)
+    public function scopeUnreadForUser(\Illuminate\Database\Eloquent\Builder $query, int $userId): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where(function ($q) use ($userId) {
             // Personal unread
@@ -60,7 +61,7 @@ class Notification extends Model
         });
     }
 
-    public function scopeForUserOrBroadcast($query, ?int $userId)
+    public function scopeForUserOrBroadcast(\Illuminate\Database\Eloquent\Builder $query, ?int $userId): \Illuminate\Database\Eloquent\Builder
     {
         return $query->where(function ($q) use ($userId) {
             $q->whereNull('user_id');
@@ -107,13 +108,13 @@ class Notification extends Model
     {
         $roomKey = self::roomKey($roomName);
         $stateKey = "notification_state:device:{$roomKey}";
-        $prevState = cache()->get($stateKey);
+        $prevState = Cache::get($stateKey);
 
         if ($prevState === 'offline') {
             return null;
         }
 
-        cache()->put($stateKey, 'offline', now()->addDays(self::STATE_TTL_DAYS));
+        Cache::put($stateKey, 'offline', now()->addDays(self::STATE_TTL_DAYS));
 
         return self::notify('device_offline', "ESP {$roomName} offline", [
             'severity' => 'error',
@@ -126,13 +127,13 @@ class Notification extends Model
     {
         $roomKey = self::roomKey($roomName);
         $stateKey = "notification_state:device:{$roomKey}";
-        $prevState = cache()->get($stateKey);
+        $prevState = Cache::get($stateKey);
 
         if ($prevState === 'online') {
             return null;
         }
 
-        cache()->put($stateKey, 'online', now()->addDays(self::STATE_TTL_DAYS));
+        Cache::put($stateKey, 'online', now()->addDays(self::STATE_TTL_DAYS));
 
         if ($prevState !== 'offline') {
             return null;
@@ -149,7 +150,7 @@ class Notification extends Model
     {
         $roomKey = self::roomKey($roomName);
         $stateKey = "notification_state:fuzzy_action:{$roomKey}";
-        $prevAction = cache()->get($stateKey);
+        $prevAction = Cache::get($stateKey);
         $currentAction = [
             'action' => $action,
             'setpoint_before' => $setpointBefore,
@@ -160,7 +161,7 @@ class Notification extends Model
             return null;
         }
 
-        cache()->put($stateKey, $currentAction, now()->addDays(self::STATE_TTL_DAYS));
+        Cache::put($stateKey, $currentAction, now()->addDays(self::STATE_TTL_DAYS));
 
         $title = "Fuzzy Logic: {$roomName}";
         $message = self::buildFuzzyMessage($roomName, $action, $setpointBefore, $setpointAfter);
@@ -193,7 +194,7 @@ class Notification extends Model
     {
         $roomKey = self::roomKey($roomName);
         $stateKey = "notification_state:fuzzy_warning:{$roomKey}:{$reason}";
-        $lastWarning = cache()->get($stateKey);
+        $lastWarning = Cache::get($stateKey);
 
         // Sudah pernah notif untuk reason ini → skip sampai recovery
         if ($lastWarning === 'warned') {
@@ -205,12 +206,12 @@ class Notification extends Model
         $otherReasons = ['temperature_offline', 'device_offline'];
         foreach ($otherReasons as $other) {
             if ($other !== $reason) {
-                cache()->forget("notification_state:fuzzy_warning:{$roomKey}:{$other}");
+                Cache::forget("notification_state:fuzzy_warning:{$roomKey}:{$other}");
             }
         }
 
         // TTL panjang (7 hari) — tidak expire selama belum recovery
-        cache()->put($stateKey, 'warned', now()->addDays(self::STATE_TTL_DAYS));
+        Cache::put($stateKey, 'warned', now()->addDays(self::STATE_TTL_DAYS));
 
         $message = match ($reason) {
             'device_offline' => 'ESP ruangan '.ucwords($roomName).' offline — Fuzzy logic tidak berjalan. Periksa koneksi device.',
@@ -234,10 +235,10 @@ class Notification extends Model
         foreach ($reasons as $reason) {
             $roomKey = self::roomKey($roomName);
             $key = "notification_state:fuzzy_warning:{$roomKey}:{$reason}";
-            if (cache()->has($key)) {
+            if (Cache::has($key)) {
                 $wasWarned = true;
                 $recoveredReason = $reason;
-                cache()->forget($key);
+                Cache::forget($key);
             }
         }
 

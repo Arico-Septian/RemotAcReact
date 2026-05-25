@@ -18,11 +18,9 @@ class DashboardController extends Controller
             ->get();
         $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
-        $recentActivities = UserLog::with('user')
-            ->orderByDesc('created_at')
-            ->limit(15)
-            ->get()
-            ->map(fn ($log) => $this->formatLog($log));
+        /** @var \Illuminate\Database\Eloquent\Collection<int, UserLog> $recentActivitiesRaw */
+        $recentActivitiesRaw = UserLog::with('user')->orderByDesc('created_at')->limit(15)->get();
+        $recentActivities = $recentActivitiesRaw->map(fn (UserLog $log) => $this->formatLog($log));
 
         $onlineRooms = 0;
         $offlineRooms = 0;
@@ -87,11 +85,9 @@ class DashboardController extends Controller
 
     public function recentActivities()
     {
-        $logs = UserLog::with('user')
-            ->orderByDesc('created_at')
-            ->limit(15)
-            ->get()
-            ->map(fn ($log) => $this->formatLog($log));
+        /** @var \Illuminate\Database\Eloquent\Collection<int, UserLog> $logsRaw */
+        $logsRaw = UserLog::with('user')->orderByDesc('created_at')->limit(15)->get();
+        $logs = $logsRaw->map(fn (UserLog $log) => $this->formatLog($log));
 
         return response()->json($logs);
     }

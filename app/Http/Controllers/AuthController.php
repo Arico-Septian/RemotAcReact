@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\UserLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -146,7 +147,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            $user->last_logout_at = now();
+            $user->last_logout_at = Carbon::now();
             $user->last_activity = null;
 
             $user->save();

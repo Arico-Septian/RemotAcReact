@@ -39,7 +39,7 @@ class RunAcTimer extends Command
 
             $this->error("MQTT connection failed: " . $e->getMessage());
 
-            return Command::FAILURE;
+            return self::FAILURE;
         }
 
         $acs = AcUnit::with(['room:id,name', 'status:id,ac_unit_id,power,mode,set_temperature,fan_speed,swing'])
@@ -65,7 +65,7 @@ class RunAcTimer extends Command
 
             $version = Cache::get("timer_version_{$ac->id}", 1);
             $roomName = $ac->room->name;
-            $topic = 'room/' . \App\Services\MqttService::roomToTopic($roomName) . "/ac/{$ac->ac_number}/control";
+            $topic = 'room/' . MqttService::roomToTopic($roomName) . "/ac/{$ac->ac_number}/control";
             $status = $ac->status ?: AcStatus::firstOrCreate(
                 ['ac_unit_id' => $ac->id],
                 [
@@ -163,6 +163,6 @@ class RunAcTimer extends Command
         }
 
         $this->info("Timer check completed");
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

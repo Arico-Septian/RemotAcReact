@@ -19,7 +19,7 @@ class AcControlController extends Controller
 
     private const SWINGS = ['OFF', 'FULL', 'HALF', 'DOWN'];
 
-    private $mqtt;
+    private ?MqttService $mqtt;
 
     public function __construct()
     {
@@ -40,12 +40,12 @@ class AcControlController extends Controller
         );
     }
 
-    private function normalizeTemperature($value): int
+    private function normalizeTemperature(mixed $value): int
     {
         return min(30, max(16, (int) $value ?: 24));
     }
 
-    private function normalizeMode($mode): string
+    private function normalizeMode(mixed $mode): string
     {
         $mode = strtoupper(trim((string) $mode));
 
@@ -54,7 +54,7 @@ class AcControlController extends Controller
         return $mode;
     }
 
-    private function normalizePower($power): string
+    private function normalizePower(mixed $power): string
     {
         $power = strtoupper(trim((string) $power));
 
@@ -63,7 +63,7 @@ class AcControlController extends Controller
         return $power;
     }
 
-    private function normalizeFanSpeed($fanSpeed): string
+    private function normalizeFanSpeed(mixed $fanSpeed): string
     {
         $fanSpeed = strtoupper(trim((string) $fanSpeed));
 
@@ -72,7 +72,7 @@ class AcControlController extends Controller
         return $fanSpeed;
     }
 
-    private function normalizeSwing($swing): string
+    private function normalizeSwing(mixed $swing): string
     {
         $swing = strtoupper(trim((string) $swing));
 
@@ -111,7 +111,7 @@ class AcControlController extends Controller
         }
     }
 
-    public function powerOn($id)
+    public function powerOn(int|string $id)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -133,7 +133,7 @@ class AcControlController extends Controller
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function powerOff($id)
+    public function powerOff(int|string $id)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -155,7 +155,7 @@ class AcControlController extends Controller
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function setTemp($id, $value)
+    public function setTemp(int|string $id, mixed $value)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -196,7 +196,7 @@ class AcControlController extends Controller
         return $this->sendFullState($ac, $room, $status);
     }
 
-    public function setMode($id, $mode)
+    public function setMode(int|string $id, mixed $mode)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -219,7 +219,7 @@ class AcControlController extends Controller
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function setFanSpeed($id, $speed)
+    public function setFanSpeed(int|string $id, mixed $speed)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -242,7 +242,7 @@ class AcControlController extends Controller
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function setSwing($id, $swing)
+    public function setSwing(int|string $id, mixed $swing)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -265,7 +265,7 @@ class AcControlController extends Controller
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function togglePower(Request $request, $id)
+    public function togglePower(Request $request, int|string $id)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -289,10 +289,11 @@ class AcControlController extends Controller
         return $sent ? back() : back()->with('warning', 'AC diperbarui, tetapi perintah gagal terkirim ke perangkat.');
     }
 
-    public function bulkPower(Request $request, $roomId)
+    public function bulkPower(Request $request, int|string $roomId)
     {
         $power = $this->normalizePower($request->input('power'));
         $room = Room::findOrFail($roomId);
+        /** @var \Illuminate\Database\Eloquent\Collection<int, AcUnit> $acs */
         $acs = AcUnit::where('room_id', $roomId)->get();
 
         $allSent = true;
@@ -317,7 +318,7 @@ class AcControlController extends Controller
             : back()->with('warning', "Semua AC di {$room->name} {$action}, tetapi sebagian perintah gagal terkirim ke perangkat.");
     }
 
-    public function control(Request $request, $id)
+    public function control(Request $request, int|string $id)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);

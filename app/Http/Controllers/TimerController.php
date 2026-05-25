@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class TimerController extends Controller
 {
-    public function schedule(Request $request, $id)
+    public function schedule(Request $request, int|string $id)
     {
         $request->validate([
             'timer_on' => 'nullable|date_format:H:i',

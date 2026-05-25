@@ -18,7 +18,7 @@ use Illuminate\Validation\Rule;
 
 class AcUnitController extends Controller
 {
-    public function index($id)
+    public function index(int|string $id)
     {
         $room = Room::with(['acUnits.status'])->findOrFail($id);
 
@@ -74,7 +74,7 @@ class AcUnitController extends Controller
         return view('ac.index', compact('room', 'acs'));
     }
 
-    public function store(Request $request, $roomId)
+    public function store(Request $request, int|string $roomId)
     {
         $room = Room::findOrFail($roomId);
 
@@ -135,7 +135,7 @@ class AcUnitController extends Controller
             : $response->with('warning', 'AC berhasil ditambahkan, tetapi konfigurasi MQTT gagal dikirim ke perangkat.');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int|string $id)
     {
         $ac = AcUnit::findOrFail($id);
         $room = Room::findOrFail($ac->room_id);
@@ -182,7 +182,7 @@ class AcUnitController extends Controller
             : back()->with('warning', 'AC unit berhasil diperbarui, tetapi konfigurasi MQTT gagal dikirim ke perangkat.');
     }
 
-    public function destroy($id)
+    public function destroy(int|string $id)
     {
         $ac = AcUnit::findOrFail($id);
 
@@ -248,7 +248,7 @@ class AcUnitController extends Controller
         }
     }
 
-    public function applyFuzzy($id)
+    public function applyFuzzy(int|string $id)
     {
         $room = Room::with(['acUnits.status'])->findOrFail($id);
 
@@ -323,7 +323,7 @@ class AcUnitController extends Controller
         );
     }
 
-    private function calculateDeltaT($tempHistory): float
+    private function calculateDeltaT(\Illuminate\Database\Eloquent\Collection $tempHistory): float
     {
         if ($tempHistory->count() < 2) {
             return 0;
