@@ -178,14 +178,14 @@
                                     ];
                                     $icon = $iconMap[$n->type] ?? 'fa-bell';
                                 @endphp
-                                <div class="nlist-item {{ $n->isUnread() ? 'unread' : '' }}"
+                                <div class="nlist-item {{ $n->isUnreadForUser($userId) ? 'unread' : '' }}"
                                     data-id="{{ $n->id }}">
                                     <span class="nlist-icon {{ $n->severity }}">
                                         <i class="fa-solid {{ $icon }}"></i>
                                     </span>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2">
-                                            @if ($n->isUnread())
+                                            @if ($n->isUnreadForUser($userId))
                                                 <span
                                                     style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></span>
                                             @endif
@@ -212,7 +212,7 @@
                                         </div>
                                     </div>
                                     <div class="nlist-actions">
-                                        @if ($n->isUnread())
+                                        @if ($n->isUnreadForUser($userId))
                                             <button onclick="markNotifReadInline(event, {{ $n->id }}, null)"
                                                 class="btn-icon" title="Tandai dibaca">
                                                 <i class="fa-solid fa-check text-[11px]"></i>

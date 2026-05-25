@@ -80,7 +80,7 @@ class RoomController extends Controller
                 $timeDiffSeconds = max(1, $currentCreatedAt->diffInSeconds($previousCreatedAt));
 
                 if ($timeDiffSeconds <= 300 && $previousTemp !== null) {
-                    $deltaT = $currentTemp - $previousTemp;
+                    $deltaT = ($currentTemp - $previousTemp) / ($timeDiffSeconds / 60);
                 }
             }
 
@@ -97,7 +97,12 @@ class RoomController extends Controller
 
                 $room->fuzzy = $fuzzyResult;
 
-                $currentSetpoint = 24;
+                $activeAcUnits = $room->acUnits->filter(
+                    fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
+                );
+                $currentSetpoint = $activeAcUnits->isNotEmpty()
+                    ? (int) round($activeAcUnits->map(fn ($ac) => $ac->status?->set_temperature ?? 24)->avg())
+                    : 24;
 
                 $decision = $fuzzyService->decideAction(
                     $fuzzyResult,

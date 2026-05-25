@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Models\NotificationRead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,12 +17,15 @@ class NotificationController extends Controller
         $userId = Auth::id();
 
         $notifications = Notification::forUserOrBroadcast($userId)
+            ->with(['reads' => fn ($q) => $q->where('user_id', $userId)])
             ->orderByDesc('created_at')
             ->paginate(20);
 
-        $unreadCount = Notification::forUserOrBroadcast($userId)->unread()->count();
+        $unreadCount = Notification::forUserOrBroadcast($userId)
+            ->unreadForUser($userId)
+            ->count();
 
-        return view('notifications.index', compact('notifications', 'unreadCount'));
+        return view('notifications.index', compact('notifications', 'unreadCount', 'userId'));
     }
 
     /**
@@ -32,22 +36,25 @@ class NotificationController extends Controller
         $userId = Auth::id();
 
         $items = Notification::forUserOrBroadcast($userId)
+            ->with(['reads' => fn ($q) => $q->where('user_id', $userId)])
             ->orderByDesc('created_at')
             ->limit(8)
             ->get()
-            ->map(fn($n) => [
+            ->map(fn ($n) => [
                 'id' => $n->id,
                 'type' => $n->type,
                 'severity' => $n->severity,
                 'title' => $n->title,
                 'message' => $n->message,
                 'link' => $n->link,
-                'is_unread' => $n->isUnread(),
+                'is_unread' => $n->isUnreadForUser($userId),
                 'time_ago' => $n->time_ago,
                 'created_at' => $n->created_at->toIso8601String(),
             ]);
 
-        $unreadCount = Notification::forUserOrBroadcast($userId)->unread()->count();
+        $unreadCount = Notification::forUserOrBroadcast($userId)
+            ->unreadForUser($userId)
+            ->count();
 
         return response()->json([
             'items' => $items,
@@ -60,7 +67,11 @@ class NotificationController extends Controller
      */
     public function unreadCount()
     {
-        $count = Notification::forUserOrBroadcast(Auth::id())->unread()->count();
+        $userId = Auth::id();
+
+        $count = Notification::forUserOrBroadcast($userId)
+            ->unreadForUser($userId)
+            ->count();
 
         return response()->json(['count' => $count]);
     }
@@ -74,7 +85,13 @@ class NotificationController extends Controller
 
         $n = Notification::forUserOrBroadcast($userId)->findOrFail($id);
 
-        if ($n->isUnread()) {
+        if ($n->user_id === null) {
+            // Broadcast — upsert agar aman dari race condition double-click
+            NotificationRead::updateOrInsert(
+                ['notification_id' => $n->id, 'user_id' => $userId],
+                ['read_at' => now()]
+            );
+        } elseif ($n->isUnread()) {
             $n->update(['read_at' => now()]);
         }
 
@@ -86,9 +103,32 @@ class NotificationController extends Controller
      */
     public function markAllRead()
     {
-        Notification::forUserOrBroadcast(Auth::id())
-            ->unread()
+        $userId = Auth::id();
+
+        // Personal notifications: stamp read_at
+        Notification::where('user_id', $userId)
+            ->whereNull('read_at')
             ->update(['read_at' => now()]);
+
+        // Broadcast notifications: insert pivot rows for those not yet read
+        $alreadyReadIds = NotificationRead::where('user_id', $userId)
+            ->pluck('notification_id');
+
+        $broadcastIds = Notification::whereNull('user_id')
+            ->whereNotIn('id', $alreadyReadIds)
+            ->pluck('id');
+
+        if ($broadcastIds->isNotEmpty()) {
+            $now = now();
+            $rows = $broadcastIds->map(fn ($nid) => [
+                'notification_id' => $nid,
+                'user_id' => $userId,
+                'read_at' => $now,
+            ])->all();
+
+            // insertOrIgnore aman dari race condition bila dipanggil 2x bersamaan
+            NotificationRead::insertOrIgnore($rows);
+        }
 
         return response()->json(['ok' => true]);
     }
@@ -104,6 +144,7 @@ class NotificationController extends Controller
 
         if ($n) {
             $n->delete();
+
             return response()->json(['ok' => true]);
         }
 

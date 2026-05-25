@@ -147,7 +147,7 @@ class MqttService
             );
         }
 
-        echo "CONFIG + STATUS DIKIRIM KE {$deviceId}\n";
+        \Illuminate\Support\Facades\Log::info("CONFIG + STATUS DIKIRIM KE {$deviceId}");
     }
 
     public function subscribeMultiple(array $topics, int $idleTimeoutSeconds = 180)

@@ -121,7 +121,7 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        if ($id == Auth::id()) {
+        if ((int) $id === Auth::id()) {
             return $this->respondError($request, 'Tidak bisa mengubah role sendiri', 403);
         }
 
@@ -151,7 +151,7 @@ class UserController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        if ($id == Auth::id()) {
+        if ((int) $id === Auth::id()) {
             return $this->respondError($request, 'Tidak bisa hapus diri sendiri', 403);
         }
 

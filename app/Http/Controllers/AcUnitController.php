@@ -298,8 +298,6 @@ class AcUnitController extends Controller
             );
         }
 
-        Cache::put($cooldownKey, true, 30);
-
         $acController = new AcControlController;
 
         $activeAcUnits = $room->acUnits->filter(
@@ -309,6 +307,8 @@ class AcUnitController extends Controller
         if ($activeAcUnits->isEmpty()) {
             return back()->with('warning', 'Tidak ada AC yang aktif');
         }
+
+        Cache::put($cooldownKey, true, 30);
 
         foreach ($activeAcUnits as $ac) {
             $acController->fuzzySetTemp(

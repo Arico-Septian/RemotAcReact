@@ -12,8 +12,8 @@ class UserLogController extends Controller
     public function index(Request $request)
     {
         $authActs = ['login', 'logout', 'change_password'];
-        $acActs   = ['on', 'off', 'bulk_on', 'bulk_off', 'timer_on', 'timer_off', 'set_timer', 'control_ac'];
-        $acLikes  = ['set_temp_%', 'mode_%', 'fan_speed_%', 'swing_%'];
+        $acActs   = ['on', 'off', 'bulk_on', 'bulk_off', 'timer_on', 'timer_off', 'set_timer_delete', 'control_ac'];
+        $acLikes  = ['set_temp_%', 'mode_%', 'fan_speed_%', 'swing_%', 'set_timer:%'];
         $userActs = ['add_user', 'delete_user', 'update_role'];
         $roomActs = ['add_room', 'delete_room', 'add_ac', 'delete_ac'];
         $destructiveActs = ['delete_user', 'delete_room', 'delete_ac'];
@@ -64,10 +64,10 @@ class UserLogController extends Controller
         } elseif ($range === '30d') {
             $query->where('created_at', '>=', now()->subDays(30));
         } else {
-            if ($request->filled('date_from')) {
+            if ($request->filled('date_from') && strtotime($request->date_from) !== false) {
                 $query->whereDate('created_at', '>=', $request->date_from);
             }
-            if ($request->filled('date_to')) {
+            if ($request->filled('date_to') && strtotime($request->date_to) !== false) {
                 $query->whereDate('created_at', '<=', $request->date_to);
             }
         }

@@ -140,7 +140,7 @@ class CheckDeviceStatus extends Command
 
     private function checkOrphanDevices($now)
     {
-        $cacheKeys = Cache::get('device_keys', []);
+        $cacheKeys = Cache::get('seen_device_ids', []);
 
         foreach ($cacheKeys as $deviceId) {
             $roomExists = Room::where('device_id', $deviceId)->exists();
@@ -154,7 +154,7 @@ class CheckDeviceStatus extends Command
     private function updateDeviceInDatabase($deviceId, $status, $lastSeen = null)
     {
         try {
-            $room = Room::where('device_id', $deviceId)->first();
+            $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
 
             if ($room) {
                 $data = ['device_status' => $status];

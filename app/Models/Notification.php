@@ -30,6 +30,11 @@ class Notification extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function reads()
+    {
+        return $this->hasMany(NotificationRead::class);
+    }
+
     protected static function booted(): void
     {
         static::created(function (Notification $notification) {
@@ -40,6 +45,19 @@ class Notification extends Model
     public function scopeUnread($query)
     {
         return $query->whereNull('read_at');
+    }
+
+    public function scopeUnreadForUser($query, int $userId)
+    {
+        return $query->where(function ($q) use ($userId) {
+            // Personal unread
+            $q->where('user_id', $userId)->whereNull('read_at');
+            // Broadcast unread (no pivot row for this user)
+            $q->orWhere(function ($qq) use ($userId) {
+                $qq->whereNull('user_id')
+                    ->whereDoesntHave('reads', fn ($r) => $r->where('user_id', $userId));
+            });
+        });
     }
 
     public function scopeForUserOrBroadcast($query, ?int $userId)
@@ -55,6 +73,16 @@ class Notification extends Model
     public function isUnread(): bool
     {
         return $this->read_at === null;
+    }
+
+    public function isUnreadForUser(int $userId): bool
+    {
+        if ($this->user_id !== null) {
+            return $this->read_at === null;
+        }
+
+        // Broadcast: check pivot (reads must be eager-loaded for this user)
+        return $this->reads->where('user_id', $userId)->isEmpty();
     }
 
     public function getTimeAgoAttribute(): string

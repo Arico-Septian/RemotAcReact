@@ -30,6 +30,7 @@ class RunFuzzyLogic extends Command
 
         $processed = 0;
         $skipped = 0;
+        $fuzzyService = new FuzzyMamdaniService;
 
         foreach ($rooms as $room) {
             $cooldownKey = 'fuzzy_room_'.$room->id;
@@ -39,8 +40,6 @@ class RunFuzzyLogic extends Command
 
                 continue;
             }
-
-            $fuzzyService = new FuzzyMamdaniService;
             $normalized = RoomTemperature::normalizeRoomName($room->name);
 
             $tempHistory = RoomTemperature::where('room', $normalized)
@@ -88,13 +87,16 @@ class RunFuzzyLogic extends Command
             Notification::fuzzyRecovery($room->name);
 
             $currentTemp = $latestTemp->temperature;
-            $previousTemp = $tempHistory->count() > 1
-                ? $tempHistory[1]->temperature
-                : $currentTemp;
 
-            $deltaT = ($currentTemp !== null && $previousTemp !== null)
-                ? ($currentTemp - $previousTemp)
-                : 0;
+            $deltaT = 0;
+            if ($tempHistory->count() > 1) {
+                $previousTemp = $tempHistory[1]->temperature;
+                $timeDiffSeconds = max(1, $latestTemp->created_at->diffInSeconds($tempHistory[1]->created_at));
+
+                if ($timeDiffSeconds <= 300 && $previousTemp !== null) {
+                    $deltaT = ($currentTemp - $previousTemp) / ($timeDiffSeconds / 60);
+                }
+            }
 
             $fuzzyResult = $fuzzyService->calculate($currentTemp, $deltaT);
 

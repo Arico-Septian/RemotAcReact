@@ -34,32 +34,6 @@
             border-color: var(--cyan);
         }
 
-        .trend-demo-toggle {
-            background: var(--panel-1);
-            border: 1px solid var(--line-soft);
-            color: var(--ink-2);
-            border-radius: var(--r-md);
-            padding: 6px 10px;
-            font-size: 11px;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: var(--t-base);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        .trend-demo-toggle.active {
-            color: var(--cyan);
-            border-color: rgba(77, 212, 255, 0.35);
-            background: rgba(77, 212, 255, 0.1);
-        }
-
-        .trend-demo-toggle i {
-            font-size: 10px;
-        }
-
         .dashboard-rooms-panel {
             padding: 20px;
             border-radius: 20px;
@@ -1457,11 +1431,6 @@
                 padding: 4px 6px !important;
                 border-radius: 7px !important;
             }
-            .temp-chart-panel .trend-demo-toggle {
-                font-size: 10px !important;
-                padding: 4px 7px !important;
-                border-radius: 7px !important;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1510,12 +1479,6 @@
                 border-radius: 6px !important;
                 min-width: 0;
             }
-            .temp-chart-panel .trend-demo-toggle {
-                font-size: 9.5px !important;
-                padding: 3px 6px !important;
-                border-radius: 6px !important;
-                gap: 4px !important;
-            }
             .temp-chart-panel #trendInfo {
                 margin-top: 6px !important;
                 font-size: 10px !important;
@@ -1541,12 +1504,6 @@
                 font-size: 9px !important;
                 padding: 2px 4px !important;
                 border-radius: 5px !important;
-            }
-            .temp-chart-panel .trend-demo-toggle {
-                font-size: 9px !important;
-                padding: 2px 5px !important;
-                border-radius: 5px !important;
-                gap: 3px !important;
             }
             .temp-chart-panel #trendInfo {
                 font-size: 9.5px !important;
@@ -1725,11 +1682,6 @@
                                         <option value="6h">6 Jam</option>
                                         <option value="today">Hari ini</option>
                                     </select>
-                                    <button id="trendDemoToggle" type="button" class="trend-demo-toggle"
-                                        title="Tampilkan data contoh">
-                                        <i class="fa-solid fa-flask"></i>
-                                        <span>Demo Data</span>
-                                    </button>
                                 </div>
                             </div>
                             <div class="temp-chart-wrap" style="height:300px;position:relative;">
@@ -2288,128 +2240,21 @@
             'today': 'Trend hari ini',
         };
 
-        function isTrendDemoMode() {
-            return localStorage.getItem('trendDemoMode') === 'true';
-        }
-
-        function updateTrendDemoToggle() {
-            const btn = document.getElementById('trendDemoToggle');
-            if (!btn) return;
-            const active = isTrendDemoMode();
-            btn.classList.toggle('active', active);
-            btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-            const label = btn.querySelector('span');
-            if (label) label.textContent = active ? 'Demo ON' : 'Demo Data';
-        }
-
-        function padTime(value) {
-            return String(value).padStart(2, '0');
-        }
-
-        function makeDemoLabels(range) {
-            const config = {
-                '1h': { slots: 12, interval: 5, hourly: false },
-                '3h': { slots: 18, interval: 10, hourly: false },
-                '6h': { slots: 24, interval: 15, hourly: false },
-                'today': { interval: 60, hourly: true, today: true },
-            }[range] || { slots: 12, interval: 5, hourly: false };
-
-            const now = new Date();
-            const labels = [];
-            if (config.today) {
-                const latestHour = now.getHours();
-                for (let hour = 0; hour <= latestHour; hour++) {
-                    labels.push(`${padTime(hour)}:00`);
-                }
-
-                return labels;
-            }
-
-            for (let i = config.slots - 1; i >= 0; i--) {
-                const date = new Date(now);
-                date.setMinutes(now.getMinutes() - (i * config.interval), 0, 0);
-                if (config.hourly) {
-                    labels.push(`${padTime(date.getHours())}:00`);
-                } else {
-                    labels.push(`${padTime(date.getHours())}:${padTime(date.getMinutes())}`);
-                }
-            }
-
-            return labels;
-        }
-
-        function makeDemoSeries(slots, baseTemp, swing, offset = 0) {
-            return Array.from({ length: slots }, (_, i) => {
-                const wave = Math.sin((i + offset) / 2.2) * swing;
-                const drift = i * 0.04;
-                return Number((baseTemp + wave + drift).toFixed(1));
-            });
-        }
-
-        function generateDemoTrendPayload(range, limit) {
-            const labels = makeDemoLabels(range);
-            const slots = labels.length;
-            const count = Math.min(Math.max(Number(limit) || 5, 1), 5);
-            const palette = ['#fb7185', '#fbbf24', '#4dd4ff', '#a78bfa', '#34d399'];
-            const rooms = [
-                { room: 'Server A', base: 24.6, swing: 0.7, offline: false },
-                { room: 'Server B', base: 26.1, swing: 0.9, offline: false },
-                { room: 'Network Rack', base: 28.4, swing: 1.1, offline: false },
-                { room: 'Storage Cold', base: 22.9, swing: 0.5, offline: false },
-                { room: 'Backup Room', base: 25.2, swing: 0.6, offline: true },
-            ].slice(0, count);
-
-            const datasets = rooms.map((room, idx) => {
-                let data = makeDemoSeries(slots, room.base, room.swing, idx);
-                if (room.offline) {
-                    data = data.map((value, pointIdx) => pointIdx >= slots - 4 ? null : value);
-                }
-
-                const visibleValues = data.filter(value => value !== null && !Number.isNaN(value));
-                const lastValue = visibleValues.length ? visibleValues[visibleValues.length - 1] : null;
-
-                return {
-                    room: room.room,
-                    room_id: `demo-${idx + 1}`,
-                    current_temp: room.offline ? null : lastValue,
-                    last_temp: lastValue,
-                    is_offline: room.offline,
-                    offline_since: room.offline ? labels[Math.max(0, slots - 5)] : null,
-                    data,
-                    color: palette[idx % palette.length],
-                };
-            });
-
-            return {
-                labels,
-                datasets,
-                total_rooms: rooms.length,
-                shown: datasets.length,
-                limit: count,
-                range,
-                interval_minutes: null,
-                demo: true,
-            };
-        }
-
         function refreshTrendChart(showLoader = false) {
             if (!tempChart) return;
 
             const limit = getTrendLimit();
             const range = getTrendRange();
-            const demoMode = isTrendDemoMode();
 
             const labelEl = document.getElementById('trendRangeLabel');
-            if (labelEl) labelEl.textContent = demoMode ? `Demo ${range === 'today' ? 'hari ini' : range.toUpperCase()}` : (RANGE_LABELS[range] || RANGE_LABELS['1h']);
+            if (labelEl) labelEl.textContent = RANGE_LABELS[range] || RANGE_LABELS['1h'];
 
             if (showLoader) {
                 const spinner = document.getElementById('tempChartLoading');
                 if (spinner) spinner.style.display = 'flex';
             }
 
-            const trendRequest = demoMode ?
-                Promise.resolve(generateDemoTrendPayload(range, limit)) :
-                fetch(`/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
+            const trendRequest = fetch(`/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
                     .then(r => (r.ok ? r.json() : Promise.reject(r.status)));
 
             trendRequest
@@ -2488,9 +2333,7 @@
                         const shown = (data.datasets || []).length;
                         const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
                         const offlineCount = shown - onlineCount;
-                        infoEl.textContent = demoMode ?
-                            `Demo: ${shown} room contoh, ${offlineCount} offline. Data asli aman.` :
-                            `${onlineCount} online, ${offlineCount} offline. Grafik memakai data historis tercatat.`;
+                        infoEl.textContent = `${onlineCount} online, ${offlineCount} offline. Grafik memakai data historis tercatat.`;
                     }
                 })
                 .catch(() => {
@@ -2621,16 +2464,6 @@
                 rangeSelect.value = getTrendRange();
                 rangeSelect.addEventListener('change', (e) => {
                     localStorage.setItem('trendRange', e.target.value);
-                    refreshTrendChart(true);
-                });
-            }
-
-            const demoToggle = document.getElementById('trendDemoToggle');
-            updateTrendDemoToggle();
-            if (demoToggle) {
-                demoToggle.addEventListener('click', () => {
-                    localStorage.setItem('trendDemoMode', isTrendDemoMode() ? 'false' : 'true');
-                    updateTrendDemoToggle();
                     refreshTrendChart(true);
                 });
             }

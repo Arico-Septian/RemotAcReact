@@ -131,7 +131,7 @@ class DashboardController extends Controller
 
     private function formatLog(UserLog $log): array
     {
-        $name = $log->user->name ?? 'System';
+        $name = $log->user?->name ?? 'System';
         $activity = (string) $log->activity;
         $acRaw = (string) ($log->ac ?? '');
 
