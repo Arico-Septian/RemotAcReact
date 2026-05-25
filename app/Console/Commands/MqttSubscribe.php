@@ -103,9 +103,10 @@ class MqttSubscribe extends Command
 
                             AcStatus::whereHas('acUnit.room', function ($q) use ($deviceId) {
                                 $q->where('device_id', $deviceId);
-                            })->update([
-                                'power' => 'OFF',
-                            ]);
+                            })->get()->each(function (AcStatus $s) {
+                                $s->power = 'OFF';
+                                $s->save();
+                            });
                             Room::where('device_id', $deviceId)->update([
                                 'device_status' => 'offline',
                             ]);

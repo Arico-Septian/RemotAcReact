@@ -48,7 +48,7 @@ class DashboardController extends Controller
             $temperatureIsOffline = ! $isOnline || $sensorStatus === 'offline';
             if ($latestTemperature && $latestTemperature->created_at) {
                 $temperatureIsOffline = $temperatureIsOffline
-                    || now()->diffInSeconds($latestTemperature->created_at, true) > 30;
+                    || now()->diffInSeconds($latestTemperature->created_at, true) > 120;
             } else {
                 $temperatureIsOffline = true;
             }

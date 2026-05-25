@@ -61,7 +61,7 @@ class RoomController extends Controller
             $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
             if ($lastTempRecord && $lastTempRecord->created_at) {
                 $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
-                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 30;
+                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 120;
             } elseif (! $lastTempRecord) {
                 $room->temperature_is_offline = true;
             }
@@ -193,7 +193,7 @@ class RoomController extends Controller
             ]);
         }
 
-        Cache::put("device_status_{$deviceId}", 'offline');
+        Cache::put("device_status_{$deviceId}", 'offline', 300);
         Cache::forget("device_{$deviceId}_last_seen");
 
         UserLog::create([
@@ -357,7 +357,7 @@ class RoomController extends Controller
             $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
             if ($lastTempRecord && $lastTempRecord->created_at) {
                 $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
-                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 30;
+                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 120;
             } elseif (! $lastTempRecord) {
                 $room->temperature_is_offline = true;
             }
@@ -401,7 +401,7 @@ class RoomController extends Controller
         $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
         if ($lastTempRecord && $lastTempRecord->created_at) {
             $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
-            $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 30;
+            $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 120;
         } elseif (! $lastTempRecord) {
             $room->temperature_is_offline = true;
         }

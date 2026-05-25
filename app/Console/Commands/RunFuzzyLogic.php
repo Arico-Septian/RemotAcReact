@@ -60,7 +60,7 @@ class RunFuzzyLogic extends Command
             $isTempAvailable = $latestTemp
                 && $sensorStatus !== 'offline'
                 && $latestTemp->created_at
-                && now()->diffInSeconds($latestTemp->created_at, true) <= 30;
+                && now()->diffInSeconds($latestTemp->created_at, true) <= 120;
 
             if (! $isTempAvailable) {
                 Notification::fuzzyWarning($room->name, 'temperature_offline');
@@ -78,13 +78,13 @@ class RunFuzzyLogic extends Command
                 fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
             );
 
+            Notification::fuzzyRecovery($room->name);
+
             if ($activeAcUnits->isEmpty()) {
                 $skipped++;
 
                 continue;
             }
-
-            Notification::fuzzyRecovery($room->name);
 
             $currentTemp = $latestTemp->temperature;
 

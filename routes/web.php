@@ -10,7 +10,6 @@ use App\Http\Controllers\TimerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLogController;
 use App\Models\AcStatus;
-use App\Models\Notification;
 use App\Models\Room;
 use App\Models\RoomTemperature;
 use App\Models\User;
@@ -86,13 +85,6 @@ Route::middleware(['auth', 'activity'])->group(function () {
                 if ($lastSeen) {
                     $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
                     $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= 30;
-                }
-
-                // State-based notifications: only notify on state CHANGE
-                if (! $isOnline && $lastSeenAt && now()->diffInMinutes($lastSeenAt, true) >= 2) {
-                    Notification::deviceOffline($room->name, $deviceId);
-                } elseif ($isOnline) {
-                    Notification::deviceOnline($room->name, $deviceId);
                 }
 
                 return [
@@ -172,9 +164,9 @@ Route::middleware(['auth', 'activity'])->group(function () {
                 $temperature = $lastTemperature;
                 $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$roomKey}") === 'offline';
 
-                // Stale check: kalau record terakhir > 30s, anggap sensor mati → null
+                // Stale check: kalau record terakhir > 120s, anggap sensor mati → null
                 if ($record && $record->created_at) {
-                    $isOffline = $isOffline || now()->diffInSeconds($record->created_at, true) > 30;
+                    $isOffline = $isOffline || now()->diffInSeconds($record->created_at, true) > 120;
                 } else {
                     $isOffline = true;
                 }
@@ -377,12 +369,12 @@ Route::middleware(['auth', 'activity'])->group(function () {
                     $lastKnownTemp = optional($lastRecord)->temperature;
                     $currentTemp = $lastKnownTemp;
 
-                    // Cek apakah sensor suhu offline (data terakhir > 30 detik lalu)
+                    // Cek apakah sensor suhu offline (data terakhir > 120 detik lalu)
                     $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
                     $offlineSince = null;
                     if ($lastRecord && $lastRecord->created_at) {
                         $secondsAgo = now()->diffInSeconds($lastRecord->created_at, true);
-                        $isOffline = $isOffline || $secondsAgo > 30;
+                        $isOffline = $isOffline || $secondsAgo > 120;
                         if ($isOffline) {
                             $offlineSince = $lastRecord->created_at->format('H:i');
                             $currentTemp = null;

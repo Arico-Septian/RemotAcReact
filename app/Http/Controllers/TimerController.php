@@ -41,7 +41,7 @@ class TimerController extends Controller
         ) {
 
             if (! Cache::has($key)) {
-                Cache::put($key, 1);
+                Cache::put($key, 1, now()->addYear());
             } else {
                 Cache::increment($key);
             }

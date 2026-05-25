@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .listen('.NotificationCreated', () => {
                 pollUnreadCount();
                 const panel = document.getElementById('notifPanel');
-                if (panel && panel.classList.contains('open') && typeof loadNotifPanel === 'function') {
+                if (panel && panel.classList.contains('show') && typeof loadNotifPanel === 'function') {
                     loadNotifPanel();
                 }
             });

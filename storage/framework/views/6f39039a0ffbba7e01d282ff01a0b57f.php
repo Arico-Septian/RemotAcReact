@@ -492,31 +492,6 @@
             scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
         }
 
-        .history-demo-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            min-height: 34px;
-            padding: 0 12px;
-            border-radius: var(--r-md);
-            border: 1px solid rgba(167, 139, 250, 0.36);
-            background: rgba(167, 139, 250, 0.12);
-            color: var(--lavender);
-            font-size: 11px;
-            font-weight: 700;
-            transition: var(--t-base);
-        }
-
-        .history-demo-btn:hover {
-            background: rgba(167, 139, 250, 0.18);
-            border-color: rgba(167, 139, 250, 0.52);
-        }
-
-        .history-demo-btn i {
-            font-size: 10px;
-        }
-
         .history-range-select {
             min-height: 34px;
             padding: 0 30px 0 11px;
@@ -620,15 +595,6 @@
                 gap: 6px;
             }
 
-            .history-demo-btn span {
-                display: none;
-            }
-
-            .history-demo-btn {
-                width: 36px;
-                min-height: 36px;
-                padding: 0;
-            }
 
             .history-range-select {
                 width: 58px;
@@ -835,10 +801,6 @@
                         <option value="6h">6j</option>
                         <option value="today">Hari ini</option>
                     </select>
-                    <button id="historyDemoButton" type="button" class="history-demo-btn" title="Tampilkan grafik demo"
-                        onclick="showDemoHistory()">
-                        <i class="fa-solid fa-wave-square"></i><span>Demo</span>
-                    </button>
                     <button type="button" class="modal-close" onclick="closeHistory()"><i
                             class="fa-solid fa-xmark"></i></button>
                 </div>
@@ -961,7 +923,7 @@
 
         /* ===== HISTORY MODAL ===== */
         let historyChartInstance = null;
-        let historyDemoRoomName = 'Ruangan';
+        let historyCurrentRoomName = 'Ruangan';
         let historyRoomId = null;
         const historyRangeText = {
             '1h': '1 jam terakhir',
@@ -1066,33 +1028,6 @@
             return `${padHour(date.getHours())}:${padHour(date.getMinutes())}`;
         }
 
-        function makeDemoHistoryData(range = getHistoryRange()) {
-            const config = historyRangeConfig[range] || historyRangeConfig.today;
-            const now = new Date();
-            const latestSlot = alignDateToHistorySlot(now, config.intervalMinutes);
-            const slotCount = historySlotCount(range);
-
-            return Array.from({ length: slotCount }, (_, index) => {
-                const pointTime = new Date(latestSlot);
-                if (config.today) {
-                    pointTime.setHours(index, 0, 0, 0);
-                } else {
-                    const slotOffset = slotCount - 1 - index;
-                    pointTime.setMinutes(latestSlot.getMinutes() - (slotOffset * config.intervalMinutes));
-                }
-
-                const wave = Math.sin(index / 2.35) * 1.9;
-                const coolingCycle = index % 6 === 0 ? -1.1 : 0;
-                const afternoonLoad = pointTime.getHours() >= 12 && pointTime.getHours() <= 16 ? 2.1 : 0;
-                const temp = Math.max(20, Math.min(33, 25.8 + wave + coolingCycle + afternoonLoad));
-
-                return {
-                    time: makeHistoryTimeLabel(pointTime, config.intervalMinutes),
-                    temp: Number(temp.toFixed(1))
-                };
-            });
-        }
-
         function historyChartOptionsForViewport() {
             const width = window.innerWidth || document.documentElement.clientWidth || 1024;
             const range = getHistoryRange();
@@ -1154,7 +1089,7 @@
             };
         }
 
-        function renderHistoryChart(data, isDemo = false, status = null) {
+        function renderHistoryChart(data, status = null) {
             const chartSizing = historyChartOptionsForViewport();
 
             document.getElementById('historyLoading').hidden = true;
@@ -1182,8 +1117,8 @@
 
             if (metaEl) {
                 metaEl.textContent = latestPoint ?
-                    `${isDemo ? 'Demo · ' : ''}${currentHistoryRangeText()} · terakhir ${Number(latestPoint.temp).toFixed(1)}°C pada ${latestPoint.time}${isDemo ? '' : historyStatusSuffix(status)}` :
-                    `${currentHistoryRangeText()} · rata-rata per jam${isDemo ? '' : historyStatusSuffix(status)}`;
+                    `${currentHistoryRangeText()} · terakhir ${Number(latestPoint.temp).toFixed(1)}°C pada ${latestPoint.time}${historyStatusSuffix(status)}` :
+                    `${currentHistoryRangeText()} · rata-rata per jam${historyStatusSuffix(status)}`;
             }
 
             const pointColor = t => t > 30 ? '#fb7185' : t > 25 ? '#fbbf24' : '#4dd4ff';
@@ -1194,10 +1129,10 @@
                 data: {
                     labels,
                     datasets: [{
-                        label: isDemo ? 'Suhu demo (°C)' : 'Suhu (°C)',
+                        label: 'Suhu (°C)',
                         data: temps,
-                        borderColor: isDemo ? '#a78bfa' : '#4dd4ff',
-                        backgroundColor: isDemo ? 'rgba(167,139,250,0.11)' : 'rgba(77,212,255,0.10)',
+                        borderColor: '#4dd4ff',
+                        backgroundColor: 'rgba(77,212,255,0.10)',
                         pointBackgroundColor: temps.map(pointColor),
                         pointRadius: chartSizing.pointRadius,
                         pointHoverRadius: chartSizing.pointHoverRadius,
@@ -1220,7 +1155,7 @@
                             backgroundColor: 'rgba(7,16,31,0.96)',
                             titleColor: '#f5f7fb',
                             bodyColor: '#cbd5e1',
-                            borderColor: isDemo ? 'rgba(167,139,250,0.44)' : 'rgba(77,212,255,0.40)',
+                            borderColor: 'rgba(77,212,255,0.40)',
                             borderWidth: 1,
                             padding: 10,
                             cornerRadius: 10,
@@ -1300,14 +1235,9 @@
             historyChartInstance.update('none');
         }
 
-        function showDemoHistory() {
-            document.getElementById('historyTitle').textContent = `${historyDemoRoomName} · Demo`;
-            renderHistoryChart(makeDemoHistoryData(), true);
-        }
-
         function openHistory(roomId, roomName) {
             historyRoomId = roomId;
-            historyDemoRoomName = roomName;
+            historyCurrentRoomName = roomName;
             setHistoryRange(getHistoryRange());
             document.getElementById('historyTitle').textContent = roomName;
             document.getElementById('historyModal').classList.add('is-open');
@@ -1330,14 +1260,14 @@
                 .then(({ data, status }) => {
                     document.getElementById('historyLoading').hidden = true;
                     if (!data || data.length === 0) {
-                        showDemoHistory();
+                        document.getElementById('historyEmpty').hidden = false;
                         return;
                     }
-                    renderHistoryChart(data, false, status);
+                    renderHistoryChart(data, status);
                 })
                 .catch(() => {
                     document.getElementById('historyLoading').hidden = true;
-                    showDemoHistory();
+                    document.getElementById('historyEmpty').hidden = false;
                 });
         }
 
@@ -1359,7 +1289,7 @@
             setHistoryRange(e.target.value);
 
             if (historyRoomId !== null && document.getElementById('historyModal')?.classList.contains('is-open')) {
-                openHistory(historyRoomId, historyDemoRoomName);
+                openHistory(historyRoomId, historyCurrentRoomName);
             }
         });
 
@@ -1423,6 +1353,7 @@
             });
         }
         setInterval(refreshTemps, 5000);
+        document.addEventListener('DOMContentLoaded', refreshTemps);
 
         function setSystemStatus(online) {
             const el = document.getElementById('systemStatus');

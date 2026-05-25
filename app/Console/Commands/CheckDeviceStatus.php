@@ -26,7 +26,7 @@ class CheckDeviceStatus extends Command
 
     public function handle()
     {
-        $lock = Cache::lock('device_check_lock', 70);
+        $lock = Cache::lock('device_check_lock', 90);
 
         if (! $lock->get()) {
             $this->warn('Another instance is already running');

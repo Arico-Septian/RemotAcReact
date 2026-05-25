@@ -37,7 +37,11 @@ class AcUnitController extends Controller
             ->take(2)
             ->get();
 
-        $currentTemp = $tempHistory->first()?->temperature;
+        $latestTempRecord = $tempHistory->first();
+        $isFresh = $latestTempRecord
+            && $latestTempRecord->created_at
+            && now()->diffInSeconds($latestTempRecord->created_at, true) <= 120;
+        $currentTemp = $isFresh ? $latestTempRecord->temperature : null;
 
         if ($currentTemp !== null) {
             $deltaT = $this->calculateDeltaT($tempHistory);

@@ -229,27 +229,28 @@ class Notification extends Model
     {
         // Cek SEMUA reason keys (temperature & device offline)
         $reasons = ['temperature_offline', 'device_offline'];
-        $wasWarned = false;
-        $recoveredReason = null;
+        $recoveredReasons = [];
+        $roomKey = self::roomKey($roomName);
 
         foreach ($reasons as $reason) {
-            $roomKey = self::roomKey($roomName);
             $key = "notification_state:fuzzy_warning:{$roomKey}:{$reason}";
             if (Cache::has($key)) {
-                $wasWarned = true;
-                $recoveredReason = $reason;
+                $recoveredReasons[] = $reason;
                 Cache::forget($key);
             }
         }
 
         // Tidak ada warning sebelumnya → tidak perlu notif recovery
-        if (! $wasWarned) {
+        if (empty($recoveredReasons)) {
             return null;
         }
 
-        $message = $recoveredReason === 'device_offline'
-            ? 'ESP ruangan '.ucwords($roomName).' online — Fuzzy logic aktif kembali.'
-            : 'Sensor suhu ruangan '.ucwords($roomName).' online — Fuzzy logic aktif kembali.';
+        $hasBoth = count($recoveredReasons) === 2;
+        $message = $hasBoth
+            ? 'ESP dan sensor suhu ruangan '.ucwords($roomName).' online — Fuzzy logic aktif kembali.'
+            : (in_array('device_offline', $recoveredReasons, true)
+                ? 'ESP ruangan '.ucwords($roomName).' online — Fuzzy logic aktif kembali.'
+                : 'Sensor suhu ruangan '.ucwords($roomName).' online — Fuzzy logic aktif kembali.');
 
         return self::notify('fuzzy_recovery', "Fuzzy Logic: {$roomName}", [
             'severity' => 'info',
