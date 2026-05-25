@@ -561,99 +561,14 @@
             font-size: 18px;
         }
 
-        .temp-ring-inner .ring-fuzzy {
-            margin-top: 10px !important;
-            width: 78% !important;
-            max-width: 220px !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-            text-align: center !important;
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 6px !important;
+        .ac-ctrl-busy {
+            opacity: 0.50 !important;
+            pointer-events: none !important;
+            cursor: wait !important;
         }
 
-        .temp-ring-inner .ring-fuzzy__line {
-            display: flex !important;
-            align-items: baseline !important;
-            justify-content: center !important;
-            gap: 6px !important;
-            line-height: 1.1 !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__line .k {
-            font-size: 10px !important;
-            color: rgba(255, 255, 255, .60) !important;
-            letter-spacing: .2px !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__line .v {
-            font-size: 12px !important;
-            font-weight: 800 !important;
-            color: rgba(255, 255, 255, .92) !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__badges {
-            margin-top: 4px !important;
-            display: flex !important;
-            justify-content: center !important;
-            gap: 8px !important;
-            flex-wrap: wrap !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__badges .badge {
-            font-size: 11px !important;
-            font-weight: 900 !important;
-            padding: 5px 10px !important;
-            border-radius: 999px !important;
-            border: 1px solid rgba(255, 255, 255, .14) !important;
-            background: rgba(0, 0, 0, .18) !important;
-            line-height: 1 !important;
-            white-space: nowrap !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__badges .badge--cyan {
-            color: #67e8f9 !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__badges .badge--yellow {
-            color: #facc15 !important;
-        }
-
-        .temp-ring-inner .ring-fuzzy__sub {
-            font-size: 10px !important;
-            color: rgba(255, 255, 255, .55) !important;
-            line-height: 1.1 !important;
-        }
-
-        .fuzzy-btn {
-            width: 220px;
-            height: 42px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, .12);
-            background:
-                linear-gradient(180deg,
-                    rgba(77, 212, 255, .18),
-                    rgba(77, 212, 255, .08));
-            color: #67e8f9;
-            font-size: 13px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: .2s;
-            box-shadow:
-                0 8px 22px rgba(77, 212, 255, .12);
-        }
-
-        .fuzzy-btn:hover {
-            transform: translateY(-1px);
-            background:
-                linear-gradient(180deg,
-                    rgba(77, 212, 255, .24),
-                    rgba(77, 212, 255, .10));
+        .ac-ctrl-busy i.fa-spinner {
+            display: inline-block;
         }
 
         /* #2 Toolbar responsiveness for small screens */
@@ -1378,31 +1293,6 @@
         </div>
     </div>
 
-    
-    <?php if(in_array(Auth::user()->role, ['admin', 'operator'])): ?>
-        <div id="bulkModal" class="modal-backdrop">
-            <div class="modal" style="max-width:400px;">
-                <div class="modal-body text-center" style="padding-top:22px;">
-                    <div id="bulkModalIcon" class="confirm-icon info"><i class="fa-solid fa-power-off"></i></div>
-                    <h2 style="font-size:16px;font-weight:600;color:var(--ink-0);margin:0 0 4px;">Kontrol Semua AC</h2>
-                    <p id="bulkModalDesc" class="text-sm" style="color:var(--ink-2);margin:0 0 4px;"></p>
-                    <p class="text-xs" style="color:var(--ink-3);"><span
-                            style="color:var(--ink-0);font-weight:600;"><?php echo e($room->name); ?></span> ·
-                        <?php echo e($acs->count()); ?> unit</p>
-                </div>
-                <div class="modal-footer" style="padding-top:6px;">
-                    <button type="button" onclick="closeBulkModal()" class="btn btn-ghost flex-1">Batal</button>
-                    <form id="bulkForm" method="POST" action="/rooms/<?php echo e($room->id); ?>/ac/bulk-power"
-                        class="flex-1">
-                        <?php echo csrf_field(); ?>
-                        <input type="hidden" name="power" id="bulkPowerInput" value="">
-                        <button id="bulkModalConfirm" type="submit"
-                            class="btn btn-primary btn-block">Lanjutkan</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    <?php endif; ?>
 
     
     <?php if(auth()->guard()->check()): ?>
@@ -1491,6 +1381,22 @@
     <script>
         let currentAcId = null;
         const normalizeFormValue = value => (value || '').trim().toLowerCase();
+
+        async function acFetch(url, body = null) {
+            const headers = {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            };
+            const opts = { method: 'POST', headers };
+            if (body) {
+                headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                opts.body = new URLSearchParams(body).toString();
+            }
+            const res = await fetch(url, opts);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res;
+        }
 
         function blockDuplicateInput(input, message) {
             input.setCustomValidity(message);
@@ -1668,59 +1574,64 @@
             if (e.target === document.getElementById('modal')) closeModal();
         });
 
-        function setTemp(id, temp) {
+        async function setTemp(id, temp) {
             if (temp < 16) temp = 16;
             if (temp > 30) temp = 30;
 
-            // Skip request kalau suhu sudah di nilai yang sama (mencegah klik berulang
-            // di batas 16/30 atau klik tanpa perubahan ngirim POST sia-sia ke server).
-            const tempEl = document.querySelector(`#ac-${id} .temp-value`);
+            const panel = document.getElementById(`ac-${id}`);
+            const tempEl = panel?.querySelector('.temp-value');
             const current = tempEl ? parseInt(tempEl.textContent, 10) : NaN;
             if (!isNaN(current) && current === temp) {
-                if (window.smToast) {
-                    window.smToast(
-                        temp === 16 ? 'Suhu sudah di minimum (16°C)' :
-                        temp === 30 ? 'Suhu sudah di maksimum (30°C)' :
-                        `Suhu sudah ${temp}°C`,
-                        'info'
-                    );
-                }
+                window.smToast?.(
+                    temp === 16 ? 'Suhu sudah di minimum (16°C)' :
+                    temp === 30 ? 'Suhu sudah di maksimum (30°C)' :
+                    `Suhu sudah ${temp}°C`,
+                    'info'
+                );
                 return;
             }
 
-            // Disable kedua tombol, tampilkan spinner di tombol yang baru saja diklik
-            // (deteksi arah dari target temp vs current temp).
-            const ctrlBtns = document.querySelectorAll(`#ac-${id} .ctrl-row .ctrl-btn`);
-            const clickedBtn = !isNaN(current) ?
-                (temp < current ? ctrlBtns[0] : ctrlBtns[ctrlBtns.length - 1]) :
-                null;
-            ctrlBtns.forEach(b => {
-                b.disabled = true;
-                b.style.opacity = '0.5';
-            });
-            if (clickedBtn) {
-                clickedBtn.style.opacity = '1';
-                clickedBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i>';
-            }
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = `/ac/${id}/temp/${temp}`;
-            const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
-            if (csrf) {
-                const i = document.createElement('input');
-                i.type = 'hidden';
-                i.name = '_token';
-                i.value = csrf;
-                form.appendChild(i);
-            }
-            const acPanel = document.getElementById(`ac-${id}`);
-            const acName = acPanel
-                ? `AC ${acPanel.dataset.acNumber}${acPanel.dataset.acName ? ' · ' + acPanel.dataset.acName : ''}`
-                : 'AC';
-            queuePendingToast(`${acName} suhu diubah ke ${temp}°C`);
+            const btnMinus = panel?.querySelector('.ctrl-btn[title*="Turunkan"]');
+            const btnPlus  = panel?.querySelector('.ctrl-btn[title*="Naikkan"]');
+            [btnMinus, btnPlus].forEach(b => b && b.classList.add('ac-ctrl-busy'));
 
-            document.body.appendChild(form);
-            form.submit();
+            // Optimistic UI
+            if (tempEl) tempEl.textContent = temp;
+            const ring = document.getElementById(`tempRing-${id}`);
+            if (ring) {
+                ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
+                ring.classList.add(temp <= 20 ? 'temp-cool' : temp <= 25 ? 'temp-warm' : 'temp-hot');
+            }
+
+            const acName = panel
+                ? `AC ${panel.dataset.acNumber}${panel.dataset.acName ? ' · ' + panel.dataset.acName : ''}`
+                : 'AC';
+
+            const minDelay = new Promise(r => setTimeout(r, 2000));
+            try {
+                await acFetch(`/ac/${id}/temp/${temp}`);
+                window.smToast?.(`${acName} suhu diubah ke ${temp}°C`, 'success');
+            } catch {
+                // Revert
+                if (tempEl) tempEl.textContent = current;
+                if (ring) {
+                    ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
+                    ring.classList.add(current <= 20 ? 'temp-cool' : current <= 25 ? 'temp-warm' : 'temp-hot');
+                }
+                window.smToast?.('Gagal mengubah suhu AC', 'error');
+            } finally {
+                await minDelay;
+                [btnMinus, btnPlus].forEach(b => b && b.classList.remove('ac-ctrl-busy'));
+                const actualTemp = tempEl ? parseInt(tempEl.textContent, 10) : temp;
+                if (btnMinus) {
+                    btnMinus.disabled = actualTemp <= 16;
+                    btnMinus.setAttribute('onclick', `setTemp(${id}, ${actualTemp - 1})`);
+                }
+                if (btnPlus) {
+                    btnPlus.disabled = actualTemp >= 30;
+                    btnPlus.setAttribute('onclick', `setTemp(${id}, ${actualTemp + 1})`);
+                }
+            }
         }
 
         function toggleTimer(id) {
@@ -1736,28 +1647,57 @@
                 '<i class="fa-solid fa-pen text-[9px]"></i><span>Edit</span>';
         }
         document.querySelectorAll('.timer-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
                 const on = this.querySelector('[name="timer_on"]').value;
                 const off = this.querySelector('[name="timer_off"]').value;
                 if (on === off && on !== '') {
-                    e.preventDefault();
-                    window.smToast('Timer ON dan OFF tidak boleh sama', 'error');
+                    window.smToast?.('Timer ON dan OFF tidak boleh sama', 'error');
                     return;
                 }
-                const btn = this.querySelector('.save-timer-btn');
-                if (btn) btn.classList.add('is-loading');
+                const acId = this.querySelector('[name="ac_id"]')?.value;
+                const saveBtn = this.querySelector('.save-timer-btn');
+                if (saveBtn) saveBtn.classList.add('ac-ctrl-busy');
+
+                const minDelay = new Promise(r => setTimeout(r, 2000));
+                try {
+                    await acFetch(this.action, { timer_on: on, timer_off: off });
+                    updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: on || null, timer_off: off || null });
+                    window.smToast?.('Timer berhasil disimpan', 'success');
+                } catch {
+                    window.smToast?.('Gagal menyimpan timer', 'error');
+                } finally {
+                    await minDelay;
+                    if (saveBtn?.isConnected) saveBtn.classList.remove('ac-ctrl-busy');
+                }
             });
         });
-        document.querySelectorAll('.delete-timer-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                if (!confirm('Hapus timer AC ini?')) {
-                    e.preventDefault();
-                    return;
-                }
 
-                const btn = this.querySelector('button[type="submit"]');
-                if (btn) btn.classList.add('is-loading');
-            });
+        async function handleDeleteTimer(e, form) {
+            e.preventDefault();
+            if (!confirm('Hapus timer AC ini?')) return;
+            const panel = form.closest('.ac-panel');
+            const acId = panel?.dataset.acId;
+            const deleteBtn = form.querySelector('button[type="submit"]');
+            if (deleteBtn) deleteBtn.classList.add('ac-ctrl-busy');
+
+            const minDelay = new Promise(r => setTimeout(r, 2000));
+            let ok = false;
+            try {
+                await acFetch(form.action, { timer_on: '', timer_off: '' });
+                ok = true;
+                updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: null, timer_off: null });
+                window.smToast?.('Timer berhasil dihapus', 'success');
+            } catch {
+                window.smToast?.('Gagal menghapus timer', 'error');
+            } finally {
+                await minDelay;
+                if (!ok && deleteBtn?.isConnected) deleteBtn.classList.remove('ac-ctrl-busy');
+            }
+        }
+
+        document.querySelectorAll('.delete-timer-form').forEach(form => {
+            form.addEventListener('submit', e => handleDeleteTimer(e, form));
         });
 
         function toggleDropdown() {
@@ -1787,77 +1727,123 @@
             return false;
         }
 
-        let pendingPowerForm = null;
+        let pendingPower = null;
         document.querySelectorAll('.power-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                pendingPowerForm = this;
                 const targetPower = (this.querySelector('[name="power"]')?.value || '').toUpperCase();
-                const turnOn = targetPower ? targetPower === 'ON' : (this.dataset.acPower || 'OFF')
-                    .toUpperCase() !== 'ON';
+                const turnOn = targetPower === 'ON';
+                const acName = this.dataset.acName || 'AC ini';
+                pendingPower = {
+                    id: this.closest('.ac-panel')?.dataset.acId,
+                    power: targetPower,
+                    acName,
+                    form: this,
+                    btn: this.querySelector('.power-btn'),
+                };
                 const icon = document.getElementById('powerModalIcon');
                 const desc = document.getElementById('powerModalDesc');
                 const conf = document.getElementById('powerModalConfirm');
                 if (turnOn) {
                     icon.className = 'confirm-icon success';
                     conf.className = 'btn btn-mint flex-1';
-                    desc.textContent = `Nyalakan ${this.dataset.acName || 'AC ini'}?`;
+                    desc.textContent = `Nyalakan ${acName}?`;
                 } else {
                     icon.className = 'confirm-icon danger';
                     conf.className = 'btn btn-danger flex-1';
-                    desc.textContent = `Matikan ${this.dataset.acName || 'AC ini'}?`;
+                    desc.textContent = `Matikan ${acName}?`;
                 }
                 document.getElementById('powerModal').classList.add('is-open');
             });
         });
 
-        function confirmPower() {
+        async function confirmPower() {
             document.getElementById('powerModal').classList.remove('is-open');
-            if (pendingPowerForm) {
-                pendingPowerForm.submit();
-                pendingPowerForm = null;
+            if (!pendingPower) return;
+            const { id, power, acName, form, btn } = pendingPower;
+            pendingPower = null;
+
+            const turnOn = power === 'ON';
+
+            // Optimistic UI
+            if (btn) { btn.classList.toggle('on', turnOn); btn.classList.add('ac-ctrl-busy'); }
+            const powerInput = form?.querySelector('[name="power"]');
+            if (powerInput) powerInput.value = turnOn ? 'OFF' : 'ON';
+            if (form) form.dataset.acPower = power;
+
+            const minDelay = new Promise(r => setTimeout(r, 2000));
+            try {
+                await acFetch(`/ac/${id}/toggle`, { power });
+                window.smToast?.(`${acName} power ${power}`, 'success');
+            } catch {
+                // Revert
+                if (btn) btn.classList.toggle('on', !turnOn);
+                if (powerInput) powerInput.value = power;
+                if (form) form.dataset.acPower = turnOn ? 'OFF' : 'ON';
+                window.smToast?.('Gagal mengubah power AC', 'error');
+            } finally {
+                await minDelay;
+                if (btn) btn.classList.remove('ac-ctrl-busy');
             }
         }
 
         function cancelPower() {
             document.getElementById('powerModal').classList.remove('is-open');
-            pendingPowerForm = null;
+            pendingPower = null;
         }
         document.getElementById('powerModal')?.addEventListener('click', e => {
             if (e.target === document.getElementById('powerModal')) cancelPower();
         });
 
-        function openBulkModal(power) {
-            const icon = document.getElementById('bulkModalIcon');
-            const desc = document.getElementById('bulkModalDesc');
-            const conf = document.getElementById('bulkModalConfirm');
-            document.getElementById('bulkPowerInput').value = power;
-            if (power === 'ON') {
-                icon.className = 'confirm-icon success';
-                conf.className = 'btn btn-mint btn-block';
-                desc.textContent = 'Nyalakan SEMUA AC di ruangan ini?';
-            } else {
-                icon.className = 'confirm-icon danger';
-                conf.className = 'btn btn-danger btn-block';
-                desc.textContent = 'Matikan SEMUA AC di ruangan ini?';
-            }
-            document.getElementById('bulkModal').classList.add('is-open');
-        }
+document.querySelectorAll('.control-form').forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = this.querySelector('.mode-btn-v, .mode-btn-h');
+                if (!btn || btn.classList.contains('active')) return;
 
-        function closeBulkModal() {
-            document.getElementById('bulkModal').classList.remove('is-open');
-        }
-        document.getElementById('bulkModal')?.addEventListener('click', e => {
-            if (e.target === document.getElementById('bulkModal')) closeBulkModal();
-        });
+                const action = this.action;
+                const panel = this.closest('.ac-panel');
+                const acId = panel?.dataset.acId;
+                const acName = panel
+                    ? `AC ${panel.dataset.acNumber}${panel.dataset.acName ? ' · ' + panel.dataset.acName : ''}`
+                    : 'AC';
 
-        document.querySelectorAll('.control-form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const btn = this.querySelector('.mode-btn-v, .mode-btn-h, .mode-btn');
-                if (btn) {
-                    btn.style.opacity = '0.65';
-                    btn.style.pointerEvents = 'none';
-                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i>';
+                let prefix, segment, label;
+                if (action.includes('/mode/')) {
+                    prefix = `/ac/${acId}/mode/`;
+                    segment = action.split('/mode/')[1];
+                    label = `mode ${segment}`;
+                } else if (action.includes('/fan-speed/')) {
+                    prefix = `/ac/${acId}/fan-speed/`;
+                    segment = action.split('/fan-speed/')[1];
+                    label = `fan ${segment}`;
+                } else if (action.includes('/swing/')) {
+                    prefix = `/ac/${acId}/swing/`;
+                    segment = action.split('/swing/')[1];
+                    label = `swing ${segment}`;
+                }
+
+                // Optimistic: pindah active state
+                const oldActive = panel?.querySelector(`form[action^="${prefix}"] button.active`);
+                if (oldActive) oldActive.classList.remove('active');
+                btn.classList.add('active');
+
+                // Disable semua tombol dalam grup selama loading
+                const groupBtns = panel?.querySelectorAll(`form[action^="${prefix}"] button`);
+                groupBtns?.forEach(b => b.classList.add('ac-ctrl-busy'));
+
+                const minDelay = new Promise(r => setTimeout(r, 2000));
+                try {
+                    await acFetch(action);
+                    window.smToast?.(`${acName} ${label}`, 'success');
+                } catch {
+                    // Revert
+                    btn.classList.remove('active');
+                    if (oldActive) oldActive.classList.add('active');
+                    window.smToast?.('Gagal mengubah pengaturan AC', 'error');
+                } finally {
+                    await minDelay;
+                    groupBtns?.forEach(b => b.classList.remove('ac-ctrl-busy'));
                 }
             });
         });
@@ -1972,12 +1958,7 @@
                             const action = form.getAttribute('action') || '';
                             const segment = action.split('/').pop();
                             const btn = form.querySelector('button');
-                            if (btn) {
-                                btn.classList.toggle('active', segment === value);
-                                // Restore opacity & inner HTML kalau sebelumnya kena spinner submit
-                                btn.style.opacity = '';
-                                btn.style.pointerEvents = '';
-                            }
+                            if (btn) btn.classList.toggle('active', segment === value);
                         });
                     };
                     setActiveByForm(`/ac/${payload.ac_unit_id}/mode/`, mode);
@@ -2030,14 +2011,7 @@
                         // Re-bind delete-timer confirm
                         const delForm = view.querySelector('.delete-timer-form');
                         if (delForm) {
-                            delForm.addEventListener('submit', function(e) {
-                                if (!confirm('Hapus timer AC ini?')) {
-                                    e.preventDefault();
-                                    return;
-                                }
-                                const b = this.querySelector('button[type="submit"]');
-                                if (b) b.classList.add('is-loading');
-                            });
+                            delForm.addEventListener('submit', e => handleDeleteTimer(e, delForm));
                         }
                     } else {
                         view.innerHTML = `
@@ -2114,73 +2088,10 @@
                 closeModal();
                 closeEditModal();
                 cancelPower();
-                closeBulkModal();
                 document.getElementById('dropdownAC')?.classList.remove('show');
             }
         });
         if (window.history.replaceState) window.history.replaceState(null, null, window.location.href);
-
-        /* #5 Control feedback toast — disimpan ke sessionStorage sebelum form submit
-           karena page langsung navigate; toast dibaca & ditampilkan setelah reload. */
-        function queuePendingToast(msg, type = 'success') {
-            try {
-                sessionStorage.setItem('pendingToast', JSON.stringify({
-                    msg,
-                    type,
-                    t: Date.now()
-                }));
-            } catch (e) {}
-        }
-
-        function flushPendingToast() {
-            try {
-                const raw = sessionStorage.getItem('pendingToast');
-                if (!raw) return;
-                sessionStorage.removeItem('pendingToast');
-                const {
-                    msg,
-                    type,
-                    t
-                } = JSON.parse(raw);
-                // Buang toast usang (> 8 detik) untuk hindari muncul di navigasi lain
-                if (!msg || (Date.now() - (t || 0)) > 8000) return;
-                if (window.smToast) window.smToast(msg, type || 'success');
-            } catch (e) {}
-        }
-
-        document.querySelectorAll('.control-form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const action = this.action || '';
-                const acName = this.closest('.ac-panel')?.dataset.acName || 'AC';
-
-                if (action.includes('/mode/')) {
-                    const mode = action.split('/mode/')[1];
-                    queuePendingToast(`${acName} mode changed to ${mode}`);
-                } else if (action.includes('/fan-speed/')) {
-                    const speed = action.split('/fan-speed/')[1];
-                    queuePendingToast(`${acName} fan speed set to ${speed}`);
-                } else if (action.includes('/swing/')) {
-                    queuePendingToast(`${acName} swing changed`);
-                }
-            });
-        });
-
-        document.querySelectorAll('.power-form').forEach(form => {
-            form.addEventListener('submit', function() {
-                const acName = this.dataset.acName || 'AC';
-                const newState = (this.querySelector('[name="power"]')?.value || '').toUpperCase() ||
-                    (((this.dataset.acPower || 'OFF').toUpperCase() === 'ON') ? 'OFF' : 'ON');
-
-                queuePendingToast(`${acName} power ${newState}`);
-            });
-        });
-
-        // Tampilkan toast yang tersimpan saat halaman selesai reload
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', flushPendingToast);
-        } else {
-            flushPendingToast();
-        }
 
         // Jalankan interval status perangkat
         setInterval(updateEspStatus, 5000);
