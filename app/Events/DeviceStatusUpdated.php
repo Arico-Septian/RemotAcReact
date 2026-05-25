@@ -7,10 +7,10 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 class DeviceStatusUpdated implements ShouldBroadcastNow
 {
-    public $deviceId;
-    public $status;
+    public string $deviceId;
+    public string $status;
 
-    public function __construct($deviceId, $status)
+    public function __construct(string $deviceId, string $status)
     {
         $this->deviceId = $deviceId;
         $this->status = $status;

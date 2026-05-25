@@ -6,6 +6,7 @@ use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class UpdateLastActivity
@@ -21,7 +22,7 @@ class UpdateLastActivity
             if (! Cache::has($cacheKey)) {
                 /** @var User $user */
                 $user = Auth::user();
-                $user->last_activity = now();
+                $user->last_activity = Carbon::now();
                 $user->save();
 
                 Cache::put($cacheKey, true, self::THROTTLE_SECONDS);
