@@ -389,7 +389,7 @@ class RoomController extends Controller
 
         $isOnline = ($status === 'online' || $status === 'available')
             && $lastSeen
-            && now()->diffInSeconds($lastSeen, true) <= 30;
+            && now()->diffInSeconds($lastSeen, true) <= 300;
 
         $room->device_status = $isOnline ? 'online' : 'offline';
 

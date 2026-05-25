@@ -1422,6 +1422,7 @@
             });
         }
         setInterval(refreshTemps, 5000);
+        document.addEventListener('DOMContentLoaded', refreshTemps);
 
         function setSystemStatus(online) {
             const el = document.getElementById('systemStatus');

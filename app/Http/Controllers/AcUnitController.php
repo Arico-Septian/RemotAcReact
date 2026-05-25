@@ -302,8 +302,15 @@ class AcUnitController extends Controller
 
         $acController = new AcControlController;
 
-        foreach ($room->acUnits as $ac) {
+        $activeAcUnits = $room->acUnits->filter(
+            fn ($ac) => strtoupper((string) ($ac->status?->power ?? 'OFF')) === 'ON'
+        );
 
+        if ($activeAcUnits->isEmpty()) {
+            return back()->with('warning', 'Tidak ada AC yang aktif');
+        }
+
+        foreach ($activeAcUnits as $ac) {
             $acController->fuzzySetTemp(
                 $ac,
                 $targetSetpoint
@@ -312,7 +319,7 @@ class AcUnitController extends Controller
 
         return back()->with(
             'success',
-            'Fuzzy berhasil diterapkan ke semua AC'
+            'Fuzzy berhasil diterapkan ke semua AC aktif'
         );
     }
 
@@ -380,53 +387,4 @@ class AcUnitController extends Controller
         }
     }
 
-    public function schedule(Request $request, $id)
-    {
-        $request->validate([
-            'timer_on' => 'nullable|date_format:H:i',
-            'timer_off' => 'nullable|date_format:H:i',
-        ]);
-
-        // OFF & ON boleh kapan saja (termasuk cross-midnight). Yang dilarang hanya identik.
-        if ($request->timer_on && $request->timer_off && $request->timer_on === $request->timer_off) {
-            return back()->withErrors([
-                'Timer ON dan OFF tidak boleh sama',
-            ])->withInput();
-        }
-
-        $ac = AcUnit::findOrFail($id);
-
-        // UX: Cek jika data tidak berubah untuk menghemat resource
-        if ($ac->timer_on === $request->timer_on && $ac->timer_off === $request->timer_off) {
-            return back();
-        }
-
-        $ac->update([
-            'timer_on' => $request->timer_on,
-            'timer_off' => $request->timer_off,
-        ]);
-
-        // Security & Sync: Kirim ke MQTT agar ESP32 tahu ada perubahan timer
-        try {
-            $mqtt = new MqttService;
-            $room = Room::findOrFail($ac->room_id);
-            $topic = 'room/'.MqttService::roomToTopic($room->name)."/ac/{$ac->ac_number}/timer";
-
-            if (! $request->timer_on && ! $request->timer_off) {
-                $mqtt->clearRetained($topic);
-            } else {
-                $mqtt->publish($topic, json_encode([
-                    'timer_on' => $request->timer_on,
-                    'timer_off' => $request->timer_off,
-                ]), 1, true);
-            }
-        } catch (\Throwable $e) {
-            \Log::warning('MQTT Timer sync failed in AcUnitController', [
-                'ac_id' => $ac->id,
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return back()->with('success', 'Timer disimpan');
-    }
 }
