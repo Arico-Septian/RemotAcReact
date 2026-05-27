@@ -1911,30 +1911,6 @@
             }
         };
 
-        const temperatureThresholdPlugin = {
-            id: 'temperatureThreshold',
-            afterDraw(chart) {
-                const yScale = chart.scales.y;
-                const { ctx, chartArea } = chart;
-                if (!yScale || !chartArea) return;
-
-                const y = yScale.getPixelForValue(30);
-                ctx.save();
-                ctx.setLineDash([5, 5]);
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = 'rgba(251,191,36,0.45)';
-                ctx.beginPath();
-                ctx.moveTo(chartArea.left, y);
-                ctx.lineTo(chartArea.right, y);
-                ctx.stroke();
-                ctx.setLineDash([]);
-                ctx.fillStyle = 'rgba(251,191,36,0.85)';
-                ctx.font = '10px Inter, sans-serif';
-                ctx.textAlign = 'right';
-                ctx.fillText('30\u00b0C', chartArea.right - 2, y - 6);
-                ctx.restore();
-            }
-        };
 
         /* ===== NOTIFICATIONS ===== */
         let notifEnabled = localStorage.getItem('notifEnabled') === 'true';
@@ -2053,7 +2029,7 @@
                     labels: [],
                     datasets: []
                 },
-                plugins: [glowLinePlugin, temperatureThresholdPlugin, crosshairGlowPlugin, {
+                plugins: [glowLinePlugin, crosshairGlowPlugin, {
                     id: 'hoverFocus',
                     _lastActive: -1,
                     afterEvent(chart, args) {
