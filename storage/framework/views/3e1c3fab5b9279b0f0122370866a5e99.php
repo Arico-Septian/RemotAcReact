@@ -27,7 +27,7 @@
         <a href="/logs"
            class="bnav-item <?php echo e(request()->is('logs*') ? 'active' : ''); ?>">
             <i class="fa-solid fa-clock-rotate-left"></i>
-            <span>Logs</span>
+            <span>Aktivitas</span>
         </a>
     <?php endif; ?>
 

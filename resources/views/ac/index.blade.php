@@ -1003,7 +1003,7 @@
                                 @if (in_array(Auth::user()->role, ['admin', 'operator']))
                                     <div class="flex items-center gap-1.5">
                                         <button type="button" onclick="openEditModal()" class="btn-icon lavender"
-                                            title="Edit AC">
+                                            title="Edit Unit AC">
                                             <i class="fa-solid fa-pen text-[10px]"></i>
                                         </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
@@ -1057,7 +1057,7 @@
                                         <div class="temp-ring temp-{{ $tempCategory }}"
                                             id="tempRing-{{ $ac->id }}">
                                             <div class="temp-ring-inner">
-                                                <p class="ring-label">Suhu Ac</p>
+                                                <p class="ring-label">AC Temp</p>
                                                 <div class="ring-temp">
                                                     <span class="temp-value">{{ $curTemp }}</span><span
                                                         class="unit">°C</span>
@@ -1207,13 +1207,13 @@
                                                         <input type="hidden" name="timer_off" value="">
                                                         <button type="submit" class="btn btn-ghost btn-sm btn-block">
                                                             <i class="fa-solid fa-trash text-[10px]"></i>
-                                                            <span>Hapus Timer</span>
+                                                            <span>Delete Timer</span>
                                                         </button>
                                                     </form>
                                                 @else
                                                     <div class="timer-empty">
                                                         <i class="fa-regular fa-clock"></i>
-                                                        Belum ada timer terpasang
+                                                        No timer set
                                                     </div>
                                                 @endif
                                             </div>
@@ -1240,11 +1240,11 @@
                                                 </div>
                                                 <div class="flex gap-2">
                                                     <button type="button" class="btn btn-ghost btn-sm flex-1"
-                                                        onclick="toggleTimer({{ $ac->id }})">Batal</button>
+                                                        onclick="toggleTimer({{ $ac->id }})">Cancel</button>
                                                     <button type="submit"
                                                         class="btn btn-primary btn-sm flex-1 save-timer-btn">
                                                         <i class="fa-solid fa-check text-[10px]"></i>
-                                                        <span>Simpan</span>
+                                                        <span>Save</span>
                                                     </button>
                                                 </div>
                                             </form>
@@ -1258,8 +1258,8 @@
                             <div class="panel">
                                 <div class="empty-state">
                                     <div class="empty-icon"><i class="fa-solid fa-snowflake"></i></div>
-                                    <p class="empty-title">Belum ada AC unit</p>
-                                    <p class="empty-sub">Tambahkan AC unit pertama untuk mulai mengontrol</p>
+                                    <p class="empty-title">No AC units</p>
+                                    <p class="empty-sub">Add the first AC unit to start controlling</p>
                                 </div>
                             </div>
                         @endif
@@ -1280,7 +1280,7 @@
                 <p id="powerModalDesc" class="text-sm" style="color:var(--ink-2);margin:0;"></p>
             </div>
             <div class="modal-footer" style="padding-top:6px;">
-                <button type="button" onclick="cancelPower()" class="btn btn-ghost flex-1">Batal</button>
+                <button type="button" onclick="cancelPower()" class="btn btn-ghost flex-1">Cancel</button>
                 <button type="button" id="powerModalConfirm" onclick="confirmPower()"
                     class="btn btn-primary flex-1">Lanjutkan</button>
             </div>
@@ -1296,35 +1296,35 @@
                     <div class="modal-header">
                         <div>
                             <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
-                            <h2>Tambah AC Unit</h2>
+                            <h2>Add AC Unit</h2>
                         </div>
                     </div>
                     <form id="addACForm" method="POST" action="/rooms/{{ $room->id }}/ac">
                         @csrf
                         <div class="modal-body space-y-3">
                             <div class="field">
-                                <label class="field-label">Nomor AC</label>
+                                <label class="field-label">AC Number</label>
                                 <input class="input text-mono" type="number" name="ac_number" min="1"
                                     max="15" placeholder="1" required>
                             </div>
                             <div class="field">
-                                <label class="field-label">Nama AC</label>
+                                <label class="field-label">AC Name</label>
                                 <input class="input" type="text" name="name" placeholder="unit_a" pattern="\S+"
-                                    title="Nama AC tidak boleh mengandung spasi" required>
+                                    title="AC name must not contain spaces" required>
                                 <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
                                     boleh ada spasi</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" type="text" name="brand" placeholder="daikin" pattern="\S+"
-                                    title="Brand tidak boleh mengandung spasi" required>
+                                    title="Brand must not contain spaces" required>
                                 <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
                                     boleh ada spasi</p>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-ghost" onclick="closeModal()">Batal</button>
-                            <button type="submit" class="btn btn-primary">Buat AC Unit</button>
+                            <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Create AC Unit</button>
                         </div>
                     </form>
                 </div>
@@ -1335,7 +1335,7 @@
                     <div class="modal-header">
                         <div>
                             <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                            <h2>Edit AC Unit</h2>
+                            <h2>Edit Unit AC</h2>
                         </div>
                     </div>
                     <form id="editACForm" method="POST" action="">
@@ -1343,28 +1343,28 @@
                         @method('PUT')
                         <div class="modal-body space-y-3">
                             <div class="field">
-                                <label class="field-label">Nomor AC</label>
+                                <label class="field-label">AC Number</label>
                                 <input class="input text-mono" id="editAcNumber" type="number" name="ac_number"
                                     min="1" max="15" required>
                             </div>
                             <div class="field">
-                                <label class="field-label">Nama AC</label>
+                                <label class="field-label">AC Name</label>
                                 <input class="input" id="editAcName" type="text" name="name" pattern="\S+"
-                                    title="Nama AC tidak boleh mengandung spasi" required>
+                                    title="AC name must not contain spaces" required>
                                 <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
                                     boleh ada spasi</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" id="editAcBrand" type="text" name="brand" pattern="\S+"
-                                    title="Brand tidak boleh mengandung spasi" required>
+                                    title="Brand must not contain spaces" required>
                                 <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
                                     boleh ada spasi</p>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
                     </form>
                 </div>
@@ -1416,8 +1416,8 @@
 
         function validateNoSpaces(input, label) {
             if (/\s/.test(input.value)) {
-                input.setCustomValidity(`${label} tidak boleh mengandung spasi`);
-                setFieldFeedback(input, `${label} tidak boleh mengandung spasi`, true);
+                input.setCustomValidity(`${label} must not contain spaces`);
+                setFieldFeedback(input, `${label} must not contain spaces`, true);
                 return false;
             }
 
@@ -1457,7 +1457,7 @@
         document.querySelectorAll('#addACForm input, #editACForm input').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.name === 'name') {
-                    validateNoSpaces(input, 'Nama AC');
+                    validateNoSpaces(input, 'AC Name');
                     return;
                 }
 
@@ -1478,7 +1478,7 @@
                 brandInput
             } = normalizeAcForm(form);
 
-            if (!validateNoSpaces(nameInput, 'Nama AC')) {
+            if (!validateNoSpaces(nameInput, 'AC Name')) {
                 e.preventDefault();
                 nameInput.reportValidity();
                 return;
@@ -1492,13 +1492,13 @@
 
             if (acNumberExists(numberInput.value)) {
                 e.preventDefault();
-                blockDuplicateInput(numberInput, 'Nomor AC sudah ada di ruangan ini');
+                blockDuplicateInput(numberInput, 'AC number already exists in this room');
                 return;
             }
 
             if (acNameExists(nameInput.value)) {
                 e.preventDefault();
-                blockDuplicateInput(nameInput, 'Nama AC sudah ada di ruangan ini');
+                blockDuplicateInput(nameInput, 'AC name already exists in this room');
             }
         });
 
@@ -1510,7 +1510,7 @@
                 brandInput
             } = normalizeAcForm(form);
 
-            if (!validateNoSpaces(nameInput, 'Nama AC')) {
+            if (!validateNoSpaces(nameInput, 'AC Name')) {
                 e.preventDefault();
                 nameInput.reportValidity();
                 return;
@@ -1524,13 +1524,13 @@
 
             if (acNumberExists(numberInput.value, currentAcId)) {
                 e.preventDefault();
-                blockDuplicateInput(numberInput, 'Nomor AC sudah ada di ruangan ini');
+                blockDuplicateInput(numberInput, 'AC number already exists in this room');
                 return;
             }
 
             if (acNameExists(nameInput.value, currentAcId)) {
                 e.preventDefault();
-                blockDuplicateInput(nameInput, 'Nama AC sudah ada di ruangan ini');
+                blockDuplicateInput(nameInput, 'AC name already exists in this room');
             }
         });
 
@@ -1554,7 +1554,7 @@
 
         function openModal() {
             if ({{ $acs->count() }} >= 15) {
-                window.smToast('Maksimal 15 AC sudah tercapai', 'error');
+                window.smToast('Maximum 15 AC units reached', 'error');
                 return;
             }
             document.getElementById('modal')?.classList.add('is-open');
@@ -1577,9 +1577,9 @@
             const current = tempEl ? parseInt(tempEl.textContent, 10) : NaN;
             if (!isNaN(current) && current === temp) {
                 window.smToast?.(
-                    temp === 16 ? 'Suhu sudah di minimum (16°C)' :
-                    temp === 30 ? 'Suhu sudah di maksimum (30°C)' :
-                    `Suhu sudah ${temp}°C`,
+                    temp === 16 ? 'Already at minimum (16°C)' :
+                    temp === 30 ? 'Already at maximum (30°C)' :
+                    `Already at ${temp}°C`,
                     'info'
                 );
                 return;
@@ -1604,7 +1604,7 @@
             const minDelay = new Promise(r => setTimeout(r, 2000));
             try {
                 await acFetch(`/ac/${id}/temp/${temp}`);
-                window.smToast?.(`${acName} suhu diubah ke ${temp}°C`, 'success');
+                window.smToast?.(`${acName} temperature set to ${temp}°C`, 'success');
             } catch {
                 // Revert
                 if (tempEl) tempEl.textContent = current;
@@ -1612,7 +1612,7 @@
                     ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
                     ring.classList.add(current <= 20 ? 'temp-cool' : current <= 25 ? 'temp-warm' : 'temp-hot');
                 }
-                window.smToast?.('Gagal mengubah suhu AC', 'error');
+                window.smToast?.('Failed to update AC temperature', 'error');
             } finally {
                 await minDelay;
                 [btnMinus, btnPlus].forEach(b => b && b.classList.remove('ac-ctrl-busy'));
@@ -1637,7 +1637,7 @@
             view.classList.toggle('hidden', editing);
             edit.classList.toggle('hidden', !editing);
             btn.innerHTML = editing ?
-                '<i class="fa-solid fa-xmark text-[9px]"></i><span>Batal</span>' :
+                '<i class="fa-solid fa-xmark text-[9px]"></i><span>Cancel</span>' :
                 '<i class="fa-solid fa-pen text-[9px]"></i><span>Edit</span>';
         }
         document.querySelectorAll('.timer-form').forEach(form => {
@@ -1646,7 +1646,7 @@
                 const on = this.querySelector('[name="timer_on"]').value;
                 const off = this.querySelector('[name="timer_off"]').value;
                 if (on === off && on !== '') {
-                    window.smToast?.('Timer ON dan OFF tidak boleh sama', 'error');
+                    window.smToast?.('Timer ON and OFF cannot be the same', 'error');
                     return;
                 }
                 const acId = this.querySelector('[name="ac_id"]')?.value;
@@ -1657,9 +1657,9 @@
                 try {
                     await acFetch(this.action, { timer_on: on, timer_off: off });
                     updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: on || null, timer_off: off || null });
-                    window.smToast?.('Timer berhasil disimpan', 'success');
+                    window.smToast?.('Timer saved successfully', 'success');
                 } catch {
-                    window.smToast?.('Gagal menyimpan timer', 'error');
+                    window.smToast?.('Failed to save timer', 'error');
                 } finally {
                     await minDelay;
                     if (saveBtn?.isConnected) saveBtn.classList.remove('ac-ctrl-busy');
@@ -1669,7 +1669,7 @@
 
         async function handleDeleteTimer(e, form) {
             e.preventDefault();
-            if (!confirm('Hapus timer AC ini?')) return;
+            if (!confirm('Delete this AC timer?')) return;
             const panel = form.closest('.ac-panel');
             const acId = panel?.dataset.acId;
             const deleteBtn = form.querySelector('button[type="submit"]');
@@ -1681,9 +1681,9 @@
                 await acFetch(form.action, { timer_on: '', timer_off: '' });
                 ok = true;
                 updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: null, timer_off: null });
-                window.smToast?.('Timer berhasil dihapus', 'success');
+                window.smToast?.('Timer deleted successfully', 'success');
             } catch {
-                window.smToast?.('Gagal menghapus timer', 'error');
+                window.smToast?.('Failed to delete timer', 'error');
             } finally {
                 await minDelay;
                 if (!ok && deleteBtn?.isConnected) deleteBtn.classList.remove('ac-ctrl-busy');
@@ -1717,7 +1717,7 @@
 
         function confirmDelete(e) {
             e.preventDefault();
-            if (confirm('Hapus AC ini? Tindakan ini tidak dapat dibatalkan.')) e.target.submit();
+            if (confirm('Delete this AC? This action cannot be undone.')) e.target.submit();
             return false;
         }
 
@@ -1774,7 +1774,7 @@
                 if (btn) btn.classList.toggle('on', !turnOn);
                 if (powerInput) powerInput.value = power;
                 if (form) form.dataset.acPower = turnOn ? 'OFF' : 'ON';
-                window.smToast?.('Gagal mengubah power AC', 'error');
+                window.smToast?.('Failed to update AC power', 'error');
             } finally {
                 await minDelay;
                 if (btn) btn.classList.remove('ac-ctrl-busy');
@@ -1834,7 +1834,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                     // Revert
                     btn.classList.remove('active');
                     if (oldActive) oldActive.classList.add('active');
-                    window.smToast?.('Gagal mengubah pengaturan AC', 'error');
+                    window.smToast?.('Failed to update AC setting', 'error');
                 } finally {
                     await minDelay;
                     groupBtns?.forEach(b => b.classList.remove('ac-ctrl-busy'));
@@ -1893,7 +1893,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                 view.innerHTML = `
                     <div class="timer-empty">
                         <i class="fa-regular fa-clock"></i>
-                        Belum ada timer terpasang
+                        No timer set
                     </div>
                 `;
             }
@@ -1939,7 +1939,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                 .catch(() => {
                     if (!_espFetchFailed) {
                         _espFetchFailed = true;
-                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                        window.smToast?.('Failed to load device status', 'error');
                     }
                 });
         };

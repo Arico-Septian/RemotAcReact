@@ -27,7 +27,7 @@
         <a href="/logs"
            class="bnav-item {{ request()->is('logs*') ? 'active' : '' }}">
             <i class="fa-solid fa-clock-rotate-left"></i>
-            <span>Logs</span>
+            <span>Aktivitas</span>
         </a>
     @endif
 

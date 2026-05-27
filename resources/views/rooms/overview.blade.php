@@ -630,7 +630,7 @@
                     </button>
                     <div class="app-header-title">
                         <h1>Server Rooms</h1>
-                        <p>{{ $rooms->count() }} ruangan · AC monitoring</p>
+                        <p>{{ $rooms->count() }} rooms · AC monitoring</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -650,7 +650,7 @@
                         <div class="flex flex-row items-center gap-2">
                             <label class="search-input flex-1 min-w-0">
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                                <input id="searchInput" type="text" placeholder="Cari nama ruangan…"
+                                <input id="searchInput" type="text" placeholder="Search room name…"
                                     autocomplete="off">
                             </label>
                             <div class="segmented flex-shrink-0">
@@ -676,7 +676,7 @@
                                                     style="color:var(--lavender);"></i>
                                                 <span class="floor-label">{{ ucfirst($floorName) }}</span>
                                                 <div class="floor-divider"></div>
-                                                <span class="floor-count">{{ $floorRooms->count() }} ruangan</span>
+                                                <span class="floor-count">{{ $floorRooms->count() }} rooms</span>
                                             </div>
                                         @endif
                                         <div
@@ -766,14 +766,14 @@
 
                             <div id="emptyState" class="empty-state" hidden>
                                 <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                                <p class="empty-title">Tidak ditemukan</p>
-                                <p class="empty-sub">Coba kata kunci atau filter lain</p>
+                                <p class="empty-title">Not found</p>
+                                <p class="empty-sub">Try a different keyword or filter</p>
                             </div>
                         @else
                             <div class="empty-state">
                                 <div class="empty-icon"><i class="fa-solid fa-server"></i></div>
-                                <p class="empty-title">Belum ada ruangan</p>
-                                <p class="empty-sub">Hubungi administrator untuk menambahkan ruangan</p>
+                                <p class="empty-title">No rooms</p>
+                                <p class="empty-sub">Contact an administrator to add rooms</p>
                             </div>
                         @endif
 
@@ -790,7 +790,7 @@
                 <div class="history-title-group">
                     <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-chart-line"></i> Histori
                         Suhu</p>
-                    <h2 id="historyTitle">Ruangan</h2>
+                    <h2 id="historyTitle">Room</h2>
                     <p id="historyMeta" class="sub">Hari ini · rata-rata per jam</p>
                 </div>
                 <div class="history-actions">
@@ -811,7 +811,7 @@
                 </div>
                 <div id="historyEmpty" class="empty-state" style="padding:36px 0;" hidden>
                     <div class="empty-icon"><i class="fa-solid fa-temperature-empty"></i></div>
-                    <p class="empty-sub">Tidak ada data suhu dalam 24 jam terakhir</p>
+                    <p class="empty-sub">No temperature data in the last 24 hours</p>
                 </div>
                 <div id="historyChartWrap" hidden>
                     <div id="historyChartScroller">

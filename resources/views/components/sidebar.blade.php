@@ -35,7 +35,7 @@
             <a href="{{ route('monitoring') }}"
                class="nav-link menu-link {{ request()->routeIs('monitoring') ? 'active' : '' }}">
                 <i class="fa-solid fa-temperature-half"></i>
-                <span class="menu-text">Monitoring Suhu Server</span>
+                <span class="menu-text">Temperature Monitor</span>
             </a>
         </div>
 
@@ -67,12 +67,12 @@
         @endif
 
         @if ($role === 'admin')
-            <p class="nav-section-label">SETTING</p>
+            <p class="nav-section-label">SETTINGS</p>
             <div class="nav-list">
                 <a href="/settings"
                    class="nav-link menu-link {{ request()->is('settings*') ? 'active' : '' }}">
                     <i class="fa-solid fa-gear"></i>
-                    <span class="menu-text">Pengaturan</span>
+                    <span class="menu-text">Settings</span>
                 </a>
             </div>
         @endif

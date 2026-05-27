@@ -285,8 +285,8 @@
                     @else
                         <div class="empty-state">
                             <div class="empty-icon"><i class="fa-solid fa-snowflake"></i></div>
-                            <p class="empty-title">Belum ada AC unit</p>
-                            <p class="empty-sub">Tambahkan AC unit di halaman manajemen ruangan</p>
+                            <p class="empty-title">No AC units</p>
+                            <p class="empty-sub">Add AC units from the room management page</p>
                         </div>
                     @endif
 
@@ -360,7 +360,7 @@ function loadStatus() {
         }).catch(() => {
             if (!_statusFetchFailed) {
                 _statusFetchFailed = true;
-                if (window.smToast) window.smToast('Gagal memuat status AC', 'error');
+                if (window.smToast) window.smToast('Failed to load AC status', 'error');
             }
         });
 }

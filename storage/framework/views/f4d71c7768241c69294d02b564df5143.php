@@ -234,7 +234,7 @@ function renderNotifItems(items) {
         body.innerHTML = `
             <div class="notif-empty">
                 <i class="fa-regular fa-bell-slash"></i>
-                Belum ada notifikasi
+                No notifications
             </div>`;
         return;
     }
@@ -274,7 +274,7 @@ function loadNotifPanel() {
             updateNotifBadge(data.unread_count);
         })
         .catch(() => {
-            if (body) body.innerHTML = '<div class="notif-empty"><i class="fa-solid fa-circle-exclamation"></i>Gagal memuat notifikasi</div>';
+            if (body) body.innerHTML = '<div class="notif-empty"><i class="fa-solid fa-circle-exclamation"></i>Failed to load notifications</div>';
         });
 }
 
@@ -318,7 +318,7 @@ function markAllNotifRead() {
         updateNotifBadge(0);
         if (window.smToast) window.smToast('Semua notifikasi ditandai dibaca', 'success');
     }).catch(() => {
-        if (window.smToast) window.smToast('Gagal menandai semua notifikasi', 'error');
+        if (window.smToast) window.smToast('Failed to mark all notifications', 'error');
     });
 }
 

@@ -220,7 +220,7 @@
                                         @endif
                                         @if ($n->user_id)
                                             <button onclick="deleteNotif({{ $n->id }})" class="btn-icon danger"
-                                                title="Hapus">
+                                                title="Delete">
                                                 <i class="fa-solid fa-trash text-[11px]"></i>
                                             </button>
                                         @endif
@@ -229,8 +229,8 @@
                             @empty
                                 <div class="empty-state">
                                     <div class="empty-icon"><i class="fa-regular fa-bell-slash"></i></div>
-                                    <p class="empty-title">Belum ada notifikasi</p>
-                                    <p class="empty-sub">Notifikasi sistem & alert akan muncul di sini</p>
+                                    <p class="empty-title">No notifications</p>
+                                    <p class="empty-sub">System notifications & alerts will appear here</p>
                                 </div>
                             @endforelse
 
@@ -281,12 +281,12 @@
                 const item = document.querySelector(`.nlist-item[data-id="${id}"]`);
                 if (item) item.classList.remove('unread');
             }).catch(() => {
-                if (window.smToast) window.smToast('Gagal menandai notifikasi', 'error');
+                if (window.smToast) window.smToast('Failed to mark notification', 'error');
             });
         }
 
         function deleteNotif(id) {
-            if (!confirm('Hapus notifikasi ini?')) return;
+            if (!confirm('Delete this notification?')) return;
             fetch(`/notifications/${id}`, {
                 method: 'DELETE',
                 headers: {
@@ -298,7 +298,7 @@
                 document.querySelector(`.nlist-item[data-id="${id}"]`)?.remove();
                 if (window.smToast) window.smToast('Notifikasi dihapus', 'success');
             }).catch(() => {
-                if (window.smToast) window.smToast('Gagal menghapus notifikasi', 'error');
+                if (window.smToast) window.smToast('Failed to delete notification', 'error');
             });
         }
 
@@ -317,7 +317,7 @@
                 location.reload();
             }).catch(() => {
                 _markAllPending = false;
-                if (window.smToast) window.smToast('Gagal menandai semua notifikasi', 'error');
+                if (window.smToast) window.smToast('Failed to mark all notifications', 'error');
             });
         }
 
@@ -375,7 +375,7 @@
                     ? `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:var(--cyan);">Buka detail →</a>`
                     : '';
                 const deleteBtn = payload.user_id
-                    ? `<button onclick="deleteNotif(${id})" class="btn-icon danger" title="Hapus"><i class="fa-solid fa-trash text-[11px]"></i></button>`
+                    ? `<button onclick="deleteNotif(${id})" class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash text-[11px]"></i></button>`
                     : '';
 
                 const item = document.createElement('div');

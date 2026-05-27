@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Manajemen Ruangan — SmartAC</title>
+    <title>Room Management — SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite('resources/js/app.js')
@@ -625,7 +625,7 @@
                                 <label class="search-input">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <input name="search" value="{{ request('search') }}" type="text"
-                                        placeholder="Cari ruangan…" autocomplete="off">
+                                        placeholder="Search rooms…" autocomplete="off">
                                     @if (request('search'))
                                         <a href="{{ route('rooms.index') }}" class="clear" title="Clear"><i
                                                 class="fa-solid fa-xmark text-[10px]"></i></a>
@@ -665,7 +665,7 @@
                                                 style="color:var(--lavender);"></i>
                                             <span class="floor-label">{{ ucfirst($floorName) }}</span>
                                             <div class="floor-divider"></div>
-                                            <span class="floor-count">{{ $floorRooms->count() }} ruangan</span>
+                                            <span class="floor-count">{{ $floorRooms->count() }} rooms</span>
                                         </div>
 
                                         <div
@@ -804,8 +804,8 @@
                                                                     @method('DELETE')
                                                                     <button type="submit"
                                                                         class="btn btn-danger btn-sm btn-block"
-                                                                        aria-label="Hapus ruangan {{ $room->name }}">
-                                                                        <i class="fa-solid fa-trash text-[10px]"></i>Hapus
+                                                                        aria-label="Delete room {{ $room->name }}">
+                                                                        <i class="fa-solid fa-trash text-[10px]"></i>Delete
                                                                     </button>
                                                                 </form>
                                                             @endif
@@ -819,14 +819,14 @@
                             </div>
                             <div id="roomFilterEmpty" class="empty-state" hidden>
                                 <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                                <p class="empty-title">Tidak ditemukan</p>
-                                <p class="empty-sub">Coba filter status lain</p>
+                                <p class="empty-title">Not found</p>
+                                <p class="empty-sub">Try a different status filter</p>
                             </div>
                         @else
                             <div class="empty-state">
                                 <div class="empty-icon"><i class="fa-solid fa-server"></i></div>
-                                <p class="empty-title">Belum ada ruangan</p>
-                                <p class="empty-sub">Tambahkan ruangan untuk memulai</p>
+                                <p class="empty-title">No rooms</p>
+                                <p class="empty-sub">Add a room to get started</p>
                             </div>
                         @endif
 
@@ -846,41 +846,41 @@
                     <div class="modal-header">
                         <div>
                             <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
-                            <h2>Tambah Ruangan</h2>
-                            <p class="sub">Daftarkan ruangan baru beserta ESP device-nya</p>
+                            <h2>Add Room</h2>
+                            <p class="sub">Register a new room with its ESP device</p>
                         </div>
                     </div>
                     <form id="addRoomForm" method="POST" action="/rooms">
                         @csrf
                         <div class="modal-body space-y-3">
                             <div class="field">
-                                <label class="field-label">Nama Ruangan</label>
+                                <label class="field-label">Room Name</label>
                                 <input class="input text-mono" type="text" name="name" placeholder="server_1"
                                     pattern="[A-Za-z0-9_]+"
-                                    title="Nama ruangan tidak boleh mengandung spasi"
+                                    title="Room name must not contain spaces"
                                     required>
-                                <p class="field-help">Huruf, angka, dan underscore (tidak boleh ada spasi)</p>
+                                <p class="field-help">Letters, numbers, and underscores (no spaces)</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">ESP Device ID</label>
                                 <input class="input text-mono" type="text" name="device_id" placeholder="esp32_01"
                                     pattern="[A-Za-z0-9_-]+"
-                                    title="ESP Device ID tidak boleh mengandung spasi"
+                                    title="ESP Device ID must not contain spaces"
                                     required>
-                                <p class="field-help">Huruf, angka, underscore, dan strip (tidak boleh ada spasi)</p>
+                                <p class="field-help">Letters, numbers, underscores, and dashes (no spaces)</p>
                             </div>
                             <div class="field">
-                                <label class="field-label">Lantai / Zona <span
-                                        style="color:var(--ink-4);font-weight:400;">(opsional)</span></label>
-                                <input class="input text-mono" type="text" name="floor" placeholder="lantai_1"
+                                <label class="field-label">Floor / Zone <span
+                                        style="color:var(--ink-4);font-weight:400;">(optional)</span></label>
+                                <input class="input text-mono" type="text" name="floor" placeholder="floor_1"
                                     pattern="[A-Za-z0-9_]*"
-                                    title="Lantai atau zona tidak boleh mengandung spasi">
-                                <p class="field-help">Huruf, angka, dan underscore (tidak boleh ada spasi)</p>
+                                    title="Floor or zone must not contain spaces">
+                                <p class="field-help">Letters, numbers, and underscores (no spaces)</p>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-ghost" onclick="closeModal()">Batal</button>
-                            <button type="submit" class="btn btn-primary">Buat Ruangan</button>
+                            <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Create Room</button>
                         </div>
                     </form>
                 </div>
@@ -906,7 +906,7 @@
 
         function confirmDelete(e) {
             e.preventDefault();
-            if (confirm('Hapus ruangan ini beserta semua AC unit di dalamnya?')) e.target.submit();
+            if (confirm('Delete this room and all its AC units?')) e.target.submit();
             return false;
         }
 
@@ -964,7 +964,7 @@
             deviceInput.value = normalizeFormValue(deviceInput.value);
             floorInput.value = normalizeFormValue(floorInput.value);
 
-            if (!validateNoSpaces(nameInput, 'Nama ruangan')) {
+            if (!validateNoSpaces(nameInput, 'Room name')) {
                 e.preventDefault();
                 nameInput.reportValidity();
                 return;
@@ -987,7 +987,7 @@
 
             if (roomNames.has(nameInput.value)) {
                 e.preventDefault();
-                blockDuplicateInput(nameInput, 'Nama ruangan sudah ada');
+                blockDuplicateInput(nameInput, 'Room name already exists');
                 return;
             }
 

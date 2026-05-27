@@ -1148,7 +1148,7 @@
                                     <div class="empty-state" style="margin: 20px;">
                                         <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
                                         <p class="empty-title">No users found</p>
-                                        <p class="empty-sub">{{ (request('search') || request('role')) ? 'Try adjusting your filters or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset all filters</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}</p>
+                                        <p class="empty-sub">{{ (request('search') || request('role')) ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}</p>
                                     </div>
                                 @endforelse
                             </div>
@@ -1233,8 +1233,8 @@
                                             <td colspan="5">
                                                 <div class="empty-state">
                                                     <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
-                                                    <p class="empty-title">No users found</p>
-                                                    <p class="empty-sub">{{ (request('search') || request('role')) ? 'Try adjusting your filters or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset all filters</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}</p>
+                                                    <p class="empty-title">Tidak ada pengguna</p>
+                                                    <p class="empty-sub">{{ (request('search') || request('role')) ? 'Coba ubah filter atau <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Tambah pengguna baru</a> untuk memulai' }}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1352,7 +1352,7 @@
             <div class="modal-header">
                 <div>
                     <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                    <h2>Edit user role</h2>
+                    <h2>Edit User Role</h2>
                 </div>
             </div>
             <form id="editRoleForm" method="POST">

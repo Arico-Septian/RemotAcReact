@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <title><?php echo e($room->name); ?> — AC Control</title>
+    <title><?php echo e($room->name); ?> — Kontrol AC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
@@ -944,7 +944,7 @@
                     </button>
                     <div class="app-header-title">
                         <h1><?php echo e($room->name); ?></h1>
-                        <p>AC control panel</p>
+                        <p>Panel kontrol AC</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1005,7 +1005,7 @@
                                 <?php if(in_array(Auth::user()->role, ['admin', 'operator'])): ?>
                                     <div class="flex items-center gap-1.5">
                                         <button type="button" onclick="openEditModal()" class="btn-icon lavender"
-                                            title="Edit AC">
+                                            title="Edit Unit AC">
                                             <i class="fa-solid fa-pen text-[10px]"></i>
                                         </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
@@ -1015,7 +1015,7 @@
                                             <button type="submit" <?php echo e(!$firstAc ? 'disabled' : ''); ?>
 
                                                 class="btn-icon danger <?php echo e(!$firstAc ? 'disabled' : ''); ?>"
-                                                title="Delete AC">
+                                                title="Hapus AC">
                                                 <i class="fa-solid fa-trash text-[10px]"></i>
                                             </button>
                                         </form>
@@ -1024,7 +1024,7 @@
                                             onclick="<?php echo e($acs->count() >= 15 ? '' : 'openModal()'); ?>"
                                             class="btn btn-primary btn-sm <?php echo e($acs->count() >= 15 ? 'disabled' : ''); ?>">
                                             <i class="fa-solid fa-plus text-[10px]"></i>
-                                            <span class="hidden sm:inline">Add AC</span>
+                                            <span class="hidden sm:inline">Tambah AC</span>
                                         </button>
                                     </div>
                                 <?php endif; ?>
@@ -1109,7 +1109,7 @@
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Mode</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                <?php $__currentLoopData = ['cool' => ['fa-snowflake', 'Cool'], 'heat' => ['fa-fire', 'Heat'], 'dry' => ['fa-droplet', 'Dry'], 'fan' => ['fa-fan', 'Fan']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php $__currentLoopData = ['cool' => ['fa-snowflake', 'Dingin'], 'heat' => ['fa-fire', 'Panas'], 'dry' => ['fa-droplet', 'Kering'], 'fan' => ['fa-fan', 'Kipas']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <form action="/ac/<?php echo e($ac->id); ?>/mode/<?php echo e($m); ?>"
                                                         method="POST" class="control-form">
                                                         <?php echo csrf_field(); ?>
@@ -1125,9 +1125,9 @@
 
                                         
                                         <div class="panel">
-                                            <p class="eyebrow" style="margin-bottom:12px;">Fan Speed</p>
+                                            <p class="eyebrow" style="margin-bottom:12px;">Kecepatan Kipas</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                <?php $__currentLoopData = ['auto' => ['fa-rotate', 'Auto'], 'low' => ['fa-equals', 'Low'], 'medium' => ['fa-bars', 'Med'], 'high' => ['fa-gauge-high', 'High']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php $__currentLoopData = ['auto' => ['fa-rotate', 'Otomatis'], 'low' => ['fa-equals', 'Rendah'], 'medium' => ['fa-bars', 'Sedang'], 'high' => ['fa-gauge-high', 'Tinggi']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <form
                                                         action="/ac/<?php echo e($ac->id); ?>/fan-speed/<?php echo e($s); ?>"
                                                         method="POST" class="control-form">
@@ -1164,7 +1164,7 @@
                                         <div class="panel">
                                             <div class="flex items-center justify-between mb-3">
                                                 <p class="eyebrow" style="color:var(--amber);margin:0;"><i
-                                                        class="fa-solid fa-clock"></i> Set Timer</p>
+                                                        class="fa-solid fa-clock"></i> Atur Timer</p>
                                                 <button id="btnTimer-<?php echo e($ac->id); ?>" type="button"
                                                     onclick="toggleTimer(<?php echo e($ac->id); ?>)"
                                                     class="btn btn-soft btn-xs">
@@ -1179,7 +1179,7 @@
                                                             <span class="t-icon"><i
                                                                     class="fa-solid fa-circle-play"></i></span>
                                                             <div class="t-meta">
-                                                                <p class="t-label">Turn On</p>
+                                                                <p class="t-label">Nyalakan</p>
                                                                 <?php if($ac->timer_on): ?>
                                                                     <p class="t-value">
                                                                         <?php echo e(\Carbon\Carbon::parse($ac->timer_on)->setTimezone('Asia/Jakarta')->format('H:i')); ?>
@@ -1194,7 +1194,7 @@
                                                             <span class="t-icon"><i
                                                                     class="fa-solid fa-circle-stop"></i></span>
                                                             <div class="t-meta">
-                                                                <p class="t-label">Turn Off</p>
+                                                                <p class="t-label">Matikan</p>
                                                                 <?php if($ac->timer_off): ?>
                                                                     <p class="t-value">
                                                                         <?php echo e(\Carbon\Carbon::parse($ac->timer_off)->setTimezone('Asia/Jakarta')->format('H:i')); ?>
@@ -1231,14 +1231,14 @@
                                                     <div class="field">
                                                         <label class="field-label"><i
                                                                 class="fa-solid fa-circle-play text-[9px]"
-                                                                style="color:var(--mint);"></i> Turn ON</label>
+                                                                style="color:var(--mint);"></i> Nyalakan</label>
                                                         <input class="input text-mono" type="time" name="timer_on"
                                                             value="<?php echo e($ac->timer_on ? \Carbon\Carbon::parse($ac->timer_on)->format('H:i') : ''); ?>">
                                                     </div>
                                                     <div class="field">
                                                         <label class="field-label"><i
                                                                 class="fa-solid fa-circle-stop text-[9px]"
-                                                                style="color:var(--coral);"></i> Turn OFF</label>
+                                                                style="color:var(--coral);"></i> Matikan</label>
                                                         <input class="input text-mono" type="time"
                                                             name="timer_off"
                                                             value="<?php echo e($ac->timer_off ? \Carbon\Carbon::parse($ac->timer_off)->format('H:i') : ''); ?>">
@@ -1301,7 +1301,7 @@
                 <div class="modal">
                     <div class="modal-header">
                         <div>
-                            <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
+                            <p class="eyebrow"><i class="fa-solid fa-plus"></i> Baru</p>
                             <h2>Tambah AC Unit</h2>
                         </div>
                     </div>
@@ -1341,7 +1341,7 @@
                     <div class="modal-header">
                         <div>
                             <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                            <h2>Edit AC Unit</h2>
+                            <h2>Edit Unit AC</h2>
                         </div>
                     </div>
                     <form id="editACForm" method="POST" action="">
@@ -1869,14 +1869,14 @@ document.querySelectorAll('.control-form').forEach(form => {
                         <div class="timer-card ${on ? 'is-on' : ''}">
                             <span class="t-icon"><i class="fa-solid fa-circle-play"></i></span>
                             <div class="t-meta">
-                                <p class="t-label">Turn On</p>
+                                <p class="t-label">Nyalakan</p>
                                 <p class="t-value ${on ? '' : 'empty'}">${on || '—'}</p>
                             </div>
                         </div>
                         <div class="timer-card ${off ? 'is-off' : ''}">
                             <span class="t-icon"><i class="fa-solid fa-circle-stop"></i></span>
                             <div class="t-meta">
-                                <p class="t-label">Turn Off</p>
+                                <p class="t-label">Matikan</p>
                                 <p class="t-value ${off ? '' : 'empty'}">${off || '—'}</p>
                             </div>
                         </div>

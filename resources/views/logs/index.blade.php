@@ -649,7 +649,7 @@
 
                                     @if (Auth::user()->role == 'admin')
                                         <button type="button" onclick="deleteAllLogs()"
-                                            class="btn btn-danger btn-sm" title="Delete Activity">
+                                            class="btn btn-danger btn-sm" title="Delete All Logs">
                                             <i class="fa-solid fa-trash text-[10px]"></i>
                                         </button>
                                     @endif

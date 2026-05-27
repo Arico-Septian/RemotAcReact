@@ -630,15 +630,10 @@
                     </button>
                     <div class="app-header-title">
                         <h1>Server Rooms</h1>
-                        <p><?php echo e($rooms->count()); ?> ruangan · AC monitoring</p>
+                        <p><?php echo e($rooms->count()); ?> rooms · AC monitoring</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="demoBadge" onclick="toggleDemoMode()" title="Toggle Demo Mode"
-                        style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-3);font-size:11px;cursor:pointer;transition:var(--t-base);">
-                        <i class="fa-solid fa-flask" style="font-size:9px;"></i>
-                        <span>Demo</span>
-                    </button>
                     <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                     <span id="systemStatus" class="pill pill-online">
                         <span class="dot"></span>
@@ -655,7 +650,7 @@
                         <div class="flex flex-row items-center gap-2">
                             <label class="search-input flex-1 min-w-0">
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                                <input id="searchInput" type="text" placeholder="Cari nama ruangan…"
+                                <input id="searchInput" type="text" placeholder="Search room name…"
                                     autocomplete="off">
                             </label>
                             <div class="segmented flex-shrink-0">
@@ -681,7 +676,7 @@
                                                     style="color:var(--lavender);"></i>
                                                 <span class="floor-label"><?php echo e(ucfirst($floorName)); ?></span>
                                                 <div class="floor-divider"></div>
-                                                <span class="floor-count"><?php echo e($floorRooms->count()); ?> ruangan</span>
+                                                <span class="floor-count"><?php echo e($floorRooms->count()); ?> rooms</span>
                                             </div>
                                         <?php endif; ?>
                                         <div
@@ -772,14 +767,14 @@
 
                             <div id="emptyState" class="empty-state" hidden>
                                 <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                                <p class="empty-title">Tidak ditemukan</p>
-                                <p class="empty-sub">Coba kata kunci atau filter lain</p>
+                                <p class="empty-title">Not found</p>
+                                <p class="empty-sub">Try a different keyword or filter</p>
                             </div>
                         <?php else: ?>
                             <div class="empty-state">
                                 <div class="empty-icon"><i class="fa-solid fa-server"></i></div>
-                                <p class="empty-title">Belum ada ruangan</p>
-                                <p class="empty-sub">Hubungi administrator untuk menambahkan ruangan</p>
+                                <p class="empty-title">No rooms yet</p>
+                                <p class="empty-sub">Contact an administrator to add rooms</p>
                             </div>
                         <?php endif; ?>
 
@@ -796,7 +791,7 @@
                 <div class="history-title-group">
                     <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-chart-line"></i> Histori
                         Suhu</p>
-                    <h2 id="historyTitle">Ruangan</h2>
+                    <h2 id="historyTitle">Room</h2>
                     <p id="historyMeta" class="sub">Hari ini · rata-rata per jam</p>
                 </div>
                 <div class="history-actions">
@@ -817,7 +812,7 @@
                 </div>
                 <div id="historyEmpty" class="empty-state" style="padding:36px 0;" hidden>
                     <div class="empty-icon"><i class="fa-solid fa-temperature-empty"></i></div>
-                    <p class="empty-sub">Tidak ada data suhu dalam 24 jam terakhir</p>
+                    <p class="empty-sub">No temperature data in the last 24 hours</p>
                 </div>
                 <div id="historyChartWrap" hidden>
                     <div id="historyChartScroller">
@@ -1410,72 +1405,6 @@
         });
     </script>
     <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-    <script>
-    // ─── Demo Mode (intercepts fetch, no DB changes) ────────────────
-    (function () {
-        let demoActive = localStorage.getItem('demoMode') === '1';
-
-        function genWave(base, amp, points) {
-            const out = [];
-            let t = base;
-            for (let i = 0; i < points; i++) {
-                t += (Math.random() - 0.48) * amp;
-                t = Math.max(base - amp * 3, Math.min(base + amp * 3, t));
-                out.push(+t.toFixed(1));
-            }
-            return out;
-        }
-
-        function demoHistory(range) {
-            const now = new Date();
-
-            if (range === 'today') {
-                const points = now.getHours() + 1;
-                const temps = genWave(26, 2, points);
-                return temps.map((temp, i) => ({ time: `${String(i).padStart(2,'0')}:00`, temp }));
-            }
-
-            const cfg = { '1h': [12, 5], '3h': [18, 10], '6h': [24, 15] };
-            const [points, stepMin] = cfg[range] || [12, 5];
-            const temps = genWave(26, 2, points);
-            return temps.map((temp, i) => {
-                const d = new Date(now - (points - 1 - i) * stepMin * 60000);
-                return { time: `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`, temp };
-            });
-        }
-
-        const _origFetch = window.fetch.bind(window);
-        window.fetch = function (url, opts) {
-            if (demoActive) {
-                const s = String(url);
-                const histMatch = s.match(/\/temperature\/history\/\d+/);
-                if (histMatch) {
-                    const range = new URLSearchParams((s.split('?')[1]) || '').get('range') || 'today';
-                    return Promise.resolve(new Response(JSON.stringify(demoHistory(range)), {
-                        status: 200, headers: { 'Content-Type': 'application/json' }
-                    }));
-                }
-            }
-            return _origFetch(url, opts);
-        };
-
-        function updateBtn() {
-            const btn = document.getElementById('demoBadge');
-            if (!btn) return;
-            btn.style.background  = demoActive ? 'rgba(167,139,250,.15)' : 'var(--panel-2)';
-            btn.style.borderColor = demoActive ? 'rgba(167,139,250,.5)'  : 'var(--line)';
-            btn.style.color       = demoActive ? '#a78bfa'               : 'var(--ink-3)';
-        }
-
-        window.toggleDemoMode = function () {
-            demoActive = !demoActive;
-            localStorage.setItem('demoMode', demoActive ? '1' : '0');
-            updateBtn();
-        };
-
-        document.addEventListener('DOMContentLoaded', updateBtn);
-    })();
-    </script>
 </body>
 
 </html>

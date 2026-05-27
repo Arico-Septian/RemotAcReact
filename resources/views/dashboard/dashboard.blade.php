@@ -1672,7 +1672,7 @@
                             <div class="panel-header">
                                 <div>
                                     <p class="eyebrow"><i class="fa-solid fa-chart-line"></i> <span
-                                            id="trendRangeLabel">Trend 1 jam terakhir</span></p>
+                                            id="trendRangeLabel">Trend last 1 hour</span></p>
                                     <h2 class="panel-title">Room Temperatures</h2>
                                 </div>
                                 <div class="flex items-center gap-2 flex-wrap">
@@ -1690,7 +1690,7 @@
                                     style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;">
                                     <div style="text-align:center;">
                                         <div class="empty-icon"><i class="fa-solid fa-temperature-empty"></i></div>
-                                        <p class="empty-sub">Belum ada data suhu dalam 1 jam terakhir</p>
+                                        <p class="empty-sub">No temperature data in the last 1 hour</p>
                                     </div>
                                 </div>
                                 <div id="tempChartLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent;pointer-events:none;">
@@ -1710,7 +1710,7 @@
                                         <div class="dashboard-rooms-title-group">
                                             <div>
                                                 <h2 class="dashboard-rooms-title">Server Rooms</h2>
-                                                <p class="dashboard-rooms-subtitle">{{ $totalRooms }} ruangan terdaftar</p>
+                                                <p class="dashboard-rooms-subtitle">{{ $totalRooms }} rooms registered</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1756,8 +1756,8 @@
                                 @else
                                     <div class="empty-state" style="padding:28px 12px;">
                                         <div class="empty-icon"><i class="fa-solid fa-server"></i></div>
-                                        <p class="empty-title">Belum ada ruangan</p>
-                                        <p class="empty-sub">Tambahkan ruangan untuk mulai monitoring</p>
+                                        <p class="empty-title">No rooms</p>
+                                        <p class="empty-sub">Add a room to start monitoring</p>
                                     </div>
                                 @endif
                             </section>
@@ -1766,8 +1766,8 @@
                             <section class="panel dashboard-activity-panel">
                                 <div class="activity-header">
                                     <div>
-                                        <h2 class="activity-title">Aktivitas Terkini</h2>
-                                        <p class="activity-subtitle">{{ count($recentActivities) }} aktivitas terbaru</p>
+                                        <h2 class="activity-title">Recent Activity</h2>
+                                        <p class="activity-subtitle">{{ count($recentActivities) }} recent activities</p>
                                     </div>
                                     <span class="activity-title-icon"><i class="fa-solid fa-bolt"></i></span>
                                 </div>
@@ -1815,7 +1815,7 @@
                                         <div class="empty-state" style="padding:24px 12px;">
                                             <div class="empty-icon"><i class="fa-solid fa-clock-rotate-left"></i>
                                             </div>
-                                            <p class="empty-title">Belum ada aktivitas</p>
+                                            <p class="empty-title">No activity</p>
                                         </div>
                                     @endforelse
                                 </div>
@@ -2210,10 +2210,10 @@
         }
 
         const RANGE_LABELS = {
-            '1h': 'Trend 1 jam terakhir',
-            '3h': 'Trend 3 jam terakhir',
-            '6h': 'Trend 6 jam terakhir',
-            'today': 'Trend hari ini',
+            '1h': 'Trend last 1 hour',
+            '3h': 'Trend last 3 hours',
+            '6h': 'Trend last 6 hours',
+            'today': 'Trend today',
         };
 
         function refreshTrendChart(showLoader = false) {
@@ -2249,8 +2249,8 @@
                         canvasEl.style.display = hasAnyData ? 'block' : 'none';
                         const emptyTextEl = emptyEl.querySelector('.empty-sub');
                         if (emptyTextEl) {
-                            const rangeText = { '1h': '1 jam terakhir', '3h': '3 jam terakhir', '6h': '6 jam terakhir', 'today': 'hari ini' };
-                            emptyTextEl.textContent = `Belum ada data suhu dalam ${rangeText[range] || range}`;
+                            const rangeText = { '1h': 'last 1 hour', '3h': 'last 3 hours', '6h': 'last 6 hours', 'today': 'today' };
+                            emptyTextEl.textContent = `No temperature data for ${rangeText[range] || range}`;
                         }
                     }
 
