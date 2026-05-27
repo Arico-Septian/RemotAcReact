@@ -63,6 +63,12 @@
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     <span class="menu-text">Activity Log</span>
                 </a>
+            </div>
+        @endif
+
+        @if ($role === 'admin')
+            <p class="nav-section-label">SETTING</p>
+            <div class="nav-list">
                 <a href="/settings"
                    class="nav-link menu-link {{ request()->is('settings*') ? 'active' : '' }}">
                     <i class="fa-solid fa-gear"></i>
