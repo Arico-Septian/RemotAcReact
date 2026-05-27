@@ -634,6 +634,11 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
+                    <button id="demoBadge" onclick="toggleDemoMode()" title="Toggle Demo Mode"
+                        style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink-3);font-size:11px;cursor:pointer;transition:var(--t-base);">
+                        <i class="fa-solid fa-flask" style="font-size:9px;"></i>
+                        <span>Demo</span>
+                    </button>
                     <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                     <span id="systemStatus" class="pill pill-online">
                         <span class="dot"></span>
@@ -1138,6 +1143,7 @@
                         pointHoverRadius: chartSizing.pointHoverRadius,
                         tension: 0.4,
                         fill: true,
+                        spanGaps: true,
                         borderWidth: chartSizing.borderWidth
                     }]
                 },
@@ -1404,6 +1410,72 @@
         });
     </script>
     <?php echo $__env->make('components.sidebar-scripts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <script>
+    // ─── Demo Mode (intercepts fetch, no DB changes) ────────────────
+    (function () {
+        let demoActive = localStorage.getItem('demoMode') === '1';
+
+        function genWave(base, amp, points) {
+            const out = [];
+            let t = base;
+            for (let i = 0; i < points; i++) {
+                t += (Math.random() - 0.48) * amp;
+                t = Math.max(base - amp * 3, Math.min(base + amp * 3, t));
+                out.push(+t.toFixed(1));
+            }
+            return out;
+        }
+
+        function demoHistory(range) {
+            const now = new Date();
+
+            if (range === 'today') {
+                const points = now.getHours() + 1;
+                const temps = genWave(26, 2, points);
+                return temps.map((temp, i) => ({ time: `${String(i).padStart(2,'0')}:00`, temp }));
+            }
+
+            const cfg = { '1h': [12, 5], '3h': [18, 10], '6h': [24, 15] };
+            const [points, stepMin] = cfg[range] || [12, 5];
+            const temps = genWave(26, 2, points);
+            return temps.map((temp, i) => {
+                const d = new Date(now - (points - 1 - i) * stepMin * 60000);
+                return { time: `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`, temp };
+            });
+        }
+
+        const _origFetch = window.fetch.bind(window);
+        window.fetch = function (url, opts) {
+            if (demoActive) {
+                const s = String(url);
+                const histMatch = s.match(/\/temperature\/history\/\d+/);
+                if (histMatch) {
+                    const range = new URLSearchParams((s.split('?')[1]) || '').get('range') || 'today';
+                    return Promise.resolve(new Response(JSON.stringify(demoHistory(range)), {
+                        status: 200, headers: { 'Content-Type': 'application/json' }
+                    }));
+                }
+            }
+            return _origFetch(url, opts);
+        };
+
+        function updateBtn() {
+            const btn = document.getElementById('demoBadge');
+            if (!btn) return;
+            btn.style.background  = demoActive ? 'rgba(167,139,250,.15)' : 'var(--panel-2)';
+            btn.style.borderColor = demoActive ? 'rgba(167,139,250,.5)'  : 'var(--line)';
+            btn.style.color       = demoActive ? '#a78bfa'               : 'var(--ink-3)';
+        }
+
+        window.toggleDemoMode = function () {
+            demoActive = !demoActive;
+            localStorage.setItem('demoMode', demoActive ? '1' : '0');
+            updateBtn();
+        };
+
+        document.addEventListener('DOMContentLoaded', updateBtn);
+    })();
+    </script>
 </body>
 
 </html>

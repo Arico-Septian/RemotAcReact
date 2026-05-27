@@ -1137,6 +1137,7 @@
                         pointHoverRadius: chartSizing.pointHoverRadius,
                         tension: 0.4,
                         fill: true,
+                        spanGaps: true,
                         borderWidth: chartSizing.borderWidth
                     }]
                 },
