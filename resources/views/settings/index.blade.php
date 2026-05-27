@@ -120,13 +120,6 @@
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
 
-                        @if (session('success'))
-                            <div style="display:flex;align-items:center;gap:10px;background:rgba(110,231,183,.08);border:1px solid rgba(110,231,183,.25);border-radius:var(--r-lg);padding:12px 16px;font-size:13px;color:var(--mint);">
-                                <i class="fa-solid fa-circle-check"></i>
-                                {{ session('success') }}
-                            </div>
-                        @endif
-
                         <form method="POST" action="{{ route('settings.update') }}">
                             @csrf
 
