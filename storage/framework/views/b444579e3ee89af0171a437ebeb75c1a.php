@@ -124,7 +124,7 @@
     /* 2026 modern status pill with vibrant glassmorphism */
     .main-header .pill {
         padding: 6px 12px !important;
-        border-radius: 999px !important;
+        border-radius: var(--r-full) !important;
         font-size: 12px !important;
         font-weight: 600;
         letter-spacing: 0.02em;
@@ -144,11 +144,11 @@
     .main-header .btn-icon {
         width: 38px !important;
         height: 38px !important;
-        border-radius: 10px !important;
+        border-radius: var(--r-md) !important;
         background: rgba(14, 165, 233, 0.08) !important;
         border: 1px solid rgba(14, 165, 233, 0.16) !important;
         color: #7fa0c8 !important;
-        transition: all 0.2s var(--ease) !important;
+        transition: all var(--t-base) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -177,7 +177,7 @@
         font-weight: 700 !important;
         min-width: 18px;
         height: 18px !important;
-        border-radius: 999px !important;
+        border-radius: var(--r-full) !important;
         border: 2px solid rgba(8, 12, 28, 0.97) !important;
         box-shadow: 0 6px 16px -2px rgb(var(--danger-rgb) / 0.60) !important;
         display: inline-flex;
@@ -200,7 +200,7 @@
     /* Mobile sidebar */
     @media (max-width: 1024px) {
         .main-content   { margin-left: 0 !important; width: 100% !important; }
-        .app-sidebar    { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); width: 280px !important; z-index: 50; transition: transform 0.25s var(--ease); }
+        .app-sidebar    { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); width: 280px !important; z-index: 50; transition: transform var(--t-slow); }
         .app-sidebar.open { transform: translateX(0); box-shadow: 0 24px 48px rgba(0,0,0,.40); }
         .sidebar-toggle.desktop-only { display: none !important; }
     }
@@ -223,7 +223,7 @@
             width: 24px !important;
             height: 24px !important;
             font-size: 11px !important;
-            border-radius: 8px !important;
+            border-radius: var(--r-sm) !important;
         }
 
         /* Section heading (OVERVIEW / MANAGEMENT / ADMINISTRATION) */
@@ -425,7 +425,7 @@
         content: '';
         position: absolute;
         inset: 3px;
-        border-radius: 8px;
+        border-radius: var(--r-sm);
         background: rgba(7, 12, 30, 0.96);
         display: flex;
         align-items: center;
@@ -470,14 +470,14 @@
     .nav-list { gap: 3px !important; }
     .nav-link {
         padding: 10px 12px !important;
-        border-radius: 12px !important;
+        border-radius: var(--r-lg) !important;
         font-size: 13px !important;
         position: relative;
-        transition: all 0.2s var(--ease) !important;
+        transition: all var(--t-base) !important;
     }
     .nav-link i {
         width: 28px !important; height: 28px !important;
-        border-radius: 8px;
+        border-radius: var(--r-sm);
         background: rgba(14, 165, 233, 0.06);
         border: 1px solid rgba(14, 165, 233, 0.10);
         display: inline-flex !important;
@@ -489,7 +489,7 @@
         padding: 0 !important;
         margin: 0 !important;
         color: #7fa0c8 !important;
-        transition: all 0.2s var(--ease) !important;
+        transition: all var(--t-base) !important;
         flex-shrink: 0;
         box-sizing: border-box !important;
     }
@@ -550,15 +550,15 @@
     }
 
     .profile-full {
-        border-radius: 12px !important;
+        border-radius: var(--r-lg) !important;
         padding: 8px 10px !important;
-        transition: all 0.2s var(--ease) !important;
+        transition: all var(--t-base) !important;
     }
     .profile-full:hover {
         background: rgba(14, 165, 233, 0.10) !important;
     }
     .profile-full .avatar {
-        transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        transition: transform var(--t-base), box-shadow var(--t-base);
     }
     .profile-full:hover .avatar {
         transform: scale(1.10);
@@ -576,8 +576,8 @@
         background: rgb(var(--danger-rgb) / 0.12) !important;
         border: 1px solid rgb(var(--danger-rgb) / 0.24) !important;
         color: var(--danger) !important;
-        border-radius: 8px !important;
-        transition: all 0.2s var(--ease);
+        border-radius: var(--r-sm) !important;
+        transition: all var(--t-base);
     }
     .icon-btn.danger:hover {
         background: rgb(var(--danger-rgb) / 0.18) !important;

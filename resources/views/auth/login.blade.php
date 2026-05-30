@@ -70,7 +70,7 @@
         }
 
         .serif {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-serif);
             font-style: italic;
             font-weight: 600;
         }
@@ -92,7 +92,7 @@
         .brand-panel {
             position: relative;
             padding: 56px 48px;
-            border-radius: 28px;
+            border-radius: var(--r-3xl);
             background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
             border: 1px solid var(--line);
             box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px -20px rgba(0,0,0,0.7);
@@ -111,7 +111,7 @@
             position: absolute;
             top: -120px; right: -120px;
             width: 380px; height: 380px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: radial-gradient(circle, rgb(var(--cyan-rgb) / 0.16) 0%, transparent 60%);
             filter: blur(20px);
             pointer-events: none;
@@ -120,14 +120,14 @@
         .brand-top { display: flex; align-items: center; gap: 12px; position: relative; z-index: 2; }
         .brand-mark {
             width: 44px; height: 44px;
-            border-radius: 12px;
+            border-radius: var(--r-lg);
             background: conic-gradient(from 220deg, #5ed0ff, var(--lavender), var(--coral), var(--amber), var(--mint), #5ed0ff);
             display: inline-flex; align-items: center; justify-content: center;
             box-shadow: 0 8px 24px -8px rgb(var(--cyan-rgb) / 0.4);
         }
         .brand-mark .mark-inner {
             width: 36px; height: 36px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             background: var(--panel);
             display: inline-flex; align-items: center; justify-content: center;
             color: var(--cyan);
@@ -148,7 +148,7 @@
             background: linear-gradient(135deg, #5ed0ff, var(--lavender), #f0abfc);
             -webkit-background-clip: text; background-clip: text;
             color: transparent;
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: var(--font-serif);
             font-style: italic;
             font-weight: 600;
         }
@@ -171,7 +171,7 @@
         .feat-row { display: flex; align-items: center; gap: 12px; }
         .feat-ic {
             width: 30px; height: 30px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             display: inline-flex; align-items: center; justify-content: center;
             font-size: 12px;
             flex-shrink: 0;
@@ -185,7 +185,7 @@
         .form-panel {
             position: relative;
             padding: 48px 44px 36px;
-            border-radius: 28px;
+            border-radius: var(--r-3xl);
             background: linear-gradient(160deg, var(--panel) 0%, var(--bg-1) 100%);
             border: 1px solid var(--line);
             box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px -20px rgba(0,0,0,0.8);
@@ -204,7 +204,7 @@
             font-size: 12px; color: var(--ink-3);
             text-decoration: none; font-weight: 500;
             margin-bottom: 32px;
-            transition: color 0.2s var(--ease);
+            transition: color var(--t-base);
         }
         .back-link:hover { color: var(--ink-1); }
 
@@ -228,7 +228,7 @@
             background: linear-gradient(135deg, #5ed0ff, var(--lavender));
             -webkit-background-clip: text; background-clip: text;
             color: transparent;
-            font-family: 'Cormorant Garamond', serif;
+            font-family: var(--font-serif);
             font-style: italic;
             font-weight: 600;
         }
@@ -243,7 +243,7 @@
         .alert {
             margin-top: 24px;
             padding: 12px 14px;
-            border-radius: 12px;
+            border-radius: var(--r-lg);
             background: rgb(var(--coral-rgb) / 0.10);
             border: 1px solid rgb(var(--coral-rgb) / 0.32);
             color: #ffc6cf;
@@ -270,8 +270,8 @@
             display: flex; align-items: center;
             background: rgba(255,255,255,0.025);
             border: 1px solid var(--line);
-            border-radius: 12px;
-            transition: all 0.2s var(--ease);
+            border-radius: var(--r-lg);
+            transition: all var(--t-base);
         }
         .input-wrap:focus-within {
             border-color: rgb(var(--cyan-rgb) / 0.45);
@@ -283,7 +283,7 @@
             color: var(--ink-3);
             font-size: 13px;
             display: inline-flex; align-items: center; justify-content: center;
-            transition: color 0.2s var(--ease);
+            transition: color var(--t-base);
         }
         .input-wrap:focus-within .leading { color: var(--cyan); }
 
@@ -310,7 +310,7 @@
         .input-wrap .valid-check {
             display: inline-flex; align-items: center; justify-content: center;
             width: 22px; height: 22px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: rgb(var(--mint-rgb) / 0.16);
             border: 1px solid rgb(var(--mint-rgb) / 0.36);
             color: var(--mint);
@@ -318,7 +318,7 @@
             margin-right: 10px;
             opacity: 0;
             transform: scale(0.7);
-            transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+            transition: opacity var(--t-base), transform var(--t-base);
             pointer-events: none;
         }
         .input-wrap input:valid:not(:placeholder-shown) ~ .valid-check {
@@ -344,7 +344,7 @@
             width: 100%;
             padding: 14px 22px;
             border: none;
-            border-radius: 12px;
+            border-radius: var(--r-lg);
             background: var(--ink-0);
             color: #0a0e1c;
             font-family: inherit;
@@ -352,7 +352,7 @@
             cursor: pointer;
             display: inline-flex; align-items: center; justify-content: center;
             gap: 10px;
-            transition: all 0.2s var(--ease);
+            transition: all var(--t-base);
             box-shadow: 0 10px 30px -10px rgba(244,246,251,0.30);
         }
         .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 36px -10px rgba(244,246,251,0.42); }
@@ -369,7 +369,7 @@
             width: 16px; height: 16px;
             border: 2px solid rgba(10,14,28,0.30);
             border-top-color: #0a0e1c;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             animation: spin 0.7s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -392,7 +392,7 @@
             color: var(--mint);
             background: rgb(var(--mint-rgb) / 0.10);
             width: 22px; height: 22px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             display: inline-flex; align-items: center; justify-content: center;
             border: 1px solid rgb(var(--mint-rgb) / 0.28);
             font-size: 10px;
@@ -441,7 +441,7 @@
                 min-height: 0;
                 width: 100%;
                 max-width: 480px;
-                border-radius: 28px;
+                border-radius: var(--r-3xl);
             }
             .form-footer { margin-left: -36px; margin-right: -36px; padding-left: 36px; padding-right: 36px; }
         }
@@ -463,7 +463,7 @@
             .brand-panel { display: none; }
             .form-panel {
                 padding: 28px 22px 22px;
-                border-radius: 20px;
+                border-radius: var(--r-2xl);
                 width: 100%;
                 max-width: 400px;
                 margin: 0;
@@ -480,13 +480,13 @@
         /* Mobile S (≤ 480 px) — very tight, form-only */
         @media (max-width: 480px) {
             .page { padding: 12px; }
-            .form-panel { padding: 22px 16px 18px; border-radius: 20px; }
+            .form-panel { padding: 22px 16px 18px; border-radius: var(--r-2xl); }
             .form-eyebrow { font-size: 10px; letter-spacing: 0.12em; }
             .form-title { font-size: 20px; margin-top: 10px; }
             .form-sub { font-size: 12px; margin-top: 6px; }
             .form { margin-top: 18px; gap: 12px; }
             .form-footer { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
-            .input-wrap { border-radius: 10px; }
+            .input-wrap { border-radius: var(--r-md); }
             .input-wrap input { font-size: 13px; padding: 11px 0; }
             .input-wrap .leading { padding: 0 10px 0 12px; font-size: 12px; }
             .input-wrap .trailing { padding: 0 12px; font-size: 12px; }

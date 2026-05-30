@@ -150,7 +150,7 @@
             .flex.flex-row.items-center > label {
                 flex: 1;
                 min-width: 0;
-                transition: flex 0.2s var(--ease);
+                transition: flex var(--t-base);
             }
 
             .flex.flex-row.items-center > .segmented {
@@ -210,7 +210,7 @@
 
             .search-input input::placeholder {
                 color: var(--ink-3);
-                transition: color 0.2s var(--ease);
+                transition: color var(--t-base);
             }
 
             .search-input input:focus::placeholder {
@@ -219,7 +219,7 @@
 
             .search-input i {
                 font-size: 12px;
-                transition: opacity 0.2s var(--ease);
+                transition: opacity var(--t-base);
             }
 
             .search-input:focus-within i {
@@ -561,7 +561,7 @@
 
             #historyModal .modal {
                 max-height: calc(100dvh - 20px);
-                border-radius: 20px;
+                border-radius: var(--r-2xl);
             }
 
             #historyModal .modal-header {

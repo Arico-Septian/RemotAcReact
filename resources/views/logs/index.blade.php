@@ -81,7 +81,7 @@
             align-items: center;
             gap: 5px;
             padding: 3px 8px 3px 10px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: rgb(var(--cyan-rgb) / 0.1);
             border: 1px solid rgb(var(--cyan-rgb) / 0.25);
             font-size: 11px;
@@ -230,7 +230,7 @@
             }
         }
 
-        .tbl tbody tr { transition: background 0.15s var(--ease); }
+        .tbl tbody tr { transition: background var(--t-fast); }
         .tbl tbody tr:hover { background: var(--panel-2); }
 
         .tbl.tbl-log thead {
@@ -302,7 +302,7 @@
             cursor: pointer;
             user-select: none;
             position: relative;
-            transition: background 0.15s var(--ease);
+            transition: background var(--t-fast);
         }
 
         .tbl-log th:hover {
@@ -345,14 +345,14 @@
             min-width: 32px;
             height: 32px;
             padding: 0 10px;
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             font-size: 12px;
             font-weight: 500;
             color: var(--ink-2);
             background: transparent;
             border: 1px solid transparent;
             text-decoration: none;
-            transition: all 0.15s var(--ease);
+            transition: all var(--t-fast);
         }
 
         .pager a {
@@ -428,7 +428,7 @@
             .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
             .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.4; }
-            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
+            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: var(--r-md); font-size: 14px; }
         }
 
         /* Stat cards — Mobile M (≤ 480px) */
@@ -438,7 +438,7 @@
             .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.05em; white-space: nowrap; }
             .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
-            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 10px; font-size: 12px; }
+            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: var(--r-md); font-size: 12px; }
             .stat-card .accent-bar { top: 12px; bottom: 12px; }
         }
 
@@ -459,7 +459,7 @@
             .stat-card .stat-label-sm { font-size: 10px !important; letter-spacing: 0.05em !important; white-space: nowrap !important; }
             .stat-card .stat-num-lg { font-size: 20px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
             .stat-card .stat-sub { font-size: 10px !important; line-height: 1.3 !important; }
-            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: 8px !important; font-size: 11px !important; }
+            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: var(--r-sm) !important; font-size: 11px !important; }
             .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
         }
     </style>

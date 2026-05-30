@@ -324,7 +324,7 @@
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
             padding: 5px 12px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             font-family: var(--font-mono);
             letter-spacing: 0.02em;
         }
@@ -358,7 +358,7 @@
         .mode-btn-v .icon-wrap {
             width: 34px;
             height: 34px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             background: var(--panel-2);
             display: inline-flex;
             align-items: center;
@@ -496,7 +496,7 @@
         .timer-card .t-icon {
             width: 32px;
             height: 32px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             display: inline-flex;
             align-items: center;
             justify-content: center;

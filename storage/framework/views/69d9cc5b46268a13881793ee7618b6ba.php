@@ -36,7 +36,7 @@
 
         .dashboard-rooms-panel {
             padding: 20px;
-            border-radius: 20px;
+            border-radius: var(--r-2xl);
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
             box-shadow: var(--inset-hi);
@@ -106,7 +106,7 @@
         /* ===== Recent Activity widget — premium ===== */
         .dashboard-activity-panel {
             padding: 20px;
-            border-radius: 20px;
+            border-radius: var(--r-2xl);
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
             box-shadow: var(--inset-hi);
@@ -139,7 +139,7 @@
         .activity-title-icon {
             width: 26px;
             height: 26px;
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -170,7 +170,7 @@
             align-items: center;
             gap: 6px;
             padding: 3px 9px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: rgb(var(--mint-d-rgb) / 0.10);
             border: 1px solid rgb(var(--mint-d-rgb) / 0.32);
             color: var(--mint);
@@ -183,7 +183,7 @@
         .live-dot {
             width: 6px;
             height: 6px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: var(--mint);
             box-shadow: 0 0 0 0 rgb(var(--mint-d-rgb) / 0.55);
             animation: livePulse 1.8s ease-out infinite;
@@ -215,7 +215,7 @@
             align-items: center;
             gap: 12px;
             padding: 10px 14px 10px 18px;
-            border-radius: 16px;
+            border-radius: var(--r-xl);
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             transition: var(--t-base);
@@ -237,7 +237,7 @@
             top: 10px;
             bottom: 10px;
             width: 4px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: var(--tone, var(--ink-2));
             opacity: 1;
             /* Efek menyala yang lebih nyata */
@@ -247,7 +247,7 @@
         .activity-icon-wrap {
             width: 32px;
             height: 32px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -270,7 +270,7 @@
         .activity-avatar-fallback {
             width: 36px;
             height: 36px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -288,7 +288,7 @@
             bottom: -3px;
             width: 16px;
             height: 16px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -394,7 +394,7 @@
             align-items: center;
             gap: 3px;
             padding: 1px 5px;
-            border-radius: 4px;
+            border-radius: var(--r-xs);
             background: rgb(var(--ink-2-rgb) / 0.10);
             border: 1px solid rgb(var(--ink-2-rgb) / 0.18);
             color: var(--ink-3);
@@ -513,7 +513,7 @@
         @media (max-width: 480px) {
             .dashboard-activity-panel {
                 padding: 12px;
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             .activity-title {
@@ -534,7 +534,7 @@
                 grid-template-columns: 28px 1fr;
                 padding: 8px 10px 8px 14px;
                 gap: 8px;
-                border-radius: 12px;
+                border-radius: var(--r-lg);
                 min-height: 60px;
             }
 
@@ -602,7 +602,7 @@
         .dashboard-rooms-title-icon {
             width: 26px;
             height: 26px;
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -631,7 +631,7 @@
         .dashboard-rooms-action {
             min-height: 40px;
             padding: 8px 14px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             color: var(--ink-0);
@@ -660,7 +660,7 @@
 
         .dashboard-room-row {
             padding: 10px 12px 10px 18px;
-            border-radius: 16px;
+            border-radius: var(--r-xl);
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             color: inherit;
@@ -679,7 +679,7 @@
             top: 10px;
             bottom: 10px;
             width: 4px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             background: #fca5a5;
             opacity: 1;
             transition: background var(--t-base);
@@ -742,7 +742,7 @@
         .dashboard-room-status {
             min-width: 82px;
             padding: 6px 12px;
-            border-radius: 999px;
+            border-radius: var(--r-full);
             text-align: center;
             font-size: 12px;
             font-weight: 800;
@@ -826,7 +826,7 @@
         @media (max-width: 480px) {
             .dashboard-rooms-panel {
                 padding: 12px;
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             .dashboard-rooms-panel .panel-header {
@@ -863,7 +863,7 @@
                 gap: 8px;
                 padding: 10px 12px 10px 16px;
                 min-height: 60px;
-                border-radius: 12px;
+                border-radius: var(--r-lg);
             }
 
             .dashboard-room-row::before {
@@ -1107,7 +1107,7 @@
             .stat-card .stat-icon {
                 width: 34px;
                 height: 34px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 font-size: 14px;
             }
         }
@@ -1142,7 +1142,7 @@
             .stat-card .stat-icon {
                 width: 30px;
                 height: 30px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 font-size: 12px;
             }
 
@@ -1154,7 +1154,7 @@
             .dashboard-rooms-panel,
             .dashboard-activity-panel {
                 padding: 12px;
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             .dashboard-rooms-title,
@@ -1184,7 +1184,7 @@
             .activity-item {
                 padding: 10px 12px;
                 gap: 8px;
-                border-radius: 12px;
+                border-radius: var(--r-lg);
                 min-height: 60px;
             }
 
@@ -1295,7 +1295,7 @@
             .stat-card .stat-icon {
                 width: 26px;
                 height: 26px;
-                border-radius: 8px;
+                border-radius: var(--r-sm);
                 font-size: 11px;
             }
 
@@ -1307,7 +1307,7 @@
             .dashboard-rooms-panel,
             .dashboard-activity-panel {
                 padding: 10px;
-                border-radius: 12px;
+                border-radius: var(--r-lg);
             }
 
             .dashboard-rooms-title,
@@ -1338,7 +1338,7 @@
             .activity-item {
                 padding: 8px 10px 8px 14px;
                 gap: 8px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 min-height: 54px;
             }
 
@@ -1422,7 +1422,7 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
                 padding: 4px 6px !important;
-                border-radius: 8px !important;
+                border-radius: var(--r-sm) !important;
             }
         }
 
@@ -1469,7 +1469,7 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
                 padding: 3px 5px !important;
-                border-radius: 8px !important;
+                border-radius: var(--r-sm) !important;
                 min-width: 0;
             }
             .temp-chart-panel #trendInfo {
@@ -1496,7 +1496,7 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
                 padding: 2px 4px !important;
-                border-radius: 4px !important;
+                border-radius: var(--r-xs) !important;
             }
             .temp-chart-panel #trendInfo {
                 font-size: 10px !important;

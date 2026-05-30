@@ -126,7 +126,7 @@
             .flex.items-center.gap-2 > form {
                 flex: 1;
                 min-width: 0;
-                transition: flex 0.2s var(--ease);
+                transition: flex var(--t-base);
             }
 
             .flex.items-center.gap-2 > div {
@@ -197,7 +197,7 @@
 
             .search-input input::placeholder {
                 color: var(--ink-3);
-                transition: color 0.2s var(--ease);
+                transition: color var(--t-base);
             }
 
             .search-input input:focus::placeholder {
@@ -206,7 +206,7 @@
 
             .search-input i {
                 font-size: 12px;
-                transition: opacity 0.2s var(--ease);
+                transition: opacity var(--t-base);
             }
 
             .search-input:focus-within i {
@@ -398,7 +398,7 @@
 
             #modal .modal {
                 max-width: 390px;
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
@@ -448,7 +448,7 @@
             #modal .input {
                 min-height: 36px;
                 padding: 0 12px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 font-size: 12px;
             }
 
@@ -477,7 +477,7 @@
 
             #modal .modal {
                 max-width: min(330px, calc(100vw - 44px));
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
@@ -527,7 +527,7 @@
             #modal .input {
                 min-height: 34px;
                 padding: 0 10px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 font-size: 11px;
             }
 
@@ -560,7 +560,7 @@
 
             #modal .modal {
                 max-width: min(286px, calc(100vw - 34px));
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             #modal .modal-header {

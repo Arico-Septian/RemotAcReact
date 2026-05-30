@@ -145,7 +145,7 @@
             align-items: center;
             justify-content: center;
             padding: 6px 12px;
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
@@ -177,7 +177,7 @@
         .user-avatar-sm {
             width: 34px;
             height: 34px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -421,7 +421,7 @@
             padding: 4px 10px;
             background: rgb(var(--cyan-rgb) / 0.1);
             border: 1px solid rgb(var(--cyan-rgb) / 0.25);
-            border-radius: 999px;
+            border-radius: var(--r-full);
             font-size: 12px;
             color: var(--cyan);
         }
@@ -454,14 +454,14 @@
             min-width: 32px;
             height: 32px;
             padding: 0 10px;
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             font-size: 12px;
             font-weight: 500;
             color: var(--ink-2);
             background: transparent;
             border: 1px solid transparent;
             text-decoration: none;
-            transition: all 0.15s var(--ease);
+            transition: all var(--t-fast);
         }
 
         .pager a {
@@ -500,7 +500,7 @@
             cursor: pointer;
             user-select: none;
             position: relative;
-            transition: background 0.15s var(--ease);
+            transition: background var(--t-fast);
         }
 
         .user-table th:hover {
@@ -572,7 +572,7 @@
             .user-card .user-avatar-sm {
                 width: 34px !important;
                 height: 34px !important;
-                border-radius: 10px !important;
+                border-radius: var(--r-md) !important;
                 font-size: 13px !important;
                 font-weight: 600 !important;
                 flex-shrink: 0;
@@ -615,7 +615,7 @@
                 padding: 3px 6px !important;
                 height: auto !important;
                 min-width: 0 !important;
-                border-radius: 4px !important;
+                border-radius: var(--r-xs) !important;
                 letter-spacing: 0.05em !important;
                 white-space: nowrap;
                 flex-shrink: 0;
@@ -654,7 +654,7 @@
                 width: 30px;
                 height: 30px;
                 font-size: 11px;
-                border-radius: 8px;
+                border-radius: var(--r-sm);
             }
 
             .user-table {
@@ -704,7 +704,7 @@
             .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
             .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.4; }
-            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
+            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: var(--r-md); font-size: 14px; }
         }
 
         /* Stat cards — Mobile M (≤ 480px) */
@@ -714,7 +714,7 @@
             .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.05em; }
             .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
-            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 10px; font-size: 12px; }
+            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: var(--r-md); font-size: 12px; }
             .stat-card .accent-bar { top: 12px; bottom: 12px; }
         }
 
@@ -736,7 +736,7 @@
                 width: 36px !important;
                 height: 36px !important;
                 font-size: 13px !important;
-                border-radius: 10px !important;
+                border-radius: var(--r-md) !important;
             }
             .user-card-name-text { font-size: 13px; }
             .user-card-handle { font-size: 11px; }
@@ -749,7 +749,7 @@
             .stat-card .stat-label-sm { font-size: 10px !important; letter-spacing: 0.05em !important; }
             .stat-card .stat-num-lg { font-size: 20px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
             .stat-card .stat-sub { font-size: 10px !important; line-height: 1.3 !important; }
-            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: 8px !important; font-size: 11px !important; }
+            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: var(--r-sm) !important; font-size: 11px !important; }
             .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
 
             /* User card: tighter padding, fonts match log card */
@@ -773,7 +773,7 @@
 
             #modal .modal {
                 max-width: 390px;
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
@@ -817,7 +817,7 @@
             #modal .input {
                 min-height: 36px;
                 padding: 0 12px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 font-size: 12px;
             }
 
@@ -847,7 +847,7 @@
 
             #modal .modal {
                 max-width: min(330px, calc(100vw - 44px));
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
@@ -891,7 +891,7 @@
             #modal .input {
                 min-height: 34px;
                 padding: 0 10px;
-                border-radius: 10px;
+                border-radius: var(--r-md);
                 font-size: 11px;
             }
 
@@ -924,7 +924,7 @@
 
             #modal .modal {
                 max-width: min(286px, calc(100vw - 34px));
-                border-radius: 16px;
+                border-radius: var(--r-xl);
             }
 
             #modal .modal-header {

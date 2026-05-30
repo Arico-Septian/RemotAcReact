@@ -35,7 +35,7 @@
         .nlist-icon {
             width: 38px;
             height: 38px;
-            border-radius: 12px;
+            border-radius: var(--r-lg);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -91,7 +91,7 @@
         /* Mobile M / L (≤ 480 px): compact notification list */
         @media (max-width: 480px) {
             .nlist-item { padding: 11px 12px; gap: 10px; }
-            .nlist-icon { width: 30px; height: 30px; font-size: 12px; border-radius: 10px; }
+            .nlist-icon { width: 30px; height: 30px; font-size: 12px; border-radius: var(--r-md); }
             .nlist-item .text-base, .nlist-item h3 { font-size: 13px !important; }
             .nlist-item .text-sm, .nlist-item p { font-size: 12px !important; line-height: 1.4 !important; }
             .nlist-item .text-xs { font-size: 10px !important; }
@@ -111,7 +111,7 @@
         /* Mobile S (≤ 480px): aggressive shrink */
         @media (max-width: 480px) {
             .nlist-item { padding: 9px 10px; gap: 8px; }
-            .nlist-icon { width: 26px; height: 26px; font-size: 11px; border-radius: 8px; }
+            .nlist-icon { width: 26px; height: 26px; font-size: 11px; border-radius: var(--r-sm); }
             .nlist-item .text-base, .nlist-item h3 { font-size: 12px !important; }
             .nlist-item .text-sm, .nlist-item p { font-size: 11px !important; }
             .nlist-item .text-mono { font-size: 10px; }

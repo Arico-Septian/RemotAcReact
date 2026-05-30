@@ -78,7 +78,7 @@
         }
         .fz-badge {
             padding: 2px 8px;
-            border-radius: 8px;
+            border-radius: var(--r-sm);
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 0.05em;

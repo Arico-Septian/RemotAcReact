@@ -12,14 +12,14 @@
     <style>
         .profile-avatar-wrap { position: relative; flex-shrink: 0; }
         .profile-avatar-xl {
-            width: 72px; height: 72px; border-radius: 999px;
+            width: 72px; height: 72px; border-radius: var(--r-full);
             object-fit: cover; font-size: 28px;
             display: flex; align-items: center; justify-content: center;
         }
         .profile-avatar-btn {
             position: absolute; right: -2px; bottom: -2px;
-            width: 26px; height: 26px; border-radius: 999px;
-            background: #0ea5e9; border: 2px solid var(--panel-1);
+            width: 26px; height: 26px; border-radius: var(--r-full);
+            background: var(--cyan-d); border: 2px solid var(--panel-1);
             color: #0b1220; display: inline-flex; align-items: center;
             justify-content: center; cursor: pointer;
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
@@ -43,7 +43,7 @@
         .pwd-field .toggle-eye:hover { color: var(--ink-1); }
 
         .profile-error-box {
-            padding: 10px 12px; border-radius: 10px;
+            padding: 10px 12px; border-radius: var(--r-md);
             background: rgb(var(--danger-rgb) / 0.08); border: 1px solid rgb(var(--danger-rgb) / 0.25);
             margin-bottom: 14px;
         }
