@@ -35,7 +35,7 @@
             <a href="<?php echo e(route('monitoring')); ?>"
                class="nav-link menu-link <?php echo e(request()->routeIs('monitoring') ? 'active' : ''); ?>">
                 <i class="fa-solid fa-temperature-half"></i>
-                <span class="menu-text">Temperature Monitor</span>
+                <span class="menu-text">Server Temperature</span>
             </a>
         </div>
 

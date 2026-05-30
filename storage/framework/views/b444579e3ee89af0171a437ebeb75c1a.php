@@ -19,13 +19,13 @@
             radial-gradient(800px 400px at 50% -20%, rgba(78, 215, 255, 0.08), transparent 60%),
             /* Complementary indigo glow from bottom-right — secondary accent */
             radial-gradient(600px 350px at 85% 110%, rgba(139, 162, 255, 0.04), transparent 65%),
-            /* Much darker gradient overlay */
+            /* Darkened gradient overlay */
             linear-gradient(135deg,
-                rgba(4, 7, 16, 0.93) 0%,
-                rgba(6, 11, 28, 0.92) 25%,
-                rgba(7, 14, 34, 0.91) 50%,
-                rgba(5, 10, 26, 0.92) 75%,
-                rgba(4, 7, 20, 0.94) 100%
+                rgba(4, 7, 16, 0.86) 0%,
+                rgba(6, 11, 28, 0.84) 25%,
+                rgba(7, 14, 34, 0.83) 50%,
+                rgba(5, 10, 26, 0.84) 75%,
+                rgba(4, 7, 20, 0.86) 100%
             ),
             /* Wallpaper image — texture underneath */
             url('/images/wallpaper.jpeg') center/cover no-repeat fixed !important;
@@ -34,10 +34,16 @@
 
     /* Modern color system — harmonious palette */
     :root {
-        --panel-1: rgba(13, 21, 44, 0.93) !important;
-        --panel-2: rgba(15, 25, 52, 0.95) !important;
+        --panel-1: rgba(13, 21, 44, 0.72) !important;
+        --panel-2: rgba(15, 25, 52, 0.78) !important;
         --bg-1:    #0d1530 !important;
         --cyan-d-rgb: 34 184 230;
+    }
+
+    /* Glass effect on all panels */
+    .panel, .ac-panel, .stat-card, .card {
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
     }
 
     /* Main content area with much darker overlay */
@@ -67,14 +73,12 @@
         height: 64px;
         display: flex; align-items: center; justify-content: space-between;
         padding: 0 24px;
-        /* 2026 modern header with vibrant accents */
         background:
-            /* Vibrant cyan glow */
-            radial-gradient(950px 320px at 50% -40%, rgb(var(--cyan-d-rgb) / 0.14), transparent 65%),
-            /* Enhanced gradient with subtle blue tint */
-            linear-gradient(180deg, rgba(15, 25, 50, 0.98) 0%, rgba(12, 20, 42, 0.96) 100%) !important;
-        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.16) !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgb(var(--cyan-d-rgb) / 0.12), inset 0 -1px 0 rgba(139, 162, 255, 0.06);
+            radial-gradient(950px 320px at 50% -40%, rgb(var(--cyan-d-rgb) / 0.12), transparent 65%),
+            radial-gradient(480px 320px at 85% 125%, rgb(var(--cyan-rgb) / 0.08), transparent 65%),
+            linear-gradient(180deg, rgba(13, 22, 46, 0.98) 0%, rgba(10, 17, 38, 0.99) 100%) !important;
+        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.12) !important;
+        box-shadow: 0 0 32px rgba(0, 0, 0, 0.40), inset 0 -1px 0 rgb(var(--cyan-d-rgb) / 0.08);
         color: var(--ink-0);
         position: sticky; top: 0;
         z-index: 30;

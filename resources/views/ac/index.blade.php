@@ -131,55 +131,57 @@
             width: 240px;
             height: 240px;
             border-radius: 50%;
-            padding: 3px;
-            background: conic-gradient(from 215deg,
-                    transparent 0deg,
-                    rgb(var(--cyan-rgb) / 0.85) 60deg,
-                    rgb(var(--lavender-rgb) / 0.85) 130deg,
-                    rgb(var(--lavender-rgb) / 0.25) 175deg,
-                    transparent 200deg);
             position: relative;
-            box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
-            transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+            flex-shrink: 0;
+            background: radial-gradient(circle at 50% 40%, #0f1e3d 0%, #070f1f 100%);
+            transition: box-shadow 0.4s var(--ease);
         }
 
-        /* #10 Temperature color indicator */
+        /* #10 Temperature color indicator — ring via box-shadow */
         .temp-ring.temp-cool {
-            background: conic-gradient(from 215deg,
-                    transparent 0deg,
-                    rgb(var(--cyan-rgb) / 0.85) 60deg,
-                    rgb(var(--lavender-rgb) / 0.85) 130deg,
-                    rgb(var(--lavender-rgb) / 0.25) 175deg,
-                    transparent 200deg);
-            box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
+            box-shadow:
+                0 0 0 4px rgba(77, 212, 255, 0.85),
+                -12px 6px 50px rgba(77, 212, 255, 0.60),
+                0 8px 30px rgba(77, 212, 255, 0.20),
+                inset 0 0 40px rgba(77, 212, 255, 0.06);
         }
 
         .temp-ring.temp-warm {
-            background: conic-gradient(from 215deg,
-                    transparent 0deg,
-                    rgba(250, 204, 21, 0.85) 60deg,
-                    rgba(251, 146, 60, 0.85) 130deg,
-                    rgba(251, 146, 60, 0.25) 175deg,
-                    transparent 200deg);
-            box-shadow: 0 20px 60px rgba(250, 204, 21, 0.10);
+            box-shadow:
+                0 0 0 4px rgba(251, 191, 36, 0.85),
+                -12px 6px 50px rgba(251, 191, 36, 0.60),
+                0 8px 30px rgba(251, 146, 60, 0.20),
+                inset 0 0 40px rgba(251, 191, 36, 0.06);
         }
 
         .temp-ring.temp-hot {
-            background: conic-gradient(from 215deg,
-                    transparent 0deg,
-                    rgba(248, 113, 113, 0.85) 60deg,
-                    rgb(var(--coral-d-rgb) / 0.85) 130deg,
-                    rgb(var(--coral-d-rgb) / 0.25) 175deg,
-                    transparent 200deg);
-            box-shadow: 0 20px 60px rgba(248, 113, 113, 0.10);
+            box-shadow:
+                0 0 0 4px rgba(248, 113, 113, 0.85),
+                -12px 6px 50px rgba(248, 113, 113, 0.60),
+                0 8px 30px rgba(248, 113, 113, 0.20),
+                inset 0 0 40px rgba(248, 113, 113, 0.06);
         }
+
+        /* Power OFF — ring redup */
+        .temp-ring.ring-off {
+            box-shadow:
+                0 0 0 3px rgba(100, 116, 139, 0.35),
+                0 4px 20px rgba(0, 0, 0, 0.30) !important;
+            background: radial-gradient(circle at 50% 40%, #0a1225 0%, #050b16 100%) !important;
+            filter: saturate(0.15) brightness(0.65);
+            transition: box-shadow 0.4s var(--ease), filter 0.4s var(--ease), background 0.4s var(--ease);
+        }
+
+        .temp-ring.ring-off .ring-label,
+        .temp-ring.ring-off .ring-summary { color: var(--ink-4); }
+        .temp-ring.ring-off .temp-value,
+        .temp-ring.ring-off .unit { color: var(--ink-3); }
 
         /* #1 Responsive temperature ring */
         @media (max-width: 768px) {
             .temp-ring {
-                width: 160px;
-                height: 160px;
-                box-shadow: 0 12px 40px rgb(var(--cyan-rgb) / 0.08);
+                width: 180px;
+                height: 180px;
             }
 
             .ring-temp {
@@ -201,17 +203,15 @@
         }
 
         .temp-ring-inner {
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            inset: 0;
             border-radius: 50%;
-            background:
-                radial-gradient(circle at 50% 45%, rgb(var(--bg-2-rgb) / 0.95), rgb(var(--bg-0-rgb) / 0.98) 70%);
+            background: transparent;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
 
         .ring-label {
@@ -244,10 +244,14 @@
 
         .ring-summary {
             font-size: 12px;
-            color: var(--ink-3);
+            color: var(--ink-2);
             margin: 2px 0 0;
             letter-spacing: 0.02em;
         }
+
+        .temp-ring.temp-cool .ring-summary { color: rgb(var(--cyan-rgb) / 0.80); }
+        .temp-ring.temp-warm .ring-summary { color: rgba(250, 204, 21, 0.80); }
+        .temp-ring.temp-hot  .ring-summary { color: rgb(var(--coral-rgb) / 0.80); }
 
         /* === Control Row (− power +) === */
         .ctrl-row {
@@ -380,50 +384,50 @@
         }
 
         .mode-btn-v.active {
-            background: linear-gradient(180deg, rgb(var(--cyan-rgb) / 0.14), rgb(var(--cyan-rgb) / 0.04));
-            border-color: var(--cyan);
+            background: linear-gradient(160deg, rgba(77,212,255,0.22) 0%, rgba(77,212,255,0.06) 60%, rgba(77,212,255,0.02) 100%);
+            border-color: rgba(77,212,255,0.90);
             color: var(--cyan);
-            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 8px 22px rgb(var(--cyan-rgb) / 0.14);
+            box-shadow: inset 0 0 16px rgba(77,212,255,0.12);
         }
 
         .mode-btn-v.active .icon-wrap {
-            background: rgb(var(--cyan-rgb) / 0.16);
+            background: rgba(77,212,255,0.20);
             color: var(--cyan);
         }
 
         .mode-btn-v[data-mode="heat"].active {
             color: var(--coral);
-            border-color: var(--coral);
-            box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.20) inset, 0 8px 22px rgba(248, 113, 113, 0.14);
-            background: linear-gradient(180deg, rgba(248, 113, 113, 0.14), rgba(248, 113, 113, 0.04));
+            border-color: rgba(248,113,113,0.90);
+            background: linear-gradient(160deg, rgba(248,113,113,0.22) 0%, rgba(248,113,113,0.06) 60%, rgba(248,113,113,0.02) 100%);
+            box-shadow: inset 0 0 16px rgba(248,113,113,0.12);
         }
 
         .mode-btn-v[data-mode="heat"].active .icon-wrap {
-            background: rgba(248, 113, 113, 0.18);
+            background: rgba(248,113,113,0.20);
             color: var(--coral);
         }
 
         .mode-btn-v[data-mode="dry"].active {
             color: var(--lavender);
-            border-color: var(--lavender);
-            box-shadow: 0 0 0 1px rgb(var(--lavender-rgb) / 0.20) inset, 0 8px 22px rgb(var(--lavender-rgb) / 0.14);
-            background: linear-gradient(180deg, rgb(var(--lavender-rgb) / 0.14), rgb(var(--lavender-rgb) / 0.04));
+            border-color: rgba(180,163,255,0.90);
+            background: linear-gradient(160deg, rgba(180,163,255,0.22) 0%, rgba(180,163,255,0.06) 60%, rgba(180,163,255,0.02) 100%);
+            box-shadow: inset 0 0 16px rgba(180,163,255,0.12);
         }
 
         .mode-btn-v[data-mode="dry"].active .icon-wrap {
-            background: rgb(var(--lavender-rgb) / 0.18);
+            background: rgba(180,163,255,0.20);
             color: var(--lavender);
         }
 
         .mode-btn-v[data-mode="fan"].active {
             color: var(--mint);
-            border-color: var(--mint);
-            box-shadow: 0 0 0 1px rgb(var(--mint-rgb) / 0.20) inset, 0 8px 22px rgb(var(--mint-rgb) / 0.14);
-            background: linear-gradient(180deg, rgb(var(--mint-rgb) / 0.14), rgb(var(--mint-rgb) / 0.04));
+            border-color: rgba(110,231,183,0.90);
+            background: linear-gradient(160deg, rgba(110,231,183,0.22) 0%, rgba(110,231,183,0.06) 60%, rgba(110,231,183,0.02) 100%);
+            box-shadow: inset 0 0 16px rgba(110,231,183,0.12);
         }
 
         .mode-btn-v[data-mode="fan"].active .icon-wrap {
-            background: rgb(var(--mint-rgb) / 0.18);
+            background: rgba(110,231,183,0.20);
             color: var(--mint);
         }
 
@@ -464,10 +468,10 @@
         }
 
         .mode-btn-h.active {
-            background: linear-gradient(180deg, rgb(var(--cyan-rgb) / 0.14), rgb(var(--cyan-rgb) / 0.04));
-            border-color: var(--cyan);
+            background: linear-gradient(160deg, rgba(77,212,255,0.22) 0%, rgba(77,212,255,0.06) 60%, rgba(77,212,255,0.02) 100%);
+            border-color: rgba(77,212,255,0.90);
             color: var(--cyan);
-            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 6px 18px rgb(var(--cyan-rgb) / 0.14);
+            box-shadow: inset 0 0 16px rgba(77,212,255,0.12);
         }
 
         .mode-btn-h.active i {
@@ -493,6 +497,16 @@
             gap: 12px;
         }
 
+        .timer-card.is-on {
+            background: rgba(110, 231, 183, 0.08);
+            border-color: rgba(110, 231, 183, 0.40);
+        }
+
+        .timer-card.is-off {
+            background: rgba(248, 113, 113, 0.08);
+            border-color: rgba(248, 113, 113, 0.40);
+        }
+
         .timer-card .t-icon {
             width: 32px;
             height: 32px;
@@ -507,12 +521,12 @@
         }
 
         .timer-card.is-on .t-icon {
-            background: rgb(var(--mint-rgb) / 0.16);
+            background: rgba(110, 231, 183, 0.18);
             color: var(--mint);
         }
 
         .timer-card.is-off .t-icon {
-            background: rgba(248, 113, 113, 0.16);
+            background: rgba(248, 113, 113, 0.18);
             color: var(--coral);
         }
 
@@ -529,14 +543,20 @@
             margin: 0;
         }
 
+        .timer-card.is-on  .t-label { color: #6ee7b7; }
+        .timer-card.is-off .t-label { color: #f87171; }
+
         .timer-card .t-value {
             font-family: var(--font-mono);
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--ink-0);
             margin: 2px 0 0;
             letter-spacing: 0em;
         }
+
+        .timer-card.is-on  .t-value { color: #6ee7b7; }
+        .timer-card.is-off .t-value { color: #f87171; }
 
         .timer-card .t-value.empty {
             color: var(--ink-4);
@@ -1054,7 +1074,7 @@
                                         @php
                                             $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
                                         @endphp
-                                        <div class="temp-ring temp-{{ $tempCategory }}"
+                                        <div class="temp-ring temp-{{ $tempCategory }} {{ $isPowerOn ? '' : 'ring-off' }}"
                                             id="tempRing-{{ $ac->id }}">
                                             <div class="temp-ring-inner">
                                                 <p class="ring-label">AC Temp</p>
@@ -1205,7 +1225,7 @@
                                                         @csrf
                                                         <input type="hidden" name="timer_on" value="">
                                                         <input type="hidden" name="timer_off" value="">
-                                                        <button type="submit" class="btn btn-ghost btn-sm btn-block">
+                                                        <button type="submit" class="btn btn-sm btn-block" style="background:rgba(248,113,113,0.10);border:1px solid rgba(248,113,113,0.30);color:var(--coral);">
                                                             <i class="fa-solid fa-trash text-[10px]"></i>
                                                             <span>Delete Timer</span>
                                                         </button>
@@ -1760,6 +1780,8 @@
             const powerInput = form?.querySelector('[name="power"]');
             if (powerInput) powerInput.value = turnOn ? 'OFF' : 'ON';
             if (form) form.dataset.acPower = power;
+            const ringEl = document.getElementById(`tempRing-${id}`);
+            if (ringEl) ringEl.classList.toggle('ring-off', !turnOn);
 
             const minDelay = new Promise(r => setTimeout(r, 2000));
             try {
@@ -1989,6 +2011,10 @@ document.querySelectorAll('.control-form').forEach(form => {
                     // Power button (toggle .on)
                     const powerBtn = panel.querySelector('.power-btn');
                     if (powerBtn) powerBtn.classList.toggle('on', power === 'ON');
+
+                    // Ring dim/bright based on power
+                    const ringEl = panel.querySelector('.temp-ring');
+                    if (ringEl) ringEl.classList.toggle('ring-off', power !== 'ON');
 
                     // Power form data attribute (dipakai modal konfirmasi)
                     const powerForm = panel.querySelector('.power-form');

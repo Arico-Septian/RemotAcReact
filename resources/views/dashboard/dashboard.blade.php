@@ -228,7 +228,6 @@
         .activity-item:hover {
             background: var(--panel-2);
             border-color: var(--line);
-            transform: translateY(-1px);
         }
 
         .activity-rail {
@@ -266,17 +265,32 @@
             flex-shrink: 0;
         }
 
-        .activity-avatar-img,
+        .activity-avatar-inner {
+            display: block;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .activity-avatar-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: block;
+            object-fit: cover;
+            object-position: center;
+        }
+
         .activity-avatar-fallback {
             width: 36px;
             height: 36px;
-            border-radius: var(--r-full);
+            border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 13px;
             font-weight: 700;
-            object-fit: cover;
             background: linear-gradient(135deg, color-mix(in srgb, var(--tone, var(--ink-2)) 35%, #1e293b), color-mix(in srgb, var(--tone, var(--ink-2)) 18%, #0f172a));
             color: #ffffff;
             border: 1px solid color-mix(in srgb, var(--tone, var(--ink-2)) 40%, transparent);
@@ -288,14 +302,14 @@
             bottom: -3px;
             width: 16px;
             height: 16px;
-            border-radius: var(--r-full);
+            border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: var(--tone, var(--ink-2));
             color: #0b1220;
             font-size: 8px;
-            border: 2px solid var(--panel-1);
+            border: 2px solid var(--bg-0, #07101f);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
         }
 
@@ -486,7 +500,6 @@
                 height: 32px;
             }
 
-            .activity-avatar-img,
             .activity-avatar-fallback {
                 font-size: 12px;
             }
@@ -702,8 +715,8 @@
 
         .dashboard-room-row:hover {
             background: var(--panel-2);
-            border-color: var(--line);
-            transform: translateY(-1px);
+            border-color: var(--line-soft);
+            transform: none;
         }
 
         .dashboard-room-main {
@@ -1721,7 +1734,7 @@
                                                 $temperature = $room->temperature ?? $room->last_temperature ?? null;
                                                 $status = $room->device_status === 'online' ? 'online' : 'offline';
                                             @endphp
-                                            <a href="{{ route('rooms.overview') }}" class="dashboard-room-row"
+                                            <div class="dashboard-room-row"
                                                 data-dashboard-room-id="{{ $room->id }}"
                                                 data-status="{{ $status }}">
                                                 <div class="dashboard-room-main">
@@ -1739,7 +1752,7 @@
                                                         -- &deg;C
                                                     @endif
                                                 </div>
-                                            </a>
+                                            </div>
                                         @endforeach
                                     </div>
                                 @else
@@ -2471,8 +2484,8 @@ updateNotifButton();
                 const chips = (room || ac) ? `<span class="activity-chips">${room}${ac}</span>` : '';
 
                 const avatar = item.user_avatar ?
-                    `<img src="${escapeHtml(item.user_avatar)}" alt="${name}" class="activity-avatar-img">` :
-                    `<div class="activity-avatar-fallback">${initial}</div>`;
+                    `<span class="activity-avatar-inner"><img src="${escapeHtml(item.user_avatar)}" alt="${name}" class="activity-avatar-img"></span>` :
+                    `<span class="activity-avatar-inner"><div class="activity-avatar-fallback">${initial}</div></span>`;
 
                 return `
             <div class="activity-item tone-${tone}" data-id="${item.id}">
