@@ -216,7 +216,7 @@
 
         .ring-label {
             font-size: 10px;
-            letter-spacing: 0.20em;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: var(--ink-3);
             font-weight: 700;
@@ -522,7 +522,7 @@
 
         .timer-card .t-label {
             font-size: 10px;
-            letter-spacing: 0.10em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--ink-3);
             font-weight: 700;
@@ -535,7 +535,7 @@
             font-weight: 700;
             color: var(--ink-0);
             margin: 2px 0 0;
-            letter-spacing: -0.01em;
+            letter-spacing: 0em;
         }
 
         .timer-card .t-value.empty {

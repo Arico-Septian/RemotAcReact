@@ -81,7 +81,7 @@
             border-radius: 8px;
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
         }
         .fz-cold   { background: rgba(77,212,255,.14);  color: var(--cyan); }
         .fz-normal { background: rgba(110,231,183,.14); color: var(--mint); }

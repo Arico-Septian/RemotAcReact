@@ -24,7 +24,7 @@
         .stat-card .stat-label-sm {
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--ink-3);
         }
@@ -239,7 +239,7 @@
 
         .tbl.tbl-log th {
             font-size: 12px;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             padding: 14px 18px;
             background: transparent;
             color: var(--ink-0);
@@ -435,7 +435,7 @@
         @media (max-width: 480px) {
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 10px; }
             .stat-card { padding: 12px 14px; }
-            .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.06em; white-space: nowrap; }
+            .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.05em; white-space: nowrap; }
             .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
             .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 10px; font-size: 12px; }

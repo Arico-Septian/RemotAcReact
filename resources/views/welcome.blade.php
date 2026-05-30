@@ -136,8 +136,8 @@
             color: var(--cyan);
             font-size: 14px;
         }
-        .brand-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink-0); white-space: nowrap; }
-        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
+        .brand-name { font-size: 16px; font-weight: 700; letter-spacing: 0em; line-height: 1.1; color: var(--ink-0); white-space: nowrap; }
+        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
 
         .nav-links { display: flex; align-items: center; gap: 2px; }
         .nav-links a {
@@ -174,7 +174,7 @@
         .section { max-width: 1320px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 2; }
         .eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
-            font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
             color: var(--cyan); text-transform: uppercase;
         }
         .eyebrow::before {
@@ -287,7 +287,7 @@
         }
         .hero-trust .item { display: flex; flex-direction: column; gap: 4px; }
         .hero-trust .num {
-            font-size: 24px; font-weight: 800; letter-spacing: -0.025em;
+            font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
             font-feature-settings: 'tnum' 1, 'lnum' 1;
             color: var(--ink-0);
         }
@@ -323,7 +323,7 @@
         .status-title {
             margin-top: 14px;
             font-size: 32px; line-height: 1.1;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.02em;
         }
         .status-list { margin-top: 26px; display: flex; flex-direction: column; gap: 20px; }
         .status-row {
@@ -514,8 +514,8 @@
             background: rgba(0,0,0,0.30);
             border: 1px solid var(--line);
         }
-        .preview-stat .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
-        .preview-stat .val { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.025em; font-feature-settings: 'tnum' 1, 'lnum' 1; }
+        .preview-stat .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-3); text-transform: uppercase; }
+        .preview-stat .val { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.02em; font-feature-settings: 'tnum' 1, 'lnum' 1; }
         .preview-stat.cyan    .val { color: var(--cyan); }
         .preview-stat.mint    .val { color: var(--mint); }
         .preview-stat.lavender .val { color: var(--lavender); }
@@ -538,7 +538,7 @@
         .metric { text-align: left; position: relative; }
         .metric:not(:first-child) { padding-left: 24px; border-left: 1px solid var(--line); }
         .metric .v {
-            font-size: 40px; font-weight: 800; letter-spacing: -0.035em;
+            font-size: 40px; font-weight: 800; letter-spacing: -0.04em;
             font-feature-settings: 'tnum' 1, 'lnum' 1;
             color: var(--ink-0);
             line-height: 1;
@@ -575,7 +575,7 @@
             font-size: 13px; font-weight: 600;
             margin-bottom: 20px;
         }
-        .step h4 { font-size: 18px; font-weight: 700; letter-spacing: -0.015em; color: var(--ink-0); }
+        .step h4 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink-0); }
         .step p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
 
         /* ===== CTA FINAL ===== */
@@ -611,7 +611,7 @@
         .cta-box > * { position: relative; z-index: 2; }
         .cta-h2 {
             font-size: clamp(40px, 5vw, 68px);
-            line-height: 1; letter-spacing: -0.035em;
+            line-height: 1; letter-spacing: -0.04em;
             max-width: 820px; margin: 14px auto 0;
             font-weight: 800;
         }
@@ -694,7 +694,7 @@
             .section { padding: 0 24px; }
             .hero { padding: 48px 0 40px; }
             .hero-main { padding: 32px 28px 28px; border-radius: 20px; }
-            .hero-h1 { font-size: 44px; letter-spacing: -0.025em; }
+            .hero-h1 { font-size: 44px; letter-spacing: -0.02em; }
             .hero-sub { font-size: 16px; max-width: 100%; }
             .hero-trust { margin-left: -28px; margin-right: -28px; padding-left: 28px; padding-right: 28px; }
             .status-card { padding: 28px 26px 24px; border-radius: 20px; }
@@ -714,7 +714,7 @@
             .hero { padding: 32px 0 28px; }
             .hero-grid { gap: 20px; }
             .hero-main { padding: 32px 28px 28px; border-radius: 20px; }
-            .hero-h1 { font-size: 36px; letter-spacing: -0.025em; line-height: 1.1; }
+            .hero-h1 { font-size: 36px; letter-spacing: -0.02em; line-height: 1.1; }
             .hero-sub { font-size: 14px; line-height: 1.6; max-width: 100%; }
             .hero-cta { flex-direction: column; gap: 10px; }
             .hero-cta > a { width: 100%; justify-content: center; }
@@ -801,7 +801,7 @@
                 gap: 12px 10px;
             }
             .hero-trust .num { font-size: 18px; }
-            .hero-trust .lbl { font-size: 8px; letter-spacing: 0.1em; }
+            .hero-trust .lbl { font-size: 8px; letter-spacing: 0.12em; }
 
             .status-card { padding: 18px 14px 14px; border-radius: 16px; }
             .status-title, .features-h2, .cta-h2 { font-size: 20px !important; line-height: 1.1; }
@@ -841,7 +841,7 @@
             }
             .preview-stat { padding: 12px; }
             .preview-stat .val { font-size: 20px; }
-            .preview-stat .lbl { font-size: 8px; letter-spacing: 0.1em; }
+            .preview-stat .lbl { font-size: 8px; letter-spacing: 0.12em; }
 
             /* How section — reduce step number circle */
             .step .num-circle { width: 40px; height: 40px; font-size: 14px; }

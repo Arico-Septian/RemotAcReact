@@ -100,7 +100,7 @@
         .floor-label {
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             color: var(--ink-3);
             white-space: nowrap;
         }
@@ -442,7 +442,7 @@
 
             #modal .field-label {
                 font-size: 10px;
-                letter-spacing: 0.045em;
+                letter-spacing: 0.05em;
             }
 
             #modal .input {
@@ -521,7 +521,7 @@
 
             #modal .field-label {
                 font-size: 10px;
-                letter-spacing: 0.04em;
+                letter-spacing: 0.05em;
             }
 
             #modal .input {

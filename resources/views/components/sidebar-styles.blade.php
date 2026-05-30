@@ -105,7 +105,7 @@
         font-size: 16px !important;
         font-weight: 700 !important;
         color: var(--ink-0) !important;
-        letter-spacing: -0.015em !important;
+        letter-spacing: -0.02em !important;
         margin: 0;
         line-height: 1.2;
     }
@@ -113,7 +113,7 @@
         font-size: 12px !important;
         color: var(--ink-3) !important;
         margin: 2px 0 0 !important;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.02em;
     }
 
     /* Right-cluster (notification bell + status pill) */
@@ -604,7 +604,7 @@
         .badge-role {
             font-size: 10px !important;
             line-height: 1.3 !important;
-            letter-spacing: 0.04em !important;
+            letter-spacing: 0.05em !important;
         }
 
         .tbl-toolbar .btn,

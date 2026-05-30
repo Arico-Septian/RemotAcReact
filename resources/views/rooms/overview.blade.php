@@ -76,7 +76,7 @@
         .room-card .ac-mini .lbl {
             font-size: 10px;
             color: var(--ink-3);
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             margin-top: 4px;
             font-weight: 600;
@@ -96,7 +96,7 @@
         .floor-label {
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             color: var(--ink-3);
             white-space: nowrap;
         }
@@ -571,7 +571,7 @@
 
             #historyModal .history-title-group .eyebrow {
                 font-size: 10px;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.05em;
             }
 
             #historyModal .modal-header h2 {

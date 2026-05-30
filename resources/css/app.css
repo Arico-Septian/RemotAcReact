@@ -206,7 +206,7 @@ body { min-height: 100vh; }
   font-weight: 600;
   color: var(--ink-0);
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0em;
 }
 .app-header-title p {
   font-size: 12px;
@@ -281,11 +281,11 @@ body { min-height: 100vh; }
 }
 .brand-text .name {
   font-size: 14px; font-weight: 700; color: var(--ink-0);
-  letter-spacing: -0.01em; line-height: 1.1;
+  letter-spacing: 0em; line-height: 1.1;
 }
 .brand-text .sub {
   font-size: 11px; color: var(--ink-3);
-  letter-spacing: 0.04em; text-transform: uppercase; margin-top: 2px;
+  letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px;
 }
 .sidebar-toggle {
   width: 28px; height: 28px;
@@ -305,7 +305,7 @@ body { min-height: 100vh; }
 .nav-section-label {
   font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.12em;
   color: var(--ink-4);
   font-weight: 700;
   padding: 8px 12px 6px;
@@ -319,7 +319,7 @@ body { min-height: 100vh; }
   color: var(--ink-2);
   text-decoration: none;
   font-size: 13px; font-weight: 500;
-  letter-spacing: -0.005em;
+  letter-spacing: 0em;
   position: relative;
   transition: color var(--t-base), background var(--t-base);
   cursor: pointer;
@@ -450,7 +450,7 @@ body { min-height: 100vh; }
   display: flex; align-items: center; justify-content: space-between;
   gap: 16px; margin-bottom: 14px; flex-wrap: wrap;
 }
-.panel-title { font-size: 14px; font-weight: 600; color: var(--ink-0); margin: 0; letter-spacing: -0.005em; }
+.panel-title { font-size: 14px; font-weight: 600; color: var(--ink-0); margin: 0; letter-spacing: 0em; }
 .panel-subtitle { font-size: 12px; color: var(--ink-3); margin: 2px 0 0; }
 .panel-meta { font-size: 12px; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; }
 
@@ -465,7 +465,7 @@ body { min-height: 100vh; }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 10px; font-weight: 700;
-  letter-spacing: 0.10em; text-transform: uppercase;
+  letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--cyan);
 }
 
@@ -500,7 +500,7 @@ body { min-height: 100vh; }
 }
 .stat-card .stat-label {
   font-size: 11px; color: var(--ink-3);
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
   margin: 0 0 6px;
 }
 .stat-card .stat-value {
@@ -538,7 +538,7 @@ body { min-height: 100vh; }
   font-size: 13px;
   font-weight: 600;
   font-family: inherit;
-  letter-spacing: -0.005em;
+  letter-spacing: 0em;
   border: 1px solid transparent;
   background: transparent;
   color: var(--ink-1);
@@ -669,7 +669,7 @@ body { min-height: 100vh; }
   padding: 3px 9px;
   border-radius: 8px;
   font-size: 10px; font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
+  letter-spacing: 0.05em; text-transform: uppercase;
   border: 1px solid transparent;
 }
 .badge-role.admin    { background: var(--lavender-soft); color: var(--lavender); border-color: var(--lavender-soft-2); }
@@ -682,7 +682,7 @@ body { min-height: 100vh; }
   padding: 3px 9px;
   border-radius: 8px;
   font-size: 11px; font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   font-family: 'JetBrains Mono', monospace;
 }
 .act-mint   { background: var(--mint-soft);     color: var(--mint); }
@@ -698,7 +698,7 @@ body { min-height: 100vh; }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field-label {
   font-size: 11px; font-weight: 600;
-  letter-spacing: 0.04em; text-transform: uppercase;
+  letter-spacing: 0.05em; text-transform: uppercase;
   color: var(--ink-3);
 }
 .input, .field input, .field select, .field textarea, input.input, select.select, textarea.textarea {
@@ -863,7 +863,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
   font-size: 11px;
   font-weight: 700;
   color: var(--ink-3);
-  letter-spacing: 0.06em; text-transform: uppercase;
+  letter-spacing: 0.05em; text-transform: uppercase;
   border-bottom: 1px solid var(--line-soft);
 }
 .tbl td {
@@ -949,7 +949,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
   gap: 12px;
   padding: 20px 22px 12px;
 }
-.modal-header h2 { margin: 0; font-size: 16px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; }
+.modal-header h2 { margin: 0; font-size: 16px; font-weight: 600; color: var(--ink-0); letter-spacing: 0em; }
 .modal-header .sub { margin: 3px 0 0; font-size: 12px; color: var(--ink-3); }
 .modal-close {
   width: 28px; height: 28px;
@@ -1179,7 +1179,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 ============================================================= */
 .h-divider { height: 1px; background: var(--line-soft); }
 .text-mono { font-family: 'JetBrains Mono', monospace; }
-.text-tight { letter-spacing: -0.01em; }
+.text-tight { letter-spacing: 0em; }
 [hidden], [x-cloak] { display: none !important; }
 
 /* Focus ring */

@@ -132,8 +132,8 @@
             color: var(--cyan);
             font-size: 16px;
         }
-        .brand-name { font-size: 16px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
-        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
+        .brand-name { font-size: 16px; font-weight: 700; line-height: 1.1; letter-spacing: 0em; }
+        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
 
         .brand-hero {
             margin-top: 60px;
@@ -209,7 +209,7 @@
 
         .form-eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
-            font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
             color: var(--cyan); text-transform: uppercase;
         }
         .form-eyebrow::before {
@@ -220,7 +220,7 @@
         .form-title {
             margin-top: 14px;
             font-size: 32px; font-weight: 800;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.02em;
             line-height: 1.1;
         }
         .form-title .accent {
@@ -262,7 +262,7 @@
             margin-bottom: 8px;
         }
         .field-label .help {
-            font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: 0.04em; text-transform: none;
+            font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: 0.05em; text-transform: none;
         }
         .input-wrap {
             position: relative;
@@ -480,7 +480,7 @@
         @media (max-width: 480px) {
             .page { padding: 12px; }
             .form-panel { padding: 22px 16px 18px; border-radius: 20px; }
-            .form-eyebrow { font-size: 10px; letter-spacing: 0.14em; }
+            .form-eyebrow { font-size: 10px; letter-spacing: 0.12em; }
             .form-title { font-size: 20px; margin-top: 10px; }
             .form-sub { font-size: 12px; margin-top: 6px; }
             .form { margin-top: 18px; gap: 12px; }
@@ -489,7 +489,7 @@
             .input-wrap input { font-size: 13px; padding: 11px 0; }
             .input-wrap .leading { padding: 0 10px 0 12px; font-size: 12px; }
             .input-wrap .trailing { padding: 0 12px; font-size: 12px; }
-            .field-label { font-size: 10px; letter-spacing: 0.1em; margin-bottom: 6px; }
+            .field-label { font-size: 10px; letter-spacing: 0.12em; margin-bottom: 6px; }
             .alert { font-size: 12px; padding: 9px 11px; margin-top: 18px; gap: 8px; }
             .back-link { margin-bottom: 18px; font-size: 11px; }
         }

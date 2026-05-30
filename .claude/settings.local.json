@@ -16,7 +16,8 @@
       "Bash(node fix-colors.cjs)",
       "Bash(powershell -Command ' *)",
       "Bash(node -e ' *)",
-      "Bash(node C:/pw-test/fix-lineheight.cjs)"
+      "Bash(node C:/pw-test/fix-lineheight.cjs)",
+      "Bash(node C:/pw-test/fix-letterspacing.cjs)"
     ],
     "additionalDirectories": [
       "c:\\laragon\\www\\tugasakhirremotac"
