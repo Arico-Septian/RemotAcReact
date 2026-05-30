@@ -46,7 +46,7 @@
         }
         .setting-input:focus {
             border-color: var(--cyan);
-            box-shadow: 0 0 0 2px rgba(77,212,255,.15);
+            box-shadow: 0 0 0 2px rgb(var(--cyan-rgb) / .15);
         }
         .setting-input.is-invalid { border-color: var(--coral); }
         .setting-unit {
@@ -83,8 +83,8 @@
             font-weight: 700;
             letter-spacing: 0.05em;
         }
-        .fz-cold   { background: rgba(77,212,255,.14);  color: var(--cyan); }
-        .fz-normal { background: rgba(110,231,183,.14); color: var(--mint); }
+        .fz-cold   { background: rgb(var(--cyan-rgb) / .14);  color: var(--cyan); }
+        .fz-normal { background: rgb(var(--mint-rgb) / .14); color: var(--mint); }
         .fz-hot    { background: rgba(248,113,113,.14); color: var(--coral); }
         .fz-sep    { color: var(--ink-4); }
     </style>

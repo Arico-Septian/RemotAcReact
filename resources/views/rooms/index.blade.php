@@ -19,14 +19,14 @@
             font-size: 11px !important;
         }
         .room-card .temp-chip.cool {
-            background: rgba(94, 208, 255, 0.15) !important;
-            color: #5ed0ff !important;
-            border: 1px solid rgba(94, 208, 255, 0.35) !important;
+            background: rgb(var(--cyan-rgb) / 0.15) !important;
+            color: var(--cyan) !important;
+            border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
         }
         .room-card .temp-chip.warm {
-            background: rgba(110, 231, 183, 0.15) !important;
+            background: rgb(var(--mint-rgb) / 0.15) !important;
             color: var(--mint) !important;
-            border: 1px solid rgba(110, 231, 183, 0.35) !important;
+            border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
         }
         .room-card .temp-chip.hot {
             background: rgba(248, 113, 113, 0.15) !important;
@@ -41,7 +41,7 @@
 
         /* Keputusan text color follows action */
         .keputusan-yellow { color: #facc15 !important; } /* TURUNKAN */
-        .keputusan-cool   { color: #5ed0ff !important; } /* NAIKKAN */
+        .keputusan-cool   { color: var(--cyan) !important; }
         .keputusan-warm   { color: var(--mint) !important; } /* DIAM (stabil) */
         .keputusan-hot    { color: #fb923c !important; }
         .keputusan-idle   { color: var(--ink-3) !important; }

@@ -326,8 +326,8 @@
         /* Pulse halo: keep app.css's pulse-dot animation, just re-center inset */
         .main-header .pill.pill-online .dot {
             box-shadow:
-                0 0 0 4px rgba(110, 231, 183, 0.35),
-                0 0 0 8px rgba(110, 231, 183, 0.18);
+                0 0 0 4px rgb(var(--mint-rgb) / 0.35),
+                0 0 0 8px rgb(var(--mint-rgb) / 0.18);
             animation: pulse-ring 1.6s ease-out infinite;
         }
     }
@@ -335,13 +335,13 @@
     @keyframes pulse-ring {
         0% {
             box-shadow:
-                0 0 0 2px rgba(110, 231, 183, 0.5),
-                0 0 0 4px rgba(110, 231, 183, 0.3);
+                0 0 0 2px rgb(var(--mint-rgb) / 0.5),
+                0 0 0 4px rgb(var(--mint-rgb) / 0.3);
         }
         100% {
             box-shadow:
-                0 0 0 8px rgba(110, 231, 183, 0),
-                0 0 0 12px rgba(110, 231, 183, 0);
+                0 0 0 8px rgb(var(--mint-rgb) / 0),
+                0 0 0 12px rgb(var(--mint-rgb) / 0);
         }
     }
 
@@ -370,9 +370,9 @@
         inset: 0;
         z-index: -1;
         background:
-            radial-gradient(60% 50% at 12% 0%, rgba(77, 212, 255, 0.035), transparent 60%),
-            radial-gradient(50% 45% at 88% 12%, rgba(180, 163, 255, 0.03), transparent 65%),
-            radial-gradient(55% 50% at 50% 100%, rgba(110, 231, 183, 0.022), transparent 60%),
+            radial-gradient(60% 50% at 12% 0%, rgb(var(--cyan-rgb) / 0.035), transparent 60%),
+            radial-gradient(50% 45% at 88% 12%, rgb(var(--lavender-rgb) / 0.03), transparent 65%),
+            radial-gradient(55% 50% at 50% 100%, rgb(var(--mint-rgb) / 0.022), transparent 60%),
             var(--bg-0);
         pointer-events: none;
     }

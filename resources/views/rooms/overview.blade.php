@@ -121,14 +121,14 @@
             font-size: 11px !important;
         }
         .room-card .temp-chip.cool {
-            background: rgba(94, 208, 255, 0.15) !important;
-            color: #5ed0ff !important;
-            border: 1px solid rgba(94, 208, 255, 0.35) !important;
+            background: rgb(var(--cyan-rgb) / 0.15) !important;
+            color: var(--cyan) !important;
+            border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
         }
         .room-card .temp-chip.warm {
-            background: rgba(110, 231, 183, 0.15) !important;
+            background: rgb(var(--mint-rgb) / 0.15) !important;
             color: var(--mint) !important;
-            border: 1px solid rgba(110, 231, 183, 0.35) !important;
+            border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
         }
         .room-card .temp-chip.hot {
             background: rgba(248, 113, 113, 0.15) !important;
@@ -489,14 +489,14 @@
             overflow-y: hidden;
             padding-bottom: 2px;
             scrollbar-width: thin;
-            scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+            scrollbar-color: rgb(var(--ink-2-rgb) / 0.42) transparent;
         }
 
         .history-range-select {
             min-height: 34px;
             padding: 0 30px 0 11px;
             border-radius: var(--r-md);
-            border: 1px solid rgba(148, 163, 184, 0.24);
+            border: 1px solid rgb(var(--ink-2-rgb) / 0.24);
             background: rgba(15, 23, 42, 0.32);
             color: var(--ink-1);
             font-size: 11px;

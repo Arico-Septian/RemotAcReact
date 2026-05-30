@@ -171,8 +171,8 @@
             gap: 6px;
             padding: 3px 9px;
             border-radius: 999px;
-            background: rgba(52, 211, 153, 0.10);
-            border: 1px solid rgba(52, 211, 153, 0.32);
+            background: rgb(var(--mint-d-rgb) / 0.10);
+            border: 1px solid rgb(var(--mint-d-rgb) / 0.32);
             color: var(--mint);
             font-size: 10px;
             font-weight: 700;
@@ -185,21 +185,21 @@
             height: 6px;
             border-radius: 999px;
             background: var(--mint);
-            box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
+            box-shadow: 0 0 0 0 rgb(var(--mint-d-rgb) / 0.55);
             animation: livePulse 1.8s ease-out infinite;
         }
 
         @keyframes livePulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55);
+                box-shadow: 0 0 0 0 rgb(var(--mint-d-rgb) / 0.55);
             }
 
             70% {
-                box-shadow: 0 0 0 7px rgba(52, 211, 153, 0);
+                box-shadow: 0 0 0 7px rgb(var(--mint-d-rgb) / 0);
             }
 
             100% {
-                box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+                box-shadow: 0 0 0 0 rgb(var(--mint-d-rgb) / 0);
             }
         }
 
@@ -395,8 +395,8 @@
             gap: 3px;
             padding: 1px 5px;
             border-radius: 4px;
-            background: rgba(148, 163, 184, 0.10);
-            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgb(var(--ink-2-rgb) / 0.10);
+            border: 1px solid rgb(var(--ink-2-rgb) / 0.18);
             color: var(--ink-3);
             font-size: 10px;
             font-weight: 600;
@@ -755,7 +755,7 @@
         }
 
         .dashboard-room-status.offline {
-            background: rgba(251, 113, 133, 0.14);
+            background: rgb(var(--coral-rgb) / 0.14);
             color: #fca5a5;
         }
 

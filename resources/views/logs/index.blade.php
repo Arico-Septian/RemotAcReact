@@ -82,8 +82,8 @@
             gap: 5px;
             padding: 3px 8px 3px 10px;
             border-radius: 999px;
-            background: rgba(77, 212, 255, 0.1);
-            border: 1px solid rgba(77, 212, 255, 0.25);
+            background: rgb(var(--cyan-rgb) / 0.1);
+            border: 1px solid rgb(var(--cyan-rgb) / 0.25);
             font-size: 11px;
             color: var(--cyan);
         }

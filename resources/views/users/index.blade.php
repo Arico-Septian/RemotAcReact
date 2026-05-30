@@ -419,8 +419,8 @@
             align-items: center;
             gap: 6px;
             padding: 4px 10px;
-            background: rgba(77, 212, 255, 0.1);
-            border: 1px solid rgba(77, 212, 255, 0.25);
+            background: rgb(var(--cyan-rgb) / 0.1);
+            border: 1px solid rgb(var(--cyan-rgb) / 0.25);
             border-radius: 999px;
             font-size: 12px;
             color: var(--cyan);

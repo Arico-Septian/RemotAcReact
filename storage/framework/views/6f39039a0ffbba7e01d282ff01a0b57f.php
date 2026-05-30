@@ -76,7 +76,7 @@
         .room-card .ac-mini .lbl {
             font-size: 10px;
             color: var(--ink-3);
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             margin-top: 4px;
             font-weight: 600;
@@ -96,7 +96,7 @@
         .floor-label {
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             color: var(--ink-3);
             white-space: nowrap;
         }
@@ -121,14 +121,14 @@
             font-size: 11px !important;
         }
         .room-card .temp-chip.cool {
-            background: rgba(94, 208, 255, 0.15) !important;
-            color: #5ed0ff !important;
-            border: 1px solid rgba(94, 208, 255, 0.35) !important;
+            background: rgb(var(--cyan-rgb) / 0.15) !important;
+            color: var(--cyan) !important;
+            border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
         }
         .room-card .temp-chip.warm {
-            background: rgba(110, 231, 183, 0.15) !important;
+            background: rgb(var(--mint-rgb) / 0.15) !important;
             color: var(--mint) !important;
-            border: 1px solid rgba(110, 231, 183, 0.35) !important;
+            border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
         }
         .room-card .temp-chip.hot {
             background: rgba(248, 113, 113, 0.15) !important;
@@ -326,7 +326,7 @@
             .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
             .main-header .app-header-title p {
                 font-size: 11px;
-                line-height: 1.25;
+                line-height: 1.3;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -456,7 +456,7 @@
         }
 
         #historyModal .history-title-group .eyebrow {
-            line-height: 1.25;
+            line-height: 1.3;
         }
 
         #historyTitle {
@@ -489,14 +489,14 @@
             overflow-y: hidden;
             padding-bottom: 2px;
             scrollbar-width: thin;
-            scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+            scrollbar-color: rgb(var(--ink-2-rgb) / 0.42) transparent;
         }
 
         .history-range-select {
             min-height: 34px;
             padding: 0 30px 0 11px;
             border-radius: var(--r-md);
-            border: 1px solid rgba(148, 163, 184, 0.24);
+            border: 1px solid rgb(var(--ink-2-rgb) / 0.24);
             background: rgba(15, 23, 42, 0.32);
             color: var(--ink-1);
             font-size: 11px;
@@ -571,7 +571,7 @@
 
             #historyModal .history-title-group .eyebrow {
                 font-size: 10px;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.05em;
             }
 
             #historyModal .modal-header h2 {
@@ -580,7 +580,7 @@
 
             #historyModal .modal-header .sub {
                 font-size: 11px;
-                line-height: 1.35;
+                line-height: 1.4;
             }
 
             #historyModal .modal-body {
@@ -705,7 +705,7 @@
                                                     data-status="<?php echo e($status); ?>" data-floor="<?php echo e($floorName); ?>">
                                                     <div class="flex items-start justify-between gap-2">
                                                         <h3 class="font-semibold text-tight"
-                                                            style="color:var(--ink-0);line-height:1.25;font-size:16px;">
+                                                            style="color:var(--ink-0);line-height: 1.3;font-size:16px;">
                                                             <?php echo e(ucfirst($room->name)); ?>
 
                                                         </h3>

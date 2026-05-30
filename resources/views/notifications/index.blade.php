@@ -25,7 +25,7 @@
         }
 
         .nlist-item.unread {
-            background: rgba(77, 212, 255, 0.05);
+            background: rgb(var(--cyan-rgb) / 0.05);
         }
 
         .nlist-item:last-child {
@@ -51,17 +51,17 @@
         }
 
         .nlist-icon.warning {
-            background: rgba(251, 191, 36, .16);
+            background: rgb(var(--amber-rgb) / .16);
             color: var(--amber);
         }
 
         .nlist-icon.success {
-            background: rgba(110, 231, 183, .16);
+            background: rgb(var(--mint-rgb) / .16);
             color: var(--mint);
         }
 
         .nlist-icon.info {
-            background: rgba(77, 212, 255, .16);
+            background: rgb(var(--cyan-rgb) / .16);
             color: var(--cyan);
         }
 

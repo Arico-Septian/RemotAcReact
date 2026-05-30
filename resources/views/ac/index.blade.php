@@ -134,12 +134,12 @@
             padding: 3px;
             background: conic-gradient(from 215deg,
                     transparent 0deg,
-                    rgba(77, 212, 255, 0.85) 60deg,
-                    rgba(180, 163, 255, 0.85) 130deg,
-                    rgba(180, 163, 255, 0.25) 175deg,
+                    rgb(var(--cyan-rgb) / 0.85) 60deg,
+                    rgb(var(--lavender-rgb) / 0.85) 130deg,
+                    rgb(var(--lavender-rgb) / 0.25) 175deg,
                     transparent 200deg);
             position: relative;
-            box-shadow: 0 20px 60px rgba(77, 212, 255, 0.10);
+            box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -147,11 +147,11 @@
         .temp-ring.temp-cool {
             background: conic-gradient(from 215deg,
                     transparent 0deg,
-                    rgba(77, 212, 255, 0.85) 60deg,
-                    rgba(180, 163, 255, 0.85) 130deg,
-                    rgba(180, 163, 255, 0.25) 175deg,
+                    rgb(var(--cyan-rgb) / 0.85) 60deg,
+                    rgb(var(--lavender-rgb) / 0.85) 130deg,
+                    rgb(var(--lavender-rgb) / 0.25) 175deg,
                     transparent 200deg);
-            box-shadow: 0 20px 60px rgba(77, 212, 255, 0.10);
+            box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
         }
 
         .temp-ring.temp-warm {
@@ -168,8 +168,8 @@
             background: conic-gradient(from 215deg,
                     transparent 0deg,
                     rgba(248, 113, 113, 0.85) 60deg,
-                    rgba(244, 63, 94, 0.85) 130deg,
-                    rgba(244, 63, 94, 0.25) 175deg,
+                    rgb(var(--coral-d-rgb) / 0.85) 130deg,
+                    rgb(var(--coral-d-rgb) / 0.25) 175deg,
                     transparent 200deg);
             box-shadow: 0 20px 60px rgba(248, 113, 113, 0.10);
         }
@@ -179,7 +179,7 @@
             .temp-ring {
                 width: 160px;
                 height: 160px;
-                box-shadow: 0 12px 40px rgba(77, 212, 255, 0.08);
+                box-shadow: 0 12px 40px rgb(var(--cyan-rgb) / 0.08);
             }
 
             .ring-temp {
@@ -205,7 +205,7 @@
             height: 100%;
             border-radius: 50%;
             background:
-                radial-gradient(circle at 50% 45%, rgba(18, 32, 66, 0.95), rgba(7, 16, 31, 0.98) 70%);
+                radial-gradient(circle at 50% 45%, rgb(var(--bg-2-rgb) / 0.95), rgb(var(--bg-0-rgb) / 0.98) 70%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -308,8 +308,8 @@
             color: var(--bg-0);
             border-color: transparent;
             box-shadow:
-                0 0 0 4px rgba(110, 231, 183, 0.18),
-                0 0 30px rgba(110, 231, 183, 0.45);
+                0 0 0 4px rgb(var(--mint-rgb) / 0.18),
+                0 0 30px rgb(var(--mint-rgb) / 0.45);
         }
 
         /* === Min/Max chips === */
@@ -380,14 +380,14 @@
         }
 
         .mode-btn-v.active {
-            background: linear-gradient(180deg, rgba(77, 212, 255, 0.14), rgba(77, 212, 255, 0.04));
+            background: linear-gradient(180deg, rgb(var(--cyan-rgb) / 0.14), rgb(var(--cyan-rgb) / 0.04));
             border-color: var(--cyan);
             color: var(--cyan);
-            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 8px 22px rgba(77, 212, 255, 0.14);
+            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 8px 22px rgb(var(--cyan-rgb) / 0.14);
         }
 
         .mode-btn-v.active .icon-wrap {
-            background: rgba(77, 212, 255, 0.16);
+            background: rgb(var(--cyan-rgb) / 0.16);
             color: var(--cyan);
         }
 
@@ -406,24 +406,24 @@
         .mode-btn-v[data-mode="dry"].active {
             color: var(--lavender);
             border-color: var(--lavender);
-            box-shadow: 0 0 0 1px rgba(180, 163, 255, 0.20) inset, 0 8px 22px rgba(180, 163, 255, 0.14);
-            background: linear-gradient(180deg, rgba(180, 163, 255, 0.14), rgba(180, 163, 255, 0.04));
+            box-shadow: 0 0 0 1px rgb(var(--lavender-rgb) / 0.20) inset, 0 8px 22px rgb(var(--lavender-rgb) / 0.14);
+            background: linear-gradient(180deg, rgb(var(--lavender-rgb) / 0.14), rgb(var(--lavender-rgb) / 0.04));
         }
 
         .mode-btn-v[data-mode="dry"].active .icon-wrap {
-            background: rgba(180, 163, 255, 0.18);
+            background: rgb(var(--lavender-rgb) / 0.18);
             color: var(--lavender);
         }
 
         .mode-btn-v[data-mode="fan"].active {
             color: var(--mint);
             border-color: var(--mint);
-            box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.20) inset, 0 8px 22px rgba(110, 231, 183, 0.14);
-            background: linear-gradient(180deg, rgba(110, 231, 183, 0.14), rgba(110, 231, 183, 0.04));
+            box-shadow: 0 0 0 1px rgb(var(--mint-rgb) / 0.20) inset, 0 8px 22px rgb(var(--mint-rgb) / 0.14);
+            background: linear-gradient(180deg, rgb(var(--mint-rgb) / 0.14), rgb(var(--mint-rgb) / 0.04));
         }
 
         .mode-btn-v[data-mode="fan"].active .icon-wrap {
-            background: rgba(110, 231, 183, 0.18);
+            background: rgb(var(--mint-rgb) / 0.18);
             color: var(--mint);
         }
 
@@ -464,10 +464,10 @@
         }
 
         .mode-btn-h.active {
-            background: linear-gradient(180deg, rgba(77, 212, 255, 0.14), rgba(77, 212, 255, 0.04));
+            background: linear-gradient(180deg, rgb(var(--cyan-rgb) / 0.14), rgb(var(--cyan-rgb) / 0.04));
             border-color: var(--cyan);
             color: var(--cyan);
-            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 6px 18px rgba(77, 212, 255, 0.14);
+            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 6px 18px rgb(var(--cyan-rgb) / 0.14);
         }
 
         .mode-btn-h.active i {
@@ -507,7 +507,7 @@
         }
 
         .timer-card.is-on .t-icon {
-            background: rgba(110, 231, 183, 0.16);
+            background: rgb(var(--mint-rgb) / 0.16);
             color: var(--mint);
         }
 
