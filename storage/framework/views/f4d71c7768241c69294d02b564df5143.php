@@ -1,6 +1,6 @@
 
 <div class="notif-bell-wrap" id="notifBellWrap" style="position:relative;">
-    <button type="button" id="notifBellBtn" class="btn-icon" title="Notifikasi" onclick="toggleNotifPanel()">
+    <button type="button" id="notifBellBtn" class="btn-icon" title="Notifications" onclick="toggleNotifPanel()">
         <i class="fa-regular fa-bell text-xs"></i>
         <span id="notifBadge" class="notif-badge" style="display:none;">0</span>
     </button>
@@ -8,12 +8,12 @@
     <div id="notifPanel" class="notif-panel">
         <div class="notif-panel-header">
             <div>
-                <p class="eyebrow" style="margin:0;"><i class="fa-regular fa-bell"></i> Notifikasi</p>
-                <p style="margin:2px 0 0;font-size:11px;color:var(--ink-3);"><span id="notifPanelCount">0</span> belum dibaca</p>
+                <p class="eyebrow" style="margin:0;"><i class="fa-regular fa-bell"></i> Notifications</p>
+                <p style="margin:2px 0 0;font-size:11px;color:var(--ink-3);"><span id="notifPanelCount">0</span> unread</p>
             </div>
             <button type="button" onclick="markAllNotifRead()" class="btn btn-ghost btn-xs" id="notifMarkAllBtn">
                 <i class="fa-solid fa-check-double text-[9px]"></i>
-                <span>Tandai semua</span>
+                <span>Mark all</span>
             </button>
         </div>
         <div id="notifPanelBody" class="notif-panel-body">
@@ -23,7 +23,7 @@
         </div>
         <div class="notif-panel-footer">
             <a href="/notifications" class="btn btn-soft btn-block btn-sm">
-                Lihat Semua
+                View All
                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </a>
         </div>
@@ -316,7 +316,7 @@ function markAllNotifRead() {
         if (!r.ok) throw new Error(r.status);
         loadNotifPanel();
         updateNotifBadge(0);
-        if (window.smToast) window.smToast('Semua notifikasi ditandai dibaca', 'success');
+        if (window.smToast) window.smToast('All notifications marked as read', 'success');
     }).catch(() => {
         if (window.smToast) window.smToast('Failed to mark all notifications', 'error');
     });

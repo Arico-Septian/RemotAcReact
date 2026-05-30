@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk — Control AC</title>
+    <title>Sign In — SmartAC</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -545,27 +545,27 @@
             </div>
 
             <h1 class="brand-hero">
-                Pintu masuk ke<br>
-                <span class="accent">kendali</span> ruangan<br>
-                server Anda.
+                Your gateway to<br>
+                <span class="accent">control</span> your<br>
+                server rooms.
             </h1>
 
             <p class="brand-sub">
-                Pantau suhu, atur jadwal AC, dan tangani anomali — semua dalam satu dashboard yang ringan dan responsif.
+                Monitor temperature, schedule AC, and handle anomalies — all in one lightweight, responsive dashboard.
             </p>
 
             <div class="brand-features">
                 <div class="feat-row">
                     <span class="feat-ic cyan"><i class="fa-solid fa-bolt"></i></span>
-                    <span class="feat-text">Realtime sub-detik via MQTT + WebSocket</span>
+                    <span class="feat-text">Sub-second realtime via MQTT + WebSocket</span>
                 </div>
                 <div class="feat-row">
                     <span class="feat-ic lavender"><i class="fa-solid fa-shield-halved"></i></span>
-                    <span class="feat-text">Akses berbasis role: Admin, Operator, User</span>
+                    <span class="feat-text">Role-based access: Admin, Operator, User</span>
                 </div>
                 <div class="feat-row">
                     <span class="feat-ic mint"><i class="fa-solid fa-clock"></i></span>
-                    <span class="feat-text">Jadwal otomatis dengan toleransi ±30 detik</span>
+                    <span class="feat-text">Automatic scheduling with ±30 second tolerance</span>
                 </div>
             </div>
         </aside>
@@ -574,12 +574,12 @@
         <section class="form-panel">
             <a href="/" class="back-link">
                 <i class="fa-solid fa-arrow-left" style="font-size:10px;"></i>
-                Kembali ke beranda
+                Back to home
             </a>
 
             <p class="form-eyebrow">Sign In</p>
-            <h2 class="form-title">Selamat datang <span class="accent">kembali.</span></h2>
-            <p class="form-sub">Masuk dengan akun yang sudah dibuat administrator untuk melanjutkan ke dashboard.</p>
+            <h2 class="form-title">Welcome <span class="accent">back.</span></h2>
+            <p class="form-sub">Sign in with the account created by the administrator to continue to the dashboard.</p>
 
             <?php if(session('error')): ?>
                 <div class="alert" role="alert">
@@ -601,7 +601,7 @@
                 <div class="field">
                     <label class="field-label" for="username">
                         <span>Username</span>
-                        <span class="help">3–20 karakter</span>
+                        <span class="help">3–20 characters</span>
                     </label>
                     <div class="input-wrap" id="usernameWrap">
                         <span class="leading"><i class="fa-regular fa-user"></i></span>
@@ -609,8 +609,8 @@
                                required autofocus autocomplete="username"
                                minlength="3" maxlength="20"
                                pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
-                               title="Username 3–20 karakter, huruf/angka/underscore, diawali huruf"
-                               placeholder="contoh: Admin"
+                               title="Username 3–20 characters, letters/numbers/underscore, must start with a letter"
+                               placeholder="e.g. Admin"
                                value="<?php echo e(old('name')); ?>">
                         <span class="valid-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
                     </div>
@@ -632,12 +632,12 @@
                     </div>
                     <p class="caps-warn" id="capsWarn">
                         <i class="fa-solid fa-triangle-exclamation"></i>
-                        CapsLock aktif
+                        CapsLock is on
                     </p>
                 </div>
 
                 <button type="submit" class="submit-btn" id="loginBtn">
-                    <span>Masuk ke Sistem</span>
+                    <span>Sign In</span>
                     <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
                 </button>
             </form>
@@ -645,7 +645,7 @@
             <div class="form-footer">
                 <span class="secure-badge">
                     <i class="fa-solid fa-lock"></i>
-                    Koneksi terenkripsi
+                    Encrypted connection
                 </span>
                 <span class="copyright">© <?php echo e(date('Y')); ?> Control AC</span>
             </div>

@@ -926,9 +926,9 @@
             </a>
 
             <div class="nav-links">
-                <a href="#produk">Produk</a>
-                <a href="#fitur">Fitur</a>
-                <a href="#cara-kerja">Cara Kerja</a>
+                <a href="#produk">Product</a>
+                <a href="#fitur">Features</a>
+                <a href="#cara-kerja">How It Works</a>
             </div>
 
             <div class="nav-actions">
@@ -937,7 +937,7 @@
                     <span>ID</span>
                 </button>
                 <a href="{{ route('login') }}" class="btn-pill">
-                    Masuk
+                    Sign In
                     <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i>
                 </a>
             </div>
@@ -955,13 +955,13 @@
                 </h1>
 
                 <p class="hero-sub">
-                    Pantau setiap ruangan server. Pelajari ritmenya. Sistem akan
-                    menjaga suhu tetap stabil — bahkan ketika Anda tidur.
+                    Monitor every server room. Learn its rhythms. The system keeps
+                    temperature stable — even while you sleep.
                 </p>
 
                 <div class="hero-cta">
                     <a href="{{ route('login') }}" class="btn-cta-primary">
-                        Mulai gratis
+                        Get started
                         <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
                     </a>
                 </div>
@@ -969,7 +969,7 @@
                 <div class="hero-trust">
                     <div class="item">
                         <div class="num">10</div>
-                        <div class="lbl">Ruangan aktif</div>
+                        <div class="lbl">Active rooms</div>
                     </div>
                     <div class="item">
                         <div class="num">99.9<sup style="font-size:14px;color:var(--ink-3);">%</sup></div>
@@ -989,14 +989,14 @@
             <aside class="hero-aside">
                 <section class="status-card reveal">
                     <p class="eyebrow">Specs</p>
-                    <h2 class="serif status-title">Dibangun untuk<br>skala.</h2>
+                    <h2 class="serif status-title">Built for<br>scale.</h2>
 
                     <div class="spec-list">
                         <div class="spec-row">
                             <span class="spec-ic cyan"><i class="fa-solid fa-plug"></i></span>
                             <div>
                                 <p class="text-main">MQTT + WebSocket realtime</p>
-                                <p class="text-sub">Sub-detik update via Laravel Reverb</p>
+                                <p class="text-sub">Sub-second updates via Laravel Reverb</p>
                             </div>
                         </div>
                         <div class="spec-row">
@@ -1010,27 +1010,27 @@
                             <span class="spec-ic mint"><i class="fa-solid fa-microchip"></i></span>
                             <div>
                                 <p class="text-main">ESP32 auto-discovery</p>
-                                <p class="text-sub">Plug, flash, langsung jalan</p>
+                                <p class="text-sub">Plug, flash, ready to go</p>
                             </div>
                         </div>
                         <div class="spec-row">
                             <span class="spec-ic amber"><i class="fa-solid fa-clipboard-list"></i></span>
                             <div>
-                                <p class="text-main">Activity logs lengkap</p>
-                                <p class="text-sub">Audit trail per aksi user</p>
+                                <p class="text-main">Complete activity logs</p>
+                                <p class="text-sub">Audit trail per user action</p>
                             </div>
                         </div>
                         <div class="spec-row">
                             <span class="spec-ic coral"><i class="fa-solid fa-bell-slash"></i></span>
                             <div>
                                 <p class="text-main">Notification deduplication</p>
-                                <p class="text-sub">Tidak spam saat insiden panjang</p>
+                                <p class="text-sub">No spam during extended incidents</p>
                             </div>
                         </div>
                     </div>
 
                     <a href="#cara-kerja" class="status-cta">
-                        <span>Lihat cara kerja</span>
+                        <span>See how it works</span>
                         <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
                     </a>
                 </section>
@@ -1038,12 +1038,12 @@
                 <section class="anomaly-card reveal">
                     <span class="badge-pill">
                         <i class="fa-solid fa-sparkles" style="font-size:9px;"></i>
-                        Baru
+                        New
                     </span>
-                    <h3 class="serif anomaly-title">Anomali, dideteksi dini.</h3>
-                    <p class="anomaly-desc">Sistem belajar pola normal tiap ruangan. Saat ada yang janggal — Anda yang pertama tahu.</p>
+                    <h3 class="serif anomaly-title">Anomalies, detected early.</h3>
+                    <p class="anomaly-desc">The system learns the normal pattern for each room. When something is off — you're the first to know.</p>
                     <a href="#fitur" class="anomaly-link">
-                        Pelajari lebih lanjut
+                        Learn more
                         <i class="fa-solid fa-arrow-right" style="font-size:10px;"></i>
                     </a>
                 </section>
@@ -1055,37 +1055,37 @@
     <section class="features section" id="fitur">
         <div class="features-head reveal">
             <h2 class="features-h2">
-                Bukan sekadar remote AC.<br><span class="accent">Sistem yang berpikir</span> untuk Anda.
+                Not just an AC remote.<br><span class="accent">A system that thinks</span> for you.
             </h2>
-            <p class="features-sub">Tiap fitur dibangun untuk membuat ruangan server selalu dingin, tanpa Anda perlu memikirkannya.</p>
+            <p class="features-sub">Every feature is built to keep server rooms cool without you having to think about it.</p>
         </div>
 
         <div class="bento">
             <div class="bento-card wide-3 cyan reveal">
                 <span class="ic"><i class="fa-solid fa-bolt"></i></span>
-                <h3>Realtime · sub-detik</h3>
-                <p>Setiap perubahan suhu, status AC, atau koneksi ESP32 ter-update langsung via MQTT + WebSocket. Tidak ada lag.</p>
+                <h3>Realtime · sub-second</h3>
+                <p>Every temperature change, AC status, or ESP32 connection is instantly updated via MQTT + WebSocket. Zero lag.</p>
             </div>
 
             <div class="bento-card wide-3 lavender reveal">
                 <span class="ic"><i class="fa-solid fa-clock"></i></span>
-                <h3>Jadwal otomatis</h3>
-                <p>Atur AC nyala/mati per ruangan, per jam. Sistem eksekusi tepat waktu dengan toleransi ±30 detik.</p>
+                <h3>Automatic scheduling</h3>
+                <p>Set AC on/off per room, per hour. The system executes on time with ±30 second tolerance.</p>
             </div>
 
             <div class="bento-card wide-2 mint reveal">
                 <span class="ic"><i class="fa-solid fa-bell"></i></span>
-                <h3>Notifikasi cerdas</h3>
-                <p>Device offline, suhu di atas ambang, anomali — semua jadi alert yang bisa di-action.</p>
+                <h3>Smart notifications</h3>
+                <p>Device offline, temperature above threshold, anomaly — all become actionable alerts.</p>
             </div>
 
             <div class="bento-card preview-card wide-4 sky reveal">
                 <span class="ic"><i class="fa-solid fa-chart-line"></i></span>
-                <h3>Trend &amp; histori 24 jam</h3>
-                <p>Visualisasi performa tiap ruangan — lihat kapan suhu naik, berapa lama AC bekerja.</p>
+                <h3>Trend &amp; 24-hour history</h3>
+                <p>Visualize each room's performance — see when temperature rises and how long AC has been running.</p>
                 <div class="mini-dashboard">
                     <div class="preview-stat cyan"><div class="lbl">Server 14</div><div class="val">22.4°</div></div>
-                    <div class="preview-stat mint"><div class="lbl">AC Aktif</div><div class="val">8</div></div>
+                    <div class="preview-stat mint"><div class="lbl">AC Active</div><div class="val">8</div></div>
                     <div class="preview-stat lavender"><div class="lbl">Comfort</div><div class="val">73%</div></div>
                 </div>
                 <svg class="mini-chart" viewBox="0 0 400 56" preserveAspectRatio="none" fill="none">
@@ -1109,11 +1109,11 @@
             <div class="metrics-inner">
                 <div class="metric">
                     <p class="v">10K<sup>+</sup></p>
-                    <p class="l">Aksi terkontrol</p>
+                    <p class="l">Controlled actions</p>
                 </div>
                 <div class="metric">
                     <p class="v">99.9<sup>%</sup></p>
-                    <p class="l">Uptime sistem</p>
+                    <p class="l">System uptime</p>
                 </div>
                 <div class="metric">
                     <p class="v">&lt;500<sup>ms</sup></p>
@@ -1131,27 +1131,27 @@
     <section class="how section" id="cara-kerja">
         <div class="how-head reveal">
             <div>
-                <p class="eyebrow">Cara Kerja</p>
-                <h2 class="features-h2" style="margin-top:14px;">Tiga langkah, <span class="accent">selesai.</span></h2>
+                <p class="eyebrow">How It Works</p>
+                <h2 class="features-h2" style="margin-top:14px;">Three steps, <span class="accent">done.</span></h2>
             </div>
-            <p class="features-sub">Dari unboxing ESP32 hingga monitoring live, prosesnya tidak lebih dari 10 menit.</p>
+            <p class="features-sub">From unboxing the ESP32 to live monitoring — the whole process takes under 10 minutes.</p>
         </div>
 
         <div class="how-grid">
             <div class="step reveal">
                 <div class="num-circle">01</div>
-                <h4>Hubungkan ESP32</h4>
-                <p>Flash firmware, pasang sensor di ruangan, dan device otomatis ter-discover oleh sistem.</p>
+                <h4>Connect ESP32</h4>
+                <p>Flash the firmware, install the sensor in the room, and the device is automatically discovered by the system.</p>
             </div>
             <div class="step reveal">
                 <div class="num-circle">02</div>
-                <h4>Atur ruangan &amp; AC</h4>
-                <p>Tambah ruangan, daftarkan unit AC, pilih merk. Mapping topik MQTT otomatis terbentuk.</p>
+                <h4>Configure rooms &amp; AC</h4>
+                <p>Add rooms, register AC units, choose the brand. MQTT topic mapping is built automatically.</p>
             </div>
             <div class="step reveal">
                 <div class="num-circle">03</div>
-                <h4>Biarkan sistem bekerja</h4>
-                <p>Jadwal, anomali, notifikasi — semua jalan di latar. Anda hanya perlu lihat dashboard.</p>
+                <h4>Let the system handle it</h4>
+                <p>Schedules, anomalies, notifications — all run in the background. You just check the dashboard.</p>
             </div>
         </div>
     </section>
@@ -1159,21 +1159,21 @@
     {{-- CTA FINAL --}}
     <section class="cta-final section">
         <div class="cta-box reveal">
-            <span class="eyebrow"><i class="fa-solid fa-bolt" style="font-size:9px;"></i> Siap dipakai</span>
+            <span class="eyebrow"><i class="fa-solid fa-bolt" style="font-size:9px;"></i> Ready to use</span>
             <h2 class="cta-h2">
-                Mulai pantau ruangan Anda <span class="accent">hari ini.</span>
+                Start monitoring your rooms <span class="accent">today.</span>
             </h2>
             <p class="cta-sub">
-                Akun gratis untuk semua role. Login dengan akun yang sudah dibuat administrator.
+                Free for all roles. Sign in with the account created by your administrator.
             </p>
             <div class="cta-buttons">
                 <a href="{{ route('login') }}" class="btn-cta-primary">
-                    Masuk ke Sistem
+                    Sign In
                     <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
                 </a>
                 <a href="#fitur" class="btn-cta-ghost">
                     <span class="play-icon"><i class="fa-solid fa-circle-info"></i></span>
-                    Pelajari fitur
+                    Explore features
                 </a>
             </div>
         </div>
@@ -1189,9 +1189,9 @@
                 <span style="font-size:13px;font-weight:600;color:var(--ink-1);">Control AC</span>
             </div>
             <div class="footer-links">
-                <a href="#produk">Produk</a>
-                <a href="#fitur">Fitur</a>
-                <a href="#cara-kerja">Cara kerja</a>
+                <a href="#produk">Product</a>
+                <a href="#fitur">Features</a>
+                <a href="#cara-kerja">How It Works</a>
             </div>
             <div class="footer-copy">© 2026 Control AC — SmartAC IoT Platform</div>
         </div>

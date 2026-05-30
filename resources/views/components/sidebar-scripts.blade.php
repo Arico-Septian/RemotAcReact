@@ -7,16 +7,16 @@
                 <i class="fa-solid fa-clock"></i>
             </span>
             <div>
-                <h3 style="margin:0;font-size:15px;font-weight:700;color:var(--ink-0);">Sesi akan berakhir</h3>
+                <h3 style="margin:0;font-size:15px;font-weight:700;color:var(--ink-0);">Session expiring</h3>
             </div>
         </div>
         <p style="margin:0 0 14px;font-size:13px;line-height:1.5;color:var(--ink-2);">
-            Anda tidak aktif untuk beberapa waktu. Sesi akan otomatis berakhir dalam
-            <strong id="idleCountdown" style="color:var(--coral);font-family:'JetBrains Mono',monospace;">60</strong> detik.
+            You have been inactive for a while. Your session will automatically end in
+            <strong id="idleCountdown" style="color:var(--coral);font-family:'JetBrains Mono',monospace;">60</strong> seconds.
         </p>
         <div style="display:flex;gap:8px;">
-            <button type="button" id="idleStayBtn" class="btn btn-primary" style="flex:1;">Tetap login</button>
-            <button type="button" id="idleLogoutBtn" class="btn btn-ghost" style="flex:1;">Logout sekarang</button>
+            <button type="button" id="idleStayBtn" class="btn btn-primary" style="flex:1;">Stay logged in</button>
+            <button type="button" id="idleLogoutBtn" class="btn btn-ghost" style="flex:1;">Logout now</button>
         </div>
     </div>
 </div>

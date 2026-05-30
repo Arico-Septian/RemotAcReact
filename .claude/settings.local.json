@@ -1,7 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(php artisan *)"
+      "Bash(php artisan *)",
+      "Bash(node \"c:/laragon/www/tugasakhirremotac/responsive_check.cjs\")",
+      "Bash(rm \"c:/laragon/www/tugasakhirremotac/responsive_check.js\" \"c:/laragon/www/tugasakhirremotac/responsive_check.cjs\")",
+      "Bash(rm -rf \"C:/pw-test\")",
+      "Bash(node \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\")",
+      "Bash(rm \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\" 2>/dev/null; echo \"Done\")"
+    ],
+    "additionalDirectories": [
+      "c:\\laragon\\www\\tugasakhirremotac"
     ]
   }
 }

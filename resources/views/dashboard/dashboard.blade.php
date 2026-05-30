@@ -1627,7 +1627,7 @@
                                     <div>
                                         <p class="stat-label-sm">Rooms</p>
                                         <p class="stat-num-lg">{{ $rooms->count() }}</p>
-                                        <p class="stat-sub">Terdaftar</p>
+                                        <p class="stat-sub">Registered</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-server"></i></div>
                                 </div>
@@ -1649,7 +1649,7 @@
                                     <div>
                                         <p class="stat-label-sm">AC Active</p>
                                         <p class="stat-num-lg" id="statActiveAc">{{ $activeAc }}</p>
-                                        <p class="stat-sub">Menyala</p>
+                                        <p class="stat-sub">Powered on</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-bolt"></i></div>
                                 </div>
@@ -1660,7 +1660,7 @@
                                     <div>
                                         <p class="stat-label-sm">AC Idle</p>
                                         <p class="stat-num-lg" id="statInactiveAc">{{ $inactiveAc }}</p>
-                                        <p class="stat-sub">Tidak aktif</p>
+                                        <p class="stat-sub">Not active</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-power-off"></i></div>
                                 </div>
@@ -1676,11 +1676,11 @@
                                     <h2 class="panel-title">Room Temperatures</h2>
                                 </div>
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <select id="trendRange" class="trend-filter-select" title="Pilih range waktu">
-                                        <option value="1h">1 Jam</option>
-                                        <option value="3h">3 Jam</option>
-                                        <option value="6h">6 Jam</option>
-                                        <option value="today">Hari ini</option>
+                                    <select id="trendRange" class="trend-filter-select" title="Select time range">
+                                        <option value="1h">1 Hour</option>
+                                        <option value="3h">3 Hours</option>
+                                        <option value="6h">6 Hours</option>
+                                        <option value="today">Today</option>
                                     </select>
                                 </div>
                             </div>
@@ -1715,8 +1715,8 @@
                                         </div>
                                     </div>
                                     <a href="{{ route('rooms.overview') }}" class="dashboard-rooms-action"
-                                        aria-label="Lihat semua server rooms">
-                                        <span>Lihat semua</span>
+                                        aria-label="View all server rooms">
+                                        <span>View all</span>
                                         <i class="fa-solid fa-chevron-right text-[10px]"></i>
                                     </a>
                                 </div>
@@ -1935,7 +1935,7 @@
 
         function toggleNotifications() {
             if (!('Notification' in window)) {
-                window.smToast('Browser tidak mendukung notifikasi', 'error');
+                window.smToast('Browser does not support notifications', 'error');
                 return;
             }
             if (notifEnabled) {
@@ -1948,7 +1948,7 @@
                 notifEnabled = perm === 'granted';
                 localStorage.setItem('notifEnabled', notifEnabled ? 'true' : 'false');
                 updateNotifButton();
-                if (perm === 'denied') window.smToast('Izin notifikasi ditolak', 'error');
+                if (perm === 'denied') window.smToast('Notification permission denied', 'error');
             });
         }
 
@@ -2192,7 +2192,7 @@
                 .catch(() => {
                     if (!_tempFetchFailed) {
                         _tempFetchFailed = true;
-                        window.smToast?.('Gagal memuat data suhu ruangan', 'error');
+                        window.smToast?.('Failed to load room temperature data', 'error');
                     }
                 });
         }
@@ -2309,12 +2309,12 @@
                         const shown = (data.datasets || []).length;
                         const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
                         const offlineCount = shown - onlineCount;
-                        infoEl.textContent = `${onlineCount} online, ${offlineCount} offline. Grafik memakai data historis tercatat.`;
+                        infoEl.textContent = `${onlineCount} online, ${offlineCount} offline. Chart uses recorded historical data.`;
                     }
                 })
                 .catch(() => {
                     document.getElementById('tempChartLoading')?.style.setProperty('display', 'none');
-                    window.smToast?.('Gagal memuat data grafik suhu', 'error');
+                    window.smToast?.('Failed to load temperature chart data', 'error');
                 });
         }
 
@@ -2348,7 +2348,7 @@
                 .catch(() => {
                     if (!_statusFetchFailed) {
                         _statusFetchFailed = true;
-                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                        window.smToast?.('Failed to load device status', 'error');
                     }
                 });
         }
@@ -2377,7 +2377,7 @@
                 .catch(() => {
                     if (!_statsFetchFailed) {
                         _statsFetchFailed = true;
-                        window.smToast?.('Gagal memuat statistik dashboard', 'error');
+                        window.smToast?.('Failed to load dashboard statistics', 'error');
                     }
                 });
         }

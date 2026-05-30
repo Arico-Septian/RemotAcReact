@@ -8,7 +8,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Monitoring Suhu Server – SmartAC</title>
+    <title>Server Temperature Monitor – SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite('resources/js/app.js')
@@ -149,8 +149,8 @@
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
-                        <h1>Monitoring Suhu Server</h1>
-                        <p>Suhu CPU server realtime</p>
+                        <h1>Server Temperature Monitor</h1>
+                        <p>Realtime server CPU temperature</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -169,12 +169,12 @@
                         <div class="raspi-card">
                             <p class="raspi-label">
                                 <i class="fa-solid fa-microchip" style="margin-right:6px;"></i>
-                                Suhu CPU Server
+                                Server CPU Temperature
                             </p>
                             <div id="raspi-temp" class="raspi-temp temp-muted">--</div>
                             <p id="raspi-status" class="raspi-status">
                                 <span class="raspi-indicator offline" id="raspi-dot"></span>
-                                Menghubungkan...
+                                Connecting...
                             </p>
                         </div>
 
@@ -205,11 +205,11 @@
                             data.value >= 55 ? 'temp-warm' :
                             'temp-cool'
                         );
-                        st.innerHTML = '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Update tiap 1 menit';
+                        st.innerHTML = '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Updates every 1 minute';
                     } else {
                         el.innerText = '--';
                         el.className = 'raspi-temp temp-muted';
-                        st.innerHTML = '<span class="raspi-indicator offline" id="raspi-dot"></span>Menunggu data...';
+                        st.innerHTML = '<span class="raspi-indicator offline" id="raspi-dot"></span>Waiting for data...';
                     }
                 })
                 .catch(err => {
@@ -222,7 +222,7 @@
                     }
                     if (st) {
                         const code = err?.message && /^\d+$/.test(err.message) ? ` (${err.message})` : '';
-                        st.innerHTML = `<span class="raspi-indicator offline" id="raspi-dot"></span>Gagal terhubung${code} · ${now} · Mencoba lagi...`;
+                        st.innerHTML = `<span class="raspi-indicator offline" id="raspi-dot"></span>Connection failed${code} · ${now} · Retrying...`;
                     }
                 });
         }

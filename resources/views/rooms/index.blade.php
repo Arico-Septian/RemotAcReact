@@ -706,7 +706,7 @@
                                                     <div class="temp-chip {{ $room->temperature_is_offline ? 'idle' : $tcls }}"
                                                         style="justify-content:space-between;width:100%;">
                                                         <span style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
-                                                            <i class="fa-solid fa-temperature-half text-[10px]"></i>Suhu
+                                                            <i class="fa-solid fa-temperature-half text-[10px]"></i>Temp
                                                         </span>
                                                         <span style="display:inline-flex;align-items:center;gap:5px;">
                                                             @if($room->temperature_is_offline)
@@ -732,7 +732,7 @@
                                                             @if (!empty($room->fuzzy))
                                                                 <div class="flex items-center justify-between mt-1"
                                                                     style="font-size:11px;">
-                                                                    <span style="color:var(--ink-3);flex-shrink:0;">Pendinginan</span>
+                                                                    <span style="color:var(--ink-3);flex-shrink:0;">Cooling</span>
                                                                     <span class="text-mono"
                                                                         style="font-weight:700;color:var(--mint);white-space:nowrap;margin-left:6px;">
                                                                         {{ $room->fuzzy['status_pendinginan'] ?? '-' }}
@@ -754,7 +754,7 @@
                                                                     @endphp
                                                                     <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">
                                                                         <div class="flex items-center justify-between">
-                                                                            <span style="flex-shrink:0;">Keputusan</span>
+                                                                            <span style="flex-shrink:0;">Decision</span>
                                                                             <span class="text-mono {{ $keputusanClass }}"
                                                                                 style="font-weight:700;white-space:nowrap;margin-left:6px;">{{ $action }}</span>
                                                                         </div>
@@ -941,8 +941,8 @@
 
         function validateNoSpaces(input, label) {
             if (/\s/.test(input.value)) {
-                input.setCustomValidity(`${label} tidak boleh mengandung spasi`);
-                setFieldFeedback(input, `${label} tidak boleh mengandung spasi`, true);
+                input.setCustomValidity(`${label} must not contain spaces`);
+                setFieldFeedback(input, `${label} must not contain spaces`, true);
                 return false;
             }
 
@@ -993,7 +993,7 @@
 
             if (deviceIds.has(deviceInput.value)) {
                 e.preventDefault();
-                blockDuplicateInput(deviceInput, 'ESP Device ID sudah terdaftar');
+                blockDuplicateInput(deviceInput, 'ESP Device ID already registered');
             }
         });
 
@@ -1092,7 +1092,7 @@
                 }).catch(() => {
                     if (!_tempFetchFailed) {
                         _tempFetchFailed = true;
-                        window.smToast?.('Gagal memuat data suhu ruangan', 'error');
+                        window.smToast?.('Failed to load room temperature data', 'error');
                     }
                 });
         }
@@ -1135,7 +1135,7 @@
                 .catch(() => {
                     if (!_statusFetchFailed) {
                         _statusFetchFailed = true;
-                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                        window.smToast?.('Failed to load device status', 'error');
                     }
                 });
         }

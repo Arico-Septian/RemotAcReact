@@ -992,7 +992,7 @@
                                     <div>
                                         <p class="stat-label-sm">Total Users</p>
                                         <p class="stat-num-lg">{{ $totalUsers }}</p>
-                                        <p class="stat-sub">+{{ $newUsersThisWeek ?? 0 }} minggu ini</p>
+                                        <p class="stat-sub">+{{ $newUsersThisWeek ?? 0 }} this week</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
                                 </div>
@@ -1003,7 +1003,7 @@
                                     <div>
                                         <p class="stat-label-sm">Online Now</p>
                                         <p class="stat-num-lg" id="onlineUsersCount">{{ $onlineUsers }}</p>
-                                        <p class="stat-sub"><span id="onlineUsersPct">{{ $onlinePercentage }}</span>% sedang aktif</p>
+                                        <p class="stat-sub"><span id="onlineUsersPct">{{ $onlinePercentage }}</span>% currently active</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
                                 </div>
@@ -1014,7 +1014,7 @@
                                     <div>
                                         <p class="stat-label-sm">Offline</p>
                                         <p class="stat-num-lg" id="offlineUsersCount">{{ $offlineUsers }}</p>
-                                        <p class="stat-sub"><span id="offlineUsersPct">{{ $offlinePercentage }}</span>% tidak aktif</p>
+                                        <p class="stat-sub"><span id="offlineUsersPct">{{ $offlinePercentage }}</span>% inactive</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-user-slash"></i></div>
                                 </div>
@@ -1233,8 +1233,8 @@
                                             <td colspan="5">
                                                 <div class="empty-state">
                                                     <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
-                                                    <p class="empty-title">Tidak ada pengguna</p>
-                                                    <p class="empty-sub">{{ (request('search') || request('role')) ? 'Coba ubah filter atau <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Tambah pengguna baru</a> untuk memulai' }}</p>
+                                                    <p class="empty-title">No users found</p>
+                                                    <p class="empty-sub">{{ (request('search') || request('role')) ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -1306,8 +1306,8 @@
             <div class="modal-header">
                 <div>
                     <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
-                    <h2>Tambah User</h2>
-                    <p class="sub">Buat akun baru dengan peran akses yang sesuai</p>
+                    <h2>Add User</h2>
+                    <p class="sub">Create a new account with the appropriate access role</p>
                 </div>
             </div>
             <form id="addUserForm" method="POST" action="/users">
@@ -1316,21 +1316,21 @@
                     <div class="field">
                         <label class="field-label">Username</label>
                         <input class="input" type="text" name="name" id="newUserName"
-                            placeholder="contoh: admin"
+                            placeholder="e.g. admin"
                             minlength="3" maxlength="20"
                             pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
-                            title="Username 3–20 karakter, huruf/angka/underscore, diawali huruf"
+                            title="Username 3–20 characters, letters/numbers/underscore, must start with a letter"
                             autocomplete="off" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3-20 karakter, awali dengan huruf.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3–20 characters, start with a letter.</p>
                     </div>
                     <div class="field">
                         <label class="field-label">Password</label>
-                        <input class="input" type="password" name="password" placeholder="min. 8 karakter"
+                        <input class="input" type="password" name="password" placeholder="min. 8 characters"
                             minlength="8" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Min. 8 karakter, huruf besar/kecil + angka.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Min. 8 characters, upper/lowercase + numbers.</p>
                     </div>
                     <div class="field">
-                        <label class="field-label">Peran</label>
+                        <label class="field-label">Role</label>
                         <select class="input select" name="role">
                             <option value="admin">Admin</option>
                             <option value="operator">Operator</option>
@@ -1413,8 +1413,8 @@
 
         function validateNoSpaces(input, label) {
             if (/\s/.test(input.value)) {
-                input.setCustomValidity(`${label} tidak boleh mengandung spasi`);
-                setFieldFeedback(input, `${label} tidak boleh mengandung spasi`, true);
+                input.setCustomValidity(`${label} must not contain spaces`);
+                setFieldFeedback(input, `${label} must not contain spaces`, true);
                 return false;
             }
 
@@ -1502,7 +1502,7 @@
             }
 
             if (exists) {
-                blockDuplicateInput(nameInput, 'Username sudah digunakan');
+                blockDuplicateInput(nameInput, 'Username already taken');
                 return;
             }
 
@@ -1538,7 +1538,7 @@
         });
 
         function deleteUser(id) {
-            if (!confirm('Hapus user ini? Tindakan ini tidak dapat dibatalkan.')) return;
+            if (!confirm('Delete this user? This action cannot be undone.')) return;
             fetch(`/users/${id}`, {
                     method: 'DELETE',
                     headers: {

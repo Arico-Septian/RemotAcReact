@@ -27,14 +27,14 @@
         <a href="/logs"
            class="bnav-item <?php echo e(request()->is('logs*') ? 'active' : ''); ?>">
             <i class="fa-solid fa-clock-rotate-left"></i>
-            <span>Aktivitas</span>
+            <span>Activity</span>
         </a>
     <?php endif; ?>
 
     <a href="<?php echo e(route('monitoring')); ?>"
        class="bnav-item <?php echo e(request()->routeIs('monitoring') ? 'active' : ''); ?>">
         <i class="fa-solid fa-temperature-half"></i>
-        <span>Suhu Server</span>
+        <span>Server Temp</span>
     </a>
 
     <a href="/profile"

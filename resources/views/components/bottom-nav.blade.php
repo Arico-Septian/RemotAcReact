@@ -27,14 +27,14 @@
         <a href="/logs"
            class="bnav-item {{ request()->is('logs*') ? 'active' : '' }}">
             <i class="fa-solid fa-clock-rotate-left"></i>
-            <span>Aktivitas</span>
+            <span>Activity</span>
         </a>
     @endif
 
     <a href="{{ route('monitoring') }}"
        class="bnav-item {{ request()->routeIs('monitoring') ? 'active' : '' }}">
         <i class="fa-solid fa-temperature-half"></i>
-        <span>Suhu Server</span>
+        <span>Server Temp</span>
     </a>
 
     <a href="/profile"

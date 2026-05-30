@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <title><?php echo e($room->name); ?> — Kontrol AC</title>
+    <title><?php echo e($room->name); ?> — AC Control</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <?php echo app('Illuminate\Foundation\Vite')('resources/js/app.js'); ?>
@@ -944,7 +944,7 @@
                     </button>
                     <div class="app-header-title">
                         <h1><?php echo e($room->name); ?></h1>
-                        <p>Panel kontrol AC</p>
+                        <p>AC control panel</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -1015,7 +1015,7 @@
                                             <button type="submit" <?php echo e(!$firstAc ? 'disabled' : ''); ?>
 
                                                 class="btn-icon danger <?php echo e(!$firstAc ? 'disabled' : ''); ?>"
-                                                title="Hapus AC">
+                                                title="Delete AC">
                                                 <i class="fa-solid fa-trash text-[10px]"></i>
                                             </button>
                                         </form>
@@ -1024,7 +1024,7 @@
                                             onclick="<?php echo e($acs->count() >= 15 ? '' : 'openModal()'); ?>"
                                             class="btn btn-primary btn-sm <?php echo e($acs->count() >= 15 ? 'disabled' : ''); ?>">
                                             <i class="fa-solid fa-plus text-[10px]"></i>
-                                            <span class="hidden sm:inline">Tambah AC</span>
+                                            <span class="hidden sm:inline">Add AC</span>
                                         </button>
                                     </div>
                                 <?php endif; ?>
@@ -1045,10 +1045,10 @@
                                         $curFan = ucfirst(strtolower($ac->status?->fan_speed ?? 'Auto'));
                                         $curSwing = strtolower($ac->status?->swing ?? 'off');
                                         $swingLabel = match ($curSwing) {
-                                            'off' => 'Diam',
+                                            'off' => 'Still',
                                             'full' => 'Full',
                                             'half' => '½',
-                                            'down' => 'Bawah',
+                                            'down' => 'Down',
                                             default => ucfirst($curSwing),
                                         };
                                         $isPowerOn = ($ac->status?->power ?? 'OFF') === 'ON';
@@ -1061,7 +1061,7 @@
                                         <div class="temp-ring temp-<?php echo e($tempCategory); ?>"
                                             id="tempRing-<?php echo e($ac->id); ?>">
                                             <div class="temp-ring-inner">
-                                                <p class="ring-label">Suhu Ac</p>
+                                                <p class="ring-label">AC Temp</p>
                                                 <div class="ring-temp">
                                                     <span class="temp-value"><?php echo e($curTemp); ?></span><span
                                                         class="unit">°C</span>
@@ -1074,11 +1074,11 @@
                                         <div class="ctrl-row">
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp(<?php echo e($ac->id); ?>, <?php echo e($curTemp - 1); ?>)"
-                                                title="Turunkan suhu" aria-label="Turunkan suhu">
+                                                title="Lower temperature" aria-label="Lower temperature">
                                                 <i class="fa-solid fa-minus"></i>
                                             </button>
                                             <form action="/ac/<?php echo e($ac->id); ?>/toggle" method="POST"
-                                                class="power-form power-form-inline" aria-label="Kontrol Power AC"
+                                                class="power-form power-form-inline" aria-label="AC Power Control"
                                                 data-ac-name="AC <?php echo e($ac->ac_number); ?><?php echo e($ac->name ? ' · ' . $ac->name : ''); ?>"
                                                 data-ac-power="<?php echo e($ac->status?->power ?? 'OFF'); ?>">
                                                 <?php echo csrf_field(); ?>
@@ -1091,7 +1091,7 @@
                                             </form>
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp(<?php echo e($ac->id); ?>, <?php echo e($curTemp + 1); ?>)"
-                                                title="Naikkan suhu" aria-label="Naikkan suhu">
+                                                title="Raise temperature" aria-label="Raise temperature">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                         </div>
@@ -1109,7 +1109,7 @@
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Mode</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                <?php $__currentLoopData = ['cool' => ['fa-snowflake', 'Dingin'], 'heat' => ['fa-fire', 'Panas'], 'dry' => ['fa-droplet', 'Kering'], 'fan' => ['fa-fan', 'Kipas']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php $__currentLoopData = ['cool' => ['fa-snowflake', 'Cool'], 'heat' => ['fa-fire', 'Heat'], 'dry' => ['fa-droplet', 'Dry'], 'fan' => ['fa-fan', 'Fan']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <form action="/ac/<?php echo e($ac->id); ?>/mode/<?php echo e($m); ?>"
                                                         method="POST" class="control-form">
                                                         <?php echo csrf_field(); ?>
@@ -1125,9 +1125,9 @@
 
                                         
                                         <div class="panel">
-                                            <p class="eyebrow" style="margin-bottom:12px;">Kecepatan Kipas</p>
+                                            <p class="eyebrow" style="margin-bottom:12px;">Fan Speed</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                <?php $__currentLoopData = ['auto' => ['fa-rotate', 'Otomatis'], 'low' => ['fa-equals', 'Rendah'], 'medium' => ['fa-bars', 'Sedang'], 'high' => ['fa-gauge-high', 'Tinggi']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php $__currentLoopData = ['auto' => ['fa-rotate', 'Auto'], 'low' => ['fa-equals', 'Low'], 'medium' => ['fa-bars', 'Med'], 'high' => ['fa-gauge-high', 'High']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <form
                                                         action="/ac/<?php echo e($ac->id); ?>/fan-speed/<?php echo e($s); ?>"
                                                         method="POST" class="control-form">
@@ -1146,7 +1146,7 @@
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Swing</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                <?php $__currentLoopData = ['off' => ['fa-ban', 'Diam'], 'full' => ['fa-arrows-up-down', 'Full'], 'half' => ['fa-equals', '½'], 'down' => ['fa-arrow-down', 'Bawah']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sw => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php $__currentLoopData = ['off' => ['fa-ban', 'Still'], 'full' => ['fa-arrows-up-down', 'Full'], 'half' => ['fa-equals', '½'], 'down' => ['fa-arrow-down', 'Down']]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sw => [$icon, $lbl]): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <form action="/ac/<?php echo e($ac->id); ?>/swing/<?php echo e($sw); ?>"
                                                         method="POST" class="control-form">
                                                         <?php echo csrf_field(); ?>
@@ -1164,7 +1164,7 @@
                                         <div class="panel">
                                             <div class="flex items-center justify-between mb-3">
                                                 <p class="eyebrow" style="color:var(--amber);margin:0;"><i
-                                                        class="fa-solid fa-clock"></i> Atur Timer</p>
+                                                        class="fa-solid fa-clock"></i> Set Timer</p>
                                                 <button id="btnTimer-<?php echo e($ac->id); ?>" type="button"
                                                     onclick="toggleTimer(<?php echo e($ac->id); ?>)"
                                                     class="btn btn-soft btn-xs">
@@ -1179,7 +1179,7 @@
                                                             <span class="t-icon"><i
                                                                     class="fa-solid fa-circle-play"></i></span>
                                                             <div class="t-meta">
-                                                                <p class="t-label">Nyalakan</p>
+                                                                <p class="t-label">Turn On</p>
                                                                 <?php if($ac->timer_on): ?>
                                                                     <p class="t-value">
                                                                         <?php echo e(\Carbon\Carbon::parse($ac->timer_on)->setTimezone('Asia/Jakarta')->format('H:i')); ?>
@@ -1194,7 +1194,7 @@
                                                             <span class="t-icon"><i
                                                                     class="fa-solid fa-circle-stop"></i></span>
                                                             <div class="t-meta">
-                                                                <p class="t-label">Matikan</p>
+                                                                <p class="t-label">Turn Off</p>
                                                                 <?php if($ac->timer_off): ?>
                                                                     <p class="t-value">
                                                                         <?php echo e(\Carbon\Carbon::parse($ac->timer_off)->setTimezone('Asia/Jakarta')->format('H:i')); ?>
@@ -1213,13 +1213,13 @@
                                                         <input type="hidden" name="timer_off" value="">
                                                         <button type="submit" class="btn btn-ghost btn-sm btn-block">
                                                             <i class="fa-solid fa-trash text-[10px]"></i>
-                                                            <span>Hapus Timer</span>
+                                                            <span>Delete Timer</span>
                                                         </button>
                                                     </form>
                                                 <?php else: ?>
                                                     <div class="timer-empty">
                                                         <i class="fa-regular fa-clock"></i>
-                                                        Belum ada timer terpasang
+                                                        No timer set
                                                     </div>
                                                 <?php endif; ?>
                                             </div>
@@ -1231,14 +1231,14 @@
                                                     <div class="field">
                                                         <label class="field-label"><i
                                                                 class="fa-solid fa-circle-play text-[9px]"
-                                                                style="color:var(--mint);"></i> Nyalakan</label>
+                                                                style="color:var(--mint);"></i> Turn ON</label>
                                                         <input class="input text-mono" type="time" name="timer_on"
                                                             value="<?php echo e($ac->timer_on ? \Carbon\Carbon::parse($ac->timer_on)->format('H:i') : ''); ?>">
                                                     </div>
                                                     <div class="field">
                                                         <label class="field-label"><i
                                                                 class="fa-solid fa-circle-stop text-[9px]"
-                                                                style="color:var(--coral);"></i> Matikan</label>
+                                                                style="color:var(--coral);"></i> Turn OFF</label>
                                                         <input class="input text-mono" type="time"
                                                             name="timer_off"
                                                             value="<?php echo e($ac->timer_off ? \Carbon\Carbon::parse($ac->timer_off)->format('H:i') : ''); ?>">
@@ -1246,11 +1246,11 @@
                                                 </div>
                                                 <div class="flex gap-2">
                                                     <button type="button" class="btn btn-ghost btn-sm flex-1"
-                                                        onclick="toggleTimer(<?php echo e($ac->id); ?>)">Batal</button>
+                                                        onclick="toggleTimer(<?php echo e($ac->id); ?>)">Cancel</button>
                                                     <button type="submit"
                                                         class="btn btn-primary btn-sm flex-1 save-timer-btn">
                                                         <i class="fa-solid fa-check text-[10px]"></i>
-                                                        <span>Simpan</span>
+                                                        <span>Save</span>
                                                     </button>
                                                 </div>
                                             </form>
@@ -1264,8 +1264,8 @@
                             <div class="panel">
                                 <div class="empty-state">
                                     <div class="empty-icon"><i class="fa-solid fa-snowflake"></i></div>
-                                    <p class="empty-title">Belum ada AC unit</p>
-                                    <p class="empty-sub">Tambahkan AC unit pertama untuk mulai mengontrol</p>
+                                    <p class="empty-title">No AC units</p>
+                                    <p class="empty-sub">Add the first AC unit to start controlling</p>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -1286,7 +1286,7 @@
                 <p id="powerModalDesc" class="text-sm" style="color:var(--ink-2);margin:0;"></p>
             </div>
             <div class="modal-footer" style="padding-top:6px;">
-                <button type="button" onclick="cancelPower()" class="btn btn-ghost flex-1">Batal</button>
+                <button type="button" onclick="cancelPower()" class="btn btn-ghost flex-1">Cancel</button>
                 <button type="button" id="powerModalConfirm" onclick="confirmPower()"
                     class="btn btn-primary flex-1">Lanjutkan</button>
             </div>
@@ -1301,36 +1301,34 @@
                 <div class="modal">
                     <div class="modal-header">
                         <div>
-                            <p class="eyebrow"><i class="fa-solid fa-plus"></i> Baru</p>
-                            <h2>Tambah AC Unit</h2>
+                            <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
+                            <h2>Add AC Unit</h2>
                         </div>
                     </div>
                     <form id="addACForm" method="POST" action="/rooms/<?php echo e($room->id); ?>/ac">
                         <?php echo csrf_field(); ?>
                         <div class="modal-body space-y-3">
                             <div class="field">
-                                <label class="field-label">Nomor AC</label>
+                                <label class="field-label">AC Number</label>
                                 <input class="input text-mono" type="number" name="ac_number" min="1"
                                     max="15" placeholder="1" required>
                             </div>
                             <div class="field">
-                                <label class="field-label">Nama AC</label>
+                                <label class="field-label">AC Name</label>
                                 <input class="input" type="text" name="name" placeholder="unit_a" pattern="\S+"
-                                    title="Nama AC tidak boleh mengandung spasi" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                    title="AC name must not contain spaces" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" type="text" name="brand" placeholder="daikin" pattern="\S+"
-                                    title="Brand tidak boleh mengandung spasi" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                    title="Brand must not contain spaces" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-ghost" onclick="closeModal()">Batal</button>
-                            <button type="submit" class="btn btn-primary">Buat AC Unit</button>
+                            <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Create AC Unit</button>
                         </div>
                     </form>
                 </div>
@@ -1341,7 +1339,7 @@
                     <div class="modal-header">
                         <div>
                             <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                            <h2>Edit Unit AC</h2>
+                            <h2>Edit AC Unit</h2>
                         </div>
                     </div>
                     <form id="editACForm" method="POST" action="">
@@ -1349,28 +1347,26 @@
                         <?php echo method_field('PUT'); ?>
                         <div class="modal-body space-y-3">
                             <div class="field">
-                                <label class="field-label">Nomor AC</label>
+                                <label class="field-label">AC Number</label>
                                 <input class="input text-mono" id="editAcNumber" type="number" name="ac_number"
                                     min="1" max="15" required>
                             </div>
                             <div class="field">
-                                <label class="field-label">Nama AC</label>
+                                <label class="field-label">AC Name</label>
                                 <input class="input" id="editAcName" type="text" name="name" pattern="\S+"
-                                    title="Nama AC tidak boleh mengandung spasi" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                    title="AC name must not contain spaces" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" id="editAcBrand" type="text" name="brand" pattern="\S+"
-                                    title="Brand tidak boleh mengandung spasi" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                    title="Brand must not contain spaces" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
                     </form>
                 </div>
@@ -1422,8 +1418,8 @@
 
         function validateNoSpaces(input, label) {
             if (/\s/.test(input.value)) {
-                input.setCustomValidity(`${label} tidak boleh mengandung spasi`);
-                setFieldFeedback(input, `${label} tidak boleh mengandung spasi`, true);
+                input.setCustomValidity(`${label} must not contain spaces`);
+                setFieldFeedback(input, `${label} must not contain spaces`, true);
                 return false;
             }
 
@@ -1463,7 +1459,7 @@
         document.querySelectorAll('#addACForm input, #editACForm input').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.name === 'name') {
-                    validateNoSpaces(input, 'Nama AC');
+                    validateNoSpaces(input, 'AC Name');
                     return;
                 }
 
@@ -1484,7 +1480,7 @@
                 brandInput
             } = normalizeAcForm(form);
 
-            if (!validateNoSpaces(nameInput, 'Nama AC')) {
+            if (!validateNoSpaces(nameInput, 'AC Name')) {
                 e.preventDefault();
                 nameInput.reportValidity();
                 return;
@@ -1498,13 +1494,13 @@
 
             if (acNumberExists(numberInput.value)) {
                 e.preventDefault();
-                blockDuplicateInput(numberInput, 'Nomor AC sudah ada di ruangan ini');
+                blockDuplicateInput(numberInput, 'AC number already exists in this room');
                 return;
             }
 
             if (acNameExists(nameInput.value)) {
                 e.preventDefault();
-                blockDuplicateInput(nameInput, 'Nama AC sudah ada di ruangan ini');
+                blockDuplicateInput(nameInput, 'AC name already exists in this room');
             }
         });
 
@@ -1516,7 +1512,7 @@
                 brandInput
             } = normalizeAcForm(form);
 
-            if (!validateNoSpaces(nameInput, 'Nama AC')) {
+            if (!validateNoSpaces(nameInput, 'AC Name')) {
                 e.preventDefault();
                 nameInput.reportValidity();
                 return;
@@ -1530,13 +1526,13 @@
 
             if (acNumberExists(numberInput.value, currentAcId)) {
                 e.preventDefault();
-                blockDuplicateInput(numberInput, 'Nomor AC sudah ada di ruangan ini');
+                blockDuplicateInput(numberInput, 'AC number already exists in this room');
                 return;
             }
 
             if (acNameExists(nameInput.value, currentAcId)) {
                 e.preventDefault();
-                blockDuplicateInput(nameInput, 'Nama AC sudah ada di ruangan ini');
+                blockDuplicateInput(nameInput, 'AC name already exists in this room');
             }
         });
 
@@ -1560,7 +1556,7 @@
 
         function openModal() {
             if (<?php echo e($acs->count()); ?> >= 15) {
-                window.smToast('Maksimal 15 AC sudah tercapai', 'error');
+                window.smToast('Maximum 15 AC units reached', 'error');
                 return;
             }
             document.getElementById('modal')?.classList.add('is-open');
@@ -1583,16 +1579,16 @@
             const current = tempEl ? parseInt(tempEl.textContent, 10) : NaN;
             if (!isNaN(current) && current === temp) {
                 window.smToast?.(
-                    temp === 16 ? 'Suhu sudah di minimum (16°C)' :
-                    temp === 30 ? 'Suhu sudah di maksimum (30°C)' :
-                    `Suhu sudah ${temp}°C`,
+                    temp === 16 ? 'Already at minimum (16°C)' :
+                    temp === 30 ? 'Already at maximum (30°C)' :
+                    `Already at ${temp}°C`,
                     'info'
                 );
                 return;
             }
 
-            const btnMinus = panel?.querySelector('.ctrl-btn[title*="Turunkan"]');
-            const btnPlus  = panel?.querySelector('.ctrl-btn[title*="Naikkan"]');
+            const btnMinus = panel?.querySelector('.ctrl-btn[title*="Lower"]');
+            const btnPlus  = panel?.querySelector('.ctrl-btn[title*="Raise"]');
             [btnMinus, btnPlus].forEach(b => b && b.classList.add('ac-ctrl-busy'));
 
             // Optimistic UI
@@ -1610,7 +1606,7 @@
             const minDelay = new Promise(r => setTimeout(r, 2000));
             try {
                 await acFetch(`/ac/${id}/temp/${temp}`);
-                window.smToast?.(`${acName} suhu diubah ke ${temp}°C`, 'success');
+                window.smToast?.(`${acName} temperature set to ${temp}°C`, 'success');
             } catch {
                 // Revert
                 if (tempEl) tempEl.textContent = current;
@@ -1618,7 +1614,7 @@
                     ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
                     ring.classList.add(current <= 20 ? 'temp-cool' : current <= 25 ? 'temp-warm' : 'temp-hot');
                 }
-                window.smToast?.('Gagal mengubah suhu AC', 'error');
+                window.smToast?.('Failed to update AC temperature', 'error');
             } finally {
                 await minDelay;
                 [btnMinus, btnPlus].forEach(b => b && b.classList.remove('ac-ctrl-busy'));
@@ -1643,7 +1639,7 @@
             view.classList.toggle('hidden', editing);
             edit.classList.toggle('hidden', !editing);
             btn.innerHTML = editing ?
-                '<i class="fa-solid fa-xmark text-[9px]"></i><span>Batal</span>' :
+                '<i class="fa-solid fa-xmark text-[9px]"></i><span>Cancel</span>' :
                 '<i class="fa-solid fa-pen text-[9px]"></i><span>Edit</span>';
         }
         document.querySelectorAll('.timer-form').forEach(form => {
@@ -1652,7 +1648,7 @@
                 const on = this.querySelector('[name="timer_on"]').value;
                 const off = this.querySelector('[name="timer_off"]').value;
                 if (on === off && on !== '') {
-                    window.smToast?.('Timer ON dan OFF tidak boleh sama', 'error');
+                    window.smToast?.('Timer ON and OFF cannot be the same', 'error');
                     return;
                 }
                 const acId = this.querySelector('[name="ac_id"]')?.value;
@@ -1663,9 +1659,9 @@
                 try {
                     await acFetch(this.action, { timer_on: on, timer_off: off });
                     updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: on || null, timer_off: off || null });
-                    window.smToast?.('Timer berhasil disimpan', 'success');
+                    window.smToast?.('Timer saved successfully', 'success');
                 } catch {
-                    window.smToast?.('Gagal menyimpan timer', 'error');
+                    window.smToast?.('Failed to save timer', 'error');
                 } finally {
                     await minDelay;
                     if (saveBtn?.isConnected) saveBtn.classList.remove('ac-ctrl-busy');
@@ -1675,7 +1671,7 @@
 
         async function handleDeleteTimer(e, form) {
             e.preventDefault();
-            if (!confirm('Hapus timer AC ini?')) return;
+            if (!confirm('Delete this AC timer?')) return;
             const panel = form.closest('.ac-panel');
             const acId = panel?.dataset.acId;
             const deleteBtn = form.querySelector('button[type="submit"]');
@@ -1687,9 +1683,9 @@
                 await acFetch(form.action, { timer_on: '', timer_off: '' });
                 ok = true;
                 updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: null, timer_off: null });
-                window.smToast?.('Timer berhasil dihapus', 'success');
+                window.smToast?.('Timer deleted successfully', 'success');
             } catch {
-                window.smToast?.('Gagal menghapus timer', 'error');
+                window.smToast?.('Failed to delete timer', 'error');
             } finally {
                 await minDelay;
                 if (!ok && deleteBtn?.isConnected) deleteBtn.classList.remove('ac-ctrl-busy');
@@ -1723,7 +1719,7 @@
 
         function confirmDelete(e) {
             e.preventDefault();
-            if (confirm('Hapus AC ini? Tindakan ini tidak dapat dibatalkan.')) e.target.submit();
+            if (confirm('Delete this AC? This action cannot be undone.')) e.target.submit();
             return false;
         }
 
@@ -1780,7 +1776,7 @@
                 if (btn) btn.classList.toggle('on', !turnOn);
                 if (powerInput) powerInput.value = power;
                 if (form) form.dataset.acPower = turnOn ? 'OFF' : 'ON';
-                window.smToast?.('Gagal mengubah power AC', 'error');
+                window.smToast?.('Failed to update AC power', 'error');
             } finally {
                 await minDelay;
                 if (btn) btn.classList.remove('ac-ctrl-busy');
@@ -1840,7 +1836,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                     // Revert
                     btn.classList.remove('active');
                     if (oldActive) oldActive.classList.add('active');
-                    window.smToast?.('Gagal mengubah pengaturan AC', 'error');
+                    window.smToast?.('Failed to update AC setting', 'error');
                 } finally {
                     await minDelay;
                     groupBtns?.forEach(b => b.classList.remove('ac-ctrl-busy'));
@@ -1869,14 +1865,14 @@ document.querySelectorAll('.control-form').forEach(form => {
                         <div class="timer-card ${on ? 'is-on' : ''}">
                             <span class="t-icon"><i class="fa-solid fa-circle-play"></i></span>
                             <div class="t-meta">
-                                <p class="t-label">Nyalakan</p>
+                                <p class="t-label">Turn On</p>
                                 <p class="t-value ${on ? '' : 'empty'}">${on || '—'}</p>
                             </div>
                         </div>
                         <div class="timer-card ${off ? 'is-off' : ''}">
                             <span class="t-icon"><i class="fa-solid fa-circle-stop"></i></span>
                             <div class="t-meta">
-                                <p class="t-label">Matikan</p>
+                                <p class="t-label">Turn Off</p>
                                 <p class="t-value ${off ? '' : 'empty'}">${off || '—'}</p>
                             </div>
                         </div>
@@ -1887,7 +1883,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                         <input type="hidden" name="timer_off" value="">
                         <button type="submit" class="btn btn-ghost btn-sm btn-block">
                             <i class="fa-solid fa-trash text-[10px]"></i>
-                            <span>Hapus Timer</span>
+                            <span>Delete Timer</span>
                         </button>
                     </form>
                 `;
@@ -1899,7 +1895,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                 view.innerHTML = `
                     <div class="timer-empty">
                         <i class="fa-regular fa-clock"></i>
-                        Belum ada timer terpasang
+                        No timer set
                     </div>
                 `;
             }
@@ -1945,7 +1941,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                 .catch(() => {
                     if (!_espFetchFailed) {
                         _espFetchFailed = true;
-                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                        window.smToast?.('Failed to load device status', 'error');
                     }
                 });
         };
@@ -1958,10 +1954,10 @@ document.querySelectorAll('.control-form').forEach(form => {
                 currentRoomId = Number(document.getElementById('espStatusPill')?.dataset.roomId);
 
                 const swingLabelMap = {
-                    off: 'Diam',
+                    off: 'Still',
                     full: 'Full',
                     half: '½',
-                    down: 'Bawah'
+                    down: 'Down'
                 };
                 const ucfirst = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
 
@@ -1989,7 +1985,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                         ring.classList.add(temp <= 20 ? 'temp-cool' : (temp <= 25 ? 'temp-warm' : 'temp-hot'));
                     }
 
-                    // Ring summary: "Cool · Auto · Diam"
+                    // Ring summary: "Cool · Auto · Still"
                     const summary = panel.querySelector('.ring-summary');
                     if (summary) {
                         summary.textContent =
@@ -2009,8 +2005,8 @@ document.querySelectorAll('.control-form').forEach(form => {
                     }
 
                     // +/- temp button onclick handlers (selalu refer ke nilai temp saat ini)
-                    const btnMinus = panel.querySelector('.ctrl-btn[title*="Turunkan"]');
-                    const btnPlus = panel.querySelector('.ctrl-btn[title*="Naikkan"]');
+                    const btnMinus = panel.querySelector('.ctrl-btn[title*="Lower"]');
+                    const btnPlus = panel.querySelector('.ctrl-btn[title*="Raise"]');
 
                     if (btnMinus) {
                         btnMinus.setAttribute('onclick', `setTemp(${payload.ac_unit_id}, ${temp - 1})`);

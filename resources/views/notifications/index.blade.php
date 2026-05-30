@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Notifikasi — SmartAC</title>
+    <title>Notifications — SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite('resources/js/app.js')
@@ -142,8 +142,8 @@
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
-                        <h1>Notifikasi</h1>
-                        <p>{{ $unreadCount }} belum dibaca dari {{ $notifications->total() }} total</p>
+                        <h1>Notifications</h1>
+                        <p>{{ $unreadCount }} unread of {{ $notifications->total() }} total</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -152,7 +152,7 @@
                             @csrf
                             <button type="button" onclick="bulkMarkAllRead()" class="btn btn-soft btn-sm">
                                 <i class="fa-solid fa-check-double text-[10px]"></i>
-                                <span>Tandai semua dibaca</span>
+                                <span>Mark all as read</span>
                             </button>
                         </form>
                     @endif
@@ -296,7 +296,7 @@
             }).then(r => {
                 if (!r.ok) throw new Error(r.status);
                 document.querySelector(`.nlist-item[data-id="${id}"]`)?.remove();
-                if (window.smToast) window.smToast('Notifikasi dihapus', 'success');
+                if (window.smToast) window.smToast('Notification deleted', 'success');
             }).catch(() => {
                 if (window.smToast) window.smToast('Failed to delete notification', 'error');
             });

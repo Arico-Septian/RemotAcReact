@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Pengaturan — SmartAC</title>
+    <title>Settings — SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     @vite('resources/js/app.js')
@@ -103,8 +103,8 @@
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
-                        <h1>Pengaturan</h1>
-                        <p>Konfigurasi sistem SmartAC</p>
+                        <h1>Settings</h1>
+                        <p>SmartAC system configuration</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -130,18 +130,18 @@
                                     <div class="tbl-toolbar" style="border-bottom:1px solid var(--line-soft);">
                                         <div class="app-header-title" style="margin:0;">
                                             <h1 style="font-size:13px;"><i class="fa-solid fa-database" style="color:var(--cyan);margin-right:7px;"></i>Data Retention</h1>
-                                            <p>Berapa lama data disimpan di database</p>
+                                            <p>How long data is retained in the database</p>
                                         </div>
                                     </div>
                                     <div style="padding:4px 16px 16px;">
                                         <div class="setting-row">
-                                            <label for="temp_retention_days" class="setting-label">Simpan data suhu</label>
+                                            <label for="temp_retention_days" class="setting-label">Retain temperature data</label>
                                             <div class="setting-input-wrap">
                                                 <input type="number" id="temp_retention_days" name="temp_retention_days"
                                                     class="setting-input {{ $errors->has('temp_retention_days') ? 'is-invalid' : '' }}"
                                                     value="{{ old('temp_retention_days', $settings['temp_retention_days']->value ?? 7) }}"
                                                     min="1" max="365">
-                                                <span class="setting-unit">hari</span>
+                                                <span class="setting-unit">days</span>
                                             </div>
                                         </div>
                                         @error('temp_retention_days')
@@ -149,13 +149,13 @@
                                         @enderror
 
                                         <div class="setting-row">
-                                            <label for="notification_retention_days" class="setting-label">Simpan notifikasi</label>
+                                            <label for="notification_retention_days" class="setting-label">Retain notifications</label>
                                             <div class="setting-input-wrap">
                                                 <input type="number" id="notification_retention_days" name="notification_retention_days"
                                                     class="setting-input {{ $errors->has('notification_retention_days') ? 'is-invalid' : '' }}"
                                                     value="{{ old('notification_retention_days', $settings['notification_retention_days']->value ?? 30) }}"
                                                     min="1" max="365">
-                                                <span class="setting-unit">hari</span>
+                                                <span class="setting-unit">days</span>
                                             </div>
                                         </div>
                                         @error('notification_retention_days')
@@ -163,13 +163,13 @@
                                         @enderror
 
                                         <div class="setting-row">
-                                            <label for="log_retention_days" class="setting-label">Simpan activity log</label>
+                                            <label for="log_retention_days" class="setting-label">Retain activity log</label>
                                             <div class="setting-input-wrap">
                                                 <input type="number" id="log_retention_days" name="log_retention_days"
                                                     class="setting-input {{ $errors->has('log_retention_days') ? 'is-invalid' : '' }}"
                                                     value="{{ old('log_retention_days', $settings['log_retention_days']->value ?? 90) }}"
                                                     min="1" max="365">
-                                                <span class="setting-unit">hari</span>
+                                                <span class="setting-unit">days</span>
                                             </div>
                                         </div>
                                         @error('log_retention_days')
@@ -178,7 +178,7 @@
 
                                         <p class="setting-hint">
                                             <i class="fa-regular fa-clock" style="margin-top:1px;flex-shrink:0;"></i>
-                                            Data lebih lama dari nilai ini dihapus otomatis setiap hari oleh scheduler.
+                                            Data older than this value is automatically deleted daily by the scheduler.
                                         </p>
                                     </div>
                                 </div>
@@ -188,12 +188,12 @@
                                     <div class="tbl-toolbar" style="border-bottom:1px solid var(--line-soft);">
                                         <div class="app-header-title" style="margin:0;">
                                             <h1 style="font-size:13px;"><i class="fa-solid fa-sliders" style="color:var(--cyan);margin-right:7px;"></i>Fuzzy Logic Threshold</h1>
-                                            <p>Batas suhu untuk logika pendinginan otomatis</p>
+                                            <p>Temperature thresholds for automatic cooling logic</p>
                                         </div>
                                     </div>
                                     <div style="padding:4px 16px 16px;">
                                         <div class="setting-row">
-                                            <label for="fuzzy_temp_cold" class="setting-label">Batas suhu Dingin (maks)</label>
+                                            <label for="fuzzy_temp_cold" class="setting-label">Cold temperature limit (max)</label>
                                             <div class="setting-input-wrap">
                                                 <input type="number" id="fuzzy_temp_cold" name="fuzzy_temp_cold"
                                                     class="setting-input {{ $errors->has('fuzzy_temp_cold') ? 'is-invalid' : '' }}"
@@ -207,7 +207,7 @@
                                         @enderror
 
                                         <div class="setting-row">
-                                            <label for="fuzzy_temp_hot" class="setting-label">Batas suhu Panas (min)</label>
+                                            <label for="fuzzy_temp_hot" class="setting-label">Hot temperature limit (min)</label>
                                             <div class="setting-input-wrap">
                                                 <input type="number" id="fuzzy_temp_hot" name="fuzzy_temp_hot"
                                                     class="setting-input {{ $errors->has('fuzzy_temp_hot') ? 'is-invalid' : '' }}"
@@ -221,19 +221,19 @@
                                         @enderror
 
                                         <div class="fuzzy-preview">
-                                            <span class="fz-badge fz-cold">Dingin</span>
+                                            <span class="fz-badge fz-cold">Cold</span>
                                             <span>≤ <span id="previewCold">{{ $settings['fuzzy_temp_cold']->value ?? 22 }}</span>°C</span>
                                             <span class="fz-sep">·</span>
                                             <span class="fz-badge fz-normal">Normal</span>
                                             <span><span id="previewNormalRange">{{ $settings['fuzzy_temp_cold']->value ?? 22 }}–{{ $settings['fuzzy_temp_hot']->value ?? 30 }}</span>°C</span>
                                             <span class="fz-sep">·</span>
-                                            <span class="fz-badge fz-hot">Panas</span>
+                                            <span class="fz-badge fz-hot">Hot</span>
                                             <span>≥ <span id="previewHot">{{ $settings['fuzzy_temp_hot']->value ?? 30 }}</span>°C</span>
                                         </div>
 
                                         <p class="setting-hint">
                                             <i class="fa-solid fa-circle-info" style="margin-top:1px;flex-shrink:0;"></i>
-                                            Titik tengah Normal dihitung otomatis:
+                                            Normal midpoint calculated automatically:
                                             <strong id="previewMid">{{ round((($settings['fuzzy_temp_cold']->value ?? 22) + ($settings['fuzzy_temp_hot']->value ?? 30)) / 2) }}</strong>°C.
                                         </p>
                                     </div>
@@ -244,7 +244,7 @@
                             <div class="flex justify-end" style="margin-top:16px;">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa-solid fa-floppy-disk"></i>
-                                    Simpan Pengaturan
+                                    Save Settings
                                 </button>
                             </div>
 

@@ -540,8 +540,8 @@
 
                             $activityOptions = [
                                 'auth'      => 'Auth (login/logout)',
-                                'ac'        => 'Kontrol AC',
-                                'room'      => 'Ruangan',
+                                'ac'        => 'AC Control',
+                                'room'      => 'Room',
                                 'user'      => 'User',
                                 'power_on'  => 'Power ON',
                                 'power_off' => 'Power OFF',
@@ -552,10 +552,10 @@
                             ];
 
                             $rangeOptions = [
-                                ''      => 'Semua waktu',
-                                'today' => 'Hari ini',
-                                '7d'    => '7 Hari',
-                                '30d'   => '30 Hari',
+                                ''      => 'All time',
+                                'today' => 'Today',
+                                '7d'    => '7 Days',
+                                '30d'   => '30 Days',
                             ];
                             $currentRange = request('range', '');
                             $rangeLabel = $rangeOptions[$currentRange] ?? 'Custom';
@@ -568,7 +568,7 @@
                                 ''     => 'All',
                                 'auth' => 'Auth',
                                 'ac'   => 'AC',
-                                'room' => 'Ruangan',
+                                'room' => 'Room',
                                 'user' => 'User',
                             ];
                             $currentCat = in_array(request('activity'), ['auth', 'ac', 'room', 'user']) ? request('activity') : '';
@@ -580,9 +580,9 @@
                                 <span class="accent-bar"></span>
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="stat-label-sm">Total Aktivitas</p>
+                                        <p class="stat-label-sm">Total Activity</p>
                                         <p class="stat-num-lg">{{ $stats['total'] }}</p>
-                                        <p class="stat-sub">Halaman {{ $logs->currentPage() }} / {{ $logs->lastPage() }}</p>
+                                        <p class="stat-sub">Page {{ $logs->currentPage() }} / {{ $logs->lastPage() }}</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
                                 </div>
@@ -613,9 +613,9 @@
                                 <span class="accent-bar"></span>
                                 <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="stat-label-sm">Kontrol AC</p>
+                                        <p class="stat-label-sm">AC Control</p>
                                         <p class="stat-num-lg">{{ $stats['ac'] }}</p>
-                                        <p class="stat-sub">on/off · mode · suhu</p>
+                                        <p class="stat-sub">on/off · mode · temp</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-snowflake"></i></div>
                                 </div>
@@ -630,7 +630,7 @@
                                 <label class="search-input" style="flex:1;max-width:none;">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                     <input name="search" value="{{ request('search') }}" type="text"
-                                        placeholder="Cari user / ruangan / aktivitas…" autocomplete="off">
+                                        placeholder="Search user / room / activity…" autocomplete="off">
                                     @if (request('search'))
                                         <button type="button" class="clear" title="Clear"
                                             onclick="removeFilter('search')"><i
@@ -819,10 +819,10 @@
 
                             <div class="tbl-footer">
                                 <p>
-                                    Menampilkan <span class="text-mono"
+                                    Showing <span class="text-mono"
                                         style="color:var(--ink-1);">{{ $logs->firstItem() ?? 0 }}–{{ $logs->lastItem() ?? 0 }}</span>
-                                    dari <span class="text-mono"
-                                        style="color:var(--ink-1);">{{ $logs->total() }}</span> aktivitas
+                                    of <span class="text-mono"
+                                        style="color:var(--ink-1);">{{ $logs->total() }}</span> activities
                                 </p>
                                 <div class="pager">
                                     @php
@@ -899,7 +899,7 @@
         }
 
         function deleteAllLogs() {
-            if (!confirm('Hapus SEMUA log? Tindakan ini tidak dapat dibatalkan.')) return;
+            if (!confirm('Delete ALL logs? This action cannot be undone.')) return;
 
             fetch('/logs/delete-all', {
                     method: 'DELETE',
@@ -913,12 +913,12 @@
                     return r.json();
                 })
                 .then(() => {
-                    window.smToast ? window.smToast('Semua log berhasil dihapus', 'success') : alert(
-                        'Semua log berhasil dihapus');
+                    window.smToast ? window.smToast('All logs deleted successfully', 'success') : alert(
+                        'All logs deleted successfully');
                     setTimeout(() => location.reload(), 800);
                 })
                 .catch(() => {
-                    window.smToast ? window.smToast('Gagal menghapus log', 'error') : alert('Gagal menghapus log');
+                    window.smToast ? window.smToast('Failed to delete logs', 'error') : alert('Failed to delete logs');
                 });
         }
 

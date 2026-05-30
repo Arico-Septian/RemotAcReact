@@ -719,7 +719,7 @@
                                                     <div class="temp-chip {{ $room->temperature_is_offline ? 'idle' : $tempClass }}"
                                                         style="justify-content:space-between;width:100%;">
                                                         <span style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
-                                                            <i class="fa-solid fa-temperature-half text-[10px]"></i>Suhu
+                                                            <i class="fa-solid fa-temperature-half text-[10px]"></i>Temp
                                                         </span>
                                                         <span style="display:inline-flex;align-items:center;gap:5px;">
                                                             @if ($room->temperature_is_offline)
@@ -753,7 +753,7 @@
                                                         </a>
                                                         <button type="button"
                                                             onclick="openHistory({{ $room->id }}, @js(ucfirst($room->name)))"
-                                                            class="btn-icon lavender" title="Histori suhu 24 jam">
+                                                            class="btn-icon lavender" title="24-hour temperature history">
                                                             <i class="fa-solid fa-chart-line text-[10px]"></i>
                                                         </button>
                                                     </div>
@@ -788,17 +788,17 @@
         <div class="modal modal-lg">
             <div class="modal-header">
                 <div class="history-title-group">
-                    <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-chart-line"></i> Histori
-                        Suhu</p>
+                    <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-chart-line"></i> Temperature
+                        History</p>
                     <h2 id="historyTitle">Room</h2>
-                    <p id="historyMeta" class="sub">Hari ini · rata-rata per jam</p>
+                    <p id="historyMeta" class="sub">Today · hourly average</p>
                 </div>
                 <div class="history-actions">
-                    <select id="historyRange" class="history-range-select" title="Pilih rentang histori">
-                        <option value="1h">1j</option>
-                        <option value="3h">3j</option>
-                        <option value="6h">6j</option>
-                        <option value="today">Hari ini</option>
+                    <select id="historyRange" class="history-range-select" title="Select history range">
+                        <option value="1h">1h</option>
+                        <option value="3h">3h</option>
+                        <option value="6h">6h</option>
+                        <option value="today">Today</option>
                     </select>
                     <button type="button" class="modal-close" onclick="closeHistory()"><i
                             class="fa-solid fa-xmark"></i></button>
@@ -912,7 +912,7 @@
                 .catch(() => {
                     if (!_statusFetchFailed) {
                         _statusFetchFailed = true;
-                        window.smToast?.('Gagal memuat status perangkat', 'error');
+                        window.smToast?.('Failed to load device status', 'error');
                     }
                 });
         }
@@ -922,13 +922,13 @@
 
         /* ===== HISTORY MODAL ===== */
         let historyChartInstance = null;
-        let historyCurrentRoomName = 'Ruangan';
+        let historyCurrentRoomName = 'Room';
         let historyRoomId = null;
         const historyRangeText = {
-            '1h': '1 jam terakhir',
-            '3h': '3 jam terakhir',
-            '6h': '6 jam terakhir',
-            'today': 'Hari ini'
+            '1h': 'Last 1 hour',
+            '3h': 'Last 3 hours',
+            '6h': 'Last 6 hours',
+            'today': 'Today'
         };
         const historyRangeConfig = {
             '1h': {
@@ -1116,8 +1116,8 @@
 
             if (metaEl) {
                 metaEl.textContent = latestPoint ?
-                    `${currentHistoryRangeText()} · terakhir ${Number(latestPoint.temp).toFixed(1)}°C pada ${latestPoint.time}${historyStatusSuffix(status)}` :
-                    `${currentHistoryRangeText()} · rata-rata per jam${historyStatusSuffix(status)}`;
+                    `${currentHistoryRangeText()} · last ${Number(latestPoint.temp).toFixed(1)}°C at ${latestPoint.time}${historyStatusSuffix(status)}` :
+                    `${currentHistoryRangeText()} · hourly average${historyStatusSuffix(status)}`;
             }
 
             const pointColor = t => t > 30 ? '#fb7185' : t > 25 ? '#fbbf24' : '#4dd4ff';
@@ -1128,7 +1128,7 @@
                 data: {
                     labels,
                     datasets: [{
-                        label: 'Suhu (°C)',
+                        label: 'Temp (°C)',
                         data: temps,
                         borderColor: '#4dd4ff',
                         backgroundColor: 'rgba(77,212,255,0.10)',
@@ -1161,12 +1161,12 @@
                             cornerRadius: 10,
                             displayColors: false,
                             callbacks: {
-                                title: items => `Jam: ${items?.[0]?.label ?? '-'}`,
+                                title: items => `Hour: ${items?.[0]?.label ?? '-'}`,
                                 label: c => {
                                     const value = c.parsed.y;
-                                    if (value === null || Number.isNaN(value)) return 'Suhu: Tidak ada data';
+                                    if (value === null || Number.isNaN(value)) return 'Temp: No data';
 
-                                    return `Suhu: ${Number(value).toFixed(1)}°C`;
+                                    return `Temp: ${Number(value).toFixed(1)}°C`;
                                 }
                             }
                         }
@@ -1245,7 +1245,7 @@
             document.getElementById('historyEmpty').hidden = true;
             document.getElementById('historyChartWrap').hidden = true;
             document.getElementById('historyChartWrap').classList.remove('show-full-range');
-            document.getElementById('historyMeta').textContent = `${currentHistoryRangeText()} · rata-rata per jam`;
+            document.getElementById('historyMeta').textContent = `${currentHistoryRangeText()} · hourly average`;
 
             if (historyChartInstance) {
                 historyChartInstance.destroy();
@@ -1348,7 +1348,7 @@
             }).catch(() => {
                 if (!_tempFetchFailed) {
                     _tempFetchFailed = true;
-                    window.smToast?.('Gagal memuat data suhu ruangan', 'error');
+                    window.smToast?.('Failed to load room temperature data', 'error');
                 }
             });
         }

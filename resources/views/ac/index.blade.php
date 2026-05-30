@@ -1041,10 +1041,10 @@
                                         $curFan = ucfirst(strtolower($ac->status?->fan_speed ?? 'Auto'));
                                         $curSwing = strtolower($ac->status?->swing ?? 'off');
                                         $swingLabel = match ($curSwing) {
-                                            'off' => 'Diam',
+                                            'off' => 'Still',
                                             'full' => 'Full',
                                             'half' => '½',
-                                            'down' => 'Bawah',
+                                            'down' => 'Down',
                                             default => ucfirst($curSwing),
                                         };
                                         $isPowerOn = ($ac->status?->power ?? 'OFF') === 'ON';
@@ -1070,11 +1070,11 @@
                                         <div class="ctrl-row">
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp({{ $ac->id }}, {{ $curTemp - 1 }})"
-                                                title="Turunkan suhu" aria-label="Turunkan suhu">
+                                                title="Lower temperature" aria-label="Lower temperature">
                                                 <i class="fa-solid fa-minus"></i>
                                             </button>
                                             <form action="/ac/{{ $ac->id }}/toggle" method="POST"
-                                                class="power-form power-form-inline" aria-label="Kontrol Power AC"
+                                                class="power-form power-form-inline" aria-label="AC Power Control"
                                                 data-ac-name="AC {{ $ac->ac_number }}{{ $ac->name ? ' · ' . $ac->name : '' }}"
                                                 data-ac-power="{{ $ac->status?->power ?? 'OFF' }}">
                                                 @csrf
@@ -1087,7 +1087,7 @@
                                             </form>
                                             <button type="button" class="ctrl-btn"
                                                 onclick="setTemp({{ $ac->id }}, {{ $curTemp + 1 }})"
-                                                title="Naikkan suhu" aria-label="Naikkan suhu">
+                                                title="Raise temperature" aria-label="Raise temperature">
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                         </div>
@@ -1142,7 +1142,7 @@
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Swing</p>
                                             <div class="grid grid-cols-4 gap-2">
-                                                @foreach (['off' => ['fa-ban', 'Diam'], 'full' => ['fa-arrows-up-down', 'Full'], 'half' => ['fa-equals', '½'], 'down' => ['fa-arrow-down', 'Bawah']] as $sw => [$icon, $lbl])
+                                                @foreach (['off' => ['fa-ban', 'Still'], 'full' => ['fa-arrows-up-down', 'Full'], 'half' => ['fa-equals', '½'], 'down' => ['fa-arrow-down', 'Down']] as $sw => [$icon, $lbl])
                                                     <form action="/ac/{{ $ac->id }}/swing/{{ $sw }}"
                                                         method="POST" class="control-form">
                                                         @csrf
@@ -1311,15 +1311,13 @@
                                 <label class="field-label">AC Name</label>
                                 <input class="input" type="text" name="name" placeholder="unit_a" pattern="\S+"
                                     title="AC name must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" type="text" name="brand" placeholder="daikin" pattern="\S+"
                                     title="Brand must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1335,7 +1333,7 @@
                     <div class="modal-header">
                         <div>
                             <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                            <h2>Edit Unit AC</h2>
+                            <h2>Edit AC Unit</h2>
                         </div>
                     </div>
                     <form id="editACForm" method="POST" action="">
@@ -1351,15 +1349,13 @@
                                 <label class="field-label">AC Name</label>
                                 <input class="input" id="editAcName" type="text" name="name" pattern="\S+"
                                     title="AC name must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" id="editAcBrand" type="text" name="brand" pattern="\S+"
                                     title="Brand must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Tidak
-                                    boleh ada spasi</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1585,8 +1581,8 @@
                 return;
             }
 
-            const btnMinus = panel?.querySelector('.ctrl-btn[title*="Turunkan"]');
-            const btnPlus  = panel?.querySelector('.ctrl-btn[title*="Naikkan"]');
+            const btnMinus = panel?.querySelector('.ctrl-btn[title*="Lower"]');
+            const btnPlus  = panel?.querySelector('.ctrl-btn[title*="Raise"]');
             [btnMinus, btnPlus].forEach(b => b && b.classList.add('ac-ctrl-busy'));
 
             // Optimistic UI
@@ -1881,7 +1877,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                         <input type="hidden" name="timer_off" value="">
                         <button type="submit" class="btn btn-ghost btn-sm btn-block">
                             <i class="fa-solid fa-trash text-[10px]"></i>
-                            <span>Hapus Timer</span>
+                            <span>Delete Timer</span>
                         </button>
                     </form>
                 `;
@@ -1952,10 +1948,10 @@ document.querySelectorAll('.control-form').forEach(form => {
                 currentRoomId = Number(document.getElementById('espStatusPill')?.dataset.roomId);
 
                 const swingLabelMap = {
-                    off: 'Diam',
+                    off: 'Still',
                     full: 'Full',
                     half: '½',
-                    down: 'Bawah'
+                    down: 'Down'
                 };
                 const ucfirst = (s) => s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : '';
 
@@ -1983,7 +1979,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                         ring.classList.add(temp <= 20 ? 'temp-cool' : (temp <= 25 ? 'temp-warm' : 'temp-hot'));
                     }
 
-                    // Ring summary: "Cool · Auto · Diam"
+                    // Ring summary: "Cool · Auto · Still"
                     const summary = panel.querySelector('.ring-summary');
                     if (summary) {
                         summary.textContent =
@@ -2003,8 +1999,8 @@ document.querySelectorAll('.control-form').forEach(form => {
                     }
 
                     // +/- temp button onclick handlers (selalu refer ke nilai temp saat ini)
-                    const btnMinus = panel.querySelector('.ctrl-btn[title*="Turunkan"]');
-                    const btnPlus = panel.querySelector('.ctrl-btn[title*="Naikkan"]');
+                    const btnMinus = panel.querySelector('.ctrl-btn[title*="Lower"]');
+                    const btnPlus = panel.querySelector('.ctrl-btn[title*="Raise"]');
 
                     if (btnMinus) {
                         btnMinus.setAttribute('onclick', `setTemp(${payload.ac_unit_id}, ${temp - 1})`);
