@@ -27,7 +27,7 @@
         .ac-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; margin-bottom: 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
         .ac-card-head__text { min-width: 0; }
         .ac-card-head__tag { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin: 0; line-height: 1.2; }
-        .ac-card-head__name { font-size: 15px; font-weight: 700; color: var(--ink-0); margin: 3px 0 0; line-height: 1.25; text-transform: capitalize; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ac-card-head__name { font-size: 16px; font-weight: 700; color: var(--ink-0); margin: 3px 0 0; line-height: 1.25; text-transform: capitalize; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .ac-card-head__icon { width: 32px; height: 32px; border-radius: 10px; background: var(--cyan-soft); color: var(--cyan); border: 1px solid var(--cyan-soft-2); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; }
         .ac-card .ac-stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; background: transparent; border-radius: 0; padding-left: 0; padding-right: 0; }
         .ac-card .ac-stat .label { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-weight: 500; }
@@ -55,7 +55,7 @@
             padding: 3px 8px;
             background-color: var(--coral);
             color: white;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 600;
             border-radius: 4px;
             letter-spacing: 0.05em;
@@ -174,7 +174,7 @@
             }
 
             .main-header .app-header-title p {
-                font-size: 9.5px;
+                font-size: 10px;
                 line-height: 1.2;
             }
 

@@ -99,14 +99,14 @@
             .raspi-card { padding: 22px 18px; }
             .raspi-temp { font-size: 56px; white-space: nowrap; }
             .raspi-label { font-size: 11px; }
-            .raspi-status { font-size: 11.5px; }
+            .raspi-status { font-size: 12px; }
 
             .main-header { gap: 8px; padding-left: 12px; padding-right: 12px; }
             .main-header > .flex.items-center.gap-3 { gap: 8px; }
             .main-header > .flex.items-center.gap-2 { gap: 6px; }
-            .main-header .app-header-title h1 { font-size: 15px; line-height: 1.2; }
+            .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
             .main-header .app-header-title p {
-                font-size: 10.5px;
+                font-size: 11px;
                 line-height: 1.25;
                 white-space: nowrap;
                 overflow: hidden;
@@ -127,7 +127,7 @@
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; }
+            .main-header .app-header-title p { font-size: 10px; }
             .main-header #systemStatus span:not(.dot) { display: none; }
             .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }

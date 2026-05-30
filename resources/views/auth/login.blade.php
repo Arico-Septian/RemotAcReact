@@ -126,14 +126,14 @@
         }
         .brand-mark .mark-inner {
             width: 36px; height: 36px;
-            border-radius: 9px;
+            border-radius: 10px;
             background: var(--panel);
             display: inline-flex; align-items: center; justify-content: center;
             color: var(--cyan);
-            font-size: 15px;
+            font-size: 16px;
         }
-        .brand-name { font-size: 15.5px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
-        .brand-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
+        .brand-name { font-size: 16px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
 
         .brand-hero {
             margin-top: 60px;
@@ -154,7 +154,7 @@
 
         .brand-sub {
             margin-top: 18px;
-            font-size: 14.5px;
+            font-size: 14px;
             line-height: 1.65;
             color: var(--ink-2);
             max-width: 420px;
@@ -170,7 +170,7 @@
         .feat-row { display: flex; align-items: center; gap: 12px; }
         .feat-ic {
             width: 30px; height: 30px;
-            border-radius: 9px;
+            border-radius: 10px;
             display: inline-flex; align-items: center; justify-content: center;
             font-size: 12px;
             flex-shrink: 0;
@@ -209,7 +209,7 @@
 
         .form-eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
-            font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
             color: var(--cyan); text-transform: uppercase;
         }
         .form-eyebrow::before {
@@ -234,7 +234,7 @@
 
         .form-sub {
             margin-top: 10px;
-            font-size: 13.5px; color: var(--ink-2);
+            font-size: 14px; color: var(--ink-2);
             line-height: 1.55;
         }
 
@@ -246,7 +246,7 @@
             background: rgba(251, 113, 133, 0.10);
             border: 1px solid rgba(251, 113, 133, 0.32);
             color: #ffc6cf;
-            font-size: 12.5px;
+            font-size: 13px;
             display: flex; align-items: flex-start; gap: 10px;
             font-weight: 500;
         }
@@ -313,7 +313,7 @@
             background: rgba(110, 231, 183, 0.16);
             border: 1px solid rgba(110, 231, 183, 0.36);
             color: var(--mint);
-            font-size: 9px;
+            font-size: 10px;
             margin-right: 10px;
             opacity: 0;
             transform: scale(0.7);
@@ -331,7 +331,7 @@
             display: none;
             align-items: center;
             gap: 6px;
-            font-size: 11.5px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--amber);
         }
@@ -394,7 +394,7 @@
             border-radius: 999px;
             display: inline-flex; align-items: center; justify-content: center;
             border: 1px solid rgba(110,231,183,0.28);
-            font-size: 9px;
+            font-size: 10px;
         }
         .copyright { font-size: 11px; color: var(--ink-4); }
 
@@ -440,7 +440,7 @@
                 min-height: 0;
                 width: 100%;
                 max-width: 480px;
-                border-radius: 24px;
+                border-radius: 28px;
             }
             .form-footer { margin-left: -36px; margin-right: -36px; padding-left: 36px; padding-right: 36px; }
         }
@@ -462,7 +462,7 @@
             .brand-panel { display: none; }
             .form-panel {
                 padding: 28px 22px 22px;
-                border-radius: 22px;
+                border-radius: 20px;
                 width: 100%;
                 max-width: 400px;
                 margin: 0;
@@ -471,16 +471,16 @@
             .form-sub { font-size: 13px; margin-top: 8px; }
             .form { margin-top: 22px; gap: 14px; }
             .form-footer { margin-left: -22px; margin-right: -22px; padding-left: 22px; padding-right: 22px; }
-            .back-link { margin-bottom: 22px; font-size: 11.5px; }
-            .input-wrap input { padding: 12px 0; font-size: 13.5px; }
+            .back-link { margin-bottom: 22px; font-size: 12px; }
+            .input-wrap input { padding: 12px 0; font-size: 14px; }
             .alert { font-size: 12px; padding: 10px 12px; }
         }
 
         /* Mobile S (≤ 480 px) — very tight, form-only */
         @media (max-width: 480px) {
             .page { padding: 12px; }
-            .form-panel { padding: 22px 16px 18px; border-radius: 18px; }
-            .form-eyebrow { font-size: 9.5px; letter-spacing: 0.14em; }
+            .form-panel { padding: 22px 16px 18px; border-radius: 20px; }
+            .form-eyebrow { font-size: 10px; letter-spacing: 0.14em; }
             .form-title { font-size: 20px; margin-top: 10px; }
             .form-sub { font-size: 12px; margin-top: 6px; }
             .form { margin-top: 18px; gap: 12px; }
@@ -490,7 +490,7 @@
             .input-wrap .leading { padding: 0 10px 0 12px; font-size: 12px; }
             .input-wrap .trailing { padding: 0 12px; font-size: 12px; }
             .field-label { font-size: 10px; letter-spacing: 0.1em; margin-bottom: 6px; }
-            .alert { font-size: 11.5px; padding: 9px 11px; margin-top: 18px; gap: 8px; }
+            .alert { font-size: 12px; padding: 9px 11px; margin-top: 18px; gap: 8px; }
             .back-link { margin-bottom: 18px; font-size: 11px; }
         }
 

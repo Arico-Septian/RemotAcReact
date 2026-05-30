@@ -61,14 +61,14 @@
         /* Tablet (768-1023px): kecilkan text supaya muat inline */
         @media (min-width: 768px) and (max-width: 1023px) {
             .activity-desc {
-                font-size: 9.5px;
+                font-size: 10px;
             }
             .activity-chips .chip {
                 font-size: 8px;
                 padding: 1px 4px;
             }
             .activity-chips .chip i {
-                font-size: 5.5px;
+                font-size: 8px;
             }
             .activity-chips {
                 gap: 3px;
@@ -150,7 +150,7 @@
         }
 
         .activity-title {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
             line-height: 1.15;
             color: var(--ink-0);
@@ -215,7 +215,7 @@
             align-items: center;
             gap: 12px;
             padding: 10px 14px 10px 18px;
-            border-radius: 14px;
+            border-radius: 16px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             transition: var(--t-base);
@@ -346,7 +346,7 @@
         }
 
         .activity-user {
-            font-size: 14.5px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--ink-0);
             letter-spacing: -0.005em;
@@ -394,16 +394,16 @@
             align-items: center;
             gap: 3px;
             padding: 1px 5px;
-            border-radius: 5px;
+            border-radius: 4px;
             background: rgba(148, 163, 184, 0.10);
             border: 1px solid rgba(148, 163, 184, 0.18);
             color: var(--ink-3);
-            font-size: 9.5px;
+            font-size: 10px;
             font-weight: 600;
         }
 
         .activity-chips .chip i {
-            font-size: 7px;
+            font-size: 8px;
             opacity: 0.7;
         }
 
@@ -421,7 +421,7 @@
 
             .dashboard-rooms-title,
             .activity-title {
-                font-size: 17px;
+                font-size: 18px;
                 flex: 1;
             }
 
@@ -494,7 +494,7 @@
             .activity-icon-badge {
                 width: 14px;
                 height: 14px;
-                font-size: 7px;
+                font-size: 8px;
             }
 
             .activity-user {
@@ -506,7 +506,7 @@
             }
 
             .activity-time {
-                font-size: 10.5px;
+                font-size: 11px;
             }
         }
 
@@ -613,7 +613,7 @@
         }
 
         .dashboard-rooms-title {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
             line-height: 1.15;
             color: var(--ink-0);
@@ -660,7 +660,7 @@
 
         .dashboard-room-row {
             padding: 10px 12px 10px 18px;
-            border-radius: 14px;
+            border-radius: 16px;
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             color: inherit;
@@ -735,7 +735,7 @@
             text-align: right;
             color: var(--ink-3);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
         }
 
@@ -770,7 +770,7 @@
             }
 
             .dashboard-rooms-title {
-                font-size: 17px;
+                font-size: 18px;
                 flex: 1;
             }
 
@@ -934,7 +934,7 @@
             }
 
             .dashboard-room-status {
-                font-size: 9px;
+                font-size: 10px;
                 padding: 3px 6px;
             }
         }
@@ -1015,7 +1015,7 @@
 
             .dashboard-rooms-title,
             .activity-title {
-                font-size: 17px;
+                font-size: 18px;
             }
 
             .dashboard-rooms-subtitle,
@@ -1060,7 +1060,7 @@
             }
 
             .stat-label-sm {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .stat-num-lg {
@@ -1089,7 +1089,7 @@
 
             .stat-card .stat-label-sm,
             .stat-card .stat-label {
-                font-size: 9.5px;
+                font-size: 10px;
                 letter-spacing: 0.08em;
             }
 
@@ -1124,7 +1124,7 @@
 
             .stat-card .stat-label-sm,
             .stat-card .stat-label {
-                font-size: 8.5px;
+                font-size: 8px;
                 letter-spacing: 0.06em;
             }
 
@@ -1135,14 +1135,14 @@
 
             .stat-card .stat-sub,
             .stat-card .stat-meta {
-                font-size: 9.5px;
+                font-size: 10px;
                 line-height: 1.3;
             }
 
             .stat-card .stat-icon {
                 width: 30px;
                 height: 30px;
-                border-radius: 9px;
+                border-radius: 10px;
                 font-size: 12px;
             }
 
@@ -1277,18 +1277,18 @@
 
             .stat-card .stat-label-sm,
             .stat-card .stat-label {
-                font-size: 9px;
+                font-size: 10px;
                 letter-spacing: 0.05em;
             }
 
             .stat-card .stat-num-lg {
-                font-size: 21px;
+                font-size: 20px;
                 margin: 3px 0 2px;
             }
 
             .stat-card .stat-sub,
             .stat-card .stat-meta {
-                font-size: 9px;
+                font-size: 10px;
                 line-height: 1.3;
             }
 
@@ -1390,7 +1390,7 @@
             .activity-icon-badge {
                 width: 14px;
                 height: 14px;
-                font-size: 7px;
+                font-size: 8px;
                 border-width: 1px;
             }
 
@@ -1417,12 +1417,12 @@
                 font-size: 13px !important;
             }
             .temp-chart-panel .eyebrow {
-                font-size: 9.5px !important;
+                font-size: 10px !important;
             }
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
                 padding: 4px 6px !important;
-                border-radius: 7px !important;
+                border-radius: 8px !important;
             }
         }
 
@@ -1457,19 +1457,19 @@
                 text-overflow: ellipsis;
             }
             .temp-chart-panel .eyebrow {
-                font-size: 8.5px !important;
+                font-size: 8px !important;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 gap: 4px !important;
             }
             .temp-chart-panel .eyebrow i {
-                font-size: 9px !important;
+                font-size: 10px !important;
             }
             .temp-chart-panel .trend-filter-select {
-                font-size: 9.5px !important;
+                font-size: 10px !important;
                 padding: 3px 5px !important;
-                border-radius: 6px !important;
+                border-radius: 8px !important;
                 min-width: 0;
             }
             .temp-chart-panel #trendInfo {
@@ -1494,12 +1494,12 @@
                 letter-spacing: 0.06em !important;
             }
             .temp-chart-panel .trend-filter-select {
-                font-size: 9px !important;
+                font-size: 10px !important;
                 padding: 2px 4px !important;
-                border-radius: 5px !important;
+                border-radius: 4px !important;
             }
             .temp-chart-panel #trendInfo {
-                font-size: 9.5px !important;
+                font-size: 10px !important;
             }
         }
 
@@ -1528,7 +1528,7 @@
             }
 
             .stat-card .stat-label-sm {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .stat-card .stat-num-lg {
@@ -1556,7 +1556,7 @@
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
+            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
             .main-header #systemStatus span:not(.dot) { display: none; }
             .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }

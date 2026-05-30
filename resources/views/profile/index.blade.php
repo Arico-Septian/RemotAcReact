@@ -13,7 +13,7 @@
         .profile-avatar-wrap { position: relative; flex-shrink: 0; }
         .profile-avatar-xl {
             width: 72px; height: 72px; border-radius: 999px;
-            object-fit: cover; font-size: 26px;
+            object-fit: cover; font-size: 28px;
             display: flex; align-items: center; justify-content: center;
         }
         .profile-avatar-btn {
@@ -31,7 +31,7 @@
         }
         .profile-info-cell { padding: 10px 0; text-align: center; }
         .profile-info-cell + .profile-info-cell { border-left: 1px solid var(--line-soft); }
-        .profile-info-label { font-size: 9px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin: 0 0 4px; }
+        .profile-info-label { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin: 0 0 4px; }
         .profile-info-value { font-size: 12px; color: var(--ink-0); margin: 0; font-weight: 600; line-height: 1.35; }
 
         .pwd-field { position: relative; }
@@ -119,9 +119,9 @@
                                     </button>
                                 </div>
                                 <div style="flex:1;min-width:0;">
-                                    <p style="margin:0;font-size:17px;font-weight:700;color:var(--ink-0);word-break:break-word;">{{ $user->name }}</p>
+                                    <p style="margin:0;font-size: 18px;font-weight:700;color:var(--ink-0);word-break:break-word;">{{ $user->name }}</p>
                                     <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;">
-                                        <span class="badge-role {{ $user->role }}" style="padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">{{ $user->role }}</span>
+                                        <span class="badge-role {{ $user->role }}" style="padding:3px 10px;border-radius: 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">{{ $user->role }}</span>
                                         <span style="font-size:12px;color:var(--ink-3);">Bergabung {{ $user->created_at->format('M Y') }}</span>
                                     </div>
                                 </div>
@@ -254,19 +254,19 @@
 {{-- Avatar preview modal --}}
 <div id="avatarPreviewModal"
      style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(7,16,31,0.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
-    <div style="max-width:360px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
+    <div style="max-width:360px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius: 20px;padding:22px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
             <span style="width:34px;height:34px;border-radius:10px;background:var(--cyan-soft);border:1px solid var(--cyan-soft-2);display:inline-flex;align-items:center;justify-content:center;color:var(--cyan);">
                 <i class="fa-solid fa-camera"></i>
             </span>
             <div>
-                <h3 style="margin:0;font-size:15px;font-weight:700;color:var(--ink-0);">Confirm Profile Photo</h3>
+                <h3 style="margin:0;font-size: 16px;font-weight:700;color:var(--ink-0);">Confirm Profile Photo</h3>
                 <p style="margin:2px 0 0;font-size:12px;color:var(--ink-3);">Check preview before uploading</p>
             </div>
         </div>
         <div style="display:flex;justify-content:center;margin-bottom:14px;">
             <img id="avatarPreviewImg" alt="Preview"
-                 style="width:160px;height:160px;border-radius:14px;object-fit:cover;border:1px solid var(--line);background:var(--panel-2);">
+                 style="width:160px;height:160px;border-radius: 16px;object-fit:cover;border:1px solid var(--line);background:var(--panel-2);">
         </div>
         <p id="avatarPreviewMeta" style="margin:0 0 14px;font-size:12px;color:var(--ink-3);text-align:center;"></p>
         <div style="display:flex;gap:8px;">

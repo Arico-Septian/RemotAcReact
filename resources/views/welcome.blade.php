@@ -130,14 +130,14 @@
         }
         .brand-mark .mark-inner {
             width: 34px; height: 34px;
-            border-radius: 9px;
+            border-radius: 10px;
             background: var(--panel);
             display: inline-flex; align-items: center; justify-content: center;
             color: var(--cyan);
             font-size: 14px;
         }
-        .brand-name { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink-0); white-space: nowrap; }
-        .brand-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
+        .brand-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink-0); white-space: nowrap; }
+        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
 
         .nav-links { display: flex; align-items: center; gap: 2px; }
         .nav-links a {
@@ -155,7 +155,7 @@
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--line);
             color: var(--ink-2);
-            font-size: 11.5px; font-weight: 600;
+            font-size: 12px; font-weight: 600;
             cursor: pointer;
         }
         .btn-pill {
@@ -174,7 +174,7 @@
         .section { max-width: 1320px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 2; }
         .eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
-            font-size: 10.5px; font-weight: 700; letter-spacing: 0.18em;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
             color: var(--cyan); text-transform: uppercase;
         }
         .eyebrow::before {
@@ -275,7 +275,7 @@
             background: linear-gradient(135deg, var(--cyan), var(--lavender));
             color: #0a0e1c;
             display: inline-flex; align-items: center; justify-content: center;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         .hero-trust {
@@ -301,7 +301,7 @@
 
         .status-card {
             padding: 32px 32px 26px;
-            border-radius: 24px;
+            border-radius: 28px;
             background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
             border: 1px solid var(--line);
             box-shadow: var(--shadow-1);
@@ -338,9 +338,9 @@
         .status-dot.coral { background: var(--coral); box-shadow: 0 0 14px rgba(251,113,133,0.5); animation: pulse 2s ease-out infinite; }
 
         .status-row .text-main { font-size: 14px; font-weight: 600; line-height: 1.25; color: var(--ink-0); }
-        .status-row .text-sub { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+        .status-row .text-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
         .status-row .num {
-            font-size: 22px; font-weight: 700;
+            font-size: 24px; font-weight: 700;
             font-feature-settings: 'tnum' 1, 'lnum' 1;
             letter-spacing: -0.02em;
         }
@@ -354,7 +354,7 @@
             display: flex; align-items: flex-start; gap: 12px;
         }
         .spec-ic {
-            width: 30px; height: 30px; border-radius: 9px;
+            width: 30px; height: 30px; border-radius: 10px;
             display: inline-flex; align-items: center; justify-content: center;
             font-size: 12px;
             flex-shrink: 0;
@@ -367,8 +367,8 @@
         .spec-ic.amber    { background: rgba(251,191,36,0.14);  border: 1px solid rgba(251,191,36,0.32);  color: var(--amber);    box-shadow: 0 0 16px -3px rgba(251,191,36,0.28); }
         .spec-ic.coral    { background: rgba(251,113,133,0.14); border: 1px solid rgba(251,113,133,0.32); color: var(--coral);    box-shadow: 0 0 16px -3px rgba(251,113,133,0.28); }
 
-        .spec-row .text-main { font-size: 13.5px; font-weight: 600; line-height: 1.25; color: var(--ink-0); margin-top: 5px; }
-        .spec-row .text-sub  { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; line-height: 1.4; }
+        .spec-row .text-main { font-size: 14px; font-weight: 600; line-height: 1.25; color: var(--ink-0); margin-top: 5px; }
+        .spec-row .text-sub  { font-size: 12px; color: var(--ink-3); margin-top: 3px; line-height: 1.4; }
 
         .status-cta {
             margin-top: 28px;
@@ -379,7 +379,7 @@
             border: 1px solid var(--line);
             color: var(--ink-1);
             text-decoration: none;
-            font-size: 13.5px; font-weight: 600;
+            font-size: 14px; font-weight: 600;
             transition: all 0.2s ease;
         }
         .status-cta:hover { background: rgba(255,255,255,0.08); color: var(--ink-0); border-color: var(--line-2); }
@@ -462,7 +462,7 @@
         .bento-card {
             position: relative;
             padding: 30px;
-            border-radius: 22px;
+            border-radius: 20px;
             background: linear-gradient(160deg, var(--panel) 0%, var(--bg-1) 100%);
             border: 1px solid var(--line);
             box-shadow: var(--shadow-1);
@@ -486,7 +486,7 @@
             width: 42px; height: 42px;
             border-radius: 12px;
             display: inline-flex; align-items: center; justify-content: center;
-            font-size: 17px;
+            font-size: 18px;
             margin-bottom: 18px;
         }
         .bento-card.cyan    .ic { background: rgba(94,208,255,0.14); color: var(--cyan); border: 1px solid rgba(94,208,255,0.32); box-shadow: 0 0 24px -4px rgba(94,208,255,0.25); }
@@ -495,8 +495,8 @@
         .bento-card.amber   .ic { background: rgba(251,191,36,0.14); color: var(--amber); border: 1px solid rgba(251,191,36,0.32); box-shadow: 0 0 24px -4px rgba(251,191,36,0.25); }
         .bento-card.sky     .ic { background: rgba(56,189,248,0.14); color: var(--sky); border: 1px solid rgba(56,189,248,0.32); box-shadow: 0 0 24px -4px rgba(56,189,248,0.25); }
 
-        .bento-card h3 { font-size: 19px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink-0); }
-        .bento-card p  { margin-top: 10px; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
+        .bento-card h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink-0); }
+        .bento-card p  { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
 
         .bento-card.wide-3 { grid-column: span 3; }
         .bento-card.wide-2 { grid-column: span 2; }
@@ -514,7 +514,7 @@
             background: rgba(0,0,0,0.30);
             border: 1px solid var(--line);
         }
-        .preview-stat .lbl { font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
+        .preview-stat .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: var(--ink-3); text-transform: uppercase; }
         .preview-stat .val { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -0.025em; font-feature-settings: 'tnum' 1, 'lnum' 1; }
         .preview-stat.cyan    .val { color: var(--cyan); }
         .preview-stat.mint    .val { color: var(--mint); }
@@ -527,7 +527,7 @@
             padding: 36px 38px;
             background: linear-gradient(180deg, rgba(20, 28, 50, 0.5), rgba(14, 20, 36, 0.5));
             border: 1px solid var(--line);
-            border-radius: 24px;
+            border-radius: 28px;
             box-shadow: var(--shadow-1);
         }
         .metrics-inner {
@@ -538,13 +538,13 @@
         .metric { text-align: left; position: relative; }
         .metric:not(:first-child) { padding-left: 24px; border-left: 1px solid var(--line); }
         .metric .v {
-            font-size: 42px; font-weight: 800; letter-spacing: -0.035em;
+            font-size: 40px; font-weight: 800; letter-spacing: -0.035em;
             font-feature-settings: 'tnum' 1, 'lnum' 1;
             color: var(--ink-0);
             line-height: 1;
         }
         .metric .v sup { font-size: 18px; color: var(--ink-3); margin-left: 2px; top: -10px; }
-        .metric .l { font-size: 11.5px; font-weight: 600; color: var(--ink-3); margin-top: 8px; letter-spacing: 0.05em; }
+        .metric .l { font-size: 12px; font-weight: 600; color: var(--ink-3); margin-top: 8px; letter-spacing: 0.05em; }
 
         /* ===== HOW IT WORKS ===== */
         .how { padding: 80px 0; }
@@ -566,7 +566,7 @@
             transform: translateY(-3px);
         }
         .step .num-circle {
-            width: 38px; height: 38px; border-radius: 11px;
+            width: 38px; height: 38px; border-radius: 12px;
             background: rgba(94,208,255,0.12);
             border: 1px solid rgba(94,208,255,0.32);
             color: var(--cyan);
@@ -576,14 +576,14 @@
             margin-bottom: 20px;
         }
         .step h4 { font-size: 18px; font-weight: 700; letter-spacing: -0.015em; color: var(--ink-0); }
-        .step p { margin-top: 10px; font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
+        .step p { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
 
         /* ===== CTA FINAL ===== */
         .cta-final { padding: 60px 0 100px; }
         .cta-box {
             position: relative;
             padding: 72px 56px;
-            border-radius: 32px;
+            border-radius: 28px;
             background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
             border: 1px solid var(--line-2);
             box-shadow: var(--shadow-2);
@@ -624,7 +624,7 @@
         }
         .cta-sub {
             margin-top: 20px;
-            font-size: 15.5px; color: var(--ink-1); max-width: 560px;
+            font-size: 16px; color: var(--ink-1); max-width: 560px;
             margin-left: auto; margin-right: auto; line-height: 1.6;
         }
         .cta-buttons { margin-top: 36px; display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
@@ -640,7 +640,7 @@
             gap: 24px; flex-wrap: wrap;
         }
         .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
-        .footer-links a { color: var(--ink-3); text-decoration: none; font-size: 12.5px; font-weight: 500; transition: color 0.18s ease; }
+        .footer-links a { color: var(--ink-3); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.18s ease; }
         .footer-links a:hover { color: var(--ink-1); }
         .footer-copy { font-size: 12px; color: var(--ink-4); }
 
@@ -693,12 +693,12 @@
         @media (max-width: 768px) {
             .section { padding: 0 24px; }
             .hero { padding: 48px 0 40px; }
-            .hero-main { padding: 32px 28px 28px; border-radius: 22px; }
+            .hero-main { padding: 32px 28px 28px; border-radius: 20px; }
             .hero-h1 { font-size: 44px; letter-spacing: -0.025em; }
-            .hero-sub { font-size: 15px; max-width: 100%; }
+            .hero-sub { font-size: 16px; max-width: 100%; }
             .hero-trust { margin-left: -28px; margin-right: -28px; padding-left: 28px; padding-right: 28px; }
-            .status-card { padding: 28px 26px 24px; border-radius: 22px; }
-            .status-title { font-size: 30px; }
+            .status-card { padding: 28px 26px 24px; border-radius: 20px; }
+            .status-title { font-size: 28px; }
             .features, .how, .cta-final { padding: 64px 0; }
             .cta-box { padding: 56px 32px; }
         }
@@ -714,7 +714,7 @@
             .hero { padding: 32px 0 28px; }
             .hero-grid { gap: 20px; }
             .hero-main { padding: 32px 28px 28px; border-radius: 20px; }
-            .hero-h1 { font-size: 34px; letter-spacing: -0.025em; line-height: 1.05; }
+            .hero-h1 { font-size: 36px; letter-spacing: -0.025em; line-height: 1.05; }
             .hero-sub { font-size: 14px; line-height: 1.55; max-width: 100%; }
             .hero-cta { flex-direction: column; gap: 10px; }
             .hero-cta > a { width: 100%; justify-content: center; }
@@ -728,27 +728,27 @@
                 display: grid;
                 grid-template-columns: 1fr 1fr;
             }
-            .hero-trust .num { font-size: 22px; }
-            .hero-trust .lbl { font-size: 9.5px; }
+            .hero-trust .num { font-size: 24px; }
+            .hero-trust .lbl { font-size: 10px; }
 
             .status-card { padding: 24px 22px 20px; border-radius: 20px; }
-            .status-title { font-size: 26px; }
+            .status-title { font-size: 28px; }
             .spec-row { gap: 10px; }
             .anomaly-card { padding: 22px 20px 20px; border-radius: 20px; }
 
             .bento { grid-template-columns: 1fr; gap: 12px; }
             .bento-card, .bento-card.wide-3, .bento-card.wide-2, .bento-card.wide-4, .preview-card {
-                grid-column: span 1; min-height: 0; padding: 22px 20px; border-radius: 18px;
+                grid-column: span 1; min-height: 0; padding: 22px 20px; border-radius: 20px;
             }
 
-            .metrics { padding: 26px 22px; border-radius: 22px; }
+            .metrics { padding: 26px 22px; border-radius: 20px; }
             .metrics-inner { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
             .metric:not(:first-child) { padding-left: 0; border-left: 0; }
-            .metric .v { font-size: 30px; }
+            .metric .v { font-size: 28px; }
 
-            .cta-box { padding: 44px 24px; border-radius: 22px; }
+            .cta-box { padding: 44px 24px; border-radius: 20px; }
             .features, .how, .cta-final { padding: 56px 0; }
-            .features-h2, .cta-h2 { font-size: 30px; line-height: 1.1; }
+            .features-h2, .cta-h2 { font-size: 28px; line-height: 1.1; }
             .features-sub, .cta-sub { font-size: 14px; }
         }
 
@@ -758,9 +758,9 @@
             .section { padding: 0 20px; }
             .hero { padding: 24px 0 22px; }
             .hero-grid { gap: 16px; }
-            .hero-main { padding: 26px 22px 22px; border-radius: 18px; }
+            .hero-main { padding: 26px 22px 22px; border-radius: 20px; }
             .hero-h1 { font-size: 28px; line-height: 1.06; }
-            .hero-sub { font-size: 13.5px; margin-top: 12px; }
+            .hero-sub { font-size: 14px; margin-top: 12px; }
             .hero-cta { margin-top: 18px; }
             .btn-cta-primary, .btn-cta-ghost { padding: 12px 16px; font-size: 13px; }
 
@@ -769,20 +769,20 @@
                 padding: 18px 22px 2px;
                 gap: 14px 12px;
             }
-            .hero-trust .num { font-size: 19px; }
-            .hero-trust .lbl { font-size: 9px; letter-spacing: 0.12em; }
+            .hero-trust .num { font-size: 20px; }
+            .hero-trust .lbl { font-size: 10px; letter-spacing: 0.12em; }
 
-            .status-card { padding: 20px 18px 16px; border-radius: 18px; }
-            .status-title { font-size: 22px; }
-            .anomaly-card { padding: 20px 18px 18px; border-radius: 18px; }
+            .status-card { padding: 20px 18px 16px; border-radius: 20px; }
+            .status-title { font-size: 24px; }
+            .anomaly-card { padding: 20px 18px 18px; border-radius: 20px; }
             .bento-card { padding: 20px 18px; border-radius: 16px; }
 
             .metrics { padding: 22px 18px; }
-            .metric .v { font-size: 26px; }
+            .metric .v { font-size: 28px; }
 
             .cta-box { padding: 36px 20px; border-radius: 20px; }
             .features, .how, .cta-final { padding: 44px 0; }
-            .features-h2, .cta-h2 { font-size: 26px; }
+            .features-h2, .cta-h2 { font-size: 28px; }
         }
 
         /* Mobile S (≤ 480px) — extra tight */
@@ -792,7 +792,7 @@
             .hero { padding: 20px 0 18px; }
             .hero-main { padding: 22px 18px 20px; border-radius: 16px; }
             .hero-h1 { font-size: 24px; letter-spacing: -0.02em; }
-            .hero-sub { font-size: 12.5px; line-height: 1.5; }
+            .hero-sub { font-size: 13px; line-height: 1.5; }
             .btn-cta-primary, .btn-cta-ghost { padding: 11px 14px; font-size: 12px; min-height: 42px; }
 
             .hero-trust {
@@ -800,17 +800,17 @@
                 padding: 16px 18px 2px;
                 gap: 12px 10px;
             }
-            .hero-trust .num { font-size: 17px; }
-            .hero-trust .lbl { font-size: 8.5px; letter-spacing: 0.1em; }
+            .hero-trust .num { font-size: 18px; }
+            .hero-trust .lbl { font-size: 8px; letter-spacing: 0.1em; }
 
-            .status-card { padding: 18px 14px 14px; border-radius: 14px; }
+            .status-card { padding: 18px 14px 14px; border-radius: 16px; }
             .status-title, .features-h2, .cta-h2 { font-size: 20px !important; line-height: 1.1; }
-            .anomaly-card { padding: 18px 14px 14px; border-radius: 14px; }
-            .bento-card { padding: 18px 14px; border-radius: 14px; }
+            .anomaly-card { padding: 18px 14px 14px; border-radius: 16px; }
+            .bento-card { padding: 18px 14px; border-radius: 16px; }
 
-            .metrics { padding: 20px 14px; border-radius: 18px; }
-            .metric .v { font-size: 22px; }
-            .metric .l { font-size: 9.5px; }
+            .metrics { padding: 20px 14px; border-radius: 20px; }
+            .metric .v { font-size: 24px; }
+            .metric .l { font-size: 10px; }
 
             .cta-box { padding: 28px 16px; border-radius: 16px; }
             .features, .how, .cta-final { padding: 36px 0; }
@@ -832,7 +832,7 @@
             .spec-list { gap: 14px; }
             .spec-ic { width: 32px; height: 32px; font-size: 13px; flex-shrink: 0; }
             .text-main { font-size: 13px; line-height: 1.3; }
-            .text-sub { font-size: 11.5px; }
+            .text-sub { font-size: 12px; }
 
             /* Bento preview-card mini dashboard — 3 stats can squeeze on narrow screens */
             .preview-card .mini-dashboard {
@@ -841,7 +841,7 @@
             }
             .preview-stat { padding: 12px; }
             .preview-stat .val { font-size: 20px; }
-            .preview-stat .lbl { font-size: 8.5px; letter-spacing: 0.1em; }
+            .preview-stat .lbl { font-size: 8px; letter-spacing: 0.1em; }
 
             /* How section — reduce step number circle */
             .step .num-circle { width: 40px; height: 40px; font-size: 14px; }
@@ -863,19 +863,19 @@
                 grid-template-columns: 1fr 1fr;
             }
             .preview-card .preview-stat:nth-child(3) { grid-column: 1 / -1; }
-            .preview-stat .val { font-size: 22px; }
+            .preview-stat .val { font-size: 24px; }
         }
 
         /* Mobile (≤ 480px): spec rows even tighter */
         @media (max-width: 480px) {
             .spec-list { gap: 11px; }
             .spec-ic { width: 28px; height: 28px; font-size: 11px; }
-            .text-main { font-size: 12.5px; }
+            .text-main { font-size: 13px; }
             .text-sub { font-size: 11px; }
             .step .num-circle { width: 36px; height: 36px; font-size: 13px; }
-            .step h4 { font-size: 15px; }
-            .step p { font-size: 12.5px; }
-            .footer-links { gap: 16px; font-size: 11.5px; }
+            .step h4 { font-size: 16px; }
+            .step p { font-size: 13px; }
+            .footer-links { gap: 16px; font-size: 12px; }
             .footer-copy { font-size: 11px; }
         }
 
@@ -883,7 +883,7 @@
         @media (max-height: 500px) and (orientation: landscape) {
             .hero { padding: 24px 0; }
             .hero-main { padding: 26px 28px 24px; min-height: 0; }
-            .hero-h1 { font-size: 38px; }
+            .hero-h1 { font-size: 40px; }
             .hero-trust { padding-top: 22px; gap: 22px; }
             .glow-top, .glow-right { opacity: 0.55; }
             .features, .how, .cta-final { padding: 40px 0; }
@@ -1037,7 +1037,7 @@
 
                 <section class="anomaly-card reveal">
                     <span class="badge-pill">
-                        <i class="fa-solid fa-sparkles" style="font-size:9px;"></i>
+                        <i class="fa-solid fa-sparkles" style="font-size: 10px;"></i>
                         New
                     </span>
                     <h3 class="serif anomaly-title">Anomalies, detected early.</h3>
@@ -1159,7 +1159,7 @@
     {{-- CTA FINAL --}}
     <section class="cta-final section">
         <div class="cta-box reveal">
-            <span class="eyebrow"><i class="fa-solid fa-bolt" style="font-size:9px;"></i> Ready to use</span>
+            <span class="eyebrow"><i class="fa-solid fa-bolt" style="font-size: 10px;"></i> Ready to use</span>
             <h2 class="cta-h2">
                 Start monitoring your rooms <span class="accent">today.</span>
             </h2>
@@ -1183,8 +1183,8 @@
     <footer class="footer">
         <div class="section footer-inner">
             <div style="display:flex;align-items:center;gap:10px;">
-                <div class="brand-mark" style="width:32px;height:32px;border-radius:9px;">
-                    <div class="mark-inner" style="width:26px;height:26px;font-size:12px;border-radius:7px;"><i class="fa-solid fa-snowflake"></i></div>
+                <div class="brand-mark" style="width:32px;height:32px;border-radius: 10px;">
+                    <div class="mark-inner" style="width:26px;height:26px;font-size:12px;border-radius: 8px;"><i class="fa-solid fa-snowflake"></i></div>
                 </div>
                 <span style="font-size:13px;font-weight:600;color:var(--ink-1);">Control AC</span>
             </div>

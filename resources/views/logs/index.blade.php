@@ -126,13 +126,13 @@
             }
 
             .segmented .seg {
-                font-size: 10.5px;
+                font-size: 11px;
                 padding: 5px 8px;
             }
 
             .btn.btn-danger {
                 padding: 5px 8px;
-                font-size: 10.5px;
+                font-size: 11px;
                 white-space: nowrap;
             }
 
@@ -238,7 +238,7 @@
         }
 
         .tbl.tbl-log th {
-            font-size: 11.5px;
+            font-size: 12px;
             letter-spacing: 0.1em;
             padding: 14px 18px;
             background: transparent;
@@ -266,7 +266,7 @@
         .log-user .name {
             color: var(--ink-0);
             font-weight: 600;
-            font-size: 14.5px;
+            font-size: 14px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -279,7 +279,7 @@
 
         .log-detail {
             color: var(--ink-2);
-            font-size: 13.5px;
+            font-size: 14px;
             max-width: 260px;
             white-space: nowrap;
             overflow: hidden;
@@ -295,7 +295,7 @@
         }
 
         .log-time .t { color: var(--ink-1); font-size: 14px; font-weight: 600; }
-        .log-time .d { color: var(--ink-4); font-size: 11.5px; }
+        .log-time .d { color: var(--ink-4); font-size: 12px; }
 
         /* Sortable table headers */
         .tbl-log th {
@@ -345,7 +345,7 @@
             min-width: 32px;
             height: 32px;
             padding: 0 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 12px;
             font-weight: 500;
             color: var(--ink-2);
@@ -425,7 +425,7 @@
         @media (max-width: 768px) {
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 12px; }
             .stat-card { padding: 14px 16px; }
-            .stat-card .stat-label-sm { font-size: 9.5px; letter-spacing: 0.08em; }
+            .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
             .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.35; }
             .stat-card .stat-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
@@ -435,10 +435,10 @@
         @media (max-width: 480px) {
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 10px; }
             .stat-card { padding: 12px 14px; }
-            .stat-card .stat-label-sm { font-size: 8.5px; letter-spacing: 0.06em; white-space: nowrap; }
+            .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.06em; white-space: nowrap; }
             .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
-            .stat-card .stat-sub { font-size: 9.5px; line-height: 1.3; }
-            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 9px; font-size: 12px; }
+            .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
+            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 10px; font-size: 12px; }
             .stat-card .accent-bar { top: 12px; bottom: 12px; }
         }
 
@@ -448,7 +448,7 @@
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
+            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
             .main-header #systemStatus span:not(.dot) { display: none; }
             .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }
@@ -456,9 +456,9 @@
             /* Stat cards: keep 2-col, compact each card so labels/subs don't wrap awkwardly */
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
             .stat-card { padding: 10px 12px !important; }
-            .stat-card .stat-label-sm { font-size: 9px !important; letter-spacing: 0.05em !important; white-space: nowrap !important; }
-            .stat-card .stat-num-lg { font-size: 21px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
-            .stat-card .stat-sub { font-size: 9px !important; line-height: 1.3 !important; }
+            .stat-card .stat-label-sm { font-size: 10px !important; letter-spacing: 0.05em !important; white-space: nowrap !important; }
+            .stat-card .stat-num-lg { font-size: 20px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
+            .stat-card .stat-sub { font-size: 10px !important; line-height: 1.3 !important; }
             .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: 8px !important; font-size: 11px !important; }
             .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
         }
@@ -679,23 +679,23 @@
                                         <div class="flex items-center gap-3">
                                             @if ($log->user?->avatar_url)
                                                 <img src="{{ $log->user->avatar_url }}" alt="{{ $log->user->name }}"
-                                                     style="width:38px;height:38px;border-radius:9px;object-fit:cover;flex-shrink:0;">
+                                                     style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">
                                             @else
-                                                <div style="width:38px;height:38px;border-radius:9px;background:var(--{{ $avatarColor }});color:#0c1726;font-size:15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                <div style="width:38px;height:38px;border-radius: 10px;background:var(--{{ $avatarColor }});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                     {{ strtoupper(substr($log->user->name ?? '?', 0, 1)) }}
                                                 </div>
                                             @endif
                                             <div class="flex-1 min-w-0">
                                                 <div class="flex items-center justify-between gap-2">
                                                     <div class="flex items-center gap-2 min-w-0">
-                                                        <span class="truncate" style="font-size:15px;font-weight:600;color:var(--ink-0);">{{ $log->user->name ?? '—' }}</span>
+                                                        <span class="truncate" style="font-size: 16px;font-weight:600;color:var(--ink-0);">{{ $log->user->name ?? '—' }}</span>
                                                         <span class="act-badge {{ $class }}" style="flex-shrink:0;">{{ $label }}</span>
                                                     </div>
-                                                    <span class="text-mono" style="font-size:12.5px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">{{ $log->created_at->format('H:i') }}</span>
+                                                    <span class="text-mono" style="font-size: 13px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">{{ $log->created_at->format('H:i') }}</span>
                                                 </div>
                                                 <div class="flex items-center justify-between gap-2" style="margin-top:5px;">
                                                     <span class="truncate" style="font-size:13px;color:var(--ink-3);">{{ $roomAcText ?: '—' }}</span>
-                                                    <span class="text-mono" style="font-size:11.5px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">{{ $log->created_at->format('d M Y') }}</span>
+                                                    <span class="text-mono" style="font-size: 12px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">{{ $log->created_at->format('d M Y') }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -766,10 +766,10 @@
                                                         @if ($log->user?->avatar_url)
                                                             <img src="{{ $log->user->avatar_url }}" alt="{{ $log->user->name }}"
                                                                  class="avatar"
-                                                                 style="width:34px;height:34px;border-radius:9px;flex-shrink:0;object-fit:cover;">
+                                                                 style="width:34px;height:34px;border-radius: 10px;flex-shrink:0;object-fit:cover;">
                                                         @else
                                                             <span class="avatar"
-                                                                style="width:34px;height:34px;font-size:13px;border-radius:9px;flex-shrink:0;">
+                                                                style="width:34px;height:34px;font-size:13px;border-radius: 10px;flex-shrink:0;">
                                                                 {{ strtoupper(substr($log->user->name ?? '?', 0, 1)) }}
                                                             </span>
                                                         @endif
@@ -990,8 +990,8 @@
                         ? '<span class="log-empty">—</span>'
                         : `<span class="log-detail" title="${escapeHtml(payload.ac)}">${escapeHtml(payload.ac)}</span>`;
                     const avatarHtml = safeAvatar
-                        ? `<img src="${safeAvatar}" alt="${name}" class="avatar" style="width:34px;height:34px;border-radius:9px;flex-shrink:0;object-fit:cover;">`
-                        : `<span class="avatar" style="width:34px;height:34px;font-size:13px;border-radius:9px;flex-shrink:0;">${initial}</span>`;
+                        ? `<img src="${safeAvatar}" alt="${name}" class="avatar" style="width:34px;height:34px;border-radius: 10px;flex-shrink:0;object-fit:cover;">`
+                        : `<span class="avatar" style="width:34px;height:34px;font-size:13px;border-radius: 10px;flex-shrink:0;">${initial}</span>`;
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -1027,8 +1027,8 @@
                     const avatarColor = avatarColors[((uid - 1) % 4 + 4) % 4];
 
                     const mobileAvatar = safeAvatar
-                        ? `<img src="${safeAvatar}" alt="${name}" style="width:38px;height:38px;border-radius:9px;object-fit:cover;flex-shrink:0;">`
-                        : `<div style="width:38px;height:38px;border-radius:9px;background:var(--${avatarColor});color:#0c1726;font-size:15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${initial}</div>`;
+                        ? `<img src="${safeAvatar}" alt="${name}" style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">`
+                        : `<div style="width:38px;height:38px;border-radius: 10px;background:var(--${avatarColor});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${initial}</div>`;
 
                     const roomAcText = [
                         !isEmpty(payload.room) ? escapeHtml(payload.room) : '',
@@ -1043,14 +1043,14 @@
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-2 min-w-0">
-                                        <span class="truncate" style="font-size:15px;font-weight:600;color:var(--ink-0);">${name}</span>
+                                        <span class="truncate" style="font-size: 16px;font-weight:600;color:var(--ink-0);">${name}</span>
                                         <span class="act-badge ${badgeClass}" style="flex-shrink:0;">${escapeHtml(badgeLabel)}</span>
                                     </div>
-                                    <span class="text-mono" style="font-size:12.5px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">${hh}:${mm}</span>
+                                    <span class="text-mono" style="font-size: 13px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">${hh}:${mm}</span>
                                 </div>
                                 <div class="flex items-center justify-between gap-2" style="margin-top:5px;">
                                     <span class="truncate" style="font-size:13px;color:var(--ink-3);">${roomAcText}</span>
-                                    <span class="text-mono" style="font-size:11.5px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">${dateStr}</span>
+                                    <span class="text-mono" style="font-size: 12px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">${dateStr}</span>
                                 </div>
                             </div>
                         </div>`;

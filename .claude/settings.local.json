@@ -8,7 +8,11 @@
       "Bash(node \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\")",
       "Bash(rm \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\" 2>/dev/null; echo \"Done\")",
       "Read(//c/pw-test/**)",
-      "Bash(node check-dashboard-mobile.cjs)"
+      "Bash(node check-dashboard-mobile.cjs)",
+      "Bash(sort -t'.' -k1,1n -k2,2n)",
+      "Bash(node fix-fontsizes.cjs)",
+      "Bash(node verify-breakpoints.cjs)",
+      "Bash(grep -roh \"#[0-9a-fA-F]\\\\{3,8\\\\}\\\\b\" resources/views --include=\"*.blade.php\")"
     ],
     "additionalDirectories": [
       "c:\\laragon\\www\\tugasakhirremotac"

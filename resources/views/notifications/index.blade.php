@@ -35,7 +35,7 @@
         .nlist-icon {
             width: 38px;
             height: 38px;
-            border-radius: 11px;
+            border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -91,9 +91,9 @@
         /* Mobile M / L (≤ 480 px): compact notification list */
         @media (max-width: 480px) {
             .nlist-item { padding: 11px 12px; gap: 10px; }
-            .nlist-icon { width: 30px; height: 30px; font-size: 12px; border-radius: 9px; }
+            .nlist-icon { width: 30px; height: 30px; font-size: 12px; border-radius: 10px; }
             .nlist-item .text-base, .nlist-item h3 { font-size: 13px !important; }
-            .nlist-item .text-sm, .nlist-item p { font-size: 11.5px !important; line-height: 1.35 !important; }
+            .nlist-item .text-sm, .nlist-item p { font-size: 12px !important; line-height: 1.35 !important; }
             .nlist-item .text-xs { font-size: 10px !important; }
             /* Force time meta row to stay on one line with smaller fonts */
             .nlist-item .text-mono { white-space: nowrap; font-size: 10px; }
@@ -114,13 +114,13 @@
             .nlist-icon { width: 26px; height: 26px; font-size: 11px; border-radius: 8px; }
             .nlist-item .text-base, .nlist-item h3 { font-size: 12px !important; }
             .nlist-item .text-sm, .nlist-item p { font-size: 11px !important; }
-            .nlist-item .text-mono { font-size: 9.5px; }
+            .nlist-item .text-mono { font-size: 10px; }
 
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; }
+            .main-header .app-header-title p { font-size: 10px; }
             .main-header #systemStatus span:not(.dot) { display: none; }
             .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }
@@ -197,7 +197,7 @@
                                                 {{ $n->message }}</p>
                                         @endif
                                         <div class="flex items-center gap-3 mt-2 text-mono"
-                                            style="font-size:10.5px;color:var(--ink-4);">
+                                            style="font-size: 11px;color:var(--ink-4);">
                                             <span><i class="fa-regular fa-clock text-[9px]"></i>
                                                 {{ $n->created_at->diffForHumans() }}</span>
                                             <span>·</span>
@@ -391,7 +391,7 @@
                             <p class="text-sm font-semibold" style="color:var(--ink-0);margin:0;">${title}</p>
                         </div>
                         ${message ? `<p class="text-xs mt-1" style="color:var(--ink-2);line-height:1.5;">${message}</p>` : ''}
-                        <div class="flex items-center gap-3 mt-2 text-mono" style="font-size:10.5px;color:var(--ink-4);">
+                        <div class="flex items-center gap-3 mt-2 text-mono" style="font-size: 11px;color:var(--ink-4);">
                             <span><i class="fa-regular fa-clock text-[9px]"></i> ${timeAgo}</span>
                             <span>·</span>
                             <span>${dateStr}</span>

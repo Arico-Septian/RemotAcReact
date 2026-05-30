@@ -102,7 +102,7 @@
 
     /* Header title */
     .main-header .app-header-title h1 {
-        font-size: 15px !important;
+        font-size: 16px !important;
         font-weight: 700 !important;
         color: var(--ink-0) !important;
         letter-spacing: -0.015em !important;
@@ -110,7 +110,7 @@
         line-height: 1.15;
     }
     .main-header .app-header-title p {
-        font-size: 11.5px !important;
+        font-size: 12px !important;
         color: var(--ink-3) !important;
         margin: 2px 0 0 !important;
         letter-spacing: 0.01em;
@@ -125,7 +125,7 @@
     .main-header .pill {
         padding: 6px 12px !important;
         border-radius: 999px !important;
-        font-size: 11.5px !important;
+        font-size: 12px !important;
         font-weight: 600;
         letter-spacing: 0.02em;
         background: rgba(14, 165, 233, 0.12) !important;
@@ -173,7 +173,7 @@
     .notif-badge {
         background: linear-gradient(135deg, #ff5577, #ff3355) !important;
         color: #fff !important;
-        font-size: 9.5px !important;
+        font-size: 10px !important;
         font-weight: 700 !important;
         min-width: 18px;
         height: 18px !important;
@@ -223,18 +223,18 @@
             width: 24px !important;
             height: 24px !important;
             font-size: 11px !important;
-            border-radius: 7px !important;
+            border-radius: 8px !important;
         }
 
         /* Section heading (OVERVIEW / MANAGEMENT / ADMINISTRATION) */
         .app-sidebar .nav-section-label {
-            font-size: 9.5px !important;
+            font-size: 10px !important;
             letter-spacing: 0.12em !important;
         }
 
         /* Footer user info compact */
         .app-sidebar .sidebar-footer .profile-info .name { font-size: 12px !important; }
-        .app-sidebar .sidebar-footer .profile-info .role { font-size: 9.5px !important; }
+        .app-sidebar .sidebar-footer .profile-info .role { font-size: 10px !important; }
     }
 
     /* Show toggle button on mobile/tablet only */
@@ -447,7 +447,7 @@
 
     /* 2026 nav section labels with vibrant accents */
     .nav-section-label {
-        font-size: 9.5px !important;
+        font-size: 10px !important;
         letter-spacing: 0.16em !important;
         color: #85a0cc !important;
         padding: 14px 12px 8px !important;
@@ -470,7 +470,7 @@
     .nav-list { gap: 3px !important; }
     .nav-link {
         padding: 10px 12px !important;
-        border-radius: 11px !important;
+        border-radius: 12px !important;
         font-size: 13px !important;
         position: relative;
         transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -550,7 +550,7 @@
     }
 
     .profile-full {
-        border-radius: 11px !important;
+        border-radius: 12px !important;
         padding: 8px 10px !important;
         transition: all 0.22s ease !important;
     }
@@ -625,7 +625,7 @@
         .label-tag,
         .ac-mini .lbl,
         .nlist-item .text-mono {
-            font-size: 9.75px !important;
+            font-size: 10px !important;
         }
     }
 </style>

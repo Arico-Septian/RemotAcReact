@@ -112,7 +112,7 @@
         }
 
         .user-name {
-            font-size: 14.5px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--ink-0);
             margin: 0;
@@ -120,7 +120,7 @@
         }
 
         .user-handle {
-            font-size: 11.5px;
+            font-size: 12px;
             color: var(--ink-3);
             margin: 2px 0 0;
             line-height: 1.2;
@@ -145,7 +145,7 @@
             align-items: center;
             justify-content: center;
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
@@ -177,7 +177,7 @@
         .user-avatar-sm {
             width: 34px;
             height: 34px;
-            border-radius: 9px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -248,7 +248,7 @@
 
         .user-table th {
             padding: 14px 18px;
-            font-size: 11.5px;
+            font-size: 12px;
             letter-spacing: 0.1em;
             color: var(--ink-0);
         }
@@ -296,13 +296,13 @@
             }
 
             .segmented .seg {
-                font-size: 10.5px;
+                font-size: 11px;
                 padding: 5px 8px;
             }
 
             .tbl-toolbar .btn {
                 padding: 5px 8px;
-                font-size: 10.5px;
+                font-size: 11px;
                 white-space: nowrap;
             }
 
@@ -454,7 +454,7 @@
             min-width: 32px;
             height: 32px;
             padding: 0 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 12px;
             font-weight: 500;
             color: var(--ink-2);
@@ -572,7 +572,7 @@
             .user-card .user-avatar-sm {
                 width: 34px !important;
                 height: 34px !important;
-                border-radius: 9px !important;
+                border-radius: 10px !important;
                 font-size: 13px !important;
                 font-weight: 600 !important;
                 flex-shrink: 0;
@@ -597,7 +597,7 @@
             }
 
             .user-card-handle {
-                font-size: 10.5px;
+                font-size: 11px;
                 color: var(--ink-3);
                 line-height: 1.2;
                 white-space: nowrap;
@@ -611,11 +611,11 @@
             }
 
             .user-card .badge-role {
-                font-size: 9px !important;
+                font-size: 10px !important;
                 padding: 3px 6px !important;
                 height: auto !important;
                 min-width: 0 !important;
-                border-radius: 5px !important;
+                border-radius: 4px !important;
                 letter-spacing: 0.04em !important;
                 white-space: nowrap;
                 flex-shrink: 0;
@@ -653,7 +653,7 @@
             .user-card-actions .btn-icon {
                 width: 30px;
                 height: 30px;
-                font-size: 10.5px;
+                font-size: 11px;
                 border-radius: 8px;
             }
 
@@ -701,7 +701,7 @@
         @media (max-width: 768px) {
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 12px; }
             .stat-card { padding: 14px 16px; }
-            .stat-card .stat-label-sm { font-size: 9.5px; letter-spacing: 0.08em; }
+            .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
             .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
             .stat-card .stat-sub { font-size: 10px; line-height: 1.35; }
             .stat-card .stat-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
@@ -711,10 +711,10 @@
         @media (max-width: 480px) {
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 10px; }
             .stat-card { padding: 12px 14px; }
-            .stat-card .stat-label-sm { font-size: 8.5px; letter-spacing: 0.06em; }
+            .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.06em; }
             .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
-            .stat-card .stat-sub { font-size: 9.5px; line-height: 1.3; }
-            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 9px; font-size: 12px; }
+            .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
+            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: 10px; font-size: 12px; }
             .stat-card .accent-bar { top: 12px; bottom: 12px; }
         }
 
@@ -724,7 +724,7 @@
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
+            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
             .main-header #systemStatus span:not(.dot) { display: none; }
             .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }
@@ -736,19 +736,19 @@
                 width: 36px !important;
                 height: 36px !important;
                 font-size: 13px !important;
-                border-radius: 9px !important;
+                border-radius: 10px !important;
             }
             .user-card-name-text { font-size: 13px; }
-            .user-card-handle { font-size: 10.5px; }
-            .user-card .badge-role { font-size: 9px !important; padding: 3px 6px !important; }
+            .user-card-handle { font-size: 11px; }
+            .user-card .badge-role { font-size: 10px !important; padding: 3px 6px !important; }
             .user-card-actions .btn-icon { width: 32px; height: 32px; font-size: 11px; }
 
             /* Stats grid: keep 2-col but compact each card so text doesn't wrap */
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
             .stat-card { padding: 10px 12px !important; }
-            .stat-card .stat-label-sm { font-size: 9px !important; letter-spacing: 0.05em !important; }
-            .stat-card .stat-num-lg { font-size: 21px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
-            .stat-card .stat-sub { font-size: 9px !important; line-height: 1.3 !important; }
+            .stat-card .stat-label-sm { font-size: 10px !important; letter-spacing: 0.05em !important; }
+            .stat-card .stat-num-lg { font-size: 20px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
+            .stat-card .stat-sub { font-size: 10px !important; line-height: 1.3 !important; }
             .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: 8px !important; font-size: 11px !important; }
             .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
 
@@ -792,7 +792,7 @@
             }
 
             #modal .modal-header .sub {
-                font-size: 10.5px;
+                font-size: 11px;
                 line-height: 1.3;
                 margin-top: 5px;
             }
@@ -818,7 +818,7 @@
                 min-height: 36px;
                 padding: 0 12px;
                 border-radius: 10px;
-                font-size: 11.5px;
+                font-size: 12px;
             }
 
             #modal .field-hint {
@@ -835,7 +835,7 @@
             #modal .modal-footer .btn {
                 min-height: 34px;
                 padding: 0 14px;
-                font-size: 11.5px;
+                font-size: 12px;
             }
         }
 
@@ -856,7 +856,7 @@
             }
 
             #modal .eyebrow {
-                font-size: 9px;
+                font-size: 10px;
                 margin-bottom: 3px;
             }
 
@@ -884,7 +884,7 @@
             }
 
             #modal .field-label {
-                font-size: 9px;
+                font-size: 10px;
                 letter-spacing: 0.04em;
             }
 
@@ -924,7 +924,7 @@
 
             #modal .modal {
                 max-width: min(286px, calc(100vw - 34px));
-                border-radius: 15px;
+                border-radius: 16px;
             }
 
             #modal .modal-header {
@@ -937,7 +937,7 @@
 
             #modal .input {
                 min-height: 32px;
-                font-size: 10.5px;
+                font-size: 11px;
             }
 
             #modal .modal-footer {
@@ -947,7 +947,7 @@
             #modal .modal-footer .btn {
                 min-height: 32px;
                 padding: 0 10px;
-                font-size: 10.5px;
+                font-size: 11px;
             }
         }
     </style>

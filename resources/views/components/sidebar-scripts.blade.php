@@ -1,13 +1,13 @@
 @auth
 {{-- ===== Idle auto-logout modal ===== --}}
 <div id="idleWarnModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(7,16,31,0.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
-    <div style="max-width:380px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
+    <div style="max-width:380px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius: 20px;padding:22px 22px 18px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
             <span style="width:36px;height:36px;border-radius:10px;background:rgba(251,191,36,0.14);border:1px solid rgba(251,191,36,0.34);display:inline-flex;align-items:center;justify-content:center;color:#fbbf24;">
                 <i class="fa-solid fa-clock"></i>
             </span>
             <div>
-                <h3 style="margin:0;font-size:15px;font-weight:700;color:var(--ink-0);">Session expiring</h3>
+                <h3 style="margin:0;font-size: 16px;font-weight:700;color:var(--ink-0);">Session expiring</h3>
             </div>
         </div>
         <p style="margin:0 0 14px;font-size:13px;line-height:1.5;color:var(--ink-2);">

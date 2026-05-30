@@ -16,7 +16,7 @@
             display: flex !important;
             border-radius: var(--r-md) !important;
             padding: 7px 12px !important;
-            font-size: 10.5px !important;
+            font-size: 11px !important;
         }
         .room-card .temp-chip.cool {
             background: rgba(94, 208, 255, 0.15) !important;
@@ -142,7 +142,7 @@
             }
 
             .segmented .seg {
-                font-size: 10.5px;
+                font-size: 11px;
                 padding: 5px 8px;
             }
 
@@ -360,7 +360,7 @@
         @media (max-width: 480px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.15; }
-            .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
+            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
             .main-header > .flex.items-center.gap-3 { gap: 6px; min-width: 0; flex: 1; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; flex-shrink: 0; }
             /* Shrink the Online pill to just the dot on tiny screens */
@@ -377,9 +377,9 @@
 
             .room-card { padding: 11px; gap: 8px; }
             .room-card h2 { font-size: 13px; }
-            .room-card .room-status-pill { padding: 2px 7px !important; font-size: 9px !important; }
+            .room-card .room-status-pill { padding: 2px 7px !important; font-size: 10px !important; }
             .room-card .temp-chip { padding: 6px 10px !important; font-size: 10px !important; }
-            .room-card .label-tag { font-size: 8.5px !important; margin-top: 2px !important; }
+            .room-card .label-tag { font-size: 8px !important; margin-top: 2px !important; }
         }
 
         /* Tiny phones (≤ 480px): grid tetap 2 kolom, lebih rapat */
@@ -417,7 +417,7 @@
             }
 
             #modal .modal-header .sub {
-                font-size: 10.5px;
+                font-size: 11px;
                 line-height: 1.3;
                 margin-top: 5px;
             }
@@ -449,7 +449,7 @@
                 min-height: 36px;
                 padding: 0 12px;
                 border-radius: 10px;
-                font-size: 11.5px;
+                font-size: 12px;
             }
 
             #modal .field-help {
@@ -465,7 +465,7 @@
             #modal .modal-footer .btn {
                 min-height: 34px;
                 padding: 0 14px;
-                font-size: 11.5px;
+                font-size: 12px;
             }
         }
 
@@ -486,7 +486,7 @@
             }
 
             #modal .eyebrow {
-                font-size: 9px;
+                font-size: 10px;
                 margin-bottom: 3px;
             }
 
@@ -520,7 +520,7 @@
             }
 
             #modal .field-label {
-                font-size: 9px;
+                font-size: 10px;
                 letter-spacing: 0.04em;
             }
 
@@ -560,7 +560,7 @@
 
             #modal .modal {
                 max-width: min(286px, calc(100vw - 34px));
-                border-radius: 15px;
+                border-radius: 16px;
             }
 
             #modal .modal-header {
@@ -573,7 +573,7 @@
 
             #modal .input {
                 min-height: 32px;
-                font-size: 10.5px;
+                font-size: 11px;
             }
 
             #modal .modal-footer {
@@ -583,7 +583,7 @@
             #modal .modal-footer .btn {
                 min-height: 32px;
                 padding: 0 10px;
-                font-size: 10.5px;
+                font-size: 11px;
             }
         }
     </style>
@@ -774,7 +774,7 @@
                                                                 style="color:var(--mint);line-height:1;"
                                                                 id="active-{{ $room->id }}">
                                                                 {{ $activeAcs }}</p>
-                                                            <p class="label-tag mt-1" style="font-size:9.5px;">Active
+                                                            <p class="label-tag mt-1" style="font-size: 10px;">Active
                                                             </p>
                                                         </div>
                                                         <div
@@ -783,7 +783,7 @@
                                                                 style="color:var(--ink-2);line-height:1;"
                                                                 id="idle-{{ $room->id }}">
                                                                 {{ $idleAcs }}</p>
-                                                            <p class="label-tag mt-1" style="font-size:9.5px;">Idle
+                                                            <p class="label-tag mt-1" style="font-size: 10px;">Idle
                                                             </p>
                                                         </div>
                                                     </div>

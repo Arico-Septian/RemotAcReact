@@ -42,7 +42,7 @@
             border-radius: var(--r-md);
             cursor: pointer;
             color: var(--ink-0);
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 600;
             transition: var(--t-base);
             user-select: none;
@@ -82,7 +82,7 @@
 
         #dropdownAC>div {
             padding: 10px 14px;
-            font-size: 12.5px;
+            font-size: 13px;
             color: var(--ink-1);
             cursor: pointer;
             transition: var(--t-fast);
@@ -111,7 +111,7 @@
         }
 
         .stat-mini .lbl {
-            font-size: 9.5px;
+            font-size: 10px;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--ink-3);
@@ -192,7 +192,7 @@
             }
 
             .ring-label {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .ring-summary {
@@ -243,7 +243,7 @@
         }
 
         .ring-summary {
-            font-size: 11.5px;
+            font-size: 12px;
             color: var(--ink-3);
             margin: 2px 0 0;
             letter-spacing: 0.02em;
@@ -319,7 +319,7 @@
         }
 
         .ring-chip {
-            font-size: 10.5px;
+            font-size: 11px;
             color: var(--ink-3);
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
@@ -437,7 +437,7 @@
             background: var(--panel-1);
             border: 1px solid var(--line);
             border-radius: var(--r-md);
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--ink-2);
             cursor: pointer;
@@ -448,7 +448,7 @@
         }
 
         .mode-btn-h i {
-            font-size: 11.5px;
+            font-size: 12px;
             color: var(--ink-3);
             transition: var(--t-base);
         }
@@ -496,7 +496,7 @@
         .timer-card .t-icon {
             width: 32px;
             height: 32px;
-            border-radius: 9px;
+            border-radius: 10px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -521,7 +521,7 @@
         }
 
         .timer-card .t-label {
-            font-size: 9.5px;
+            font-size: 10px;
             letter-spacing: 0.10em;
             text-transform: uppercase;
             color: var(--ink-3);
@@ -551,7 +551,7 @@
             border: 1px dashed var(--line);
             border-radius: var(--r-lg);
             color: var(--ink-3);
-            font-size: 12.5px;
+            font-size: 13px;
         }
 
         .timer-empty i {
@@ -628,7 +628,7 @@
             }
 
             .selector i {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .selector-bar>div:last-child {
@@ -687,7 +687,7 @@
 
             .selector-bar .btn.btn-sm {
                 padding: 9px 14px;
-                font-size: 12.5px;
+                font-size: 13px;
                 min-height: 42px;
             }
 
@@ -756,7 +756,7 @@
             .power-btn {
                 width: 60px;
                 height: 60px;
-                font-size: 22px;
+                font-size: 24px;
             }
 
             .mode-btn-h,
@@ -804,7 +804,7 @@
 
             .mode-btn-h {
                 padding: 10px 8px !important;
-                font-size: 11.5px !important;
+                font-size: 12px !important;
                 min-height: 40px !important;
                 gap: 5px;
             }
@@ -865,7 +865,7 @@
             }
 
             .main-header .app-header-title p {
-                font-size: 9.5px;
+                font-size: 10px;
                 line-height: 1.2;
             }
 
@@ -922,7 +922,7 @@
             }
 
             .ring-chip {
-                font-size: 9.5px;
+                font-size: 10px;
                 padding: 4px 10px;
             }
         }

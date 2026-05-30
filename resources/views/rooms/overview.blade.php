@@ -74,7 +74,7 @@
         }
 
         .room-card .ac-mini .lbl {
-            font-size: 9.5px;
+            font-size: 10px;
             color: var(--ink-3);
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -118,7 +118,7 @@
             display: flex !important;
             border-radius: var(--r-md) !important;
             padding: 7px 12px !important;
-            font-size: 10.5px !important;
+            font-size: 11px !important;
         }
         .room-card .temp-chip.cool {
             background: rgba(94, 208, 255, 0.15) !important;
@@ -160,7 +160,7 @@
             }
 
             .segmented .seg {
-                font-size: 10.5px;
+                font-size: 11px;
                 padding: 5px 8px;
             }
 
@@ -292,7 +292,7 @@
 
             .room-card .room-status-pill {
                 padding: 2px 7px !important;
-                font-size: 9px !important;
+                font-size: 10px !important;
             }
 
             .room-card .temp-chip {
@@ -303,7 +303,7 @@
             .ac-mini { gap: 5px; }
             .ac-mini > div { padding: 6px 5px; }
             .ac-mini .num { font-size: 14px; }
-            .ac-mini .lbl { font-size: 8.5px; margin-top: 2px; }
+            .ac-mini .lbl { font-size: 8px; margin-top: 2px; }
 
             .room-card .btn.btn-primary.btn-sm {
                 font-size: 11px;
@@ -344,7 +344,7 @@
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 9.5px; }
+            .main-header .app-header-title p { font-size: 10px; }
             .main-header #systemStatus span:not(.dot) { display: none; }
             .main-header #systemStatus {
                 width: 28px;
@@ -532,7 +532,7 @@
             }
 
             #historyModal .modal-header h2 {
-                font-size: 15px;
+                font-size: 16px;
             }
 
         #historyModal .modal-header .sub {
@@ -561,7 +561,7 @@
 
             #historyModal .modal {
                 max-height: calc(100dvh - 20px);
-                border-radius: 18px;
+                border-radius: 20px;
             }
 
             #historyModal .modal-header {
@@ -579,7 +579,7 @@
             }
 
             #historyModal .modal-header .sub {
-                font-size: 10.5px;
+                font-size: 11px;
                 line-height: 1.35;
             }
 
@@ -601,7 +601,7 @@
                 min-height: 36px;
                 padding-left: 9px;
                 padding-right: 24px;
-                font-size: 10.5px;
+                font-size: 11px;
                 background-position:
                     calc(100% - 13px) 15px,
                     calc(100% - 8px) 15px;
