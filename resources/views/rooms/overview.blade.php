@@ -345,47 +345,7 @@
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
             .main-header .app-header-title p { font-size: 10px; }
-            .main-header #systemStatus span:not(.dot) { display: none; }
-            .main-header #systemStatus {
-                width: 28px;
-                height: 28px;
-                padding: 0 !important;
-                gap: 0 !important;
-                border-radius: 50%;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                flex-shrink: 0;
-                line-height: 0;
-                box-sizing: border-box;
-            }
-            .main-header #systemStatus .dot {
-                width: 8px !important;
-                height: 8px !important;
-                min-width: 8px;
-                min-height: 8px;
-                flex-shrink: 0;
-                border-radius: 50%;
-                aspect-ratio: 1 / 1;
-                margin: 0 !important;
-                position: relative;
-            }
             /* Pulse halo: keep dead-center using transform instead of inset */
-            .main-header #systemStatus .dot::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 100%;
-                height: 100%;
-                transform: translate(-50%, -50%);
-                transform-origin: center center;
-                border-radius: 50%;
-                background: var(--mint);
-                opacity: 0.4;
-                animation: pulse-dot 1.6s ease-out infinite;
-                inset: auto;
-            }
             .main-header .btn-icon { width: 32px; height: 32px; }
         }
 
@@ -635,10 +595,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-                    <span id="systemStatus" class="pill pill-online">
-                        <span class="dot"></span>
-                        <span>Online</span>
-                    </span>
+
                 </div>
             </header>
 
@@ -1355,18 +1312,8 @@
         setInterval(refreshTemps, 5000);
         document.addEventListener('DOMContentLoaded', refreshTemps);
 
-        function setSystemStatus(online) {
-            const el = document.getElementById('systemStatus');
-            if (!el) return;
-            el.className = 'pill ' + (online ? 'pill-online' : 'pill-offline');
-            el.innerHTML = `<span class="dot"></span><span>${online ? 'Online' : 'Offline'}</span>`;
-        }
-        window.addEventListener('online', () => setSystemStatus(true));
-        window.addEventListener('offline', () => setSystemStatus(false));
         document.addEventListener('DOMContentLoaded', () => {
-            setSystemStatus(navigator.onLine);
-
-            // Real-time: counter Active/Idle per kartu tanpa reload
+// Real-time: counter Active/Idle per kartu tanpa reload
             function refreshAcCountersOverview() {
                 fetch('/api/ac-status', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
                     .then(r => r.ok ? r.json() : null)

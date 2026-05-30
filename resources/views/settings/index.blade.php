@@ -109,10 +109,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-                    <span id="systemStatus" class="pill pill-online">
-                        <span class="dot"></span>
-                        <span>Online</span>
-                    </span>
+
                 </div>
             </header>
 

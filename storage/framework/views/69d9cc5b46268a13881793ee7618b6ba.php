@@ -1557,8 +1557,6 @@
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
             .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
-            .main-header #systemStatus span:not(.dot) { display: none; }
-            .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }
         }
 
@@ -1601,9 +1599,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <?php echo $__env->make('components.notification-bell', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-                    <span id="systemStatus" class="pill pill-offline">
-                        <span class="dot"></span><span>Offline</span>
-                    </span>
+
                 </div>
             </header>
 
@@ -2377,15 +2373,6 @@
                 });
         }
 
-        function setSystemStatus(online) {
-            const el = document.getElementById('systemStatus');
-            if (!el) return;
-            el.className = 'pill ' + (online ? 'pill-online' : 'pill-offline');
-            el.innerHTML = `<span class="dot"></span><span>${online ? 'Online' : 'Offline'}</span>`;
-        }
-        window.addEventListener('online', () => setSystemStatus(true));
-        window.addEventListener('offline', () =>
-            setSystemStatus(false));
 
         document.addEventListener('DOMContentLoaded', () => {
             initChart();
@@ -2397,8 +2384,7 @@
                 resizeTimer = setTimeout(applyChartSizing, 150);
             });
 
-            setSystemStatus(navigator.onLine);
-            updateNotifButton();
+updateNotifButton();
 
             // Real-time via Reverb: trigger refresh segera saat event masuk
             if (window.Echo) {

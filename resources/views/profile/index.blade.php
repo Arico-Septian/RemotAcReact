@@ -84,10 +84,6 @@
             </div>
             <div class="flex items-center gap-2">
                 @include('components.notification-bell')
-                <span class="pill {{ $user->isOnline ? 'pill-online' : 'pill-offline' }}">
-                    <span class="dot"></span>
-                    <span>{{ $user->isOnline ? 'Online' : 'Offline' }}</span>
-                </span>
             </div>
         </header>
 

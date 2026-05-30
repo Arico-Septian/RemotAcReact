@@ -364,8 +364,6 @@
             .main-header > .flex.items-center.gap-3 { gap: 6px; min-width: 0; flex: 1; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; flex-shrink: 0; }
             /* Shrink the Online pill to just the dot on tiny screens */
-            .main-header > .flex.items-center.gap-2 #systemStatus span:not(.dot) { display: none; }
-            .main-header > .flex.items-center.gap-2 #systemStatus { padding: 4px 6px; }
             .main-header > .flex.items-center.gap-2 .btn-icon { width: 28px; height: 28px; }
         }
 
@@ -609,10 +607,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-                    <span id="systemStatus" class="pill pill-online">
-                        <span class="dot"></span>
-                        <span>Online</span>
-                    </span>
+
                 </div>
             </header>
 
@@ -1195,17 +1190,8 @@
             @endif
         });
 
-        function setSystemStatus(online) {
-            const el = document.getElementById('systemStatus');
-            if (!el) return;
-            el.className = 'pill ' + (online ? 'pill-online' : 'pill-offline');
-            el.innerHTML = `<span class="dot"></span><span>${online ? 'Online' : 'Offline'}</span>`;
-        }
-        window.addEventListener('online', () => setSystemStatus(true));
-        window.addEventListener('offline', () => setSystemStatus(false));
         document.addEventListener('DOMContentLoaded', () => {
-            setSystemStatus(navigator.onLine);
-        });
+});
     </script>
     @include('components.sidebar-scripts')
 </body>

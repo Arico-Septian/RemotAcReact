@@ -725,8 +725,6 @@
             .main-header > .flex.items-center.gap-2 { gap: 4px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
             .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
-            .main-header #systemStatus span:not(.dot) { display: none; }
-            .main-header #systemStatus { padding: 4px 6px; }
             .main-header .btn-icon { width: 32px; height: 32px; }
 
             /* User card — tighter at 320 */
@@ -973,10 +971,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-                    <span id="systemStatus" class="pill pill-online">
-                        <span class="dot"></span>
-                        <span>Online</span>
-                    </span>
+
                 </div>
             </header>
 
@@ -1576,9 +1571,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             startActivityPing();
-            setSystemStatus(navigator.onLine);
-
-            // Real-time: update counter online users tanpa reload halaman
+// Real-time: update counter online users tanpa reload halaman
             function refreshUsersOnline() {
                 fetch('/users-online', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
                     .then(r => r.ok ? r.json() : null)
@@ -1633,14 +1626,6 @@
             if (pingInterval) clearInterval(pingInterval);
         });
 
-        function setSystemStatus(online) {
-            const el = document.getElementById('systemStatus');
-            if (!el) return;
-            el.className = 'pill ' + (online ? 'pill-online' : 'pill-offline');
-            el.innerHTML = `<span class="dot"></span><span>${online ? 'Online' : 'Offline'}</span>`;
-        }
-        window.addEventListener('online', () => setSystemStatus(true));
-        window.addEventListener('offline', () => setSystemStatus(false));
 
         // Column sorting
         function handleSort(column) {

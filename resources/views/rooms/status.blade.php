@@ -179,8 +179,6 @@
             }
 
             /* Shrink Online pill to dot-only — saves ~50px */
-            .main-header #systemStatus span:not(.dot) { display: none; }
-            .main-header #systemStatus { padding: 4px 6px; }
 
             .main-header .btn-icon { width: 32px; height: 32px; }
         }
@@ -221,9 +219,7 @@
             </div>
             <div class="flex items-center gap-2">
                 @include('components.notification-bell')
-                <span id="systemStatus" class="pill pill-offline">
-                    <span class="dot"></span><span>Offline</span>
-                </span>
+
             </div>
         </header>
 
@@ -366,20 +362,10 @@ function loadStatus() {
 }
 setInterval(loadStatus, 5000);
 
-function setSystemStatus(online) {
-    const el = document.getElementById('systemStatus');
-    if (!el) return;
-    el.className = 'pill ' + (online ? 'pill-online' : 'pill-offline');
-    el.innerHTML = `<span class="dot"></span><span>${online ? 'Online' : 'Offline'}</span>`;
-}
-window.addEventListener('online',  () => setSystemStatus(true));
-window.addEventListener('offline', () => setSystemStatus(false));
 
 document.addEventListener('DOMContentLoaded', () => {
     loadStatus();
-    setSystemStatus(navigator.onLine);
-
-    // Real-time via Reverb: refresh segera saat AC/device berubah dari user/tab lain
+// Real-time via Reverb: refresh segera saat AC/device berubah dari user/tab lain
     if (window.Echo) {
         window.Echo.channel('device-status')
             .listen('.AcStatusUpdated', () => loadStatus())

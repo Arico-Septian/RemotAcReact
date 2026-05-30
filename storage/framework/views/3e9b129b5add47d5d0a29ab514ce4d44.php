@@ -42,7 +42,7 @@
             border-radius: var(--r-md);
             cursor: pointer;
             color: var(--ink-0);
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 600;
             transition: var(--t-base);
             user-select: none;
@@ -82,7 +82,7 @@
 
         #dropdownAC>div {
             padding: 10px 14px;
-            font-size: 12.5px;
+            font-size: 13px;
             color: var(--ink-1);
             cursor: pointer;
             transition: var(--t-fast);
@@ -98,7 +98,7 @@
 
         #dropdownAC>div .num {
             color: var(--ink-3);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 11px;
         }
 
@@ -111,7 +111,7 @@
         }
 
         .stat-mini .lbl {
-            font-size: 9.5px;
+            font-size: 10px;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--ink-3);
@@ -122,7 +122,7 @@
             font-size: 13px;
             font-weight: 700;
             margin-top: 4px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             color: var(--ink-0);
         }
 
@@ -134,24 +134,24 @@
             padding: 3px;
             background: conic-gradient(from 215deg,
                     transparent 0deg,
-                    rgba(77, 212, 255, 0.85) 60deg,
-                    rgba(180, 163, 255, 0.85) 130deg,
-                    rgba(180, 163, 255, 0.25) 175deg,
+                    rgb(var(--cyan-rgb) / 0.85) 60deg,
+                    rgb(var(--lavender-rgb) / 0.85) 130deg,
+                    rgb(var(--lavender-rgb) / 0.25) 175deg,
                     transparent 200deg);
             position: relative;
-            box-shadow: 0 20px 60px rgba(77, 212, 255, 0.10);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
+            transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
         }
 
         /* #10 Temperature color indicator */
         .temp-ring.temp-cool {
             background: conic-gradient(from 215deg,
                     transparent 0deg,
-                    rgba(77, 212, 255, 0.85) 60deg,
-                    rgba(180, 163, 255, 0.85) 130deg,
-                    rgba(180, 163, 255, 0.25) 175deg,
+                    rgb(var(--cyan-rgb) / 0.85) 60deg,
+                    rgb(var(--lavender-rgb) / 0.85) 130deg,
+                    rgb(var(--lavender-rgb) / 0.25) 175deg,
                     transparent 200deg);
-            box-shadow: 0 20px 60px rgba(77, 212, 255, 0.10);
+            box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
         }
 
         .temp-ring.temp-warm {
@@ -168,18 +168,18 @@
             background: conic-gradient(from 215deg,
                     transparent 0deg,
                     rgba(248, 113, 113, 0.85) 60deg,
-                    rgba(244, 63, 94, 0.85) 130deg,
-                    rgba(244, 63, 94, 0.25) 175deg,
+                    rgb(var(--coral-d-rgb) / 0.85) 130deg,
+                    rgb(var(--coral-d-rgb) / 0.25) 175deg,
                     transparent 200deg);
             box-shadow: 0 20px 60px rgba(248, 113, 113, 0.10);
         }
 
         /* #1 Responsive temperature ring */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .temp-ring {
                 width: 160px;
                 height: 160px;
-                box-shadow: 0 12px 40px rgba(77, 212, 255, 0.08);
+                box-shadow: 0 12px 40px rgb(var(--cyan-rgb) / 0.08);
             }
 
             .ring-temp {
@@ -192,7 +192,7 @@
             }
 
             .ring-label {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .ring-summary {
@@ -205,7 +205,7 @@
             height: 100%;
             border-radius: 50%;
             background:
-                radial-gradient(circle at 50% 45%, rgba(18, 32, 66, 0.95), rgba(7, 16, 31, 0.98) 70%);
+                radial-gradient(circle at 50% 45%, rgb(var(--bg-2-rgb) / 0.95), rgb(var(--bg-0-rgb) / 0.98) 70%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -216,7 +216,7 @@
 
         .ring-label {
             font-size: 10px;
-            letter-spacing: 0.20em;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             color: var(--ink-3);
             font-weight: 700;
@@ -224,7 +224,7 @@
         }
 
         .ring-temp {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-sans);
             font-size: 64px;
             font-weight: 700;
             color: var(--ink-0);
@@ -243,7 +243,7 @@
         }
 
         .ring-summary {
-            font-size: 11.5px;
+            font-size: 12px;
             color: var(--ink-3);
             margin: 2px 0 0;
             letter-spacing: 0.02em;
@@ -305,11 +305,11 @@
 
         .power-btn.on {
             background: radial-gradient(circle at center, var(--mint), var(--mint-d));
-            color: #07101f;
+            color: var(--bg-0);
             border-color: transparent;
             box-shadow:
-                0 0 0 4px rgba(110, 231, 183, 0.18),
-                0 0 30px rgba(110, 231, 183, 0.45);
+                0 0 0 4px rgb(var(--mint-rgb) / 0.18),
+                0 0 30px rgb(var(--mint-rgb) / 0.45);
         }
 
         /* === Min/Max chips === */
@@ -319,13 +319,13 @@
         }
 
         .ring-chip {
-            font-size: 10.5px;
+            font-size: 11px;
             color: var(--ink-3);
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
             padding: 5px 12px;
-            border-radius: 999px;
-            font-family: 'JetBrains Mono', monospace;
+            border-radius: var(--r-full);
+            font-family: var(--font-mono);
             letter-spacing: 0.02em;
         }
 
@@ -358,7 +358,7 @@
         .mode-btn-v .icon-wrap {
             width: 34px;
             height: 34px;
-            border-radius: 10px;
+            border-radius: var(--r-md);
             background: var(--panel-2);
             display: inline-flex;
             align-items: center;
@@ -380,14 +380,14 @@
         }
 
         .mode-btn-v.active {
-            background: linear-gradient(180deg, rgba(77, 212, 255, 0.14), rgba(77, 212, 255, 0.04));
+            background: linear-gradient(180deg, rgb(var(--cyan-rgb) / 0.14), rgb(var(--cyan-rgb) / 0.04));
             border-color: var(--cyan);
             color: var(--cyan);
-            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 8px 22px rgba(77, 212, 255, 0.14);
+            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 8px 22px rgb(var(--cyan-rgb) / 0.14);
         }
 
         .mode-btn-v.active .icon-wrap {
-            background: rgba(77, 212, 255, 0.16);
+            background: rgb(var(--cyan-rgb) / 0.16);
             color: var(--cyan);
         }
 
@@ -406,24 +406,24 @@
         .mode-btn-v[data-mode="dry"].active {
             color: var(--lavender);
             border-color: var(--lavender);
-            box-shadow: 0 0 0 1px rgba(180, 163, 255, 0.20) inset, 0 8px 22px rgba(180, 163, 255, 0.14);
-            background: linear-gradient(180deg, rgba(180, 163, 255, 0.14), rgba(180, 163, 255, 0.04));
+            box-shadow: 0 0 0 1px rgb(var(--lavender-rgb) / 0.20) inset, 0 8px 22px rgb(var(--lavender-rgb) / 0.14);
+            background: linear-gradient(180deg, rgb(var(--lavender-rgb) / 0.14), rgb(var(--lavender-rgb) / 0.04));
         }
 
         .mode-btn-v[data-mode="dry"].active .icon-wrap {
-            background: rgba(180, 163, 255, 0.18);
+            background: rgb(var(--lavender-rgb) / 0.18);
             color: var(--lavender);
         }
 
         .mode-btn-v[data-mode="fan"].active {
             color: var(--mint);
             border-color: var(--mint);
-            box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.20) inset, 0 8px 22px rgba(110, 231, 183, 0.14);
-            background: linear-gradient(180deg, rgba(110, 231, 183, 0.14), rgba(110, 231, 183, 0.04));
+            box-shadow: 0 0 0 1px rgb(var(--mint-rgb) / 0.20) inset, 0 8px 22px rgb(var(--mint-rgb) / 0.14);
+            background: linear-gradient(180deg, rgb(var(--mint-rgb) / 0.14), rgb(var(--mint-rgb) / 0.04));
         }
 
         .mode-btn-v[data-mode="fan"].active .icon-wrap {
-            background: rgba(110, 231, 183, 0.18);
+            background: rgb(var(--mint-rgb) / 0.18);
             color: var(--mint);
         }
 
@@ -437,7 +437,7 @@
             background: var(--panel-1);
             border: 1px solid var(--line);
             border-radius: var(--r-md);
-            font-size: 12.5px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--ink-2);
             cursor: pointer;
@@ -448,7 +448,7 @@
         }
 
         .mode-btn-h i {
-            font-size: 11.5px;
+            font-size: 12px;
             color: var(--ink-3);
             transition: var(--t-base);
         }
@@ -464,10 +464,10 @@
         }
 
         .mode-btn-h.active {
-            background: linear-gradient(180deg, rgba(77, 212, 255, 0.14), rgba(77, 212, 255, 0.04));
+            background: linear-gradient(180deg, rgb(var(--cyan-rgb) / 0.14), rgb(var(--cyan-rgb) / 0.04));
             border-color: var(--cyan);
             color: var(--cyan);
-            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 6px 18px rgba(77, 212, 255, 0.14);
+            box-shadow: 0 0 0 1px var(--cyan-soft) inset, 0 6px 18px rgb(var(--cyan-rgb) / 0.14);
         }
 
         .mode-btn-h.active i {
@@ -496,7 +496,7 @@
         .timer-card .t-icon {
             width: 32px;
             height: 32px;
-            border-radius: 9px;
+            border-radius: var(--r-md);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -507,7 +507,7 @@
         }
 
         .timer-card.is-on .t-icon {
-            background: rgba(110, 231, 183, 0.16);
+            background: rgb(var(--mint-rgb) / 0.16);
             color: var(--mint);
         }
 
@@ -521,8 +521,8 @@
         }
 
         .timer-card .t-label {
-            font-size: 9.5px;
-            letter-spacing: 0.10em;
+            font-size: 10px;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--ink-3);
             font-weight: 700;
@@ -530,12 +530,12 @@
         }
 
         .timer-card .t-value {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 16px;
             font-weight: 700;
             color: var(--ink-0);
             margin: 2px 0 0;
-            letter-spacing: -0.01em;
+            letter-spacing: 0em;
         }
 
         .timer-card .t-value.empty {
@@ -551,7 +551,7 @@
             border: 1px dashed var(--line);
             border-radius: var(--r-lg);
             color: var(--ink-3);
-            font-size: 12.5px;
+            font-size: 13px;
         }
 
         .timer-empty i {
@@ -628,7 +628,7 @@
             }
 
             .selector i {
-                font-size: 9px;
+                font-size: 10px;
             }
 
             .selector-bar>div:last-child {
@@ -687,7 +687,7 @@
 
             .selector-bar .btn.btn-sm {
                 padding: 9px 14px;
-                font-size: 12.5px;
+                font-size: 13px;
                 min-height: 42px;
             }
 
@@ -735,7 +735,7 @@
         }
 
         /* #3 Mobile layout optimization */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .grid[class*="md:grid-cols"] {
                 grid-template-columns: 1fr !important;
             }
@@ -746,7 +746,7 @@
         }
 
         /* #4 Touch targets minimum 44x44px */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .ctrl-btn {
                 width: 48px;
                 height: 48px;
@@ -756,7 +756,7 @@
             .power-btn {
                 width: 60px;
                 height: 60px;
-                font-size: 22px;
+                font-size: 24px;
             }
 
             .mode-btn-h,
@@ -804,7 +804,7 @@
 
             .mode-btn-h {
                 padding: 10px 8px !important;
-                font-size: 11.5px !important;
+                font-size: 12px !important;
                 min-height: 40px !important;
                 gap: 5px;
             }
@@ -814,8 +814,8 @@
             }
         }
 
-        /* Mobile S (≤ 360 px): tighter selector bar + header */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px): tighter selector bar + header */
+        @media (max-width: 480px) {
             .selector-bar {
                 padding: 6px !important;
                 gap: 6px !important;
@@ -865,7 +865,7 @@
             }
 
             .main-header .app-header-title p {
-                font-size: 9.5px;
+                font-size: 10px;
                 line-height: 1.2;
             }
 
@@ -922,7 +922,7 @@
             }
 
             .ring-chip {
-                font-size: 9.5px;
+                font-size: 10px;
                 padding: 4px 10px;
             }
         }
@@ -990,7 +990,7 @@
                                                 <span style="text-transform:capitalize;"><?php echo e($ac->name); ?>
 
                                                     <?php if($ac->brand): ?>
-                                                        <span style="opacity:.65;font-size:11px;">·
+                                                        <span style="opacity:0.7;font-size:11px;">·
                                                             <?php echo e($ac->brand); ?></span>
                                                     <?php endif; ?>
                                                 </span>

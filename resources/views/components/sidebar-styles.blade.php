@@ -37,6 +37,7 @@
         --panel-1: rgba(13, 21, 44, 0.93) !important;
         --panel-2: rgba(15, 25, 52, 0.95) !important;
         --bg-1:    #0d1530 !important;
+        --cyan-d-rgb: 34 184 230;
     }
 
     /* Main content area with much darker overlay */
@@ -119,24 +120,6 @@
     /* Right-cluster (notification bell + status pill) */
     .main-header > div:last-child {
         gap: 10px !important;
-    }
-
-    /* 2026 modern status pill with vibrant glassmorphism */
-    .main-header .pill {
-        padding: 6px 12px !important;
-        border-radius: var(--r-full) !important;
-        font-size: 12px !important;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        background: rgb(var(--cyan-d-rgb) / 0.12) !important;
-        border: 1px solid rgb(var(--cyan-d-rgb) / 0.24) !important;
-        -webkit-backdrop-filter: blur(14px);
-        backdrop-filter: blur(14px);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px -2px rgb(var(--cyan-d-rgb) / 0.15);
-    }
-    .main-header .pill .dot {
-        width: 6px; height: 6px;
-        margin-right: 2px;
     }
 
     /* 2026 modern notification bell with vibrant interactions */
@@ -292,62 +275,6 @@
     @media (min-width: 1025px) {
         .main-header .lg\:hidden,
         .main-header button[onclick*="toggleSidebar"] {
-            display: none !important;
-        }
-    }
-
-    /* ===== Mobile (≤ 480px): circular status pill (dot only), shared across all pages ===== */
-    @media (max-width: 480px) {
-        .main-header .pill span:not(.dot) { display: none !important; }
-        .main-header .pill {
-            width: 28px !important;
-            height: 28px !important;
-            padding: 0 !important;
-            gap: 0 !important;
-            border-radius: 50% !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            flex-shrink: 0 !important;
-            line-height: 0 !important;
-            box-sizing: border-box !important;
-        }
-        .main-header .pill .dot {
-            width: 8px !important;
-            height: 8px !important;
-            min-width: 8px !important;
-            min-height: 8px !important;
-            flex-shrink: 0 !important;
-            border-radius: 50% !important;
-            aspect-ratio: 1 / 1 !important;
-            margin: 0 !important;
-            position: relative !important;
-        }
-        /* Pulse halo: keep app.css's pulse-dot animation, just re-center inset */
-        .main-header .pill.pill-online .dot {
-            box-shadow:
-                0 0 0 4px rgb(var(--mint-rgb) / 0.35),
-                0 0 0 8px rgb(var(--mint-rgb) / 0.18);
-            animation: pulse-ring 1.6s ease-out infinite;
-        }
-    }
-
-    @keyframes pulse-ring {
-        0% {
-            box-shadow:
-                0 0 0 2px rgb(var(--mint-rgb) / 0.5),
-                0 0 0 4px rgb(var(--mint-rgb) / 0.3);
-        }
-        100% {
-            box-shadow:
-                0 0 0 8px rgb(var(--mint-rgb) / 0),
-                0 0 0 12px rgb(var(--mint-rgb) / 0);
-        }
-    }
-
-    @media (max-width: 480px) {
-        /* Hide the original ::after pulse (we replaced with box-shadow ring) */
-        .main-header .pill.pill-online .dot::after {
             display: none !important;
         }
     }
