@@ -86,7 +86,7 @@
             transform: translate(-50%, -50%);
             opacity: 0;
             mix-blend-mode: screen;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s var(--ease);
         }
         body:hover .spotlight { opacity: 1; }
 
@@ -108,7 +108,7 @@
             background: rgba(6, 9, 18, 0.55);
             backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid transparent;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            transition: background 0.3s var(--ease), border-color 0.3s var(--ease);
         }
         .nav.scrolled {
             background: rgba(6, 9, 18, 0.92);
@@ -145,7 +145,7 @@
             color: var(--ink-1); text-decoration: none;
             font-size: 13px; font-weight: 500;
             padding: 8px 14px; border-radius: 10px;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
         }
         .nav-links a:hover { color: var(--ink-0); background: rgba(255,255,255,0.04); }
 
@@ -165,7 +165,7 @@
             background: var(--ink-0); color: #0a0e1c;
             font-size: 13px; font-weight: 700;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
             box-shadow: 0 8px 24px -8px rgba(244, 246, 251, 0.25);
         }
         .btn-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(244,246,251,0.4); }
@@ -255,7 +255,7 @@
             background: var(--ink-0); color: #0a0e1c;
             font-size: 14px; font-weight: 700;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
             box-shadow: 0 10px 30px -10px rgba(244,246,251,0.30);
         }
         .btn-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -10px rgba(244,246,251,0.42); }
@@ -268,7 +268,7 @@
             color: var(--ink-1);
             font-size: 14px; font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
         }
         .btn-cta-ghost:hover { background: rgba(255,255,255,0.08); color: var(--ink-0); border-color: var(--line-3); }
         .play-icon {
@@ -359,7 +359,7 @@
             display: inline-flex; align-items: center; justify-content: center;
             font-size: 12px;
             flex-shrink: 0;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s var(--ease);
         }
         .spec-row:hover .spec-ic { transform: scale(1.08); }
         .spec-ic.cyan     { background: rgb(var(--cyan-rgb) / 0.14); border: 1px solid rgb(var(--cyan-rgb) / 0.32); color: var(--cyan); box-shadow: 0 0 16px -3px rgb(var(--cyan-rgb) / 0.28); }
@@ -381,7 +381,7 @@
             color: var(--ink-1);
             text-decoration: none;
             font-size: 14px; font-weight: 600;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
         }
         .status-cta:hover { background: rgba(255,255,255,0.08); color: var(--ink-0); border-color: var(--line-2); }
 
@@ -430,7 +430,7 @@
             color: var(--lavender);
             font-size: 13px; font-weight: 600;
             text-decoration: none;
-            transition: gap 0.2s ease;
+            transition: gap 0.2s var(--ease);
         }
         .anomaly-link:hover { gap: 12px; color: var(--pink); }
 
@@ -468,7 +468,7 @@
             border: 1px solid var(--line);
             box-shadow: var(--shadow-1);
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s var(--ease);
             min-height: 240px;
         }
         .bento-card:hover {
@@ -560,7 +560,7 @@
             border: 1px solid var(--line);
             box-shadow: var(--shadow-1);
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.3s var(--ease);
         }
         .step:hover {
             border-color: var(--line-2);
@@ -641,7 +641,7 @@
             gap: 24px; flex-wrap: wrap;
         }
         .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
-        .footer-links a { color: var(--ink-3); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s ease; }
+        .footer-links a { color: var(--ink-3); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s var(--ease); }
         .footer-links a:hover { color: var(--ink-1); }
         .footer-copy { font-size: 12px; color: var(--ink-4); }
 

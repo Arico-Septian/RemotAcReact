@@ -52,7 +52,7 @@
         height: 100vh;
         display: flex;
         flex-direction: column;
-        transition: margin-left .25s cubic-bezier(.4,0,.2,1), width .25s cubic-bezier(.4,0,.2,1);
+        transition: margin-left .25s var(--ease), width .25s var(--ease);
         overflow: hidden;
     }
     .sidebar.close ~ .main-content,
@@ -148,7 +148,7 @@
         background: rgba(14, 165, 233, 0.08) !important;
         border: 1px solid rgba(14, 165, 233, 0.16) !important;
         color: #7fa0c8 !important;
-        transition: all 0.2s ease !important;
+        transition: all 0.2s var(--ease) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -200,7 +200,7 @@
     /* Mobile sidebar */
     @media (max-width: 1024px) {
         .main-content   { margin-left: 0 !important; width: 100% !important; }
-        .app-sidebar    { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); width: 280px !important; z-index: 50; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .app-sidebar    { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); width: 280px !important; z-index: 50; transition: transform 0.25s var(--ease); }
         .app-sidebar.open { transform: translateX(0); box-shadow: 0 24px 48px rgba(0,0,0,.40); }
         .sidebar-toggle.desktop-only { display: none !important; }
     }
@@ -361,7 +361,7 @@
         -webkit-backdrop-filter: blur(6px);
         backdrop-filter: blur(6px);
         opacity: 0; pointer-events: none;
-        transition: opacity .25s cubic-bezier(.4,0,.2,1);
+        transition: opacity .25s var(--ease);
     }
     #overlay.active { opacity: 1; pointer-events: auto; }
 
@@ -473,7 +473,7 @@
         border-radius: 12px !important;
         font-size: 13px !important;
         position: relative;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.2s var(--ease) !important;
     }
     .nav-link i {
         width: 28px !important; height: 28px !important;
@@ -489,7 +489,7 @@
         padding: 0 !important;
         margin: 0 !important;
         color: #7fa0c8 !important;
-        transition: all 0.2s ease !important;
+        transition: all 0.2s var(--ease) !important;
         flex-shrink: 0;
         box-sizing: border-box !important;
     }
@@ -552,13 +552,13 @@
     .profile-full {
         border-radius: 12px !important;
         padding: 8px 10px !important;
-        transition: all 0.2s ease !important;
+        transition: all 0.2s var(--ease) !important;
     }
     .profile-full:hover {
         background: rgba(14, 165, 233, 0.10) !important;
     }
     .profile-full .avatar {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
     }
     .profile-full:hover .avatar {
         transform: scale(1.10);
@@ -577,7 +577,7 @@
         border: 1px solid rgba(255, 85, 119, 0.24) !important;
         color: #ff5577 !important;
         border-radius: 8px !important;
-        transition: all 0.2s ease;
+        transition: all 0.2s var(--ease);
     }
     .icon-btn.danger:hover {
         background: rgba(255, 85, 119, 0.18) !important;

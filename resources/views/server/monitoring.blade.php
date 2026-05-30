@@ -30,7 +30,7 @@
             font-weight: 700;
             font-family: 'JetBrains Mono', monospace;
             line-height: 1;
-            transition: color 0.4s ease;
+            transition: color 0.4s var(--ease);
             display: inline-flex;
             align-items: baseline;
             gap: 4px;

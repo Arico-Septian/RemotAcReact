@@ -140,7 +140,7 @@
                     transparent 200deg);
             position: relative;
             box-shadow: 0 20px 60px rgb(var(--cyan-rgb) / 0.10);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
         }
 
         /* #10 Temperature color indicator */

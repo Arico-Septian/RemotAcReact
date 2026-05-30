@@ -204,7 +204,7 @@
             font-size: 12px; color: var(--ink-3);
             text-decoration: none; font-weight: 500;
             margin-bottom: 32px;
-            transition: color 0.2s ease;
+            transition: color 0.2s var(--ease);
         }
         .back-link:hover { color: var(--ink-1); }
 
@@ -271,7 +271,7 @@
             background: rgba(255,255,255,0.025);
             border: 1px solid var(--line);
             border-radius: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
         }
         .input-wrap:focus-within {
             border-color: rgb(var(--cyan-rgb) / 0.45);
@@ -283,7 +283,7 @@
             color: var(--ink-3);
             font-size: 13px;
             display: inline-flex; align-items: center; justify-content: center;
-            transition: color 0.2s ease;
+            transition: color 0.2s var(--ease);
         }
         .input-wrap:focus-within .leading { color: var(--cyan); }
 
@@ -318,7 +318,7 @@
             margin-right: 10px;
             opacity: 0;
             transform: scale(0.7);
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
             pointer-events: none;
         }
         .input-wrap input:valid:not(:placeholder-shown) ~ .valid-check {
@@ -352,7 +352,7 @@
             cursor: pointer;
             display: inline-flex; align-items: center; justify-content: center;
             gap: 10px;
-            transition: all 0.2s ease;
+            transition: all 0.2s var(--ease);
             box-shadow: 0 10px 30px -10px rgba(244,246,251,0.30);
         }
         .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 36px -10px rgba(244,246,251,0.42); }

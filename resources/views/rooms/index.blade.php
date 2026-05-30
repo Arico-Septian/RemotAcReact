@@ -126,7 +126,7 @@
             .flex.items-center.gap-2 > form {
                 flex: 1;
                 min-width: 0;
-                transition: flex 0.2s ease;
+                transition: flex 0.2s var(--ease);
             }
 
             .flex.items-center.gap-2 > div {
@@ -197,7 +197,7 @@
 
             .search-input input::placeholder {
                 color: var(--ink-3);
-                transition: color 0.2s ease;
+                transition: color 0.2s var(--ease);
             }
 
             .search-input input:focus::placeholder {
@@ -206,7 +206,7 @@
 
             .search-input i {
                 font-size: 12px;
-                transition: opacity 0.2s ease;
+                transition: opacity 0.2s var(--ease);
             }
 
             .search-input:focus-within i {
