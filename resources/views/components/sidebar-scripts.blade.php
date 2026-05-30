@@ -3,7 +3,7 @@
 <div id="idleWarnModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(7,16,31,0.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
     <div style="max-width:380px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius: 20px;padding:22px 22px 18px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-            <span style="width:36px;height:36px;border-radius:10px;background:rgba(251,191,36,0.14);border:1px solid rgba(251,191,36,0.34);display:inline-flex;align-items:center;justify-content:center;color:#fbbf24;">
+            <span style="width:36px;height:36px;border-radius:10px;background:rgba(251,191,36,0.14);border:1px solid rgba(251,191,36,0.34);display:inline-flex;align-items:center;justify-content:center;color:var(--amber);">
                 <i class="fa-solid fa-clock"></i>
             </span>
             <div>

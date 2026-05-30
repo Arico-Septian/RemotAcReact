@@ -12,7 +12,10 @@
       "Bash(sort -t'.' -k1,1n -k2,2n)",
       "Bash(node fix-fontsizes.cjs)",
       "Bash(node verify-breakpoints.cjs)",
-      "Bash(grep -roh \"#[0-9a-fA-F]\\\\{3,8\\\\}\\\\b\" resources/views --include=\"*.blade.php\")"
+      "Bash(grep -roh \"#[0-9a-fA-F]\\\\{3,8\\\\}\\\\b\" resources/views --include=\"*.blade.php\")",
+      "Bash(node fix-colors.cjs)",
+      "Bash(powershell -Command ' *)",
+      "Bash(node -e ' *)"
     ],
     "additionalDirectories": [
       "c:\\laragon\\www\\tugasakhirremotac"

@@ -305,7 +305,7 @@
 
         .power-btn.on {
             background: radial-gradient(circle at center, var(--mint), var(--mint-d));
-            color: #07101f;
+            color: var(--bg-0);
             border-color: transparent;
             box-shadow:
                 0 0 0 4px rgba(110, 231, 183, 0.18),

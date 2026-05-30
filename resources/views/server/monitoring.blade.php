@@ -47,7 +47,7 @@
         }
 
         .temp-warm {
-            color: var(--amber, #f59e0b);
+            color: var(--amber, var(--amber-d));
         }
 
         .temp-hot {

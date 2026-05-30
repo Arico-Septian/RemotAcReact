@@ -123,7 +123,7 @@
         .brand-mark {
             width: 42px; height: 42px;
             border-radius: 12px;
-            background: conic-gradient(from 220deg, #5ed0ff, #b4a3ff, #fb7185, #fbbf24, #6ee7b7, #5ed0ff);
+            background: conic-gradient(from 220deg, #5ed0ff, var(--lavender), var(--coral), var(--amber), var(--mint), #5ed0ff);
             display: inline-flex; align-items: center; justify-content: center;
             position: relative;
             box-shadow: 0 8px 24px -8px rgba(94,208,255,0.4);
@@ -228,7 +228,7 @@
         }
         .hero-h1 .accent {
             display: inline-block;
-            background: linear-gradient(135deg, #5ed0ff 0%, #b4a3ff 50%, #f0abfc 100%);
+            background: linear-gradient(135deg, #5ed0ff 0%, var(--lavender) 50%, #f0abfc 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -446,7 +446,7 @@
             font-weight: 800;
         }
         .features-h2 .accent {
-            background: linear-gradient(135deg, #5ed0ff, #b4a3ff);
+            background: linear-gradient(135deg, #5ed0ff, var(--lavender));
             -webkit-background-clip: text; background-clip: text;
             color: transparent;
             font-family: 'Cormorant Garamond', serif;
@@ -616,7 +616,7 @@
             font-weight: 800;
         }
         .cta-h2 .accent {
-            background: linear-gradient(135deg, #5ed0ff, #b4a3ff);
+            background: linear-gradient(135deg, #5ed0ff, var(--lavender));
             -webkit-background-clip: text; background-clip: text;
             color: transparent;
             font-family: 'Cormorant Garamond', serif;

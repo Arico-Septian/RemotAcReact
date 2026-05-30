@@ -120,7 +120,7 @@
         .brand-mark {
             width: 44px; height: 44px;
             border-radius: 12px;
-            background: conic-gradient(from 220deg, #5ed0ff, #b4a3ff, #fb7185, #fbbf24, #6ee7b7, #5ed0ff);
+            background: conic-gradient(from 220deg, #5ed0ff, var(--lavender), var(--coral), var(--amber), var(--mint), #5ed0ff);
             display: inline-flex; align-items: center; justify-content: center;
             box-shadow: 0 8px 24px -8px rgba(94,208,255,0.4);
         }
@@ -144,7 +144,7 @@
             position: relative; z-index: 2;
         }
         .brand-hero .accent {
-            background: linear-gradient(135deg, #5ed0ff, #b4a3ff, #f0abfc);
+            background: linear-gradient(135deg, #5ed0ff, var(--lavender), #f0abfc);
             -webkit-background-clip: text; background-clip: text;
             color: transparent;
             font-family: 'Cormorant Garamond', Georgia, serif;
@@ -224,7 +224,7 @@
             line-height: 1.1;
         }
         .form-title .accent {
-            background: linear-gradient(135deg, #5ed0ff, #b4a3ff);
+            background: linear-gradient(135deg, #5ed0ff, var(--lavender));
             -webkit-background-clip: text; background-clip: text;
             color: transparent;
             font-family: 'Cormorant Garamond', serif;

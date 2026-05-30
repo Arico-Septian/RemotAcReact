@@ -272,7 +272,7 @@ body { min-height: 100vh; }
   border-radius: 12px;
   background: linear-gradient(135deg, var(--cyan), var(--lavender-d));
   display: inline-flex; align-items: center; justify-content: center;
-  color: #07101f; font-size: 14px;
+  color: var(--bg-0); font-size: 14px;
   box-shadow: 0 6px 18px rgba(77, 212, 255, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.30);
   flex-shrink: 0;
 }
@@ -357,7 +357,7 @@ body { min-height: 100vh; }
   width: 32px; height: 32px;
   border-radius: 10px;
   display: inline-flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 700; color: #07101f;
+  font-size: 12px; font-weight: 700; color: var(--bg-0);
   background: linear-gradient(135deg, var(--cyan), var(--lavender-d));
   flex-shrink: 0;
 }
@@ -552,14 +552,14 @@ body { min-height: 100vh; }
 
 .btn-primary {
   background: linear-gradient(180deg, var(--cyan), var(--cyan-d));
-  color: #07101f;
+  color: var(--bg-0);
   box-shadow: 0 1px 0 rgba(255,255,255,0.30) inset, 0 6px 16px rgba(77, 212, 255, 0.20);
 }
 .btn-primary:hover { filter: brightness(1.05); box-shadow: 0 1px 0 rgba(255,255,255,0.30) inset, 0 8px 22px rgba(77, 212, 255, 0.30); }
 
 .btn-mint {
   background: linear-gradient(180deg, var(--mint), var(--mint-d));
-  color: #07101f;
+  color: var(--bg-0);
   box-shadow: 0 1px 0 rgba(255,255,255,0.30) inset, 0 6px 16px rgba(110, 231, 183, 0.20);
 }
 .btn-mint:hover { filter: brightness(1.05); }
@@ -1058,7 +1058,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 .power-ring:hover { transform: scale(1.04); }
 .power-ring.on {
   background: linear-gradient(180deg, var(--mint), var(--mint-d));
-  color: #07101f;
+  color: var(--bg-0);
   box-shadow: 0 0 0 4px var(--mint-soft-2), 0 12px 28px rgba(110, 231, 183, 0.30);
 }
 
@@ -1087,7 +1087,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 .temp-stepper button:hover:not(:disabled) { background: var(--panel-3); border-color: var(--line-strong); }
 .temp-stepper button.plus {
   background: linear-gradient(180deg, var(--cyan), var(--cyan-d));
-  color: #07101f; border-color: transparent;
+  color: var(--bg-0); border-color: transparent;
 }
 .temp-stepper button:disabled { opacity: 0.5; cursor: not-allowed; }
 

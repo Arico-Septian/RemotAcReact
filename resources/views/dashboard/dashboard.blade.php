@@ -238,7 +238,7 @@
             bottom: 10px;
             width: 4px;
             border-radius: 999px;
-            background: var(--tone, #94a3b8);
+            background: var(--tone, var(--ink-2));
             opacity: 1;
             /* Efek menyala yang lebih nyata */
             box-shadow: 0 0 10px color-mix(in srgb, var(--tone) 40%, transparent);
@@ -251,9 +251,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: color-mix(in srgb, var(--tone, #94a3b8) 14%, transparent);
-            border: 1px solid color-mix(in srgb, var(--tone, #94a3b8) 30%, transparent);
-            color: var(--tone, #94a3b8);
+            background: color-mix(in srgb, var(--tone, var(--ink-2)) 14%, transparent);
+            border: 1px solid color-mix(in srgb, var(--tone, var(--ink-2)) 30%, transparent);
+            color: var(--tone, var(--ink-2));
             font-size: 12px;
             flex-shrink: 0;
         }
@@ -277,9 +277,9 @@
             font-size: 13px;
             font-weight: 700;
             object-fit: cover;
-            background: linear-gradient(135deg, color-mix(in srgb, var(--tone, #94a3b8) 35%, #1e293b), color-mix(in srgb, var(--tone, #94a3b8) 18%, #0f172a));
+            background: linear-gradient(135deg, color-mix(in srgb, var(--tone, var(--ink-2)) 35%, #1e293b), color-mix(in srgb, var(--tone, var(--ink-2)) 18%, #0f172a));
             color: #ffffff;
-            border: 1px solid color-mix(in srgb, var(--tone, #94a3b8) 40%, transparent);
+            border: 1px solid color-mix(in srgb, var(--tone, var(--ink-2)) 40%, transparent);
         }
 
         .activity-icon-badge {
@@ -292,7 +292,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: var(--tone, #94a3b8);
+            background: var(--tone, var(--ink-2));
             color: #0b1220;
             font-size: 8px;
             border: 2px solid var(--panel-1);
@@ -689,10 +689,10 @@
 
         /* Indikator status via warna garis kiri (tanpa glow, match activity rail) */
         .dashboard-room-row[data-status="online"]::before {
-            background: #34d399;
+            background: var(--mint-d);
         }
         .dashboard-room-row[data-status="offline"]::before {
-            background: #fb7185;
+            background: var(--coral);
         }
 
         /* Dashboard sections spacing */
