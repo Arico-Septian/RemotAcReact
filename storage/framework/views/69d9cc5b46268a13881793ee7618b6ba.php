@@ -155,7 +155,7 @@
             line-height: 1.2;
             color: var(--ink-0);
             margin: 0;
-            letter-spacing: -0.01em;
+            letter-spacing: 0em;
         }
 
         .activity-subtitle {
@@ -349,7 +349,7 @@
             font-size: 14px;
             font-weight: 700;
             color: var(--ink-0);
-            letter-spacing: -0.005em;
+            letter-spacing: 0em;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -618,7 +618,7 @@
             line-height: 1.2;
             color: var(--ink-0);
             margin: 0;
-            letter-spacing: -0.01em;
+            letter-spacing: 0em;
         }
 
         .dashboard-rooms-subtitle {
@@ -960,7 +960,7 @@
         .stat-card .stat-label-sm {
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--ink-3);
         }
@@ -1125,7 +1125,7 @@
             .stat-card .stat-label-sm,
             .stat-card .stat-label {
                 font-size: 8px;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.05em;
             }
 
             .stat-card .stat-num-lg {
@@ -1491,7 +1491,7 @@
             }
             .temp-chart-panel .eyebrow {
                 font-size: 8px !important;
-                letter-spacing: 0.06em !important;
+                letter-spacing: 0.05em !important;
             }
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;

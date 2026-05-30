@@ -461,7 +461,7 @@
             background: transparent;
             border: 1px solid transparent;
             text-decoration: none;
-            transition: all 0.12s ease;
+            transition: all 0.15s ease;
         }
 
         .pager a {
@@ -482,7 +482,7 @@
         }
 
         .pager .disabled {
-            opacity: 0.35;
+            opacity: 0.4;
             pointer-events: none;
             cursor: not-allowed;
         }
@@ -500,7 +500,7 @@
             cursor: pointer;
             user-select: none;
             position: relative;
-            transition: background 0.12s ease;
+            transition: background 0.15s ease;
         }
 
         .user-table th:hover {

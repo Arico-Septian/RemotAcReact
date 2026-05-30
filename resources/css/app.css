@@ -548,7 +548,7 @@ body { min-height: 100vh; }
   white-space: nowrap;
   line-height: 1;
 }
-.btn:disabled, .btn.disabled { opacity: 0.45; pointer-events: none; }
+.btn:disabled, .btn.disabled { opacity: 0.5; pointer-events: none; }
 
 .btn-primary {
   background: linear-gradient(180deg, var(--cyan), var(--cyan-d));
@@ -659,7 +659,7 @@ body { min-height: 100vh; }
 .pill-mute { background: var(--panel-2); color: var(--ink-2); border-color: var(--line); }
 
 @keyframes pulse-dot {
-  0%   { transform: scale(1);   opacity: 0.55; }
+  0%   { transform: scale(1);   opacity: 0.6; }
   100% { transform: scale(2.4); opacity: 0;   }
 }
 
@@ -911,7 +911,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 .pager .active, .pager [aria-current="page"] {
   background: var(--cyan-soft); color: var(--cyan); border-color: var(--cyan-soft-2);
 }
-.pager .disabled, .pager [aria-disabled="true"] { opacity: 0.35; pointer-events: none; }
+.pager .disabled, .pager [aria-disabled="true"] { opacity: 0.4; pointer-events: none; }
 
 /* =============================================================
    MODAL

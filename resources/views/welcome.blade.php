@@ -144,7 +144,7 @@
             color: var(--ink-1); text-decoration: none;
             font-size: 13px; font-weight: 500;
             padding: 8px 14px; border-radius: 10px;
-            transition: all 0.18s ease;
+            transition: all 0.2s ease;
         }
         .nav-links a:hover { color: var(--ink-0); background: rgba(255,255,255,0.04); }
 
@@ -164,7 +164,7 @@
             background: var(--ink-0); color: #0a0e1c;
             font-size: 13px; font-weight: 700;
             text-decoration: none;
-            transition: all 0.18s ease;
+            transition: all 0.2s ease;
             box-shadow: 0 8px 24px -8px rgba(244, 246, 251, 0.25);
         }
         .btn-pill:hover { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(244,246,251,0.4); }
@@ -640,7 +640,7 @@
             gap: 24px; flex-wrap: wrap;
         }
         .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
-        .footer-links a { color: var(--ink-3); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.18s ease; }
+        .footer-links a { color: var(--ink-3); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s ease; }
         .footer-links a:hover { color: var(--ink-1); }
         .footer-copy { font-size: 12px; color: var(--ink-4); }
 
@@ -885,7 +885,7 @@
             .hero-main { padding: 26px 28px 24px; min-height: 0; }
             .hero-h1 { font-size: 40px; }
             .hero-trust { padding-top: 22px; gap: 22px; }
-            .glow-top, .glow-right { opacity: 0.55; }
+            .glow-top, .glow-right { opacity: 0.6; }
             .features, .how, .cta-final { padding: 40px 0; }
         }
 

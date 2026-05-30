@@ -148,7 +148,7 @@
         background: rgba(14, 165, 233, 0.08) !important;
         border: 1px solid rgba(14, 165, 233, 0.16) !important;
         color: #7fa0c8 !important;
-        transition: all 0.22s ease !important;
+        transition: all 0.2s ease !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -473,7 +473,7 @@
         border-radius: 12px !important;
         font-size: 13px !important;
         position: relative;
-        transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     .nav-link i {
         width: 28px !important; height: 28px !important;
@@ -489,7 +489,7 @@
         padding: 0 !important;
         margin: 0 !important;
         color: #7fa0c8 !important;
-        transition: all 0.22s ease !important;
+        transition: all 0.2s ease !important;
         flex-shrink: 0;
         box-sizing: border-box !important;
     }
@@ -552,13 +552,13 @@
     .profile-full {
         border-radius: 12px !important;
         padding: 8px 10px !important;
-        transition: all 0.22s ease !important;
+        transition: all 0.2s ease !important;
     }
     .profile-full:hover {
         background: rgba(14, 165, 233, 0.10) !important;
     }
     .profile-full .avatar {
-        transition: transform 0.22s ease, box-shadow 0.22s ease;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .profile-full:hover .avatar {
         transform: scale(1.10);
@@ -577,7 +577,7 @@
         border: 1px solid rgba(255, 85, 119, 0.24) !important;
         color: #ff5577 !important;
         border-radius: 8px !important;
-        transition: all 0.22s ease;
+        transition: all 0.2s ease;
     }
     .icon-btn.danger:hover {
         background: rgba(255, 85, 119, 0.18) !important;

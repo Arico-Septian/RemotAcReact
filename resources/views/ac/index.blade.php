@@ -988,7 +988,7 @@
                                                 <span class="num">#{{ $ac->ac_number }}</span>
                                                 <span style="text-transform:capitalize;">{{ $ac->name }}
                                                     @if ($ac->brand)
-                                                        <span style="opacity:.65;font-size:11px;">·
+                                                        <span style="opacity:0.7;font-size:11px;">·
                                                             {{ $ac->brand }}</span>
                                                     @endif
                                                 </span>

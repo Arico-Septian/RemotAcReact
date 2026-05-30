@@ -230,7 +230,7 @@
             }
         }
 
-        .tbl tbody tr { transition: background 0.12s ease; }
+        .tbl tbody tr { transition: background 0.15s ease; }
         .tbl tbody tr:hover { background: var(--panel-2); }
 
         .tbl.tbl-log thead {
@@ -302,7 +302,7 @@
             cursor: pointer;
             user-select: none;
             position: relative;
-            transition: background 0.12s ease;
+            transition: background 0.15s ease;
         }
 
         .tbl-log th:hover {
@@ -352,7 +352,7 @@
             background: transparent;
             border: 1px solid transparent;
             text-decoration: none;
-            transition: all 0.12s ease;
+            transition: all 0.15s ease;
         }
 
         .pager a {
@@ -373,7 +373,7 @@
         }
 
         .pager .disabled {
-            opacity: 0.35;
+            opacity: 0.4;
             pointer-events: none;
             cursor: not-allowed;
         }
