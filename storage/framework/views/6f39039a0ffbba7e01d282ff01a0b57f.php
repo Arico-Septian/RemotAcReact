@@ -37,11 +37,26 @@
             opacity: 0.7;
         }
 
-        .room-card:hover {
-            background: var(--panel-2);
-            border-color: var(--line);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+        .room-card:hover {}
+
+        /* Tombol Detail & Grafik — soft cyan seperti Delete User */
+        .room-card .btn.btn-primary,
+        .room-card .room-card-chart-btn {
+            background: var(--cyan-soft);
+            border-color: var(--cyan-soft-2);
+            color: var(--cyan);
+            box-shadow: none;
+            transition: var(--t-base);
+            justify-content: center;
+        }
+
+        .room-card .btn.btn-primary:hover,
+        .room-card .room-card-chart-btn:hover {
+            background: var(--cyan-soft-2);
+            border-color: var(--cyan-soft-2);
+            color: var(--cyan);
+            box-shadow: none;
+            transform: none;
         }
 
         .room-card[data-status="online"] {
@@ -453,29 +468,31 @@
         }
 
         .history-range-select {
-            min-height: 34px;
-            padding: 0 30px 0 11px;
-            border-radius: var(--r-md);
-            border: 1px solid rgb(var(--ink-2-rgb) / 0.24);
-            background: rgba(15, 23, 42, 0.32);
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
             color: var(--ink-1);
+            border-radius: var(--r-md);
+            padding: 6px 10px;
             font-size: 11px;
-            font-weight: 700;
+            font-family: var(--font-sans);
+            cursor: pointer;
             outline: none;
-            appearance: none;
-            background-image:
-                linear-gradient(45deg, transparent 50%, var(--ink-3) 50%),
-                linear-gradient(135deg, var(--ink-3) 50%, transparent 50%);
-            background-position:
-                calc(100% - 15px) 14px,
-                calc(100% - 10px) 14px;
-            background-size: 5px 5px, 5px 5px;
-            background-repeat: no-repeat;
+            transition: var(--t-base);
+        }
+
+        .history-range-select:hover {
+            background: rgba(77, 212, 255, 0.10);
+            border-color: rgba(77, 212, 255, 0.50);
+            color: var(--cyan);
+            box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
         }
 
         .history-range-select:focus {
-            border-color: rgba(167, 139, 250, 0.55);
-            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+            background: rgba(77, 212, 255, 0.10);
+            border-color: rgba(77, 212, 255, 0.60);
+            color: var(--cyan);
+            box-shadow: 0 0 14px rgba(77, 212, 255, 0.20);
+            outline: none;
         }
 
         @media (max-width: 768px) {
@@ -627,15 +644,13 @@
                             <div id="allSections">
                                 <?php $__currentLoopData = $roomsByFloor; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $floorName => $floorRooms): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="floor-section" data-section-floor="<?php echo e($floorName); ?>">
-                                        <?php if($roomsByFloor->count() > 1): ?>
-                                            <div class="floor-section-header">
-                                                <i class="fa-solid fa-layer-group text-[10px]"
-                                                    style="color:var(--lavender);"></i>
-                                                <span class="floor-label"><?php echo e(ucfirst($floorName)); ?></span>
-                                                <div class="floor-divider"></div>
-                                                <span class="floor-count"><?php echo e($floorRooms->count()); ?> rooms</span>
-                                            </div>
-                                        <?php endif; ?>
+                                        <div class="floor-section-header">
+                                            <i class="fa-solid fa-layer-group text-[10px]"
+                                                style="color:var(--lavender);"></i>
+                                            <span class="floor-label"><?php echo e(ucfirst($floorName)); ?></span>
+                                            <div class="floor-divider"></div>
+                                            <span class="floor-count"><?php echo e($floorRooms->count()); ?> rooms</span>
+                                        </div>
                                         <div
                                             class="floor-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 mb-6">
                                             <?php $__currentLoopData = $floorRooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -704,15 +719,19 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="flex gap-1.5 mt-auto pt-1">
+                                                    <p class="text-xs text-center"
+                                                        style="color:var(--ink-4);margin-top:-2px;">
+                                                        <?php echo e($room->acUnits->count()); ?> unit total</p>
+
+                                                    <div class="grid grid-cols-2 gap-2 mt-auto">
                                                         <a href="/rooms/<?php echo e($room->id); ?>/status"
-                                                            class="btn btn-primary btn-sm flex-1">
+                                                            class="btn btn-primary btn-sm" style="justify-content:center;">
                                                             Detail
                                                         </a>
                                                         <button type="button"
                                                             onclick="openHistory(<?php echo e($room->id); ?>, <?php echo \Illuminate\Support\Js::from(ucfirst($room->name))->toHtml() ?>)"
-                                                            class="btn-icon lavender" title="24-hour temperature history">
-                                                            <i class="fa-solid fa-chart-line text-[10px]"></i>
+                                                            class="btn btn-sm room-card-chart-btn" title="24-hour temperature history">
+                                                            Grafik
                                                         </button>
                                                     </div>
                                                 </div>
@@ -746,7 +765,7 @@
         <div class="modal modal-lg">
             <div class="modal-header">
                 <div class="history-title-group">
-                    <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-chart-line"></i> Temperature
+                    <p class="eyebrow" style="color:var(--cyan);"><i class="fa-solid fa-chart-line"></i> Temperature
                         History</p>
                     <h2 id="historyTitle">Room</h2>
                     <p id="historyMeta" class="sub">Today · hourly average</p>

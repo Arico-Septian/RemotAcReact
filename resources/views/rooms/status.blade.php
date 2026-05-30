@@ -20,7 +20,7 @@
             display: flex; flex-direction: column; gap: 0;
             transition: var(--t-base);
         }
-        .ac-card:hover { background: var(--panel-2); border-color: var(--line); transform: translateY(-1px); box-shadow: var(--shadow); }
+        .ac-card:hover {}
         .ac-card > .ac-stat { padding: 9px 0; min-height: 32px; }
         .ac-card > .ac-stat + .ac-stat { border-top: 1px solid rgba(255, 255, 255, 0.22); }
         .ac-card > .ac-stat:last-child { padding-bottom: 2px; }

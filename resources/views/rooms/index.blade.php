@@ -79,11 +79,34 @@
             --card-accent: var(--coral);
         }
 
-        .room-card:hover {
-            background: var(--panel-2);
-            border-color: var(--line);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+        .room-card:hover {}
+
+        /* Tombol Control AC — soft cyan seperti Delete User */
+        .room-card .btn.btn-primary {
+            background: var(--cyan-soft);
+            border-color: var(--cyan-soft-2);
+            color: var(--cyan);
+            box-shadow: none;
+            transition: var(--t-base);
+        }
+        .room-card .btn.btn-primary:hover {
+            background: var(--cyan-soft-2);
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Tombol Delete Room — sama seperti Delete User */
+        .room-card .btn.btn-danger {
+            background: var(--coral-soft);
+            border-color: var(--coral-soft-2);
+            color: var(--coral);
+            box-shadow: none;
+            transition: var(--t-base);
+        }
+        .room-card .btn.btn-danger:hover {
+            background: var(--coral-soft-2);
+            box-shadow: none;
+            transform: none;
         }
 
         .floor-section {
@@ -762,7 +785,7 @@
                                                             @endif
                                                         </div>
                                                     @endif
-                                                    <div class="grid grid-cols-2 gap-1.5">
+                                                    <div class="grid grid-cols-2 gap-2">
                                                         <div
                                                             style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:6px 8px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
@@ -786,21 +809,22 @@
                                                         style="color:var(--ink-4);margin-top:-2px;">
                                                         {{ $room->acUnits->count() }} unit total</p>
 
-                                                    <div class="flex flex-col gap-1.5 mt-auto">
+                                                    <div class="grid grid-cols-2 gap-2 mt-auto">
                                                         <a href="/rooms/{{ $room->id }}/ac"
-                                                            class="btn btn-primary btn-sm">
-                                                            <i class="fa-solid fa-sliders text-[10px]" aria-hidden="true"></i>Control AC
+                                                            class="btn btn-primary btn-sm" style="justify-content:center;">
+                                                            Control AC
                                                         </a>
                                                         @auth
                                                             @if (in_array(Auth::user()->role, ['admin', 'operator']))
                                                                 <form action="/rooms/{{ $room->id }}" method="POST"
-                                                                    onsubmit="return confirmDelete(event)">
+                                                                    onsubmit="return confirmDelete(event)" style="display:contents;">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit"
-                                                                        class="btn btn-danger btn-sm btn-block"
+                                                                        class="btn btn-danger btn-sm"
+                                                                        style="justify-content:center;"
                                                                         aria-label="Delete room {{ $room->name }}">
-                                                                        <i class="fa-solid fa-trash text-[10px]"></i>Delete
+                                                                        Delete
                                                                     </button>
                                                                 </form>
                                                             @endif

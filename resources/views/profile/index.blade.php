@@ -66,6 +66,7 @@
     </style>
 </head>
 <body>
+<div class="custom-bg"></div>
 <div id="overlay"></div>
 
 <div class="layout">

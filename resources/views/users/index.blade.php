@@ -53,10 +53,10 @@
         .stat-card .stat-num-lg { color: var(--ink-0); }
 
         /* Label kecil di atas mengambil warna accent per kartu */
-        .stat-card.acc-cyan     .stat-label-sm { color: var(--cyan); }
-        .stat-card.acc-mint     .stat-label-sm { color: var(--mint); }
-        .stat-card.acc-lavender .stat-label-sm { color: var(--lavender); }
-        .stat-card.acc-coral    .stat-label-sm { color: var(--coral); }
+        .stat-card.acc-cyan     .stat-label-sm,
+        .stat-card.acc-mint     .stat-label-sm,
+        .stat-card.acc-lavender .stat-label-sm,
+        .stat-card.acc-coral    .stat-label-sm { color: var(--ink-0); }
 
         table {
             width: 100%;

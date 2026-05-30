@@ -26,12 +26,17 @@
         }
 
         .trend-filter-select:hover {
-            background: var(--panel-2);
-            border-color: var(--line);
+            background: rgba(77, 212, 255, 0.10);
+            border-color: rgba(77, 212, 255, 0.50);
+            color: var(--cyan);
+            box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
         }
 
         .trend-filter-select:focus {
-            border-color: var(--cyan);
+            background: rgba(77, 212, 255, 0.10);
+            border-color: rgba(77, 212, 255, 0.60);
+            color: var(--cyan);
+            box-shadow: 0 0 14px rgba(77, 212, 255, 0.20);
         }
 
         .dashboard-rooms-panel {
@@ -660,10 +665,10 @@
         }
 
         .dashboard-rooms-action:hover {
-            background: var(--panel-2);
-            border-color: var(--line);
-            color: var(--ink-0);
-            transform: translateY(-1px);
+            background: rgba(77, 212, 255, 0.10);
+            border-color: rgba(77, 212, 255, 0.50);
+            color: var(--cyan);
+            box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
         }
 
         .dashboard-room-list {
@@ -1000,23 +1005,14 @@
 
         /* Label kecil di atas mengambil warna accent per kartu */
         .stat-card.acc-cyan .stat-label-sm,
-        .stat-card.acc-cyan .stat-label {
-            color: var(--cyan);
-        }
-
+        .stat-card.acc-cyan .stat-label,
         .stat-card.acc-mint .stat-label-sm,
-        .stat-card.acc-mint .stat-label {
-            color: var(--mint);
-        }
-
+        .stat-card.acc-mint .stat-label,
         .stat-card.acc-lavender .stat-label-sm,
-        .stat-card.acc-lavender .stat-label {
-            color: var(--lavender);
-        }
-
+        .stat-card.acc-lavender .stat-label,
         .stat-card.acc-coral .stat-label-sm,
         .stat-card.acc-coral .stat-label {
-            color: var(--coral);
+            color: var(--ink-0);
         }
 
         /* Device compatibility - Tablet & Below (768px) */

@@ -18,6 +18,20 @@
             flex-wrap: wrap;
         }
 
+        /* Delete Activity — sama seperti Delete User */
+        .btn.btn-danger {
+            background: var(--coral-soft);
+            border-color: var(--coral-soft-2);
+            color: var(--coral);
+            box-shadow: none;
+            transition: var(--t-base);
+        }
+        .btn.btn-danger:hover {
+            background: var(--coral-soft-2);
+            box-shadow: none;
+            transform: none;
+        }
+
         .toolbar-row .search-input { flex: 1; min-width: 240px; }
 
 
@@ -65,10 +79,10 @@
         .stat-card .stat-num-lg { color: var(--ink-0); }
 
         /* Label kecil di atas mengambil warna accent per kartu */
-        .stat-card.acc-cyan     .stat-label-sm { color: var(--cyan); }
-        .stat-card.acc-mint     .stat-label-sm { color: var(--mint); }
-        .stat-card.acc-lavender .stat-label-sm { color: var(--lavender); }
-        .stat-card.acc-coral    .stat-label-sm { color: var(--coral); }
+        .stat-card.acc-cyan     .stat-label-sm,
+        .stat-card.acc-mint     .stat-label-sm,
+        .stat-card.acc-lavender .stat-label-sm,
+        .stat-card.acc-coral    .stat-label-sm { color: var(--ink-0); }
 
         .active-filters {
             display: flex;
@@ -249,7 +263,7 @@
             padding: 14px 18px;
             vertical-align: middle;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .tbl.tbl-log tbody tr:first-child td { border-top: none; }
@@ -259,14 +273,14 @@
         .log-user {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             min-width: 0;
         }
 
         .log-user .name {
             color: var(--ink-0);
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -274,12 +288,12 @@
 
         .log-room {
             color: var(--ink-1);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .log-detail {
             color: var(--ink-2);
-            font-size: 14px;
+            font-size: 13px;
             max-width: 260px;
             white-space: nowrap;
             overflow: hidden;
@@ -294,8 +308,8 @@
             white-space: nowrap;
         }
 
-        .log-time .t { color: var(--ink-1); font-size: 14px; font-weight: 600; }
-        .log-time .d { color: var(--ink-4); font-size: 12px; }
+        .log-time .t { color: var(--ink-1); font-size: 12px; font-weight: 600; }
+        .log-time .d { color: var(--ink-4); font-size: 11px; }
 
         /* Sortable table headers */
         .tbl-log th {

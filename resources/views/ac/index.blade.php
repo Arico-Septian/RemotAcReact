@@ -1021,7 +1021,7 @@
 
                             @auth
                                 @if (in_array(Auth::user()->role, ['admin', 'operator']))
-                                    <div class="flex items-center gap-1.5">
+                                    <div class="flex items-center gap-2">
                                         <button type="button" onclick="openEditModal()" class="btn-icon lavender"
                                             title="Edit Unit AC">
                                             <i class="fa-solid fa-pen text-[10px]"></i>

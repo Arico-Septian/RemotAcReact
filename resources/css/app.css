@@ -516,7 +516,6 @@ body { min-height: 100vh; }
   transition: var(--t-base);
   overflow: hidden;
 }
-.stat-card:hover {}
 .stat-card .accent-bar {
   position: absolute;
   left: 0; top: 16px; bottom: 16px;
@@ -578,9 +577,9 @@ body { min-height: 100vh; }
 .btn-primary {
   background: linear-gradient(180deg, var(--cyan), var(--cyan-d));
   color: var(--bg-0);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.30) inset, 0 6px 16px rgb(var(--cyan-rgb) / 0.20);
+  box-shadow: none;
 }
-.btn-primary:hover { filter: brightness(1.05); box-shadow: 0 1px 0 rgba(255,255,255,0.30) inset, 0 8px 22px rgb(var(--cyan-rgb) / 0.30); }
+.btn-primary:hover { filter: brightness(1.05); box-shadow: none; }
 
 .btn-mint {
   background: linear-gradient(180deg, var(--mint), var(--mint-d));
@@ -638,6 +637,7 @@ body { min-height: 100vh; }
 .btn-icon.danger:hover { background: var(--coral-soft-2); }
 .btn-icon.warning { color: var(--amber); border-color: var(--amber-soft-2); background: var(--amber-soft); }
 .btn-icon.lavender { color: var(--lavender); border-color: var(--lavender-soft-2); background: var(--lavender-soft); }
+.btn-icon.lavender:hover { background: var(--lavender-soft-2); color: var(--lavender); }
 
 /* Loading state */
 .is-loading { position: relative; pointer-events: none; color: transparent !important; }
