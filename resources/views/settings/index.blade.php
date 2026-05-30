@@ -38,7 +38,7 @@
             border-radius: var(--r-md);
             color: var(--ink-0);
             font-size: 13px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             padding: 5px 8px;
             text-align: right;
             outline: none;
@@ -73,7 +73,7 @@
             background: var(--panel-2);
             border-radius: var(--r-lg);
             font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             color: var(--ink-2);
         }
         .fz-badge {

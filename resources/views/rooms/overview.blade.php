@@ -67,7 +67,7 @@
         }
 
         .room-card .ac-mini .num {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 16px;
             font-weight: 700;
             line-height: 1;

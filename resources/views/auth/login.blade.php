@@ -32,7 +32,7 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html, body { height: 100%; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        html, body { height: 100%; font-family: var(--font-sans); }
         body {
             color: var(--ink-0);
             -webkit-font-smoothing: antialiased;

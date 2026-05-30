@@ -39,7 +39,7 @@
 
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-sans);
             color: var(--ink-0);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -572,7 +572,7 @@
             border: 1px solid rgb(var(--cyan-rgb) / 0.32);
             color: var(--cyan);
             display: inline-flex; align-items: center; justify-content: center;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 13px; font-weight: 600;
             margin-bottom: 20px;
         }

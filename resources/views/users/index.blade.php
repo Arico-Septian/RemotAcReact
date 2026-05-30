@@ -20,7 +20,7 @@
         }
 
         .stat-card .stat-num-lg {
-            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+            font-family: var(--font-sans);
             font-feature-settings: 'tnum' 1, 'lnum' 1, 'cv11' 1;
             font-size: 36px;
             font-weight: 700;

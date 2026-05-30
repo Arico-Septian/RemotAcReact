@@ -98,7 +98,7 @@
 
         #dropdownAC>div .num {
             color: var(--ink-3);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 11px;
         }
 
@@ -122,7 +122,7 @@
             font-size: 13px;
             font-weight: 700;
             margin-top: 4px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             color: var(--ink-0);
         }
 
@@ -224,7 +224,7 @@
         }
 
         .ring-temp {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-sans);
             font-size: 64px;
             font-weight: 700;
             color: var(--ink-0);
@@ -325,7 +325,7 @@
             border: 1px solid var(--line-soft);
             padding: 5px 12px;
             border-radius: 999px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             letter-spacing: 0.02em;
         }
 
@@ -530,7 +530,7 @@
         }
 
         .timer-card .t-value {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 16px;
             font-weight: 700;
             color: var(--ink-0);

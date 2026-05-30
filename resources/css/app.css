@@ -87,6 +87,10 @@
   --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.40);
   --inset-hi:  inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+
   /* Easing & motion */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --t-fast: 0.15s var(--ease);
@@ -102,7 +106,7 @@ html, body {
   margin: 0; padding: 0;
   background: var(--bg-0);
   color: var(--ink-0);
-  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'cv11', 'ss01';
@@ -466,9 +470,9 @@ body { min-height: 100vh; }
 }
 .panel-title { font-size: 14px; font-weight: 600; color: var(--ink-0); margin: 0; letter-spacing: 0em; }
 .panel-subtitle { font-size: 12px; color: var(--ink-3); margin: 2px 0 0; }
-.panel-meta { font-size: 12px; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; }
+.panel-meta { font-size: 12px; color: var(--ink-3); font-family: var(--font-mono); }
 
-.kbd { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-2); }
+.kbd { font-family: var(--font-mono); font-size: 11px; color: var(--ink-2); }
 .label-tag {
   font-size: 10px;
   font-weight: 700;
@@ -697,7 +701,7 @@ body { min-height: 100vh; }
   border-radius: 8px;
   font-size: 11px; font-weight: 700;
   letter-spacing: 0.05em;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
 }
 .act-mint   { background: var(--mint-soft);     color: var(--mint); }
 .act-cyan   { background: var(--cyan-soft);     color: var(--cyan); }
@@ -889,7 +893,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 .tbl tbody tr { transition: background var(--t-fast); }
 .tbl tbody tr:hover { background: var(--panel-1); }
 .tbl tbody tr:last-child td { border-bottom: none; }
-.tbl .num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-2); }
+.tbl .num { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
 
 .tbl-toolbar {
   display: flex; align-items: center; justify-content: space-between;
@@ -1077,7 +1081,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 }
 
 .temp-display {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
   font-size: 56px; font-weight: 700;
   color: var(--cyan);
   letter-spacing: -0.04em;
@@ -1192,7 +1196,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
    UTILITY HELPERS (used as supplements to Tailwind)
 ============================================================= */
 .h-divider { height: 1px; background: var(--line-soft); }
-.text-mono { font-family: 'JetBrains Mono', monospace; }
+.text-mono { font-family: var(--font-mono); }
 .text-tight { letter-spacing: 0em; }
 [hidden], [x-cloak] { display: none !important; }
 

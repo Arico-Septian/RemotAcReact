@@ -28,7 +28,7 @@
         .raspi-temp {
             font-size: 72px;
             font-weight: 700;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             line-height: 1;
             transition: color 0.4s var(--ease);
             display: inline-flex;

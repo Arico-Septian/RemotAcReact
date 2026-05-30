@@ -42,7 +42,7 @@
     padding: 0 5px;
     border: 2px solid var(--bg-1);
     box-shadow: 0 0 10px rgba(248,113,113,.45);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
 }
 .notif-panel {
     position: absolute; top: calc(100% + 10px); right: 0;
@@ -122,7 +122,7 @@
 .notif-time {
     font-size: 11px; color: var(--ink-4);
     margin-top: 4px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-mono);
 }
 .notif-panel-footer {
     padding: 10px 12px;
