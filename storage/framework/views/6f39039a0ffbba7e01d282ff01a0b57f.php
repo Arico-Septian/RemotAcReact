@@ -48,6 +48,8 @@
             box-shadow: none;
             transition: var(--t-base);
             justify-content: center;
+            padding: 7px 12px;
+            font-size: 12px;
         }
 
         .room-card .btn.btn-primary:hover,
@@ -320,7 +322,8 @@
             .ac-mini .num { font-size: 14px; }
             .ac-mini .lbl { font-size: 8px; margin-top: 2px; }
 
-            .room-card .btn.btn-primary.btn-sm {
+            .room-card .btn.btn-primary.btn-sm,
+            .room-card .room-card-chart-btn {
                 font-size: 11px;
                 padding: 7px 10px;
                 min-height: 34px;

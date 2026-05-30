@@ -85,9 +85,6 @@
             min-height: 56px;
         }
 
-        tbody tr:hover {
-            background: var(--panel-1);
-        }
 
         tbody tr:last-child {
             border-bottom: none;
@@ -503,31 +500,7 @@
             transition: background var(--t-fast);
         }
 
-        .user-table th:hover {
-            background: var(--panel-2);
-        }
 
-        .user-table th.sortable::after {
-            content: '';
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin-left: 6px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="%23999"><path d="M3 2L6 0l3 2M3 10L6 12l3-2"/></svg>') center no-repeat;
-            background-size: contain;
-            opacity: 0.4;
-            vertical-align: -1px;
-        }
-
-        .user-table th.sort-asc::after {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="%234dd4ff"><path d="M6 1L3 4h6z"/></svg>');
-            opacity: 1;
-        }
-
-        .user-table th.sort-desc::after {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="%234dd4ff"><path d="M6 11L3 8h6z"/></svg>');
-            opacity: 1;
-        }
 
         /* Mobile user list — clean simple layout */
         .user-cards {
@@ -1152,9 +1125,9 @@
                             <table id="user-list" class="user-table">
                                 <thead>
                                     <tr>
-                                        <th style="width:30%;" class="sortable" data-sort="name" onclick="handleSort('name')">USER</th>
-                                        <th style="width:20%;" class="sortable" data-sort="role" onclick="handleSort('role')">ROLE</th>
-                                        <th style="width:20%;" class="sortable" data-sort="last_activity" onclick="handleSort('last_activity')">STATUS</th>
+                                        <th style="width:30%;">USER</th>
+                                        <th style="width:20%;">ROLE</th>
+                                        <th style="width:20%;">STATUS</th>
                                         <th style="width:30%;text-align:right;padding-right:24px;">ACTIONS</th>
                                     </tr>
                                 </thead>
@@ -1627,39 +1600,7 @@
         });
 
 
-        // Column sorting
-        function handleSort(column) {
-            const url = new URL(window.location.href);
-            const currentSort = url.searchParams.get('sort');
-            const currentOrder = url.searchParams.get('order') || 'asc';
-
-            if (currentSort === column) {
-                url.searchParams.set('order', currentOrder === 'asc' ? 'desc' : 'asc');
-            } else {
-                url.searchParams.set('sort', column);
-                url.searchParams.set('order', 'asc');
-            }
-            url.searchParams.delete('page');
-            window.location.href = url.toString();
-        }
-
-        function initializeSortIndicators() {
-            const params = new URLSearchParams(window.location.search);
-            const sortColumn = params.get('sort');
-            const sortOrder = params.get('order') || 'asc';
-
-            if (sortColumn) {
-                const th = document.querySelector(`th[data-sort="${sortColumn}"]`);
-                if (th) {
-                    th.classList.remove('sortable');
-                    th.classList.add(sortOrder === 'asc' ? 'sort-asc' : 'sort-desc');
-                }
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initializeSortIndicators();
-        });
+        document.addEventListener('DOMContentLoaded', () => {});
     </script>
     @include('components.sidebar-scripts')
 </body>

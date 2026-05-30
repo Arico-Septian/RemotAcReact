@@ -244,8 +244,7 @@
             }
         }
 
-        .tbl tbody tr { transition: background var(--t-fast); }
-        .tbl tbody tr:hover { background: var(--panel-2); }
+        .tbl tbody tr { transition: none; }
 
         .tbl.tbl-log thead {
             background: transparent;
@@ -311,39 +310,6 @@
         .log-time .t { color: var(--ink-1); font-size: 12px; font-weight: 600; }
         .log-time .d { color: var(--ink-4); font-size: 11px; }
 
-        /* Sortable table headers */
-        .tbl-log th {
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            transition: background var(--t-fast);
-        }
-
-        .tbl-log th:hover {
-            background: var(--panel-2);
-        }
-
-        .tbl-log th.sortable::after {
-            content: '';
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin-left: 6px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="%23999"><path d="M3 2L6 0l3 2M3 10L6 12l3-2"/></svg>') center no-repeat;
-            background-size: contain;
-            opacity: 0.4;
-            vertical-align: -1px;
-        }
-
-        .tbl-log th.sort-asc::after {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="%234dd4ff"><path d="M6 1L3 4h6z"/></svg>');
-            opacity: 1;
-        }
-
-        .tbl-log th.sort-desc::after {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" fill="%234dd4ff"><path d="M6 11L3 8h6z"/></svg>');
-            opacity: 1;
-        }
 
         /* Enhanced pagination */
         .pager {
@@ -760,11 +726,11 @@
                                 <table class="tbl tbl-log">
                                     <thead>
                                         <tr>
-                                            <th style="width:20%;" class="sortable" data-sort="user_name" onclick="handleSort('user_name')">USER</th>
-                                            <th style="width:20%;" class="sortable" data-sort="room" onclick="handleSort('room')">ROOM</th>
+                                            <th style="width:20%;">USER</th>
+                                            <th style="width:20%;">ROOM</th>
                                             <th style="width:20%;">DETAIL</th>
-                                            <th style="width:20%;" class="sortable" data-sort="activity" onclick="handleSort('activity')">ACTIVITY</th>
-                                            <th style="width:20%;" class="whitespace-nowrap sortable" data-sort="created_at" onclick="handleSort('created_at')">TIME</th>
+                                            <th style="width:20%;">ACTIVITY</th>
+                                            <th style="width:20%;" class="whitespace-nowrap">TIME</th>
                                         </tr>
                                     </thead>
                                     <tbody id="logsTbody">
@@ -1093,34 +1059,8 @@ initializeSortIndicators();
             }
         });
 
-        // Column sorting
-        function handleSort(column) {
-            const url = new URL(window.location.href);
-            const currentSort = url.searchParams.get('sort');
-            const currentOrder = url.searchParams.get('order') || 'asc';
-
-            if (currentSort === column) {
-                url.searchParams.set('order', currentOrder === 'asc' ? 'desc' : 'asc');
-            } else {
-                url.searchParams.set('sort', column);
-                url.searchParams.set('order', 'asc');
-            }
-            url.searchParams.delete('page');
-            window.location.href = url.toString();
-        }
-
         function initializeSortIndicators() {
-            const params = new URLSearchParams(window.location.search);
-            const sortColumn = params.get('sort');
-            const sortOrder = params.get('order') || 'asc';
-
-            if (sortColumn) {
-                const th = document.querySelector(`th[data-sort="${sortColumn}"]`);
-                if (th) {
-                    th.classList.remove('sortable');
-                    th.classList.add(sortOrder === 'asc' ? 'sort-asc' : 'sort-desc');
-                }
-            }
+            if (false) {
         }
     </script>
 </body>
