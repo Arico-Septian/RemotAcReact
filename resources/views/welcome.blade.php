@@ -322,7 +322,7 @@
 
         .status-title {
             margin-top: 14px;
-            font-size: 32px; line-height: 1.05;
+            font-size: 32px; line-height: 1.1;
             letter-spacing: -0.025em;
         }
         .status-list { margin-top: 26px; display: flex; flex-direction: column; gap: 20px; }
@@ -337,7 +337,7 @@
         .status-dot.amber { background: var(--amber); box-shadow: 0 0 14px rgba(251,191,36,0.5); }
         .status-dot.coral { background: var(--coral); box-shadow: 0 0 14px rgba(251,113,133,0.5); animation: pulse 2s ease-out infinite; }
 
-        .status-row .text-main { font-size: 14px; font-weight: 600; line-height: 1.25; color: var(--ink-0); }
+        .status-row .text-main { font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--ink-0); }
         .status-row .text-sub { font-size: 12px; color: var(--ink-3); margin-top: 3px; }
         .status-row .num {
             font-size: 24px; font-weight: 700;
@@ -367,7 +367,7 @@
         .spec-ic.amber    { background: rgba(251,191,36,0.14);  border: 1px solid rgba(251,191,36,0.32);  color: var(--amber);    box-shadow: 0 0 16px -3px rgba(251,191,36,0.28); }
         .spec-ic.coral    { background: rgba(251,113,133,0.14); border: 1px solid rgba(251,113,133,0.32); color: var(--coral);    box-shadow: 0 0 16px -3px rgba(251,113,133,0.28); }
 
-        .spec-row .text-main { font-size: 14px; font-weight: 600; line-height: 1.25; color: var(--ink-0); margin-top: 5px; }
+        .spec-row .text-main { font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--ink-0); margin-top: 5px; }
         .spec-row .text-sub  { font-size: 12px; color: var(--ink-3); margin-top: 3px; line-height: 1.4; }
 
         .status-cta {
@@ -420,7 +420,7 @@
         }
         .anomaly-desc {
             margin-top: 10px;
-            font-size: 13px; line-height: 1.55;
+            font-size: 13px; line-height: 1.6;
             color: var(--ink-2);
         }
         .anomaly-link {
@@ -441,7 +441,7 @@
         }
         .features-h2 {
             font-size: clamp(36px, 4vw, 56px);
-            line-height: 1.04; letter-spacing: -0.03em;
+            line-height: 1; letter-spacing: -0.03em;
             max-width: 680px;
             font-weight: 800;
         }
@@ -495,7 +495,7 @@
         .bento-card.amber   .ic { background: rgba(251,191,36,0.14); color: var(--amber); border: 1px solid rgba(251,191,36,0.32); box-shadow: 0 0 24px -4px rgba(251,191,36,0.25); }
         .bento-card.sky     .ic { background: rgba(56,189,248,0.14); color: var(--sky); border: 1px solid rgba(56,189,248,0.32); box-shadow: 0 0 24px -4px rgba(56,189,248,0.25); }
 
-        .bento-card h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; color: var(--ink-0); }
+        .bento-card h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; color: var(--ink-0); }
         .bento-card p  { margin-top: 10px; font-size: 14px; line-height: 1.6; color: var(--ink-2); }
 
         .bento-card.wide-3 { grid-column: span 3; }
@@ -611,7 +611,7 @@
         .cta-box > * { position: relative; z-index: 2; }
         .cta-h2 {
             font-size: clamp(40px, 5vw, 68px);
-            line-height: 1.04; letter-spacing: -0.035em;
+            line-height: 1; letter-spacing: -0.035em;
             max-width: 820px; margin: 14px auto 0;
             font-weight: 800;
         }
@@ -714,8 +714,8 @@
             .hero { padding: 32px 0 28px; }
             .hero-grid { gap: 20px; }
             .hero-main { padding: 32px 28px 28px; border-radius: 20px; }
-            .hero-h1 { font-size: 36px; letter-spacing: -0.025em; line-height: 1.05; }
-            .hero-sub { font-size: 14px; line-height: 1.55; max-width: 100%; }
+            .hero-h1 { font-size: 36px; letter-spacing: -0.025em; line-height: 1.1; }
+            .hero-sub { font-size: 14px; line-height: 1.6; max-width: 100%; }
             .hero-cta { flex-direction: column; gap: 10px; }
             .hero-cta > a { width: 100%; justify-content: center; }
             .btn-cta-primary, .btn-cta-ghost { padding: 13px 18px; font-size: 13px; min-height: 44px; }
@@ -759,7 +759,7 @@
             .hero { padding: 24px 0 22px; }
             .hero-grid { gap: 16px; }
             .hero-main { padding: 26px 22px 22px; border-radius: 20px; }
-            .hero-h1 { font-size: 28px; line-height: 1.06; }
+            .hero-h1 { font-size: 28px; line-height: 1.1; }
             .hero-sub { font-size: 14px; margin-top: 12px; }
             .hero-cta { margin-top: 18px; }
             .btn-cta-primary, .btn-cta-ghost { padding: 12px 16px; font-size: 13px; }
@@ -822,7 +822,7 @@
             /* Section headings (features-head, how-head) — match bento card visual offset */
             .features-head, .how-head { padding-left: 14px; padding-right: 14px; }
             .features-h2 { line-height: 1.1; }
-            .features-sub { line-height: 1.55; }
+            .features-sub { line-height: 1.6; }
 
             /* Brand block — keep name on single line */
             .brand-block { min-width: 0; }

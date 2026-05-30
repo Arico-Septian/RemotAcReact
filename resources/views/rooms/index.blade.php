@@ -359,7 +359,7 @@
         }
         @media (max-width: 480px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.15; }
+            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
             .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
             .main-header > .flex.items-center.gap-3 { gap: 6px; min-width: 0; flex: 1; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; flex-shrink: 0; }
@@ -413,7 +413,7 @@
 
             #modal .modal-header h2 {
                 font-size: 14px;
-                line-height: 1.15;
+                line-height: 1.2;
             }
 
             #modal .modal-header .sub {
@@ -497,7 +497,7 @@
 
             #modal .modal-header .sub {
                 font-size: 10px;
-                line-height: 1.25;
+                line-height: 1.3;
                 margin-top: 4px;
             }
 
@@ -695,7 +695,7 @@
                                                     data-status="{{ $online ? 'online' : 'offline' }}">
                                                     <div class="flex items-start justify-between gap-2">
                                                         <h2 class="font-semibold text-tight truncate"
-                                                            style="color:var(--ink-0);font-size:16px;line-height:1.25;">{{ ucfirst($room->name) }}</h2>
+                                                            style="color:var(--ink-0);font-size:16px;line-height: 1.3;">{{ ucfirst($room->name) }}</h2>
                                                         <span class="pill room-status-pill {{ $online ? 'pill-online' : 'pill-offline' }}"
                                                             style="padding:3px 8px;font-size:10px;flex-shrink:0;">
                                                             <span class="dot"></span><span class="room-status-text">{{ $online ? 'Online' : 'Offline' }}</span>

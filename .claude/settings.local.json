@@ -15,7 +15,8 @@
       "Bash(grep -roh \"#[0-9a-fA-F]\\\\{3,8\\\\}\\\\b\" resources/views --include=\"*.blade.php\")",
       "Bash(node fix-colors.cjs)",
       "Bash(powershell -Command ' *)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(node C:/pw-test/fix-lineheight.cjs)"
     ],
     "additionalDirectories": [
       "c:\\laragon\\www\\tugasakhirremotac"

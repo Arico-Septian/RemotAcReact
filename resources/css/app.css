@@ -505,7 +505,7 @@ body { min-height: 100vh; }
 }
 .stat-card .stat-value {
   font-size: 28px; font-weight: 700; color: var(--ink-0);
-  letter-spacing: -0.02em; line-height: 1.05;
+  letter-spacing: -0.02em; line-height: 1.1;
   margin: 0;
 }
 .stat-card .stat-meta {

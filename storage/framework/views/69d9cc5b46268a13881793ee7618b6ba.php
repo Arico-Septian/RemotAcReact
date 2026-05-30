@@ -152,7 +152,7 @@
         .activity-title {
             font-size: 18px;
             font-weight: 700;
-            line-height: 1.15;
+            line-height: 1.2;
             color: var(--ink-0);
             margin: 0;
             letter-spacing: -0.01em;
@@ -615,7 +615,7 @@
         .dashboard-rooms-title {
             font-size: 18px;
             font-weight: 700;
-            line-height: 1.15;
+            line-height: 1.2;
             color: var(--ink-0);
             margin: 0;
             letter-spacing: -0.01em;
@@ -713,7 +713,7 @@
         .dashboard-room-name {
             font-size: 16px;
             font-weight: 700;
-            line-height: 1.15;
+            line-height: 1.2;
             color: var(--ink-0);
             white-space: nowrap;
             overflow: hidden;
@@ -724,7 +724,7 @@
             margin-top: 3px;
             color: var(--ink-3);
             font-size: 13px;
-            line-height: 1.25;
+            line-height: 1.3;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1101,7 +1101,7 @@
             .stat-card .stat-sub,
             .stat-card .stat-meta {
                 font-size: 10px;
-                line-height: 1.35;
+                line-height: 1.4;
             }
 
             .stat-card .stat-icon {
@@ -1475,7 +1475,7 @@
             .temp-chart-panel #trendInfo {
                 margin-top: 6px !important;
                 font-size: 10px !important;
-                line-height: 1.35 !important;
+                line-height: 1.4 !important;
             }
         }
 

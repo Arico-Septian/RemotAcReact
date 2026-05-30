@@ -93,7 +93,7 @@
             .nlist-item { padding: 11px 12px; gap: 10px; }
             .nlist-icon { width: 30px; height: 30px; font-size: 12px; border-radius: 10px; }
             .nlist-item .text-base, .nlist-item h3 { font-size: 13px !important; }
-            .nlist-item .text-sm, .nlist-item p { font-size: 12px !important; line-height: 1.35 !important; }
+            .nlist-item .text-sm, .nlist-item p { font-size: 12px !important; line-height: 1.4 !important; }
             .nlist-item .text-xs { font-size: 10px !important; }
             /* Force time meta row to stay on one line with smaller fonts */
             .nlist-item .text-mono { white-space: nowrap; font-size: 10px; }
@@ -101,7 +101,7 @@
             .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
             .main-header .app-header-title p {
                 font-size: 11px;
-                line-height: 1.25;
+                line-height: 1.3;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;

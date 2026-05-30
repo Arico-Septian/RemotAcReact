@@ -32,7 +32,7 @@
         .profile-info-cell { padding: 10px 0; text-align: center; }
         .profile-info-cell + .profile-info-cell { border-left: 1px solid var(--line-soft); }
         .profile-info-label { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; font-weight: 700; margin: 0 0 4px; }
-        .profile-info-value { font-size: 12px; color: var(--ink-0); margin: 0; font-weight: 600; line-height: 1.35; }
+        .profile-info-value { font-size: 12px; color: var(--ink-0); margin: 0; font-weight: 600; line-height: 1.4; }
 
         .pwd-field { position: relative; }
         .pwd-field .input { padding-right: 38px; }

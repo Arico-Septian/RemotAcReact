@@ -326,7 +326,7 @@
             .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
             .main-header .app-header-title p {
                 font-size: 11px;
-                line-height: 1.25;
+                line-height: 1.3;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -456,7 +456,7 @@
         }
 
         #historyModal .history-title-group .eyebrow {
-            line-height: 1.25;
+            line-height: 1.3;
         }
 
         #historyTitle {
@@ -580,7 +580,7 @@
 
             #historyModal .modal-header .sub {
                 font-size: 11px;
-                line-height: 1.35;
+                line-height: 1.4;
             }
 
             #historyModal .modal-body {
@@ -705,7 +705,7 @@
                                                     data-status="{{ $status }}" data-floor="{{ $floorName }}">
                                                     <div class="flex items-start justify-between gap-2">
                                                         <h3 class="font-semibold text-tight"
-                                                            style="color:var(--ink-0);line-height:1.25;font-size:16px;">
+                                                            style="color:var(--ink-0);line-height: 1.3;font-size:16px;">
                                                             {{ ucfirst($room->name) }}
                                                         </h3>
                                                         <span

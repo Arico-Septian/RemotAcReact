@@ -107,7 +107,7 @@
         color: var(--ink-0) !important;
         letter-spacing: -0.015em !important;
         margin: 0;
-        line-height: 1.15;
+        line-height: 1.2;
     }
     .main-header .app-header-title p {
         font-size: 12px !important;
@@ -603,7 +603,7 @@
         .room-status-pill,
         .badge-role {
             font-size: 10px !important;
-            line-height: 1.25 !important;
+            line-height: 1.3 !important;
             letter-spacing: 0.04em !important;
         }
 

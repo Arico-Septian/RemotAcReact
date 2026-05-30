@@ -138,7 +138,7 @@
         .brand-hero {
             margin-top: 60px;
             font-size: clamp(36px, 4.5vw, 52px);
-            line-height: 1.04;
+            line-height: 1;
             letter-spacing: -0.03em;
             font-weight: 800;
             position: relative; z-index: 2;
@@ -155,7 +155,7 @@
         .brand-sub {
             margin-top: 18px;
             font-size: 14px;
-            line-height: 1.65;
+            line-height: 1.6;
             color: var(--ink-2);
             max-width: 420px;
             position: relative; z-index: 2;
@@ -235,7 +235,7 @@
         .form-sub {
             margin-top: 10px;
             font-size: 14px; color: var(--ink-2);
-            line-height: 1.55;
+            line-height: 1.6;
         }
 
         /* Alert */

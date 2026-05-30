@@ -289,7 +289,7 @@
         .log-time {
             display: flex;
             flex-direction: column;
-            line-height: 1.35;
+            line-height: 1.4;
             font-family: 'JetBrains Mono', monospace;
             white-space: nowrap;
         }
@@ -427,7 +427,7 @@
             .stat-card { padding: 14px 16px; }
             .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
             .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
-            .stat-card .stat-sub { font-size: 10px; line-height: 1.35; }
+            .stat-card .stat-sub { font-size: 10px; line-height: 1.4; }
             .stat-card .stat-icon { width: 34px; height: 34px; border-radius: 10px; font-size: 14px; }
         }
 

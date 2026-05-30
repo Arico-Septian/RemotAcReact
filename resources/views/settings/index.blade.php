@@ -58,7 +58,7 @@
             font-size: 11px;
             color: var(--ink-3);
             margin-top: 10px;
-            line-height: 1.55;
+            line-height: 1.6;
             display: flex;
             align-items: flex-start;
             gap: 6px;

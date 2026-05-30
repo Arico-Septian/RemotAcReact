@@ -105,7 +105,7 @@
     font-size: 13px; font-weight: 600;
     color: var(--ink-0);
     margin: 0;
-    line-height: 1.35;
+    line-height: 1.4;
     display: flex; align-items: center; gap: 6px;
 }
 .notif-unread-dot {
@@ -116,7 +116,7 @@
 .notif-msg {
     font-size: 12px; color: var(--ink-2);
     margin: 3px 0 0;
-    line-height: 1.45;
+    line-height: 1.5;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .notif-time {
@@ -142,7 +142,7 @@
     .notif-icon { width: 28px; height: 28px; font-size: 11px; border-radius: 8px; }
     .notif-title { font-size: 12px; line-height: 1.3; }
     .notif-msg {
-        font-size: 11px; margin-top: 2px; line-height: 1.35;
+        font-size: 11px; margin-top: 2px; line-height: 1.4;
         -webkit-line-clamp: 2;
     }
     .notif-time { font-size: 10px; margin-top: 3px; }
@@ -168,7 +168,7 @@
     .notif-title { font-size: 11px; line-height: 1.2; gap: 4px; }
     .notif-unread-dot { width: 5px; height: 5px; }
     .notif-msg {
-        font-size: 10px; margin-top: 1px; line-height: 1.25;
+        font-size: 10px; margin-top: 1px; line-height: 1.3;
         -webkit-line-clamp: 1;
     }
     .notif-time { font-size: 8px; margin-top: 1px; }

@@ -107,7 +107,7 @@
             .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
             .main-header .app-header-title p {
                 font-size: 11px;
-                line-height: 1.25;
+                line-height: 1.3;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
