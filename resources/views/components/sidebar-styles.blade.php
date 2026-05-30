@@ -69,11 +69,11 @@
         /* 2026 modern header with vibrant accents */
         background:
             /* Vibrant cyan glow */
-            radial-gradient(950px 320px at 50% -40%, rgba(14, 165, 233, 0.14), transparent 65%),
+            radial-gradient(950px 320px at 50% -40%, rgb(var(--cyan-d-rgb) / 0.14), transparent 65%),
             /* Enhanced gradient with subtle blue tint */
             linear-gradient(180deg, rgba(15, 25, 50, 0.98) 0%, rgba(12, 20, 42, 0.96) 100%) !important;
-        border-bottom: 1px solid rgba(14, 165, 233, 0.16) !important;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(14, 165, 233, 0.12), inset 0 -1px 0 rgba(139, 162, 255, 0.06);
+        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.16) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgb(var(--cyan-d-rgb) / 0.12), inset 0 -1px 0 rgba(139, 162, 255, 0.06);
         color: var(--ink-0);
         position: sticky; top: 0;
         z-index: 30;
@@ -84,7 +84,7 @@
         position: absolute;
         top: 0; left: 16%; right: 16%;
         height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.45), transparent);
+        background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb) / 0.45), transparent);
         filter: blur(0.8px);
         pointer-events: none;
         z-index: 2;
@@ -95,7 +95,7 @@
         position: absolute;
         left: 16%; right: 16%; bottom: -1px;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.20), transparent);
+        background: linear-gradient(90deg, transparent, rgb(var(--cyan-rgb) / 0.20), transparent);
         pointer-events: none;
     }
     @media (max-width: 1024px) { .main-header { padding: 0 16px; } }
@@ -128,11 +128,11 @@
         font-size: 12px !important;
         font-weight: 600;
         letter-spacing: 0.02em;
-        background: rgba(14, 165, 233, 0.12) !important;
-        border: 1px solid rgba(14, 165, 233, 0.24) !important;
+        background: rgb(var(--cyan-d-rgb) / 0.12) !important;
+        border: 1px solid rgb(var(--cyan-d-rgb) / 0.24) !important;
         -webkit-backdrop-filter: blur(14px);
         backdrop-filter: blur(14px);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px -2px rgba(14, 165, 233, 0.15);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 12px -2px rgb(var(--cyan-d-rgb) / 0.15);
     }
     .main-header .pill .dot {
         width: 6px; height: 6px;
@@ -145,8 +145,8 @@
         width: 38px !important;
         height: 38px !important;
         border-radius: var(--r-md) !important;
-        background: rgba(14, 165, 233, 0.08) !important;
-        border: 1px solid rgba(14, 165, 233, 0.16) !important;
+        background: rgb(var(--cyan-d-rgb) / 0.08) !important;
+        border: 1px solid rgb(var(--cyan-d-rgb) / 0.16) !important;
         color: #7fa0c8 !important;
         transition: all var(--t-base) !important;
         display: flex !important;
@@ -158,11 +158,11 @@
     }
     #notifBellBtn:hover,
     .main-header .btn-icon:hover {
-        background: rgba(14, 165, 233, 0.15) !important;
-        border-color: rgba(14, 165, 233, 0.38) !important;
-        color: #0ea5e9 !important;
+        background: rgb(var(--cyan-d-rgb) / 0.15) !important;
+        border-color: rgb(var(--cyan-d-rgb) / 0.38) !important;
+        color: var(--cyan-d) !important;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px -2px rgba(14, 165, 233, 0.40);
+        box-shadow: 0 6px 20px -2px rgb(var(--cyan-d-rgb) / 0.40);
     }
     .main-header .btn-icon i {
         font-size: 14px !important;
@@ -356,7 +356,7 @@
     #overlay {
         position: fixed; inset: 0; z-index: 40;
         background:
-            radial-gradient(500px 350px at 50% 50%, rgba(14, 165, 233, 0.03), transparent 70%),
+            radial-gradient(500px 350px at 50% 50%, rgb(var(--cyan-d-rgb) / 0.03), transparent 70%),
             rgba(0, 0, 0, 0.64);
         -webkit-backdrop-filter: blur(6px);
         backdrop-filter: blur(6px);
@@ -381,13 +381,13 @@
     .app-sidebar {
         background:
             /* Vibrant cyan glow from top */
-            radial-gradient(600px 400px at 50% -25%, rgba(14, 165, 233, 0.12), transparent 65%),
+            radial-gradient(600px 400px at 50% -25%, rgb(var(--cyan-d-rgb) / 0.12), transparent 65%),
             /* Vibrant indigo glow from bottom */
-            radial-gradient(480px 320px at 15% 125%, rgba(56, 189, 248, 0.08), transparent 65%),
+            radial-gradient(480px 320px at 15% 125%, rgb(var(--cyan-rgb) / 0.08), transparent 65%),
             /* Enhanced dark blue gradient */
             linear-gradient(180deg, rgba(13, 22, 46, 0.98), rgba(10, 17, 38, 0.99)) !important;
-        border-right: 1px solid rgba(14, 165, 233, 0.12) !important;
-        box-shadow: 0 0 32px rgba(0, 0, 0, 0.40), inset -1px 0 0 rgba(14, 165, 233, 0.08);
+        border-right: 1px solid rgb(var(--cyan-d-rgb) / 0.12) !important;
+        box-shadow: 0 0 32px rgba(0, 0, 0, 0.40), inset -1px 0 0 rgb(var(--cyan-d-rgb) / 0.08);
     }
 
     /* Top accent line — vibrant and modern */
@@ -396,7 +396,7 @@
         position: absolute;
         top: 0; left: 16%; right: 16%;
         height: 2px;
-        background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.40), transparent);
+        background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb) / 0.40), transparent);
         filter: blur(0.8px);
         pointer-events: none;
         z-index: 2;
@@ -405,7 +405,7 @@
     /* 2026 brand with vibrant, modern aesthetic */
     .brand {
         height: 64px !important;
-        border-bottom: 1px solid rgba(14, 165, 233, 0.14) !important;
+        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.14) !important;
         position: relative;
         background: linear-gradient(180deg, rgba(20, 32, 60, 0.6), rgba(14, 22, 46, 0.20));
     }
@@ -414,11 +414,11 @@
         position: absolute;
         left: 18px; right: 18px; bottom: -1px;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.28), rgba(56, 189, 248, 0.14), transparent);
+        background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb) / 0.28), rgb(var(--cyan-rgb) / 0.14), transparent);
     }
     .brand-logo {
-        background: conic-gradient(from 220deg, #0ea5e9, #38bdf8, #70f5d0, #0ea5e9) !important;
-        box-shadow: 0 12px 40px -6px rgba(14, 165, 233, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+        background: conic-gradient(from 220deg, var(--cyan-d), var(--cyan), #70f5d0, var(--cyan-d)) !important;
+        box-shadow: 0 12px 40px -6px rgb(var(--cyan-d-rgb) / 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
         position: relative;
     }
     .brand-logo::after {
@@ -434,11 +434,11 @@
     .brand-logo i {
         position: relative;
         z-index: 2;
-        color: #0ea5e9;
-        filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.65));
+        color: var(--cyan-d);
+        filter: drop-shadow(0 0 8px rgb(var(--cyan-d-rgb) / 0.65));
     }
     .brand-text .sub {
-        background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+        background: linear-gradient(90deg, var(--cyan-d), var(--cyan));
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -462,7 +462,7 @@
         content: '';
         width: 14px;
         height: 1px;
-        background: linear-gradient(90deg, rgba(14, 165, 233, 0.50), transparent);
+        background: linear-gradient(90deg, rgb(var(--cyan-d-rgb) / 0.50), transparent);
         flex-shrink: 0;
     }
 
@@ -478,8 +478,8 @@
     .nav-link i {
         width: 28px !important; height: 28px !important;
         border-radius: var(--r-sm);
-        background: rgba(14, 165, 233, 0.06);
-        border: 1px solid rgba(14, 165, 233, 0.10);
+        background: rgb(var(--cyan-d-rgb) / 0.06);
+        border: 1px solid rgb(var(--cyan-d-rgb) / 0.10);
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -500,36 +500,36 @@
     }
 
     .nav-link:hover {
-        background: rgba(14, 165, 233, 0.10) !important;
+        background: rgb(var(--cyan-d-rgb) / 0.10) !important;
         color: var(--ink-0) !important;
         transform: translateX(2px);
     }
     .nav-link:hover i {
-        background: linear-gradient(135deg, rgba(14, 165, 233, 0.18), rgba(56, 189, 248, 0.10));
-        border-color: rgba(14, 165, 233, 0.35);
-        color: #0ea5e9 !important;
+        background: linear-gradient(135deg, rgb(var(--cyan-d-rgb) / 0.18), rgb(var(--cyan-rgb) / 0.10));
+        border-color: rgb(var(--cyan-d-rgb) / 0.35);
+        color: var(--cyan-d) !important;
     }
 
     .nav-link.active {
         background:
-            linear-gradient(90deg, rgba(14, 165, 233, 0.14) 0%, rgba(14, 165, 233, 0.06) 100%) !important;
+            linear-gradient(90deg, rgb(var(--cyan-d-rgb) / 0.14) 0%, rgb(var(--cyan-d-rgb) / 0.06) 100%) !important;
         color: var(--ink-0) !important;
         font-weight: 600 !important;
-        box-shadow: inset 0 1px 0 rgba(14, 165, 233, 0.12);
+        box-shadow: inset 0 1px 0 rgb(var(--cyan-d-rgb) / 0.12);
     }
     .nav-link.active i {
-        background: linear-gradient(135deg, rgba(14, 165, 233, 0.24), rgba(56, 189, 248, 0.16));
-        border-color: rgba(14, 165, 233, 0.45);
-        color: #0ea5e9 !important;
-        box-shadow: 0 0 16px -2px rgba(14, 165, 233, 0.50);
+        background: linear-gradient(135deg, rgb(var(--cyan-d-rgb) / 0.24), rgb(var(--cyan-rgb) / 0.16));
+        border-color: rgb(var(--cyan-d-rgb) / 0.45);
+        color: var(--cyan-d) !important;
+        box-shadow: 0 0 16px -2px rgb(var(--cyan-d-rgb) / 0.50);
     }
     .nav-link.active::before {
         width: 3px !important;
-        background: linear-gradient(180deg, #0ea5e9, #38bdf8) !important;
+        background: linear-gradient(180deg, var(--cyan-d), var(--cyan)) !important;
         top: 10px !important;
         bottom: 10px !important;
         border-radius: 0 3px 3px 0 !important;
-        box-shadow: 0 0 14px rgba(14, 165, 233, 0.55);
+        box-shadow: 0 0 14px rgb(var(--cyan-d-rgb) / 0.55);
     }
 
     /* Collapsed sidebar — icon-only state */
@@ -537,7 +537,7 @@
 
     /* 2026 modern sidebar footer with vibrant accents */
     .sidebar-footer {
-        border-top: 1px solid rgba(14, 165, 233, 0.12) !important;
+        border-top: 1px solid rgb(var(--cyan-d-rgb) / 0.12) !important;
         position: relative;
         background: linear-gradient(180deg, rgba(13, 22, 46, 0.08) 0%, rgba(0, 0, 0, 0.25) 100%);
     }
@@ -546,7 +546,7 @@
         position: absolute;
         left: 18px; right: 18px; top: -1px;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.22), rgba(56, 189, 248, 0.12), transparent);
+        background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb) / 0.22), rgb(var(--cyan-rgb) / 0.12), transparent);
     }
 
     .profile-full {
@@ -555,14 +555,14 @@
         transition: all var(--t-base) !important;
     }
     .profile-full:hover {
-        background: rgba(14, 165, 233, 0.10) !important;
+        background: rgb(var(--cyan-d-rgb) / 0.10) !important;
     }
     .profile-full .avatar {
         transition: transform var(--t-base), box-shadow var(--t-base);
     }
     .profile-full:hover .avatar {
         transform: scale(1.10);
-        box-shadow: 0 8px 24px -4px rgba(14, 165, 233, 0.50);
+        box-shadow: 0 8px 24px -4px rgb(var(--cyan-d-rgb) / 0.50);
     }
     .profile-info .role {
         font-size: 10px !important;
