@@ -6,7 +6,9 @@
       "Bash(rm \"c:/laragon/www/tugasakhirremotac/responsive_check.js\" \"c:/laragon/www/tugasakhirremotac/responsive_check.cjs\")",
       "Bash(rm -rf \"C:/pw-test\")",
       "Bash(node \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\")",
-      "Bash(rm \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\" 2>/dev/null; echo \"Done\")"
+      "Bash(rm \"c:/laragon/www/tugasakhirremotac/responsive_check2.cjs\" 2>/dev/null; echo \"Done\")",
+      "Read(//c/pw-test/**)",
+      "Bash(node check-dashboard-mobile.cjs)"
     ],
     "additionalDirectories": [
       "c:\\laragon\\www\\tugasakhirremotac"

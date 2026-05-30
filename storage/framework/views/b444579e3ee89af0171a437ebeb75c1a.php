@@ -205,8 +205,8 @@
         .sidebar-toggle.desktop-only { display: none !important; }
     }
 
-    /* Phone (≤ 600px): sidebar setengah layar + nav-link kompak */
-    @media (max-width: 600px) {
+    /* Phone (≤ 480px): sidebar setengah layar + nav-link kompak */
+    @media (max-width: 480px) {
         .app-sidebar {
             width: 50vw !important;
             min-width: 200px !important;
@@ -277,8 +277,8 @@
         }
     }
 
-    /* Mobile S (≤ 360px): paling kecil */
-    @media (max-width: 360px) {
+    /* Mobile S (≤ 480px): paling kecil */
+    @media (max-width: 480px) {
         .main-header button[onclick*="toggleSidebar"],
         .main-header button[onclick*="toggleSidebar"] i {
             font-size: 14px !important;
@@ -296,8 +296,8 @@
         }
     }
 
-    /* ===== Mobile S (≤ 360 px): circular status pill (dot only), shared across all pages ===== */
-    @media (max-width: 360px) {
+    /* ===== Mobile (≤ 480px): circular status pill (dot only), shared across all pages ===== */
+    @media (max-width: 480px) {
         .main-header .pill span:not(.dot) { display: none !important; }
         .main-header .pill {
             width: 28px !important;
@@ -345,7 +345,7 @@
         }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 480px) {
         /* Hide the original ::after pulse (we replaced with box-shadow ring) */
         .main-header .pill.pill-online .dot::after {
             display: none !important;
@@ -583,6 +583,50 @@
         background: rgba(255, 85, 119, 0.18) !important;
         border-color: rgba(255, 85, 119, 0.40) !important;
         transform: translateY(-1px);
+    }
+
+    /* Mobile polish: keep operational labels readable without changing layout. */
+    @media (max-width: 480px) {
+        .main-header .app-header-title p,
+        .stat-card .stat-sub,
+        .nlist-item .text-mono,
+        .profile-info-label {
+            font-size: 10px !important;
+            line-height: 1.3 !important;
+        }
+
+        .stat-card .stat-label-sm,
+        .label-tag,
+        .ac-mini .lbl,
+        .notif-msg,
+        .notif-time,
+        .room-status-pill,
+        .badge-role {
+            font-size: 10px !important;
+            line-height: 1.25 !important;
+            letter-spacing: 0.04em !important;
+        }
+
+        .tbl-toolbar .btn,
+        .modal-footer .btn,
+        .selector-bar .btn-icon,
+        .user-card-actions .btn-icon {
+            min-height: 36px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .main-header .app-header-title p {
+            font-size: 10px !important;
+        }
+
+        .stat-card .stat-label-sm,
+        .stat-card .stat-sub,
+        .label-tag,
+        .ac-mini .lbl,
+        .nlist-item .text-mono {
+            font-size: 9.75px !important;
+        }
     }
 </style>
 <?php /**PATH C:\laragon\www\tugasakhirremotac\resources\views/components/sidebar-styles.blade.php ENDPATH**/ ?>

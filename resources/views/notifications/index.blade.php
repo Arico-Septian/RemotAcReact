@@ -77,7 +77,7 @@
             opacity: 1;
         }
 
-        @media (max-width: 720px) {
+        @media (max-width: 768px) {
             .nlist-actions {
                 opacity: 1;
             }
@@ -108,8 +108,8 @@
             }
         }
 
-        /* Mobile S (≤ 360 px): aggressive shrink */
-        @media (max-width: 360px) {
+        /* Mobile S (≤ 480px): aggressive shrink */
+        @media (max-width: 480px) {
             .nlist-item { padding: 9px 10px; gap: 8px; }
             .nlist-icon { width: 26px; height: 26px; font-size: 11px; border-radius: 8px; }
             .nlist-item .text-base, .nlist-item h3 { font-size: 12px !important; }

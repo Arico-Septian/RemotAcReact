@@ -116,8 +116,8 @@
             .main-header .btn-icon { width: 34px; height: 34px; }
         }
 
-        /* Mobile S (≤ 360 px): aggressive shrink */
-        @media (max-width: 360px) {
+        /* Mobile S (≤ 480px): aggressive shrink */
+        @media (max-width: 480px) {
             .raspi-card { padding: 18px 14px; gap: 6px; }
             .raspi-temp { font-size: 44px; }
             .raspi-label { font-size: 10px; }

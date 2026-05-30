@@ -84,7 +84,7 @@
             min-height: 72px !important;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .dashboard-room-row,
             .activity-item {
                 min-height: 64px !important;
@@ -95,13 +95,6 @@
             .dashboard-room-row,
             .activity-item {
                 min-height: 58px !important;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .dashboard-room-row,
-            .activity-item {
-                min-height: 52px !important;
             }
         }
 
@@ -414,7 +407,7 @@
             opacity: 0.7;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .dashboard-rooms-panel,
             .dashboard-activity-panel {
                 padding: 14px;
@@ -766,7 +759,7 @@
             color: #fca5a5;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .dashboard-rooms-panel {
                 padding: 16px;
             }
@@ -1084,8 +1077,8 @@
             }
         }
 
-        /* Stat cards optimization for small screens (< 640px) — Mobile L */
-        @media (max-width: 640px) {
+        /* Stat cards optimization for small screens (≤ 768px) — Tablet */
+        @media (max-width: 768px) {
             .grid.grid-cols-2.lg\:grid-cols-4 {
                 gap: 12px;
             }
@@ -1272,8 +1265,8 @@
             }
         }
 
-        /* Mobile S (≤ 360px) — extra-tight stat cards */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px) — extra-tight stat cards */
+        @media (max-width: 480px) {
             .grid.grid-cols-2.lg\:grid-cols-4 {
                 gap: 8px;
             }
@@ -1418,8 +1411,8 @@
             }
         }
 
-        /* Tablet (≤ 1023px): teks chart sedikit lebih kecil */
-        @media (max-width: 1023px) {
+        /* Tablet (≤ 1024px): teks chart sedikit lebih kecil */
+        @media (max-width: 1024px) {
             .temp-chart-panel .panel-title {
                 font-size: 13px !important;
             }
@@ -1486,7 +1479,7 @@
             }
         }
 
-        @media (max-width: 360px) {
+        @media (max-width: 480px) {
             .temp-chart-wrap {
                 height: 220px !important;
             }
@@ -1557,8 +1550,8 @@
         .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
         .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
 
-        /* Mobile S (≤ 360 px): shrink header so title fits in one row */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px): shrink header so title fits in one row */
+        @media (max-width: 480px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }

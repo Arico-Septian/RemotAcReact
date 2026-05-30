@@ -205,8 +205,8 @@
         .sidebar-toggle.desktop-only { display: none !important; }
     }
 
-    /* Phone (≤ 600px): sidebar setengah layar + nav-link kompak */
-    @media (max-width: 600px) {
+    /* Phone (≤ 480px): sidebar setengah layar + nav-link kompak */
+    @media (max-width: 480px) {
         .app-sidebar {
             width: 50vw !important;
             min-width: 200px !important;
@@ -277,8 +277,8 @@
         }
     }
 
-    /* Mobile S (≤ 360px): paling kecil */
-    @media (max-width: 360px) {
+    /* Mobile S (≤ 480px): paling kecil */
+    @media (max-width: 480px) {
         .main-header button[onclick*="toggleSidebar"],
         .main-header button[onclick*="toggleSidebar"] i {
             font-size: 14px !important;
@@ -296,8 +296,8 @@
         }
     }
 
-    /* ===== Mobile S (≤ 360 px): circular status pill (dot only), shared across all pages ===== */
-    @media (max-width: 360px) {
+    /* ===== Mobile (≤ 480px): circular status pill (dot only), shared across all pages ===== */
+    @media (max-width: 480px) {
         .main-header .pill span:not(.dot) { display: none !important; }
         .main-header .pill {
             width: 28px !important;
@@ -345,7 +345,7 @@
         }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 480px) {
         /* Hide the original ::after pulse (we replaced with box-shadow ring) */
         .main-header .pill.pill-online .dot::after {
             display: none !important;
@@ -615,7 +615,7 @@
         }
     }
 
-    @media (max-width: 360px) {
+    @media (max-width: 480px) {
         .main-header .app-header-title p {
             font-size: 10px !important;
         }

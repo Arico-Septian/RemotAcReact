@@ -175,7 +175,7 @@
         }
 
         /* #1 Responsive temperature ring */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .temp-ring {
                 width: 160px;
                 height: 160px;
@@ -735,7 +735,7 @@
         }
 
         /* #3 Mobile layout optimization */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .grid[class*="md:grid-cols"] {
                 grid-template-columns: 1fr !important;
             }
@@ -746,7 +746,7 @@
         }
 
         /* #4 Touch targets minimum 44x44px */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .ctrl-btn {
                 width: 48px;
                 height: 48px;
@@ -814,8 +814,8 @@
             }
         }
 
-        /* Mobile S (≤ 360 px): tighter selector bar + header */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px): tighter selector bar + header */
+        @media (max-width: 480px) {
             .selector-bar {
                 padding: 6px !important;
                 gap: 6px !important;

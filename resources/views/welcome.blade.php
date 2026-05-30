@@ -703,8 +703,8 @@
             .cta-box { padding: 56px 32px; }
         }
 
-        /* Mobile L (≤ 640 px) — full mobile layout */
-        @media (max-width: 640px) {
+        /* Mobile (≤ 480px) — full mobile layout */
+        @media (max-width: 480px) {
             .nav-inner { padding: 14px 24px; }
             .section { padding: 0 24px; max-width: 100%; }
             .brand-tag { display: none; }
@@ -785,8 +785,8 @@
             .features-h2, .cta-h2 { font-size: 26px; }
         }
 
-        /* Mobile S (≤ 360 px) — extra tight */
-        @media (max-width: 360px) {
+        /* Mobile S (≤ 480px) — extra tight */
+        @media (max-width: 480px) {
             .nav-inner { padding: 10px 18px; }
             .section { padding: 0 18px; }
             .hero { padding: 20px 0 18px; }
@@ -866,8 +866,8 @@
             .preview-stat .val { font-size: 22px; }
         }
 
-        /* Mobile S (≤ 360 px): spec rows even tighter */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px): spec rows even tighter */
+        @media (max-width: 480px) {
             .spec-list { gap: 11px; }
             .spec-ic { width: 28px; height: 28px; font-size: 11px; }
             .text-main { font-size: 12.5px; }

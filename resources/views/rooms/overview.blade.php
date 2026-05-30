@@ -274,8 +274,8 @@
             }
         }
 
-        /* Phones (≤600px): tighter card spacing — grid tetap 2 kolom */
-        @media (max-width: 600px) {
+        /* Phones (≤480px): tighter card spacing — grid tetap 2 kolom */
+        @media (max-width: 480px) {
             .floor-grid {
                 gap: 10px !important;
                 margin-bottom: 12px !important;
@@ -333,8 +333,8 @@
             }
         }
 
-        /* Tiny phones (≤360px): grid tetap 2 kolom, lebih rapat */
-        @media (max-width: 360px) {
+        /* Tiny phones (≤480px): grid tetap 2 kolom, lebih rapat */
+        @media (max-width: 480px) {
             .floor-grid {
                 gap: 8px !important;
             }
@@ -390,7 +390,7 @@
         }
 
         /* Touch targets optimization */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .btn.btn-primary.btn-sm {
                 min-height: 40px;
                 padding: 8px 12px;
@@ -553,7 +553,7 @@
 
         }
 
-        @media (max-width: 420px) {
+        @media (max-width: 480px) {
             #historyModal {
                 padding: 10px;
                 align-items: center;

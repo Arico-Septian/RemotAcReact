@@ -1013,7 +1013,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 @keyframes toastIn  { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes toastOut { to { transform: translateY(8px); opacity: 0; } }
 
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .toast { right: 12px; left: 12px; bottom: 76px; min-width: 0; }
 }
 

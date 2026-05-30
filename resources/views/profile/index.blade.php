@@ -50,7 +50,7 @@
         .profile-error-box p { margin: 0; font-size: 12px; color: #ff5577; }
         .profile-error-box p + p { margin-top: 4px; }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .profile-info-grid { grid-template-columns: 1fr 1fr; }
             .profile-info-cell:nth-child(3) { border-left: none; border-top: 1px solid var(--line-soft); grid-column: 1 / -1; text-align: left; }
             .profile-info-cell { text-align: left; }

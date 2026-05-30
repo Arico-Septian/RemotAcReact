@@ -420,8 +420,8 @@
         }
 
         /* ===== Responsive ===== */
-        /* Tablet & smaller laptop (≤ 960 px) — hide brand panel, center form */
-        @media (max-width: 960px) {
+        /* Tablet & smaller laptop (≤ 1024 px) — hide brand panel, center form */
+        @media (max-width: 1024px) {
             html, body { height: 100%; }
             body { overflow-y: auto; overflow-x: hidden; }
             .page {
@@ -476,8 +476,8 @@
             .alert { font-size: 12px; padding: 10px 12px; }
         }
 
-        /* Mobile S (≤ 360 px) — very tight, form-only */
-        @media (max-width: 360px) {
+        /* Mobile S (≤ 480 px) — very tight, form-only */
+        @media (max-width: 480px) {
             .page { padding: 12px; }
             .form-panel { padding: 22px 16px 18px; border-radius: 18px; }
             .form-eyebrow { font-size: 9.5px; letter-spacing: 0.14em; }

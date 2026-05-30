@@ -421,8 +421,8 @@
         .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
         .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
 
-        /* Stat cards — Mobile L (≤ 640px) */
-        @media (max-width: 640px) {
+        /* Stat cards — Tablet (≤ 768px) */
+        @media (max-width: 768px) {
             .grid.grid-cols-2.lg\:grid-cols-4 { gap: 12px; }
             .stat-card { padding: 14px 16px; }
             .stat-card .stat-label-sm { font-size: 9.5px; letter-spacing: 0.08em; }
@@ -442,8 +442,8 @@
             .stat-card .accent-bar { top: 12px; bottom: 12px; }
         }
 
-        /* Mobile S (≤ 360 px): shrink header + extra-tight stat cards */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px): shrink header + extra-tight stat cards */
+        @media (max-width: 480px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }

@@ -42,7 +42,7 @@
         .ic-swing  { --icon-color: var(--lavender); }
         .ic-timer  { --icon-color: var(--amber); }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .ac-card {
                 padding: 12px;
             }
@@ -65,8 +65,8 @@
         }
 
         /* Grid optimization — order matters: broader → narrower */
-        /* Small phones / portrait phones (≤600px) — 2 columns */
-        @media (max-width: 600px) {
+        /* Small phones / portrait phones (≤480px) — 2 columns */
+        @media (max-width: 480px) {
             .grid[class*="grid-cols"] {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 8px !important;
@@ -100,15 +100,15 @@
             }
         }
 
-        /* Tiny phones (≤360px) — single column */
-        @media (max-width: 360px) {
+        /* Tiny phones (≤480px) — single column */
+        @media (max-width: 480px) {
             .grid[class*="grid-cols"] {
                 grid-template-columns: 1fr !important;
             }
         }
 
-        /* Tablet portrait (769-1023px) — 3 columns instead of cramped 4 */
-        @media (min-width: 769px) and (max-width: 1023px) {
+        /* Tablet portrait (769-1024px) — 3 columns instead of cramped 4 */
+        @media (min-width: 769px) and (max-width: 1024px) {
             .grid[class*="grid-cols"] {
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 12px !important;
@@ -116,7 +116,7 @@
         }
 
         /* Touch targets optimization */
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .btn.btn-primary.btn-sm {
                 min-height: 40px;
                 padding: 8px 12px;
@@ -163,7 +163,7 @@
             }
         }
 
-        @media (max-width: 360px) {
+        @media (max-width: 480px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
             .main-header > .flex.items-center.gap-3 { gap: 6px; }
             .main-header > .flex.items-center.gap-2 { gap: 4px; }

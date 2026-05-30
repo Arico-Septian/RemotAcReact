@@ -344,8 +344,8 @@
             }
         }
 
-        /* Mobile S (≤ 360 px): keep "Add Room" label visible, match 36 px unified height */
-        @media (max-width: 360px) {
+        /* Mobile (≤ 480px): keep "Add Room" label visible, match 36 px unified height */
+        @media (max-width: 480px) {
             .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary span { display: inline !important; font-size: 10px; }
             .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary i { margin-right: 4px; font-size: 10px; }
             .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary { padding: 0 10px; font-size: 10px; white-space: nowrap; }
@@ -357,7 +357,7 @@
             .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
             .main-header .app-header-title p { font-size: 11px; }
         }
-        @media (max-width: 360px) {
+        @media (max-width: 480px) {
             .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
             .main-header .app-header-title h1 { font-size: 13px; line-height: 1.15; }
             .main-header .app-header-title p { font-size: 9.5px; line-height: 1.2; }
@@ -369,8 +369,8 @@
             .main-header > .flex.items-center.gap-2 .btn-icon { width: 28px; height: 28px; }
         }
 
-        /* Phones (≤ 600 px): tighter card spacing — grid tetap 2 kolom */
-        @media (max-width: 600px) {
+        /* Phones (≤ 480px): tighter card spacing — grid tetap 2 kolom */
+        @media (max-width: 480px) {
             .floor-section > .grid {
                 gap: 10px !important;
             }
@@ -382,8 +382,8 @@
             .room-card .label-tag { font-size: 8.5px !important; margin-top: 2px !important; }
         }
 
-        /* Tiny phones (≤ 360 px): grid tetap 2 kolom, lebih rapat */
-        @media (max-width: 360px) {
+        /* Tiny phones (≤ 480px): grid tetap 2 kolom, lebih rapat */
+        @media (max-width: 480px) {
             .floor-section > .grid {
                 gap: 8px !important;
             }
@@ -391,7 +391,7 @@
         }
 
         /* Compact Add Room modal on tablets */
-        @media (min-width: 601px) and (max-width: 900px) {
+        @media (min-width: 481px) and (max-width: 1024px) {
             #modal.modal-backdrop {
                 padding: 12px;
             }
@@ -469,8 +469,8 @@
             }
         }
 
-        /* Compact Add Room modal on mobile S/M/L */
-        @media (max-width: 600px) {
+        /* Compact Add Room modal on mobile */
+        @media (max-width: 480px) {
             #modal.modal-backdrop {
                 padding: 10px;
             }
@@ -547,13 +547,13 @@
             }
         }
 
-        @media (max-width: 430px) {
+        @media (max-width: 480px) {
             #modal .modal {
                 max-width: min(310px, calc(100vw - 44px));
             }
         }
 
-        @media (max-width: 360px) {
+        @media (max-width: 480px) {
             #modal.modal-backdrop {
                 padding: 8px;
             }

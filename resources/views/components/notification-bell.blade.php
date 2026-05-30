@@ -176,7 +176,7 @@
     .notif-panel-footer a { font-size: 10px; }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
     .notif-panel {
         top: 50px; right: 4px;
         width: min(240px, calc(100vw - 8px));
