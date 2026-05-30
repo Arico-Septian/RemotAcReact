@@ -171,7 +171,7 @@
     /* 2026 vibrant notification badge */
     #notifBadge,
     .notif-badge {
-        background: linear-gradient(135deg, #ff5577, #ff3355) !important;
+        background: linear-gradient(135deg, var(--danger), var(--danger-d)) !important;
         color: #fff !important;
         font-size: 10px !important;
         font-weight: 700 !important;
@@ -179,7 +179,7 @@
         height: 18px !important;
         border-radius: 999px !important;
         border: 2px solid rgba(8, 12, 28, 0.97) !important;
-        box-shadow: 0 6px 16px -2px rgba(255, 85, 119, 0.60) !important;
+        box-shadow: 0 6px 16px -2px rgb(var(--danger-rgb) / 0.60) !important;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -573,15 +573,15 @@
         margin-top: 2px;
     }
     .icon-btn.danger {
-        background: rgba(255, 85, 119, 0.12) !important;
-        border: 1px solid rgba(255, 85, 119, 0.24) !important;
-        color: #ff5577 !important;
+        background: rgb(var(--danger-rgb) / 0.12) !important;
+        border: 1px solid rgb(var(--danger-rgb) / 0.24) !important;
+        color: var(--danger) !important;
         border-radius: 8px !important;
         transition: all 0.2s var(--ease);
     }
     .icon-btn.danger:hover {
-        background: rgba(255, 85, 119, 0.18) !important;
-        border-color: rgba(255, 85, 119, 0.40) !important;
+        background: rgb(var(--danger-rgb) / 0.18) !important;
+        border-color: rgb(var(--danger-rgb) / 0.40) !important;
         transform: translateY(-1px);
     }
 

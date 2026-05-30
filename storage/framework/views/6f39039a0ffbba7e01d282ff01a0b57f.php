@@ -67,7 +67,7 @@
         }
 
         .room-card .ac-mini .num {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 16px;
             font-weight: 700;
             line-height: 1;
@@ -150,7 +150,7 @@
             .flex.flex-row.items-center > label {
                 flex: 1;
                 min-width: 0;
-                transition: flex 0.2s ease;
+                transition: flex 0.2s var(--ease);
             }
 
             .flex.flex-row.items-center > .segmented {
@@ -210,7 +210,7 @@
 
             .search-input input::placeholder {
                 color: var(--ink-3);
-                transition: color 0.2s ease;
+                transition: color 0.2s var(--ease);
             }
 
             .search-input input:focus::placeholder {
@@ -219,7 +219,7 @@
 
             .search-input i {
                 font-size: 12px;
-                transition: opacity 0.2s ease;
+                transition: opacity 0.2s var(--ease);
             }
 
             .search-input:focus-within i {

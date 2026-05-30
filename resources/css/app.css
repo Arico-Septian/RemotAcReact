@@ -44,6 +44,11 @@
   --coral:    #fb7185;
   --coral-d:  #f43f5e;
   --rose:     #f9a8d4;
+  --yellow:   #facc15;
+  --orange:   #fb923c;
+  --red:      #f87171;
+  --danger:   #ff5577;
+  --danger-d: #ff3355;
 
   /* RGB channels â€” for transparent tints: rgb(var(--xxx-rgb) / alpha) */
   --bg-0-rgb:      7 16 31;
@@ -58,6 +63,10 @@
   --amber-rgb:     251 191 36;
   --coral-rgb:     251 113 133;
   --coral-d-rgb:   244 63 94;
+  --yellow-rgb:    250 204 21;
+  --orange-rgb:    251 146 60;
+  --red-rgb:       248 113 113;
+  --danger-rgb:    255 85 119;
 
   /* Soft fills */
   --cyan-soft:       rgb(var(--cyan-rgb) / 0.12);

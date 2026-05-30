@@ -132,7 +132,7 @@
         }
         .room-card .temp-chip.hot {
             background: rgba(248, 113, 113, 0.15) !important;
-            color: #f87171 !important;
+            color: var(--red) !important;
             border: 1px solid rgba(248, 113, 113, 0.4) !important;
         }
         .room-card .temp-chip.idle {

@@ -19,7 +19,7 @@
             border-radius: var(--r-md);
             padding: 6px 10px;
             font-size: 11px;
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-sans);
             cursor: pointer;
             outline: none;
             transition: var(--t-base);
@@ -356,7 +356,7 @@
         }
 
         .activity-time {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 11px;
             color: var(--ink-4);
             flex-shrink: 0;
@@ -734,7 +734,7 @@
             min-width: 76px;
             text-align: right;
             color: var(--ink-3);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: var(--font-mono);
             font-size: 16px;
             font-weight: 700;
         }
@@ -966,7 +966,7 @@
         }
 
         .stat-card .stat-num-lg {
-            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+            font-family: var(--font-sans);
             font-feature-settings: 'tnum' 1, 'lnum' 1, 'cv11' 1;
             font-size: 36px;
             font-weight: 700;
