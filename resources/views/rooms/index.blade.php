@@ -403,13 +403,6 @@
             .room-card .label-tag { font-size: 8px !important; margin-top: 2px !important; }
         }
 
-        /* Tiny phones (≤ 480px): grid tetap 2 kolom, lebih rapat */
-        @media (max-width: 480px) {
-            .floor-section > .grid {
-                gap: 8px !important;
-            }
-            .room-card { padding: 9px; gap: 6px; }
-        }
 
         /* Compact Add Room modal on tablets */
         @media (min-width: 481px) and (max-width: 1024px) {

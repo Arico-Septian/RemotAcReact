@@ -317,9 +317,9 @@
                 font-size: 10px !important;
             }
 
-            .ac-mini { gap: 5px; }
-            .ac-mini > div { padding: 6px 5px; }
-            .ac-mini .num { font-size: 14px; }
+            .ac-mini { gap: 8px; }
+            .ac-mini > div { padding: 8px 6px; }
+            .ac-mini .num { font-size: 16px; }
             .ac-mini .lbl { font-size: 8px; margin-top: 2px; }
 
             .room-card .btn.btn-primary.btn-sm,
