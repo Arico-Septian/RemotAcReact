@@ -49,9 +49,11 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/'],
             'password' => 'required|string',
         ], [
-            'name.min' => 'Username minimal 3 karakter.',
-            'name.max' => 'Username maksimal 20 karakter.',
-            'name.regex' => 'Username 3–20 karakter, hanya huruf/angka/underscore, dan diawali huruf.',
+            'name.required'  => 'Username is required.',
+            'name.min'       => 'Username must be at least 3 characters.',
+            'name.max'       => 'Username may not exceed 20 characters.',
+            'name.regex'     => 'Username must be 3–20 characters, letters/numbers/underscore only, and start with a letter.',
+            'password.required' => 'Password is required.',
         ]);
 
         $keyName = $this->rateLimitKeyName($request);
@@ -61,15 +63,14 @@ class AuthController extends Controller
         if (RateLimiter::tooManyAttempts($keyName, self::MAX_PER_NAME)) {
             $minutes = ceil(RateLimiter::availableIn($keyName) / 60);
             throw ValidationException::withMessages([
-                'name' => "Terlalu banyak percobaan login. Coba lagi dalam {$minutes} menit.",
+                'name' => "Too many login attempts. Please try again in {$minutes} minute(s).",
             ]);
         }
 
-        // Bucket per IP penuh → IP ini dikunci (cegah enumerasi multi-username)
         if (RateLimiter::tooManyAttempts($keyIp, self::MAX_PER_IP)) {
             $minutes = ceil(RateLimiter::availableIn($keyIp) / 60);
             throw ValidationException::withMessages([
-                'name' => "Terlalu banyak percobaan login dari jaringan Anda. Coba lagi dalam {$minutes} menit.",
+                'name' => "Too many login attempts from your network. Please try again in {$minutes} minute(s).",
             ]);
         }
 
@@ -84,7 +85,7 @@ class AuthController extends Controller
             RateLimiter::hit($keyName, self::LOCKOUT_SECONDS);
             RateLimiter::hit($keyIp, self::LOCKOUT_SECONDS);
             throw ValidationException::withMessages([
-                'name' => 'Username atau password salah.',
+                'name' => 'Incorrect username or password.',
             ]);
         }
 
@@ -122,7 +123,6 @@ class AuthController extends Controller
             '/device-status', '/ac-status',
             '/notifications/recent',
             '/dashboard/recent-activities',
-            '/session/ping',
             '/logout',
             '/suhu-raspi',
             '/raspi-monitor',

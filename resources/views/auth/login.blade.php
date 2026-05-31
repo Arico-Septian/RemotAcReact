@@ -1,689 +1,637 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In — SmartAC</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
         :root {
-            --bg-0:    #060912;
-            --bg-1:    #0a0f1c;
-            --panel:   #0e1424;
-            --panel-2: #131a2e;
-            --line:    rgba(255, 255, 255, 0.08);
-            --line-2:  rgba(255, 255, 255, 0.14);
-            --line-3:  rgba(255, 255, 255, 0.22);
-            --ink-0:   #f4f6fb;
-            --ink-1:   #d8def0;
-            --ink-2:   #9aa3bd;
-            --ink-3:   #6b7596;
-            --ink-4:   #4a5273;
-            --cyan:    #5ed0ff;
-            --cyan-rgb: 94 208 255;
-            --mint:    #6ee7b7;
-            --lavender:#b4a3ff;
-            --coral:   #fb7185;
-            --amber:   #fbbf24;
+            --cyan:         #4dd4ff;
+            --cyan-d:       #22b8e6;
+            --cyan-rgb:     77 212 255;
+            --cyan-d-rgb:   34 184 230;
+            --mint:         #6ee7b7;
+            --mint-rgb:     110 231 183;
+            --lavender:     #b4a3ff;
+            --lavender-rgb: 180 163 255;
+            --coral:        #fb7185;
+            --coral-rgb:    251 113 133;
+            --amber:        #fbbf24;
+            --ink-0: #f5f7fb;
+            --ink-1: #cbd5e1;
+            --ink-2: #94a3b8;
+            --ink-3: #64748b;
+            --ink-4: #475569;
+            --line:       rgba(255,255,255,.08);
+            --line-soft:  rgba(255,255,255,.05);
+            --r-sm: 8px; --r-md: 10px; --r-lg: 12px;
+            --r-xl: 16px; --r-2xl: 20px; --r-3xl: 28px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; }
 
-        html, body { height: 100%; font-family: var(--font-sans); }
         body {
             color: var(--ink-0);
             -webkit-font-smoothing: antialiased;
-            overflow: hidden;
             background:
-                linear-gradient(rgba(6, 9, 18, 0.88), rgba(6, 9, 18, 0.94)),
+                radial-gradient(800px 400px at 50% -20%, rgba(78,215,255,.08), transparent 60%),
+                radial-gradient(600px 350px at 85% 110%, rgba(139,162,255,.04), transparent 65%),
+                linear-gradient(135deg,
+                    rgba(4,7,16,.86) 0%, rgba(6,11,28,.84) 25%,
+                    rgba(7,14,34,.83) 50%, rgba(5,10,26,.84) 75%,
+                    rgba(4,7,20,.86) 100%),
                 url('/images/wallpaper.jpeg') center/cover no-repeat fixed;
+            background-blend-mode: multiply;
         }
 
-        /* Glow accents */
-        .glow-1 {
-            position: fixed; top: -250px; left: -150px;
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, rgb(var(--cyan-rgb) / 0.16) 0%, transparent 60%);
-            filter: blur(50px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .glow-2 {
-            position: fixed; bottom: -250px; right: -150px;
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, rgb(var(--lavender-rgb) / 0.14) 0%, transparent 60%);
-            filter: blur(50px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .grid-overlay {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-            background-size: 56px 56px;
-            mask-image: radial-gradient(circle at center, black, transparent 70%);
-            -webkit-mask-image: radial-gradient(circle at center, black, transparent 70%);
-        }
-
-        .serif {
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-weight: 600;
-        }
-
-        /* ===== Layout ===== */
+        /* ── Layout ── */
         .page {
-            position: relative; z-index: 2;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 100vh;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 24px;
-            gap: 24px;
-            align-items: center;
+            height: 100vh;
         }
 
-        /* ===== Brand panel (left) ===== */
-        .brand-panel {
+        /* ── Left: Brand ── */
+        .brand {
+            display: flex;
+            flex-direction: column;
+            padding: 52px 60px 52px 48px;
             position: relative;
-            padding: 56px 48px;
-            border-radius: var(--r-3xl);
-            background: linear-gradient(160deg, var(--panel-2) 0%, var(--panel) 100%);
-            border: 1px solid var(--line);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px -20px rgba(0,0,0,0.7);
             overflow: hidden;
-            min-height: 580px;
+        }
+        .brand-inner {
+            flex: 1;
             display: flex; flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+            position: relative; z-index: 1;
         }
-        .brand-panel::before {
+        .brand::before {
             content: '';
-            position: absolute; top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--line-2), transparent);
+            position: absolute; inset: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+            background-size: 32px 32px;
+            -webkit-mask-image: radial-gradient(ellipse 80% 80% at 30% 40%, black 0%, transparent 70%);
+            mask-image: radial-gradient(ellipse 80% 80% at 30% 40%, black 0%, transparent 70%);
+            pointer-events: none;
         }
-        .brand-panel::after {
+        .brand::after {
             content: '';
-            position: absolute;
-            top: -120px; right: -120px;
-            width: 380px; height: 380px;
-            border-radius: var(--r-full);
-            background: radial-gradient(circle, rgb(var(--cyan-rgb) / 0.16) 0%, transparent 60%);
-            filter: blur(20px);
+            position: absolute; top: -100px; left: -100px;
+            width: 500px; height: 500px; border-radius: 50%;
+            background: radial-gradient(circle, rgb(var(--cyan-d-rgb)/.08) 0%, transparent 65%);
             pointer-events: none;
         }
 
-        .brand-top { display: flex; align-items: center; gap: 12px; position: relative; z-index: 2; }
-        .brand-mark {
-            width: 44px; height: 44px;
-            border-radius: var(--r-lg);
-            background: conic-gradient(from 220deg, #5ed0ff, var(--lavender), var(--coral), var(--amber), var(--mint), #5ed0ff);
-            display: inline-flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 24px -8px rgb(var(--cyan-rgb) / 0.4);
+        /* Logo */
+        .b-logo { display: flex; align-items: center; gap: 11px; }
+        .b-mark {
+            position: relative; width: 40px; height: 40px; border-radius: var(--r-lg);
+            background: conic-gradient(from 220deg, var(--cyan-d), var(--cyan), #70f5d0, var(--cyan-d));
+            box-shadow: 0 8px 28px -4px rgb(var(--cyan-d-rgb)/.5), inset 0 1px 0 rgba(255,255,255,.28);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .brand-mark .mark-inner {
-            width: 36px; height: 36px;
-            border-radius: var(--r-md);
-            background: var(--panel);
-            display: inline-flex; align-items: center; justify-content: center;
-            color: var(--cyan);
-            font-size: 16px;
+        .b-mark::after {
+            content: ''; position: absolute; inset: 2px;
+            border-radius: 9px; background: rgba(7,12,30,.96);
         }
-        .brand-name { font-size: 16px; font-weight: 700; line-height: 1.1; letter-spacing: 0em; }
-        .brand-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; color: var(--ink-3); margin-top: 4px; text-transform: uppercase; }
+        .b-mark i { position: relative; z-index: 2; font-size: 14px; color: var(--cyan-d); filter: drop-shadow(0 0 8px rgb(var(--cyan-d-rgb)/.7)); }
+        .b-name { font-size: 16px; font-weight: 700; letter-spacing: -.02em; display: block; }
+        .b-tag  { font-size: 10px; font-weight: 600; letter-spacing: .10em; text-transform: uppercase; color: var(--ink-3); display: block; margin-top: 2px; }
 
-        .brand-hero {
-            margin-top: 60px;
-            font-size: clamp(36px, 4.5vw, 52px);
-            line-height: 1;
-            letter-spacing: -0.03em;
-            font-weight: 800;
-            position: relative; z-index: 2;
+        /* Center content */
+        .b-content { }
+        .b-headline {
+            font-size: clamp(36px, 4.2vw, 54px);
+            font-weight: 900; letter-spacing: -.05em; line-height: .95;
         }
-        .brand-hero .accent {
-            background: linear-gradient(135deg, #5ed0ff, var(--lavender), #f0abfc);
-            -webkit-background-clip: text; background-clip: text;
-            color: transparent;
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-weight: 600;
+        .b-headline .plain { color: var(--ink-0); display: block; }
+        .b-headline .grad  {
+            display: block;
+            background: linear-gradient(115deg, var(--cyan) 0%, var(--lavender) 55%, var(--mint) 100%);
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+        }
+        .b-desc {
+            margin-top: 16px;
+            font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 340px;
+        }
+        .b-status {
+            display: inline-flex; align-items: center; gap: 7px;
+            margin-top: 20px; align-self: flex-start;
+            padding: 5px 14px 5px 8px; border-radius: 999px;
+            background: rgb(var(--mint-rgb)/.08);
+            border: 1px solid rgb(var(--mint-rgb)/.22);
+            font-size: 11.5px; font-weight: 600; color: var(--mint);
+        }
+        .s-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--mint); box-shadow: 0 0 8px var(--mint);
+            animation: blink 2s ease-in-out infinite;
         }
 
-        .brand-sub {
-            margin-top: 18px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--ink-2);
-            max-width: 420px;
-            position: relative; z-index: 2;
-        }
 
-        .brand-features {
-            margin-top: auto;
-            padding-top: 36px;
+        /* Features */
+        .b-feats {
+            padding-top: 24px;
+            border-top: 1px solid var(--line-soft);
             display: flex; flex-direction: column; gap: 14px;
-            position: relative; z-index: 2;
         }
-        .feat-row { display: flex; align-items: center; gap: 12px; }
+        .feat { display: flex; align-items: center; gap: 12px; }
         .feat-ic {
-            width: 30px; height: 30px;
-            border-radius: var(--r-md);
-            display: inline-flex; align-items: center; justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
+            width: 34px; height: 34px; border-radius: var(--r-md);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; flex-shrink: 0;
         }
-        .feat-ic.cyan     { background: rgb(var(--cyan-rgb) / 0.14);  border: 1px solid rgb(var(--cyan-rgb) / 0.32);  color: var(--cyan);     box-shadow: 0 0 14px -3px rgb(var(--cyan-rgb) / 0.28); }
-        .feat-ic.mint     { background: rgb(var(--mint-rgb) / 0.14); border: 1px solid rgb(var(--mint-rgb) / 0.32); color: var(--mint);     box-shadow: 0 0 14px -3px rgb(var(--mint-rgb) / 0.28); }
-        .feat-ic.lavender { background: rgb(var(--lavender-rgb) / 0.14); border: 1px solid rgb(var(--lavender-rgb) / 0.32); color: var(--lavender); box-shadow: 0 0 14px -3px rgb(var(--lavender-rgb) / 0.28); }
+        .feat-ic.c { background: rgb(var(--cyan-d-rgb)/.10); border: 1px solid rgb(var(--cyan-d-rgb)/.22); color: var(--cyan-d); }
+        .feat-ic.m { background: rgb(var(--mint-rgb)/.10);   border: 1px solid rgb(var(--mint-rgb)/.22);   color: var(--mint); }
+        .feat-ic.l { background: rgb(var(--lavender-rgb)/.10);border: 1px solid rgb(var(--lavender-rgb)/.22);color: var(--lavender); }
         .feat-text { font-size: 13px; color: var(--ink-1); font-weight: 500; }
 
-        /* ===== Form panel (right) ===== */
-        .form-panel {
-            position: relative;
-            padding: 48px 44px 36px;
-            border-radius: var(--r-3xl);
-            background: linear-gradient(160deg, var(--panel) 0%, var(--bg-1) 100%);
-            border: 1px solid var(--line);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px -20px rgba(0,0,0,0.8);
-            min-height: 580px;
-            display: flex; flex-direction: column;
+        /* Vertical divider */
+        .divider {
+            position: absolute; top: 0; bottom: 0;
+            left: 50%; width: 1px;
+            background: linear-gradient(180deg, transparent, var(--line) 15%, var(--line) 85%, transparent);
+            pointer-events: none; z-index: 10;
         }
-        .form-panel::before {
+
+        /* ── Right: Form ── */
+        .form-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 52px 48px 52px 60px;
+            position: relative;
+            overflow-y: auto;
+            min-height: 0;
+        }
+        .form-side::before {
+            content: '';
+            position: absolute; top: -120px; right: -60px;
+            width: 480px; height: 480px; border-radius: 50%;
+            background: radial-gradient(circle, rgb(var(--cyan-d-rgb)/.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .form-side::after {
+            content: '';
+            position: absolute; bottom: -100px; left: -40px;
+            width: 360px; height: 360px; border-radius: 50%;
+            background: radial-gradient(circle, rgb(var(--lavender-rgb)/.05) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+
+        /* Form body */
+        .form-body {
+            flex: 1;
+            display: flex; flex-direction: column;
+            justify-content: center;
+            padding: 24px 0;
+            min-height: 0;
+            position: relative; z-index: 1;
+        }
+
+        /* Glass form card */
+        .form-card {
+            padding: 36px 38px;
+            border-radius: var(--r-3xl);
+            background: rgba(10,18,40,.65);
+            border: 1px solid rgba(255,255,255,.1);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            position: relative;
+            overflow: hidden;
+            box-shadow:
+                0 32px 80px rgba(0,0,0,.35),
+                0 0 0 1px rgba(255,255,255,.04),
+                inset 0 1px 0 rgba(255,255,255,.08);
+            z-index: 1;
+        }
+        .form-card::before {
             content: '';
             position: absolute; top: 0; left: 0; right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--line-2), transparent);
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgb(var(--cyan-d-rgb)/.8) 25%,
+                rgb(var(--lavender-rgb)/.6) 65%,
+                transparent 100%);
         }
 
-        .back-link {
+        .eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
-            font-size: 12px; color: var(--ink-3);
-            text-decoration: none; font-weight: 500;
-            margin-bottom: 32px;
-            transition: color var(--t-base);
+            font-size: 11px; font-weight: 700; letter-spacing: .14em;
+            color: var(--cyan-d); text-transform: uppercase;
         }
-        .back-link:hover { color: var(--ink-1); }
-
-        .form-eyebrow {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
-            color: var(--cyan); text-transform: uppercase;
+        .eyebrow::before {
+            content: ''; width: 16px; height: 1px;
+            background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb)/.7));
         }
-        .form-eyebrow::before {
-            content: ''; width: 18px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--cyan));
-        }
-
         .form-title {
-            margin-top: 14px;
-            font-size: 32px; font-weight: 800;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
+            margin-top: 12px;
+            font-size: 34px; font-weight: 800; letter-spacing: -.04em; line-height: 1.1;
         }
-        .form-title .accent {
-            background: linear-gradient(135deg, #5ed0ff, var(--lavender));
-            -webkit-background-clip: text; background-clip: text;
-            color: transparent;
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-weight: 600;
+        .form-title .hi {
+            background: linear-gradient(120deg, var(--cyan), var(--lavender));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-
-        .form-sub {
-            margin-top: 10px;
-            font-size: 14px; color: var(--ink-2);
-            line-height: 1.6;
-        }
+        .form-desc { margin-top: 8px; font-size: 14px; color: var(--ink-2); line-height: 1.65; }
 
         /* Alert */
         .alert {
-            margin-top: 24px;
-            padding: 12px 14px;
-            border-radius: var(--r-lg);
-            background: rgb(var(--coral-rgb) / 0.10);
-            border: 1px solid rgb(var(--coral-rgb) / 0.32);
-            color: #ffc6cf;
-            font-size: 13px;
+            margin-top: 18px; padding: 12px 14px; border-radius: var(--r-lg);
+            background: rgb(var(--coral-rgb)/.10);
+            border: 1px solid rgb(var(--coral-rgb)/.28);
+            color: #ffc6cf; font-size: 13px; font-weight: 500;
             display: flex; align-items: flex-start; gap: 10px;
-            font-weight: 500;
         }
-        .alert i { color: var(--coral); margin-top: 2px; }
+        .alert i { color: var(--coral); flex-shrink: 0; margin-top: 1px; }
 
-        /* Form */
-        .form { margin-top: 26px; display: flex; flex-direction: column; gap: 16px; }
-        .field-label {
+        /* Fields */
+        .fields { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+        .field-lbl {
             display: flex; align-items: center; justify-content: space-between;
-            font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
-            color: var(--ink-3);
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            font-size: 11px; font-weight: 700; letter-spacing: .10em;
+            color: var(--ink-3); text-transform: uppercase; margin-bottom: 8px;
         }
-        .field-label .help {
-            font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: 0.05em; text-transform: none;
-        }
+        .field-lbl .hint { font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: .04em; text-transform: none; }
+
         .input-wrap {
-            position: relative;
             display: flex; align-items: center;
-            background: rgba(255,255,255,0.025);
-            border: 1px solid var(--line);
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.12);
             border-radius: var(--r-lg);
-            transition: all var(--t-base);
+            transition: border-color .18s, background .18s, box-shadow .18s;
         }
         .input-wrap:focus-within {
-            border-color: rgb(var(--cyan-rgb) / 0.45);
-            background: rgb(var(--cyan-rgb) / 0.04);
-            box-shadow: 0 0 0 4px rgb(var(--cyan-rgb) / 0.10);
+            border-color: rgb(var(--cyan-d-rgb)/.6);
+            background: rgb(var(--cyan-d-rgb)/.06);
+            box-shadow: 0 0 0 3px rgb(var(--cyan-d-rgb)/.12);
         }
-        .input-wrap .leading {
-            padding: 0 12px 0 14px;
-            color: var(--ink-3);
-            font-size: 13px;
-            display: inline-flex; align-items: center; justify-content: center;
-            transition: color var(--t-base);
+        .input-ic {
+            padding: 0 12px 0 16px; color: var(--ink-3); font-size: 13px;
+            display: flex; align-items: center; transition: color .18s;
         }
-        .input-wrap:focus-within .leading { color: var(--cyan); }
-
+        .input-wrap:focus-within .input-ic { color: var(--cyan-d); }
         .input-wrap input {
-            flex: 1;
-            min-width: 0;
-            background: transparent; border: none; outline: none;
-            color: var(--ink-0);
-            font-family: inherit;
-            font-size: 14px; font-weight: 500;
-            padding: 14px 0;
+            flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+            color: var(--ink-0); font-family: inherit; font-size: 14px; font-weight: 500; padding: 14px 0;
         }
         .input-wrap input::placeholder { color: var(--ink-4); }
-        .input-wrap .trailing {
+        .input-btn {
             background: transparent; border: none; cursor: pointer;
-            color: var(--ink-3);
-            padding: 0 14px;
-            display: inline-flex; align-items: center; justify-content: center;
-            font-size: 13px;
+            color: var(--ink-3); padding: 0 14px;
+            display: flex; align-items: center; font-size: 13px; transition: color .18s;
         }
-        .input-wrap .trailing:hover { color: var(--ink-1); }
+        .input-btn:hover { color: var(--ink-1); }
 
-        /* Live validation checkmark — appears when field is valid & filled */
-        .input-wrap .valid-check {
-            display: inline-flex; align-items: center; justify-content: center;
-            width: 22px; height: 22px;
-            border-radius: var(--r-full);
-            background: rgb(var(--mint-rgb) / 0.16);
-            border: 1px solid rgb(var(--mint-rgb) / 0.36);
-            color: var(--mint);
-            font-size: 10px;
-            margin-right: 10px;
-            opacity: 0;
-            transform: scale(0.7);
-            transition: opacity var(--t-base), transform var(--t-base);
-            pointer-events: none;
-        }
-        .input-wrap input:valid:not(:placeholder-shown) ~ .valid-check {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* CapsLock warning */
+        /* Caps */
         .caps-warn {
-            margin-top: 8px;
-            display: none;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--amber);
+            margin-top: 6px; display: none;
+            align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--amber);
         }
-        .caps-warn i { font-size: 10px; }
-        .caps-warn.visible { display: inline-flex; }
+        .caps-warn.on { display: flex; }
 
-        .submit-btn {
-            margin-top: 8px;
-            width: 100%;
-            padding: 14px 22px;
-            border: none;
-            border-radius: var(--r-lg);
+        /* Submit */
+        .btn-submit {
+            width: 100%; margin-top: 8px;
+            padding: 14px 22px; border: none; border-radius: var(--r-lg);
             background: var(--ink-0);
-            color: #0a0e1c;
-            font-family: inherit;
-            font-size: 14px; font-weight: 700;
-            cursor: pointer;
-            display: inline-flex; align-items: center; justify-content: center;
-            gap: 10px;
-            transition: all var(--t-base);
-            box-shadow: 0 10px 30px -10px rgba(244,246,251,0.30);
+            color: #07101f;
+            font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: -.01em;
+            cursor: pointer; position: relative;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 20px rgba(245,247,251,.12), inset 0 1px 0 rgba(255,255,255,.5);
+            transition: filter .15s, transform .12s, box-shadow .15s;
         }
-        .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 14px 36px -10px rgba(244,246,251,0.42); }
-        .submit-btn:active { transform: translateY(0); }
-        .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-        .submit-btn.is-loading {
-            color: transparent;
-            position: relative;
-            pointer-events: none;
+        .btn-submit:hover:not(:disabled) {
+            filter: brightness(1.05); transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(245,247,251,.2);
         }
-        .submit-btn.is-loading::after {
-            content: '';
-            position: absolute;
+        .btn-submit:active:not(:disabled) { transform: translateY(0); }
+        .btn-submit:disabled { opacity: .7; cursor: not-allowed; }
+        .btn-submit.loading { color: transparent; pointer-events: none; }
+        .btn-submit.loading::after {
+            content: ''; position: absolute;
             width: 16px; height: 16px;
-            border: 2px solid rgba(10,14,28,0.30);
-            border-top-color: #0a0e1c;
-            border-radius: var(--r-full);
-            animation: spin 0.7s linear infinite;
+            border: 2px solid rgba(7,16,31,.25); border-top-color: #07101f;
+            border-radius: 50%; animation: spin .7s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Admin note */
+        .form-note {
+            margin-top: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 7px;
+            font-size: 12px; color: var(--ink-4); text-align: center;
+        }
+        .form-note i { font-size: 10px; color: var(--ink-4); }
 
         /* Footer */
-        .form-footer {
-            margin-top: auto; padding-top: 28px;
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 12px; flex-wrap: wrap;
-            border-top: 1px solid var(--line);
-            margin-left: -44px; margin-right: -44px;
-            padding-left: 44px; padding-right: 44px;
-            padding-top: 22px;
+        .form-foot {
+            padding-top: 20px;
+            margin-top: 0;
+            border-top: 1px solid var(--line-soft);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
         }
-        .secure-badge {
-            display: inline-flex; align-items: center; gap: 8px;
+        .secure-pill {
+            display: inline-flex; align-items: center; gap: 7px;
             font-size: 11px; color: var(--ink-3); font-weight: 500;
         }
-        .secure-badge i {
-            color: var(--mint);
-            background: rgb(var(--mint-rgb) / 0.10);
-            width: 22px; height: 22px;
-            border-radius: var(--r-full);
-            display: inline-flex; align-items: center; justify-content: center;
-            border: 1px solid rgb(var(--mint-rgb) / 0.28);
-            font-size: 10px;
+        .secure-pill i {
+            width: 20px; height: 20px; border-radius: 50%;
+            background: rgb(var(--mint-rgb)/.10);
+            border: 1px solid rgb(var(--mint-rgb)/.25);
+            color: var(--mint); font-size: 9px;
+            display: flex; align-items: center; justify-content: center;
         }
-        .copyright { font-size: 11px; color: var(--ink-4); }
+        .copy { font-size: 11px; color: var(--ink-4); }
 
-        /* Hide scrollbars completely — all browsers including mobile */
-        html, body, * {
-            scrollbar-width: none !important;
-            scrollbar-color: transparent transparent !important;
-            -ms-overflow-style: none !important;
+        /* Brand summary — mobile/tablet only */
+        .brand-summary { display: none; }
+        .bs-logo { display: flex; align-items: center; gap: 11px; margin-bottom: 20px; }
+        .bs-headline {
+            font-size: clamp(22px, 5vw, 34px);
+            font-weight: 900; letter-spacing: -.04em; line-height: 1.0; margin-bottom: 12px;
         }
-        html::-webkit-scrollbar,
-        body::-webkit-scrollbar,
-        *::-webkit-scrollbar,
-        *::-webkit-scrollbar-track,
-        *::-webkit-scrollbar-thumb,
-        *::-webkit-scrollbar-corner,
-        *::-webkit-scrollbar-button {
-            display: none !important;
-            width: 0 !important;
-            height: 0 !important;
-            background: transparent !important;
-            -webkit-appearance: none !important;
-            appearance: none !important;
+        .bs-desc { font-size: 13.5px; color: var(--ink-2); line-height: 1.68; }
+        .bs-feats {
+            margin-top: 18px; padding-top: 18px;
+            border-top: 1px solid var(--line-soft);
+            display: flex; flex-direction: column; gap: 11px;
         }
 
-        /* ===== Responsive ===== */
-        /* Tablet & smaller laptop (≤ 1024 px) — hide brand panel, center form */
+        /* Animations */
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+        @keyframes spin  { to { transform: rotate(360deg); } }
+
+        /* ── Responsive ── */
         @media (max-width: 1024px) {
-            html, body { height: 100%; }
-            body { overflow-y: auto; overflow-x: hidden; }
+            html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
             .page {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 24px;
-                gap: 0;
-                min-height: 100vh;
-                max-width: 100%;
-                margin: 0 auto;
+                display: flex; align-items: flex-start; justify-content: center;
+                height: auto; min-height: 100vh; padding: 32px 24px;
             }
-            .brand-panel { display: none; }
-            .form-panel {
-                padding: 40px 36px 28px;
-                min-height: 0;
-                width: 100%;
-                max-width: 480px;
-                border-radius: var(--r-3xl);
+            .divider { display: none; }
+            .brand   { display: none; }
+            .form-side {
+                width: 100%; max-width: 520px; height: auto;
+                padding: 36px 28px 32px;
+                justify-content: flex-start;
+                background: none; border: none; border-radius: 0;
+                -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none;
             }
-            .form-footer { margin-left: -36px; margin-right: -36px; padding-left: 36px; padding-right: 36px; }
+            .form-side::before { display: none; }
+            .brand-summary {
+                display: block; padding-bottom: 28px;
+                margin-bottom: 8px; border-bottom: 1px solid var(--line-soft);
+            }
+            .form-body { flex: none; justify-content: flex-start; padding: 0; }
+            .form-card { padding: 28px 26px; }
+            .fields    { margin-top: 22px; }
+            .form-foot { margin-top: 22px; }
         }
 
-        /* Mobile L (≤ 480 px) — hide brand panel, center the form */
         @media (max-width: 480px) {
-            html, body { height: 100%; }
-            body { overflow-y: auto; }
-            .page {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 16px;
-                gap: 0;
-                max-width: 100%;
-                min-height: 100vh;
-                margin: 0 auto;
-            }
-            .brand-panel { display: none; }
-            .form-panel {
-                padding: 28px 22px 22px;
-                border-radius: var(--r-2xl);
-                width: 100%;
-                max-width: 400px;
-                margin: 0;
-            }
-            .form-title { font-size: 24px; margin-top: 12px; }
-            .form-sub { font-size: 13px; margin-top: 8px; }
-            .form { margin-top: 22px; gap: 14px; }
-            .form-footer { margin-left: -22px; margin-right: -22px; padding-left: 22px; padding-right: 22px; }
-            .back-link { margin-bottom: 22px; font-size: 12px; }
-            .input-wrap input { padding: 12px 0; font-size: 14px; }
-            .alert { font-size: 12px; padding: 10px 12px; }
+            .page { padding: 24px 20px; }
+            .form-side  { padding: 24px 0 28px; max-width: 100%; }
+            .form-title { font-size: 22px; }
+            .bs-headline { font-size: 21px; }
+            .bs-desc    { font-size: 13px; }
+            .fields     { gap: 13px; margin-top: 18px; }
+            .form-foot  { margin-top: 18px; }
+            .feat-text  { font-size: 12.5px; }
+            .bs-feats   { gap: 10px; }
+            .brand-summary { padding-bottom: 22px; margin-bottom: 6px; }
+            .form-card  { padding: 22px 18px; }
         }
 
-        /* Mobile S (≤ 480 px) — very tight, form-only */
-        @media (max-width: 480px) {
-            .page { padding: 12px; }
-            .form-panel { padding: 22px 16px 18px; border-radius: var(--r-2xl); }
-            .form-eyebrow { font-size: 10px; letter-spacing: 0.12em; }
-            .form-title { font-size: 20px; margin-top: 10px; }
-            .form-sub { font-size: 12px; margin-top: 6px; }
-            .form { margin-top: 18px; gap: 12px; }
-            .form-footer { margin-left: -16px; margin-right: -16px; padding-left: 16px; padding-right: 16px; }
-            .input-wrap { border-radius: var(--r-md); }
-            .input-wrap input { font-size: 13px; padding: 11px 0; }
-            .input-wrap .leading { padding: 0 10px 0 12px; font-size: 12px; }
-            .input-wrap .trailing { padding: 0 12px; font-size: 12px; }
-            .field-label { font-size: 10px; letter-spacing: 0.12em; margin-bottom: 6px; }
-            .alert { font-size: 12px; padding: 9px 11px; margin-top: 18px; gap: 8px; }
-            .back-link { margin-bottom: 18px; font-size: 11px; }
+        @media (max-width: 360px) {
+            .page { padding: 20px 16px; }
+            .form-side  { padding: 20px 0 24px; }
+            .form-title { font-size: 20px; }
+            .bs-headline { font-size: 19px; }
+            .feat-text  { font-size: 12px; }
+            .input-wrap input { padding: 12px 0; font-size: 13px; }
+            .btn-submit { font-size: 13px; padding: 12px; }
+            .form-card  { padding: 18px 14px; }
         }
 
-        /* Landscape mobile — make body scrollable so form is reachable */
-        @media (max-height: 600px) and (orientation: landscape) {
-            html, body { height: auto; }
-            body { overflow: auto; }
-            .page {
-                min-height: 100vh;
-                padding: 16px;
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-                align-items: stretch;
-            }
-            .brand-panel, .form-panel { min-height: 0; padding: 26px 26px 22px; }
-            .brand-hero { margin-top: 22px; font-size: 28px; }
-            .brand-features { padding-top: 22px; gap: 10px; }
-            .form-panel { padding-top: 22px; }
-            .back-link { margin-bottom: 18px; }
+        @media (max-height: 500px) and (orientation: landscape) {
+            html, body { height: auto; overflow-y: auto; }
+            .page { padding: 16px 20px; }
+            .form-side  { padding: 20px 24px 18px; }
+            .bs-headline, .bs-desc, .bs-feats { display: none; }
+            .brand-summary { padding-bottom: 16px; margin-bottom: 4px; }
+            .form-title { font-size: 20px; }
+            .form-card  { padding: 20px 22px; }
+            .fields     { margin-top: 14px; gap: 10px; }
+            .form-foot  { margin-top: 14px; }
+            .form-note  { display: none; }
         }
 
-        /* Touch devices — ensure tap targets ≥44px */
-        @media (hover: none) and (pointer: coarse) {
-            .submit-btn { min-height: 48px; }
-            .input-wrap input { padding: 16px 0; }
-            .input-wrap .trailing { min-width: 44px; min-height: 44px; }
-        }
-
-        /* Respect prefers-reduced-motion */
         @media (prefers-reduced-motion: reduce) {
-            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+            * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
         }
+        * { scrollbar-width: none; -ms-overflow-style: none; }
+        *::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
-    <div class="grid-overlay"></div>
 
-    <main class="page">
+<main class="page">
 
-        {{-- BRAND PANEL (LEFT) --}}
-        <aside class="brand-panel">
-            <div class="brand-top">
-                <div class="brand-mark">
-                    <div class="mark-inner"><i class="fa-solid fa-snowflake"></i></div>
-                </div>
+    {{-- ── BRAND (left) ── --}}
+    <aside class="brand">
+        <div class="brand-inner">
+
+            <div class="b-logo">
+                <div class="b-mark"><i class="fa-solid fa-snowflake"></i></div>
                 <div>
-                    <div class="brand-name">Control AC</div>
-                    <div class="brand-tag">Cooling, Reimagined</div>
+                    <span class="b-name">SmartAC</span>
+                    <span class="b-tag">IoT Control System</span>
                 </div>
             </div>
 
-            <h1 class="brand-hero">
-                Your gateway to<br>
-                <span class="accent">control</span> your<br>
-                server rooms.
-            </h1>
-
-            <p class="brand-sub">
-                Monitor temperature, schedule AC, and handle anomalies — all in one lightweight, responsive dashboard.
-            </p>
-
-            <div class="brand-features">
-                <div class="feat-row">
-                    <span class="feat-ic cyan"><i class="fa-solid fa-bolt"></i></span>
-                    <span class="feat-text">Sub-second realtime via MQTT + WebSocket</span>
+            <div class="b-content">
+                <h1 class="b-headline">
+                    <span class="plain">Intelligent</span>
+                    <span class="plain">climate control</span>
+                    <span class="grad">for server rooms.</span>
+                </h1>
+                <p class="b-desc">
+                    Monitor temperatures, control AC units remotely, and automate climate responses — all from one real-time dashboard.
+                </p>
+                <div class="b-status">
+                    <span class="s-dot"></span>
+                    System online &amp; monitoring
                 </div>
-                <div class="feat-row">
-                    <span class="feat-ic lavender"><i class="fa-solid fa-shield-halved"></i></span>
+            </div>
+
+            <div class="b-feats">
+                <div class="feat">
+                    <span class="feat-ic c"><i class="fa-solid fa-bolt"></i></span>
+                    <span class="feat-text">Real-time updates via MQTT + WebSocket</span>
+                </div>
+                <div class="feat">
+                    <span class="feat-ic m"><i class="fa-solid fa-brain"></i></span>
+                    <span class="feat-text">Fuzzy logic auto-adjusts AC setpoints</span>
+                </div>
+                <div class="feat">
+                    <span class="feat-ic l"><i class="fa-solid fa-shield-halved"></i></span>
                     <span class="feat-text">Role-based access: Admin, Operator, User</span>
                 </div>
-                <div class="feat-row">
-                    <span class="feat-ic mint"><i class="fa-solid fa-clock"></i></span>
-                    <span class="feat-text">Automatic scheduling with ±30 second tolerance</span>
+            </div>
+
+        </div>
+    </aside>
+
+    <div class="divider"></div>
+
+    {{-- ── FORM (right) ── --}}
+    <section class="form-side">
+
+        {{-- Brand summary — tablet/mobile only --}}
+        <div class="brand-summary">
+            <div class="bs-logo">
+                <div class="b-mark"><i class="fa-solid fa-snowflake"></i></div>
+                <div>
+                    <span class="b-name">SmartAC</span>
+                    <span class="b-tag">IoT Control System</span>
                 </div>
             </div>
-        </aside>
-
-        {{-- FORM PANEL (RIGHT) --}}
-        <section class="form-panel">
-            <a href="/" class="back-link">
-                <i class="fa-solid fa-arrow-left" style="font-size:10px;"></i>
-                Back to home
-            </a>
-
-            <p class="form-eyebrow">Sign In</p>
-            <h2 class="form-title">Welcome <span class="accent">back.</span></h2>
-            <p class="form-sub">Sign in with the account created by the administrator to continue to the dashboard.</p>
-
-            @if (session('error'))
-                <div class="alert" role="alert">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>{{ session('error') }}</span>
+            <h1 class="bs-headline">
+                <span class="plain">Intelligent climate control</span>
+                <span class="grad">for server rooms.</span>
+            </h1>
+            <p class="bs-desc">Monitor temperatures, control AC units remotely, and automate climate responses — all from one real-time dashboard.</p>
+            <div class="b-status">
+                <span class="s-dot"></span>
+                System online &amp; monitoring
+            </div>
+            <div class="bs-feats">
+                <div class="feat">
+                    <span class="feat-ic c"><i class="fa-solid fa-bolt"></i></span>
+                    <span class="feat-text">Real-time updates via MQTT + WebSocket</span>
                 </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="alert" role="alert">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>{{ $errors->first() }}</span>
+                <div class="feat">
+                    <span class="feat-ic m"><i class="fa-solid fa-brain"></i></span>
+                    <span class="feat-text">Fuzzy logic auto-adjusts AC setpoints</span>
                 </div>
-            @endif
+                <div class="feat">
+                    <span class="feat-ic l"><i class="fa-solid fa-shield-halved"></i></span>
+                    <span class="feat-text">Role-based access: Admin, Operator, User</span>
+                </div>
+            </div>
+        </div>
 
-            <form method="POST" action="/login" id="loginForm" class="form">
-                @csrf
 
-                <div class="field">
-                    <label class="field-label" for="username">
-                        <span>Username</span>
-                        <span class="help">3–20 characters</span>
-                    </label>
-                    <div class="input-wrap" id="usernameWrap">
-                        <span class="leading"><i class="fa-regular fa-user"></i></span>
-                        <input id="username" type="text" name="name"
-                               required autofocus autocomplete="username"
-                               minlength="3" maxlength="20"
-                               pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
-                               title="Username 3–20 characters, letters/numbers/underscore, must start with a letter"
-                               placeholder="e.g. Admin"
-                               value="{{ old('name') }}">
-                        <span class="valid-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+        {{-- Form body --}}
+        <div class="form-body">
+            <div class="form-card">
+                <p class="eyebrow">Sign In</p>
+                <h2 class="form-title">Welcome <span class="hi">back.</span></h2>
+                <p class="form-desc">Sign in with your account to access the SmartAC dashboard.</p>
+
+                @if (session('error'))
+                    <div class="alert" role="alert">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ session('error') }}</span>
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="alert" role="alert">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ $errors->first() }}</span>
+                    </div>
+                @endif
+
+                <div class="fields">
+                    <div>
+                        <label class="field-lbl" for="username">
+                            <span>Username</span>
+                            <span class="hint">3 – 20 characters</span>
+                        </label>
+                        <div class="input-wrap">
+                            <span class="input-ic"><i class="fa-regular fa-user"></i></span>
+                            <input id="username" type="text" name="name" form="loginForm"
+                                   required autofocus autocomplete="username"
+                                   minlength="3" maxlength="20"
+                                   placeholder="Enter your username"
+                                   value="{{ old('name') }}">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="field-lbl" for="password">
+                            <span>Password</span>
+                        </label>
+                        <div class="input-wrap">
+                            <span class="input-ic"><i class="fa-solid fa-lock"></i></span>
+                            <input id="password" type="password" name="password" form="loginForm"
+                                   required autocomplete="current-password"
+                                   placeholder="Enter your password">
+                            <button type="button" class="input-btn" onclick="togglePw()" aria-label="Toggle password">
+                                <i id="pwIcon" class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <p class="caps-warn" id="capsWarn">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Caps Lock is on
+                        </p>
                     </div>
                 </div>
 
-                <div class="field">
-                    <label class="field-label" for="password">
-                        <span>Password</span>
-                    </label>
-                    <div class="input-wrap" id="passwordWrap">
-                        <span class="leading"><i class="fa-solid fa-lock"></i></span>
-                        <input id="password" type="password" name="password"
-                               required autocomplete="current-password"
-                               placeholder="••••••••">
-                        <span class="valid-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
-                        <button type="button" class="trailing" onclick="togglePassword()" aria-label="Show password">
-                            <i id="toggleIcon" class="fa-regular fa-eye"></i>
-                        </button>
-                    </div>
-                    <p class="caps-warn" id="capsWarn">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        CapsLock is on
-                    </p>
-                </div>
+                <form method="POST" action="/login" id="loginForm" novalidate style="margin-top:8px;">
+                    @csrf
+                    <button type="submit" class="btn-submit" id="loginBtn">
+                        <span>Sign In</span>
+                        <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+                    </button>
+                </form>
 
-                <button type="submit" class="submit-btn" id="loginBtn">
-                    <span>Sign In</span>
-                    <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
-                </button>
-            </form>
-
-            <div class="form-footer">
-                <span class="secure-badge">
-                    <i class="fa-solid fa-lock"></i>
-                    Encrypted connection
-                </span>
-                <span class="copyright">© {{ date('Y') }} Control AC</span>
+                <p class="form-note">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Accounts are managed by your system administrator.
+                </p>
             </div>
-        </section>
+        </div>
 
-    </main>
+        {{-- Footer --}}
+        <div class="form-foot">
+            <span class="secure-pill">
+                <i class="fa-solid fa-lock"></i>
+                Encrypted connection
+            </span>
+            <span class="copy">© {{ date('Y') }} SmartAC</span>
+        </div>
 
-    <script>
-        function togglePassword() {
-            const pw = document.getElementById('password');
-            const icon = document.getElementById('toggleIcon');
-            if (pw.type === 'password') {
-                pw.type = 'text';
-                icon.className = 'fa-regular fa-eye-slash';
-            } else {
-                pw.type = 'password';
-                icon.className = 'fa-regular fa-eye';
-            }
-        }
+    </section>
 
-        document.getElementById('loginForm')?.addEventListener('submit', () => {
-            document.getElementById('loginBtn').classList.add('is-loading');
-        });
+</main>
 
-        // CapsLock detection on password field
-        const pwInput = document.getElementById('password');
-        const capsWarn = document.getElementById('capsWarn');
-        function checkCaps(e) {
-            if (!capsWarn) return;
-            const on = typeof e.getModifierState === 'function' && e.getModifierState('CapsLock');
-            capsWarn.classList.toggle('visible', !!on);
-        }
-        if (pwInput) {
-            pwInput.addEventListener('keydown', checkCaps);
-            pwInput.addEventListener('keyup', checkCaps);
-            pwInput.addEventListener('blur', () => capsWarn?.classList.remove('visible'));
-        }
-    </script>
+<script>
+    function togglePw() {
+        const pw = document.getElementById('password');
+        const ic = document.getElementById('pwIcon');
+        const show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        ic.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function () {
+        document.getElementById('loginBtn').classList.add('loading');
+    });
+
+    const pw    = document.getElementById('password');
+    const capEl = document.getElementById('capsWarn');
+    function checkCaps(e) {
+        capEl.classList.toggle('on', !!e.getModifierState?.('CapsLock'));
+    }
+    pw.addEventListener('keydown', checkCaps);
+    pw.addEventListener('keyup',   checkCaps);
+    pw.addEventListener('blur',    () => capEl.classList.remove('on'));
+</script>
 </body>
 </html>

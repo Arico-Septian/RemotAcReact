@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::get('/login', function () {
@@ -50,8 +50,6 @@ Route::get('/system-check', function () {
 
 Route::middleware(['auth', 'activity'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
-    Route::post('/session/ping', fn () => response()->json(['ok' => true]))->name('session.ping');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/recent-activities', [DashboardController::class, 'recentActivities'])->name('dashboard.recent-activities');

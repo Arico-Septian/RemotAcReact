@@ -28,7 +28,6 @@
     const IDLE_MINUTES = { admin: 15, operator: 30, user: 60 };
     const WARN_SECONDS = 60;
     const IDLE_MS = (IDLE_MINUTES[ROLE] ?? 60) * 60 * 1000;
-    const PING_THROTTLE_MS = 60 * 1000;
 
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
     const modal = document.getElementById('idleWarnModal');
@@ -37,7 +36,6 @@
     const logoutBtn = document.getElementById('idleLogoutBtn');
 
     let lastActivity = Date.now();
-    let lastPing = 0;
     let warnTimer = null;
     let logoutTimer = null;
     let countdownTimer = null;
@@ -77,23 +75,9 @@
         form.submit();
     }
 
-    function pingServer() {
-        const now = Date.now();
-        if (now - lastPing < PING_THROTTLE_MS) return;
-        lastPing = now;
-        fetch('/session/ping', {
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': csrf, 'Accept': 'application/json' },
-            credentials: 'same-origin'
-        }).catch(() => {});
-    }
-
     function resetIdle() {
         lastActivity = Date.now();
-        if (warning) {
-            hideModal();
-            pingServer();
-        }
+        if (warning) hideModal();
         clearTimeout(warnTimer);
         warnTimer = setTimeout(showModal, Math.max(IDLE_MS - WARN_SECONDS * 1000, 1000));
     }
@@ -102,17 +86,13 @@
         const now = Date.now();
         if (now - lastActivity < 2000) return;
         resetIdle();
-        pingServer();
     }
 
     ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'].forEach(evt => {
         window.addEventListener(evt, onUserInput, { passive: true });
     });
 
-    stayBtn?.addEventListener('click', () => {
-        resetIdle();
-        pingServer();
-    });
+    stayBtn?.addEventListener('click', resetIdle);
     logoutBtn?.addEventListener('click', doLogout);
 
     resetIdle();
