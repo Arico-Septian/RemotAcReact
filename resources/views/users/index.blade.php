@@ -141,8 +141,8 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 6px 12px;
-            border-radius: var(--r-sm);
+            padding: 6px 14px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
@@ -188,7 +188,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1;
             color: var(--ink-2);
             justify-content: center;
@@ -437,26 +437,27 @@
             opacity: 1;
         }
 
-        /* Enhanced pagination */
+        /* Pagination — tombol konsisten, rapi */
         .pager {
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
         }
 
         .pager a, .pager span {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 32px;
-            height: 32px;
-            padding: 0 10px;
-            border-radius: var(--r-sm);
-            font-size: 12px;
-            font-weight: 500;
+            min-width: 34px;
+            height: 34px;
+            padding: 0 11px;
+            border-radius: var(--r-md);
+            font-size: 13px;
+            font-weight: 600;
             color: var(--ink-2);
-            background: transparent;
-            border: 1px solid transparent;
+            background: var(--panel-2);
+            border: 1px solid var(--line-soft);
             text-decoration: none;
             transition: all var(--t-fast);
         }
@@ -466,7 +467,7 @@
         }
 
         .pager a:hover {
-            background: var(--panel-2);
+            background: var(--panel-3);
             color: var(--ink-0);
             border-color: var(--line);
         }
@@ -475,13 +476,16 @@
             background: var(--cyan-soft);
             color: var(--cyan);
             border-color: var(--cyan-soft-2);
-            font-weight: 600;
+            font-weight: 700;
         }
 
+        /* Item nonaktif (panah disabled & "...") tanpa kotak tombol */
         .pager .disabled {
             opacity: 0.4;
             pointer-events: none;
             cursor: not-allowed;
+            background: transparent;
+            border-color: transparent;
         }
 
         .pager i {
@@ -490,6 +494,37 @@
 
         .pager a:hover i {
             opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .tbl-footer {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+            .tbl-footer > p {
+                margin: 0;
+                font-size: 11px;
+                flex: 1;
+                min-width: 0;
+                line-height: 1.35;
+            }
+            .pager {
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+                gap: 4px;
+            }
+            .pager a, .pager span {
+                min-width: 30px;
+                height: 30px;
+                padding: 0 7px;
+                font-size: 12px;
+            }
+            /* Ringkas: sembunyikan nomor selain aktif & yang tepat setelahnya */
+            .pager a.text-mono { display: none; }
+            .pager .active + a.text-mono { display: inline-flex; }
         }
 
         /* Sortable table headers */
@@ -560,7 +595,7 @@
             }
 
             .user-card-name-text {
-                font-size: 13px;
+                font-size: 14px;
                 font-weight: 600;
                 color: var(--ink-0);
                 line-height: 1.2;
@@ -570,7 +605,7 @@
             }
 
             .user-card-handle {
-                font-size: 11px;
+                font-size: 12px;
                 color: var(--ink-3);
                 line-height: 1.2;
                 white-space: nowrap;
@@ -585,10 +620,11 @@
 
             .user-card .badge-role {
                 font-size: 10px !important;
-                padding: 3px 6px !important;
+                padding: 3px 10px !important;
                 height: auto !important;
-                min-width: 0 !important;
-                border-radius: var(--r-xs) !important;
+                min-width: 58px !important;
+                justify-content: center !important;
+                border-radius: 8px !important;
                 letter-spacing: 0.05em !important;
                 white-space: nowrap;
                 flex-shrink: 0;
@@ -598,7 +634,9 @@
             .user-card-status {
                 display: inline-flex;
                 align-items: center;
-                font-size: 10px;
+                justify-content: flex-end;
+                min-width: 56px;
+                font-size: 12px;
                 font-weight: 600;
                 color: var(--ink-3);
                 text-transform: uppercase;
@@ -621,6 +659,7 @@
                 gap: 4px;
                 justify-content: flex-end;
                 flex-shrink: 0;
+                min-width: 64px;
             }
 
             .user-card-actions .btn-icon {
@@ -709,8 +748,8 @@
                 font-size: 13px !important;
                 border-radius: var(--r-md) !important;
             }
-            .user-card-name-text { font-size: 13px; }
-            .user-card-handle { font-size: 11px; }
+            .user-card-name-text { font-size: 14px; }
+            .user-card-handle { font-size: 12px; }
             .user-card .badge-role { font-size: 10px !important; padding: 3px 6px !important; }
             .user-card-actions .btn-icon { width: 32px; height: 32px; font-size: 11px; }
 
@@ -1109,6 +1148,8 @@
                                                         <i class="fa-solid fa-trash text-[10px]"></i>
                                                     </button>
                                                 </div>
+                                            @else
+                                                <div class="user-card-actions" aria-hidden="true"></div>
                                             @endif
                                         </div>
                                     </div>
@@ -1438,11 +1479,34 @@
             }, 500);
         });
 
+        // Validasi password sesuai aturan server (min 8, ada huruf besar, kecil, angka)
+        function validatePassword(pw) {
+            if (!pw || pw.length < 8) return 'Password minimal 8 karakter.';
+            if (!/[a-z]/.test(pw)) return 'Password harus mengandung huruf kecil.';
+            if (!/[A-Z]/.test(pw)) return 'Password harus mengandung huruf besar.';
+            if (!/[0-9]/.test(pw)) return 'Password harus mengandung minimal 1 angka.';
+            return null;
+        }
+
+        // Feedback real-time di dalam modal saat mengetik password
+        const addUserPasswordInput = document.querySelector('#addUserForm [name="password"]');
+        if (addUserPasswordInput) {
+            addUserPasswordInput.addEventListener('input', () => {
+                if (!addUserPasswordInput.value) {
+                    setFieldFeedback(addUserPasswordInput);
+                    return;
+                }
+                const err = validatePassword(addUserPasswordInput.value);
+                setFieldFeedback(addUserPasswordInput, err, !!err);
+            });
+        }
+
         document.getElementById('addUserForm')?.addEventListener('submit', async e => {
             e.preventDefault();
 
             const form = e.currentTarget;
             const nameInput = form.querySelector('[name="name"]');
+            const passwordInput = form.querySelector('[name="password"]');
             const submitButton = form.querySelector('[type="submit"]');
             // Preserve original case — only trim whitespace, do not lowercase
             const username = (nameInput.value || '').trim();
@@ -1455,6 +1519,14 @@
 
             if (!username) {
                 form.reportValidity();
+                return;
+            }
+
+            // Validasi password — warning tampil di dalam modal (tidak perlu submit dulu)
+            const pwError = validatePassword(passwordInput.value);
+            if (pwError) {
+                setFieldFeedback(passwordInput, pwError, true);
+                passwordInput.focus();
                 return;
             }
 

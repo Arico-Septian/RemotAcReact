@@ -50,6 +50,7 @@
             justify-content: center;
             padding: 7px 12px;
             font-size: 12px;
+            border-radius: 8px !important;
         }
 
         .room-card .btn.btn-primary:hover,
@@ -72,7 +73,7 @@
         .room-card .ac-mini {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 8px;
         }
 
         .room-card .ac-mini>div {
@@ -93,10 +94,10 @@
         .room-card .ac-mini .lbl {
             font-size: 10px;
             color: var(--ink-3);
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
             margin-top: 4px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .floor-section {
@@ -151,6 +152,12 @@
             background: rgba(248, 113, 113, 0.15) !important;
             color: var(--red) !important;
             border: 1px solid rgba(248, 113, 113, 0.4) !important;
+        }
+
+        /* Status pill Online/Offline → kotak membulat (badge pendek perlu radius kecil
+           agar tdk terlihat pill; 6px ≈ proporsi rounding tombol Detail/Grafik) */
+        .room-card .room-status-pill {
+            border-radius: 8px !important;
         }
         .room-card .temp-chip.idle {
             background: var(--panel-2) !important;
@@ -471,27 +478,36 @@
         }
 
         .history-range-select {
-            background: var(--panel-1);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: var(--panel-1);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a7b0c0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 9px center;
+            background-size: 11px;
             border: 1px solid var(--line-soft);
             color: var(--ink-1);
-            border-radius: var(--r-md);
-            padding: 6px 10px;
+            border-radius: 8px;
+            padding: 6px 28px 6px 12px;
             font-size: 11px;
             font-family: var(--font-sans);
+            line-height: 1.2;
+            text-align: left;
             cursor: pointer;
             outline: none;
             transition: var(--t-base);
         }
 
         .history-range-select:hover {
-            background: rgba(77, 212, 255, 0.10);
+            background-color: rgba(77, 212, 255, 0.10);
             border-color: rgba(77, 212, 255, 0.50);
             color: var(--cyan);
             box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
         }
 
         .history-range-select:focus {
-            background: rgba(77, 212, 255, 0.10);
+            background-color: rgba(77, 212, 255, 0.10);
             border-color: rgba(77, 212, 255, 0.60);
             color: var(--cyan);
             box-shadow: 0 0 14px rgba(77, 212, 255, 0.20);
@@ -577,14 +593,11 @@
 
 
             .history-range-select {
-                width: 58px;
                 min-height: 36px;
-                padding-left: 9px;
-                padding-right: 24px;
+                padding-left: 11px;
+                padding-right: 26px;
                 font-size: 11px;
-                background-position:
-                    calc(100% - 13px) 15px,
-                    calc(100% - 8px) 15px;
+                background-position: right 9px center;
             }
 
             #historyModal .modal-close {
@@ -708,16 +721,16 @@
 
                                                     <div class="ac-mini">
                                                         <div>
-                                                            <p class="num" style="color:var(--mint);"
+                                                            <p class="num" style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="ov-active-{{ $room->id }}">
                                                                 {{ $activeCount }}</p>
-                                                            <p class="lbl">Active</p>
+                                                            <p class="lbl" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Active</p>
                                                         </div>
                                                         <div>
-                                                            <p class="num" style="color:var(--ink-2);"
+                                                            <p class="num" style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="ov-idle-{{ $room->id }}">
                                                                 {{ $inactiveCount }}</p>
-                                                            <p class="lbl">Idle</p>
+                                                            <p class="lbl" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Idle</p>
                                                         </div>
                                                     </div>
 

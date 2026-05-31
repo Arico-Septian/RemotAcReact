@@ -19,7 +19,7 @@
             align-items: center;
             background-color: var(--panel-2);
             border: 1px solid var(--line);
-            border-radius: 999px;
+            border-radius: 8px;
             transition: var(--t-base);
         }
 
@@ -49,7 +49,7 @@
             background: transparent;
             border: none;
             color: var(--ink-1);
-            border-radius: 999px;
+            border-radius: 8px;
             padding: 8px 34px 8px 16px;
             font-size: 12px;
             font-weight: 600;
@@ -1491,7 +1491,7 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 11px !important;
                 padding: 5px 26px 5px 11px !important;
-                border-radius: var(--r-full) !important;
+                border-radius: 8px !important;
             }
         }
 
@@ -1538,7 +1538,7 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
                 padding: 5px 24px 5px 10px !important;
-                border-radius: var(--r-full) !important;
+                border-radius: 8px !important;
                 min-width: 0;
             }
             .temp-chart-panel #trendInfo {
@@ -1565,7 +1565,7 @@
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
                 padding: 5px 24px 5px 10px !important;
-                border-radius: var(--r-full) !important;
+                border-radius: var(--r-md) !important;
             }
             .temp-chart-panel #trendInfo {
                 font-size: 10px !important;
@@ -1796,7 +1796,7 @@
                                                 data-dashboard-room-id="{{ $room->id }}"
                                                 data-status="{{ $status }}">
                                                 <div class="dashboard-room-main">
-                                                    <h3 class="dashboard-room-name">{{ $room->name }}</h3>
+                                                    <h3 class="dashboard-room-name">{{ ucfirst($room->name) }}</h3>
                                                     <p class="dashboard-room-meta">
                                                         {{ $room->acUnits->count() }} unit &middot;
                                                         {{ $room->device_id ?: '-' }}

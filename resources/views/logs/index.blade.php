@@ -279,7 +279,7 @@
         .log-user .name {
             color: var(--ink-0);
             font-weight: 600;
-            font-size: 13px;
+            font-size: 14px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -287,12 +287,12 @@
 
         .log-room {
             color: var(--ink-1);
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .log-detail {
             color: var(--ink-2);
-            font-size: 13px;
+            font-size: 14px;
             max-width: 260px;
             white-space: nowrap;
             overflow: hidden;
@@ -310,27 +310,34 @@
         .log-time .t { color: var(--ink-1); font-size: 12px; font-weight: 600; }
         .log-time .d { color: var(--ink-4); font-size: 11px; }
 
+        /* Badge aktivitas — kotak membulat 8px, konsisten dengan badge role */
+        .act-badge {
+            border-radius: 8px !important;
+            padding: 3px 10px !important;
+        }
 
-        /* Enhanced pagination */
+
+        /* Pagination — tombol konsisten, rapi */
         .pager {
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            flex-wrap: wrap;
         }
 
         .pager a, .pager span {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 32px;
-            height: 32px;
-            padding: 0 10px;
-            border-radius: var(--r-sm);
-            font-size: 12px;
-            font-weight: 500;
+            min-width: 34px;
+            height: 34px;
+            padding: 0 11px;
+            border-radius: var(--r-md);
+            font-size: 13px;
+            font-weight: 600;
             color: var(--ink-2);
-            background: transparent;
-            border: 1px solid transparent;
+            background: var(--panel-2);
+            border: 1px solid var(--line-soft);
             text-decoration: none;
             transition: all var(--t-fast);
         }
@@ -340,7 +347,7 @@
         }
 
         .pager a:hover {
-            background: var(--panel-2);
+            background: var(--panel-3);
             color: var(--ink-0);
             border-color: var(--line);
         }
@@ -349,13 +356,16 @@
             background: var(--cyan-soft);
             color: var(--cyan);
             border-color: var(--cyan-soft-2);
-            font-weight: 600;
+            font-weight: 700;
         }
 
+        /* Item nonaktif (panah disabled & "...") tanpa kotak tombol */
         .pager .disabled {
             opacity: 0.4;
             pointer-events: none;
             cursor: not-allowed;
+            background: transparent;
+            border-color: transparent;
         }
 
         .pager i {
@@ -364,6 +374,38 @@
 
         .pager a:hover i {
             opacity: 1;
+        }
+
+        /* Mobile: footer tetap kiri-kanan (Showing kiri, pager kanan), tidak ditumpuk */
+        @media (max-width: 600px) {
+            .tbl-footer {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+            .tbl-footer > p {
+                margin: 0;
+                font-size: 11px;
+                flex: 1;
+                min-width: 0;
+                line-height: 1.35;
+            }
+            .pager {
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+                gap: 4px;
+            }
+            .pager a, .pager span {
+                min-width: 30px;
+                height: 30px;
+                padding: 0 7px;
+                font-size: 12px;
+            }
+            /* Ringkas: sembunyikan nomor selain aktif & yang tepat setelahnya */
+            .pager a.text-mono { display: none; }
+            .pager .active + a.text-mono { display: inline-flex; }
         }
 
         /* Page sections spacing */
@@ -489,6 +531,21 @@
                                 if (str_starts_with($activity, 'swing_')) {
                                     $val = strtoupper(str_replace('swing_', '', $activity));
                                     return ["SWING {$val}", 'act-lavender'];
+                                }
+                                if (str_starts_with($activity, 'set_timer')) {
+                                    $detail = substr($activity, 9);
+                                    $on = preg_match('/ON\s+(\d{2}:\d{2})/i', $detail, $mOn) ? $mOn[1] : null;
+                                    $off = preg_match('/OFF\s+(\d{2}:\d{2})/i', $detail, $mOff) ? $mOff[1] : null;
+                                    if ($on && $off) {
+                                        $label = "Timer ON {$on} · OFF {$off}";
+                                    } elseif ($on) {
+                                        $label = "Timer ON {$on}";
+                                    } elseif ($off) {
+                                        $label = "Timer OFF {$off}";
+                                    } else {
+                                        $label = 'Set Timer';
+                                    }
+                                    return [$label, 'act-amber'];
                                 }
                                 return match ($activity) {
                                     'login' => ['LOGIN', 'act-mint'],
@@ -663,13 +720,13 @@
                                             <div class="flex-1 min-w-0">
                                                 <div class="flex items-center justify-between gap-2">
                                                     <div class="flex items-center gap-2 min-w-0">
-                                                        <span class="truncate" style="font-size: 16px;font-weight:600;color:var(--ink-0);">{{ $log->user->name ?? '—' }}</span>
+                                                        <span class="truncate" style="font-size: 14px;font-weight:600;color:var(--ink-0);">{{ $log->user->name ?? '—' }}</span>
                                                         <span class="act-badge {{ $class }}" style="flex-shrink:0;">{{ $label }}</span>
                                                     </div>
-                                                    <span class="text-mono" style="font-size: 13px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">{{ $log->created_at->format('H:i') }}</span>
+                                                    <span class="text-mono" style="font-size: 12px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">{{ $log->created_at->format('H:i') }}</span>
                                                 </div>
                                                 <div class="flex items-center justify-between gap-2" style="margin-top:5px;">
-                                                    <span class="truncate" style="font-size:13px;color:var(--ink-3);">{{ $roomAcText ?: '—' }}</span>
+                                                    <span class="truncate" style="font-size:12px;color:var(--ink-3);">{{ $roomAcText ?: '—' }}</span>
                                                     <span class="text-mono" style="font-size: 12px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">{{ $log->created_at->format('d M Y') }}</span>
                                                 </div>
                                             </div>
@@ -910,6 +967,18 @@ initializeSortIndicators();
                 if (a.startsWith('mode_'))     return [`MODE ${a.replace('mode_', '').toUpperCase()}`, 'act-cyan'];
                 if (a.startsWith('fan_speed_'))return [`FAN ${a.replace('fan_speed_', '').toUpperCase()}`, 'act-cyan'];
                 if (a.startsWith('swing_'))    return [`SWING ${a.replace('swing_', '').toUpperCase()}`, 'act-lavender'];
+                if (a.startsWith('set_timer')) {
+                    const detail = a.slice(9);
+                    const mOn = detail.match(/ON\s+(\d{2}:\d{2})/i);
+                    const mOff = detail.match(/OFF\s+(\d{2}:\d{2})/i);
+                    const on = mOn ? mOn[1] : null;
+                    const off = mOff ? mOff[1] : null;
+                    let label = 'Set Timer';
+                    if (on && off) label = `Timer ON ${on} · OFF ${off}`;
+                    else if (on) label = `Timer ON ${on}`;
+                    else if (off) label = `Timer OFF ${off}`;
+                    return [label, 'act-amber'];
+                }
                 const map = {
                     login: ['LOGIN', 'act-mint'], logout: ['LOGOUT', 'act-slate'],
                     on: ['POWER ON', 'act-mint'], off: ['POWER OFF', 'act-coral'],
@@ -1009,13 +1078,13 @@ initializeSortIndicators();
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center justify-between gap-2">
                                     <div class="flex items-center gap-2 min-w-0">
-                                        <span class="truncate" style="font-size: 16px;font-weight:600;color:var(--ink-0);">${name}</span>
+                                        <span class="truncate" style="font-size: 14px;font-weight:600;color:var(--ink-0);">${name}</span>
                                         <span class="act-badge ${badgeClass}" style="flex-shrink:0;">${escapeHtml(badgeLabel)}</span>
                                     </div>
-                                    <span class="text-mono" style="font-size: 13px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">${hh}:${mm}</span>
+                                    <span class="text-mono" style="font-size: 12px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">${hh}:${mm}</span>
                                 </div>
                                 <div class="flex items-center justify-between gap-2" style="margin-top:5px;">
-                                    <span class="truncate" style="font-size:13px;color:var(--ink-3);">${roomAcText}</span>
+                                    <span class="truncate" style="font-size:12px;color:var(--ink-3);">${roomAcText}</span>
                                     <span class="text-mono" style="font-size: 12px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">${dateStr}</span>
                                 </div>
                             </div>

@@ -81,6 +81,11 @@
 
         .room-card:hover {}
 
+        /* Status pill Online/Offline → kotak membulat 8px (seragam dgn overview) */
+        .room-card .room-status-pill {
+            border-radius: 8px !important;
+        }
+
         /* Tombol Control AC — soft cyan seperti Delete User */
         .room-card .btn.btn-primary {
             background: var(--cyan-soft);
@@ -88,6 +93,7 @@
             color: var(--cyan);
             box-shadow: none;
             transition: var(--t-base);
+            border-radius: 8px !important;
         }
         .room-card .btn.btn-primary:hover {
             background: var(--cyan-soft-2);
@@ -102,6 +108,7 @@
             color: var(--coral);
             box-shadow: none;
             transition: var(--t-base);
+            border-radius: 8px !important;
         }
         .room-card .btn.btn-danger:hover {
             background: var(--coral-soft-2);
@@ -400,7 +407,6 @@
             .room-card h2 { font-size: 13px; }
             .room-card .room-status-pill { padding: 2px 7px !important; font-size: 10px !important; }
             .room-card .temp-chip { padding: 6px 10px !important; font-size: 10px !important; }
-            .room-card .label-tag { font-size: 8px !important; margin-top: 2px !important; }
         }
 
 
@@ -782,19 +788,19 @@
                                                         <div
                                                             style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 6px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
-                                                                style="color:var(--mint);line-height:1;"
+                                                                style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="active-{{ $room->id }}">
                                                                 {{ $activeAcs }}</p>
-                                                            <p class="label-tag mt-1" style="font-size: 10px;">Active
+                                                            <p class="label-tag mt-1" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Active
                                                             </p>
                                                         </div>
                                                         <div
                                                             style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 6px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
-                                                                style="color:var(--ink-2);line-height:1;"
+                                                                style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="idle-{{ $room->id }}">
                                                                 {{ $idleAcs }}</p>
-                                                            <p class="label-tag mt-1" style="font-size: 10px;">Idle
+                                                            <p class="label-tag mt-1" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Idle
                                                             </p>
                                                         </div>
                                                     </div>

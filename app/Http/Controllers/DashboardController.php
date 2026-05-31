@@ -144,11 +144,7 @@ class DashboardController extends Controller
                 $meta['description'] = 'Hapus timer';
                 $meta['tone'] = 'coral';
             } else {
-                $on = preg_match('/ON\s+(\d{2}:\d{2})/i', $extraDetail, $mOn) ? 'ON '.$mOn[1] : null;
-                $off = preg_match('/OFF\s+(\d{2}:\d{2})/i', $extraDetail, $mOff) ? 'OFF '.$mOff[1] : null;
-
-                $parts = array_filter([$on, $off]);
-                $meta['description'] = 'Timer '.implode(' · ', $parts);
+                $meta['description'] = 'Set timer';
                 $meta['tone'] = 'amber';
             }
         }
@@ -218,15 +214,8 @@ class DashboardController extends Controller
         if ($a === 'set_timer_delete') {
             return ['description' => 'Hapus timer', 'icon' => 'fa-solid fa-clock', 'tone' => 'coral'];
         }
-        if (str_starts_with($a, 'set_timer:')) {
-            $detail = substr($activity, 10); // "ON 20:31,OFF 22:00"
-            $on = preg_match('/ON\s+(\d{2}:\d{2})/i', $detail, $mOn) ? 'ON '.$mOn[1] : null;
-            $off = preg_match('/OFF\s+(\d{2}:\d{2})/i', $detail, $mOff) ? 'OFF '.$mOff[1] : null;
-
-            $parts = array_filter([$on, $off]);
-            $desc = 'Timer '.implode(' · ', $parts);
-
-            return ['description' => $desc, 'icon' => 'fa-solid fa-clock', 'tone' => 'amber'];
+        if (str_starts_with($a, 'set_timer')) {
+            return ['description' => 'Set timer', 'icon' => 'fa-solid fa-clock', 'tone' => 'amber'];
         }
         if (str_starts_with($a, 'timer_on')) {
             return ['description' => 'Timer ON', 'icon' => 'fa-solid fa-clock', 'tone' => 'mint'];
