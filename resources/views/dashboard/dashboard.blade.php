@@ -12,31 +12,62 @@
     @vite('resources/js/app.js')
     @include('components.sidebar-styles')
     <style>
-        .trend-filter-select {
-            background: var(--panel-1);
-            border: 1px solid var(--line-soft);
-            color: var(--ink-1);
-            border-radius: var(--r-md);
-            padding: 6px 10px;
-            font-size: 11px;
-            font-family: var(--font-sans);
-            cursor: pointer;
-            outline: none;
+        /* Wrapper jadi pill (div selalu hormati border-radius, beda dgn select native mobile) */
+        .trend-filter {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 999px;
             transition: var(--t-base);
         }
 
-        .trend-filter-select:hover {
-            background: rgba(77, 212, 255, 0.10);
+        .trend-filter::after {
+            content: '';
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            width: 11px;
+            height: 11px;
+            transform: translateY(-50%);
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c8d0e0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat center / contain;
+            pointer-events: none;
+        }
+
+        .trend-filter:hover,
+        .trend-filter:focus-within {
+            background-color: rgba(77, 212, 255, 0.10);
             border-color: rgba(77, 212, 255, 0.50);
-            color: var(--cyan);
             box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
         }
 
+        .trend-filter-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: transparent;
+            border: none;
+            color: var(--ink-1);
+            border-radius: 999px;
+            padding: 8px 34px 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            outline: none;
+            width: 100%;
+        }
+
+        .trend-filter-select option {
+            background: #161a24;
+            color: #f0f2f8;
+            font-weight: 600;
+        }
+
+        .trend-filter:hover .trend-filter-select,
         .trend-filter-select:focus {
-            background: rgba(77, 212, 255, 0.10);
-            border-color: rgba(77, 212, 255, 0.60);
             color: var(--cyan);
-            box-shadow: 0 0 14px rgba(77, 212, 255, 0.20);
         }
 
         .dashboard-rooms-panel {
@@ -51,6 +82,11 @@
         .temp-chart-panel {
             border: none !important;
             position: relative;
+        }
+
+        /* Judul + eyebrow grafik digeser sejajar dengan judul panel lain */
+        .temp-chart-panel .panel-header > div:first-child {
+            padding-left: 12px;
         }
 
         /* Bottom row: Server Rooms + Recent Activity */
@@ -69,23 +105,24 @@
             }
         }
 
-        /* Tablet (768-1023px): kecilkan text supaya muat inline */
+        /* Tablet (768-1023px): teks tetap terbaca, chip boleh wrap ke bawah */
         @media (min-width: 768px) and (max-width: 1023px) {
             .activity-desc {
-                font-size: 10px;
+                font-size: 13px;
             }
             .activity-chips .chip {
-                font-size: 8px;
-                padding: 1px 4px;
+                font-size: 11px;
+                padding: 2px 7px;
             }
             .activity-chips .chip i {
-                font-size: 8px;
+                font-size: 9px;
             }
             .activity-chips {
-                gap: 3px;
+                gap: 4px;
             }
             .activity-desc-row {
-                gap: 5px;
+                gap: 6px;
+                flex-wrap: wrap;
             }
         }
 
@@ -126,10 +163,11 @@
 
         .activity-header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 14px;
+            padding-left: 12px;
         }
 
         .activity-title-group {
@@ -139,20 +177,21 @@
         }
 
         .activity-title-icon {
-            width: 26px;
-            height: 26px;
-            border-radius: var(--r-sm);
+            width: 36px;
+            height: 36px;
+            border-radius: var(--r-md);
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.18));
             border: 1px solid rgba(34, 211, 238, 0.30);
             color: var(--cyan);
-            font-size: 11px;
+            font-size: 15px;
         }
 
         .activity-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             line-height: 1.2;
             color: var(--ink-0);
@@ -216,7 +255,7 @@
             grid-template-columns: 36px 1fr;
             align-items: center;
             gap: 12px;
-            padding: 10px 14px 10px 18px;
+            padding: 10px 14px 10px 26px;
             border-radius: var(--r-xl);
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -234,11 +273,11 @@
 
         .activity-rail {
             position: absolute;
-            left: 6px;
-            top: 10px;
-            bottom: 10px;
-            width: 4px;
-            border-radius: var(--r-full);
+            left: 12px;
+            top: 12px;
+            bottom: 12px;
+            width: 5px;
+            border-radius: 999px;
             background: var(--tone, var(--ink-2));
             opacity: 1;
             /* Efek menyala yang lebih nyata */
@@ -373,7 +412,7 @@
 
         .activity-time {
             font-family: var(--font-mono);
-            font-size: 11px;
+            font-size: 13px;
             color: var(--ink-4);
             flex-shrink: 0;
         }
@@ -408,18 +447,18 @@
         .activity-chips .chip {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-            padding: 1px 5px;
-            border-radius: var(--r-xs);
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: var(--r-sm);
             background: rgb(var(--ink-2-rgb) / 0.10);
             border: 1px solid rgb(var(--ink-2-rgb) / 0.18);
-            color: var(--ink-3);
-            font-size: 10px;
+            color: var(--ink-2);
+            font-size: 12px;
             font-weight: 600;
         }
 
         .activity-chips .chip i {
-            font-size: 8px;
+            font-size: 10px;
             opacity: 0.7;
         }
 
@@ -459,7 +498,7 @@
 
             .activity-item {
                 grid-template-columns: 32px 1fr;
-                padding: 10px 14px 10px 16px;
+                padding: 10px 14px 10px 22px;
                 gap: 10px;
             }
 
@@ -546,15 +585,15 @@
             }
 
             .activity-item {
-                grid-template-columns: 28px 1fr;
-                padding: 8px 10px 8px 14px;
-                gap: 8px;
+                grid-template-columns: 30px 1fr;
+                padding: 9px 10px 9px 24px;
+                gap: 10px;
                 border-radius: var(--r-lg);
                 min-height: 60px;
             }
 
             .activity-item .activity-rail {
-                left: 6px;
+                left: 8px;
                 top: 9px;
                 bottom: 9px;
             }
@@ -584,19 +623,23 @@
                 border-width: 1.5px;
             }
 
-            .activity-item .activity-rail {
-                left: 5px;
-                top: 7px;
-                bottom: 7px;
+            .activity-user {
+                font-size: 14px;
             }
-
-            .activity-user,
             .activity-desc {
-                font-size: 12px;
+                font-size: 13px;
             }
 
             .activity-time {
+                font-size: 12px;
+            }
+
+            .activity-chips .chip {
                 font-size: 10px;
+                padding: 2px 6px;
+            }
+            .activity-chips .chip i {
+                font-size: 8px;
             }
         }
 
@@ -606,6 +649,7 @@
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 14px;
+            padding-left: 12px;
         }
 
         .dashboard-rooms-title-group {
@@ -628,7 +672,7 @@
         }
 
         .dashboard-rooms-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             line-height: 1.2;
             color: var(--ink-0);
@@ -674,7 +718,7 @@
         }
 
         .dashboard-room-row {
-            padding: 10px 12px 10px 18px;
+            padding: 10px 14px 10px 26px;
             border-radius: var(--r-xl);
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
@@ -690,11 +734,11 @@
         .dashboard-room-row::before {
             content: '';
             position: absolute;
-            left: 6px;
-            top: 10px;
-            bottom: 10px;
-            width: 4px;
-            border-radius: var(--r-full);
+            left: 12px;
+            top: 12px;
+            bottom: 12px;
+            width: 5px;
+            border-radius: 999px;
             background: #fca5a5;
             opacity: 1;
             transition: background var(--t-base);
@@ -914,8 +958,8 @@
             }
 
             .trend-filter-select {
-                font-size: 10px;
-                padding: 5px 8px;
+                font-size: 11px;
+                padding: 6px 26px 6px 11px;
             }
         }
 
@@ -1170,8 +1214,9 @@
 
             .dashboard-rooms-title-icon,
             .activity-title-icon {
-                width: 24px;
-                height: 24px;
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
             }
 
             .dashboard-rooms-action {
@@ -1228,7 +1273,7 @@
 
             .activity-item {
                 grid-template-columns: 30px 1fr;
-                padding: 8px 10px 8px 16px;
+                padding: 9px 10px 9px 24px;
             }
 
             .activity-icon-wrap {
@@ -1256,18 +1301,20 @@
                 border-width: 1.5px;
             }
 
-            .activity-user,
+            .activity-user {
+                font-size: 14px;
+            }
             .activity-desc {
-                font-size: 11px;
+                font-size: 13px;
             }
 
             .activity-time {
-                font-size: 10px;
+                font-size: 12px;
             }
 
             .trend-filter-select {
-                font-size: 10px;
-                padding: 5px 8px;
+                font-size: 11px;
+                padding: 6px 26px 6px 11px;
             }
         }
 
@@ -1323,9 +1370,9 @@
 
             .dashboard-rooms-title-icon,
             .activity-title-icon {
-                width: 22px;
-                height: 22px;
-                font-size: 10px;
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
             }
 
             .dashboard-rooms-action {
@@ -1342,17 +1389,17 @@
 
             .dashboard-room-row,
             .activity-item {
-                padding: 8px 10px 8px 14px;
+                padding: 8px 10px 8px 22px;
                 gap: 8px;
                 border-radius: var(--r-md);
                 min-height: 54px;
             }
 
             .dashboard-room-row::before {
-                width: 3px;
-                left: 5px;
-                top: 7px;
-                bottom: 7px;
+                width: 4px;
+                left: 8px;
+                top: 8px;
+                bottom: 8px;
             }
 
             .dashboard-room-name {
@@ -1375,8 +1422,8 @@
             }
 
             .activity-item {
-                grid-template-columns: 28px 1fr;
-                padding: 8px 10px 8px 14px;
+                grid-template-columns: 34px 1fr;
+                padding: 9px 10px 9px 22px;
             }
 
             .activity-icon-wrap {
@@ -1386,11 +1433,17 @@
             }
 
             .activity-avatar-wrap,
+            .activity-avatar-inner,
             .activity-avatar-img,
             .activity-avatar-fallback {
-                width: 28px;
-                height: 28px;
-                font-size: 10px;
+                width: 32px;
+                height: 32px;
+                font-size: 11px;
+                border-radius: 50%;
+            }
+            .activity-avatar-img {
+                object-fit: cover;
+                aspect-ratio: 1 / 1;
             }
 
             .activity-icon-badge {
@@ -1400,12 +1453,22 @@
                 border-width: 1px;
             }
 
-            .activity-user,
+            .activity-user {
+                font-size: 14px;
+            }
             .activity-desc {
-                font-size: 10px;
+                font-size: 11px;
             }
 
             .activity-time {
+                font-size: 12px;
+            }
+
+            .activity-chips .chip {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+            .activity-chips .chip i {
                 font-size: 8px;
             }
         }
@@ -1426,9 +1489,9 @@
                 font-size: 10px !important;
             }
             .temp-chart-panel .trend-filter-select {
-                font-size: 10px !important;
-                padding: 4px 6px !important;
-                border-radius: var(--r-sm) !important;
+                font-size: 11px !important;
+                padding: 5px 26px 5px 11px !important;
+                border-radius: var(--r-full) !important;
             }
         }
 
@@ -1438,7 +1501,7 @@
             }
             /* Panel temperatur lebih kompak di mobile */
             .temp-chart-panel {
-                padding: 14px 12px !important;
+                padding: 16px !important;
             }
             /* Title kiri, filter kanan — tetap 1 baris, tidak boleh wrap */
             .temp-chart-panel .panel-header {
@@ -1474,8 +1537,8 @@
             }
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
-                padding: 3px 5px !important;
-                border-radius: var(--r-sm) !important;
+                padding: 5px 24px 5px 10px !important;
+                border-radius: var(--r-full) !important;
                 min-width: 0;
             }
             .temp-chart-panel #trendInfo {
@@ -1490,7 +1553,7 @@
                 height: 220px !important;
             }
             .temp-chart-panel {
-                padding: 12px 10px !important;
+                padding: 16px !important;
             }
             .temp-chart-panel .panel-title {
                 font-size: 11px !important;
@@ -1501,8 +1564,8 @@
             }
             .temp-chart-panel .trend-filter-select {
                 font-size: 10px !important;
-                padding: 2px 4px !important;
-                border-radius: var(--r-xs) !important;
+                padding: 5px 24px 5px 10px !important;
+                border-radius: var(--r-full) !important;
             }
             .temp-chart-panel #trendInfo {
                 font-size: 10px !important;
@@ -1517,7 +1580,7 @@
             }
 
             .dashboard-room-row {
-                padding: 12px 14px;
+                padding: 12px 14px 12px 22px;
                 min-height: 72px;
             }
         }
@@ -1671,12 +1734,14 @@
                                     <h2 class="panel-title">Room Temperatures</h2>
                                 </div>
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <select id="trendRange" class="trend-filter-select" title="Select time range">
-                                        <option value="1h">1 Hour</option>
-                                        <option value="3h">3 Hours</option>
-                                        <option value="6h">6 Hours</option>
-                                        <option value="today">Today</option>
-                                    </select>
+                                    <span class="trend-filter">
+                                        <select id="trendRange" class="trend-filter-select" title="Select time range">
+                                            <option value="1h">1 Hour</option>
+                                            <option value="3h">3 Hours</option>
+                                            <option value="6h">6 Hours</option>
+                                            <option value="today">Today</option>
+                                        </select>
+                                    </span>
                                 </div>
                             </div>
                             <div class="temp-chart-wrap" style="height:300px;position:relative;">
@@ -1764,7 +1829,7 @@
                                         <h2 class="activity-title">Recent Activity</h2>
                                         <p class="activity-subtitle">{{ count($recentActivities) }} recent activities</p>
                                     </div>
-                                    <span class="activity-title-icon"><i class="fa-solid fa-bolt"></i></span>
+                                    <span class="activity-title-icon"><i class="fa-solid fa-clock-rotate-left"></i></span>
                                 </div>
 
                                 <div class="activity-list" id="activityList">

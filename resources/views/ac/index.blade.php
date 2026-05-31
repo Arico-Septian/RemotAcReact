@@ -949,7 +949,8 @@
             }
 
             .main-header>.flex.items-center.gap-2 #espStatusPill span:not(.dot) {
-                display: none;
+                display: inline;
+                font-size: 10px;
             }
 
             .main-header>.flex.items-center.gap-2 #espStatusPill {

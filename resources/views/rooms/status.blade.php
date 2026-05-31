@@ -197,6 +197,13 @@
                 max-width: 1600px;
             }
         }
+
+        /* Mobile: 1 AC = lebar penuh, 2+ AC = berjejer 2 kolom. Status di kartu tetap 1 kolom vertikal. */
+        @media (max-width: 639px) {
+            .ac-cards.grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -228,7 +235,7 @@
                 <div class="app-content-inner space-y-4">
 
                     @if ($acs->count() > 0)
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
+                        <div class="ac-cards grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
                             @foreach ($acs as $ac)
                                 <div class="ac-card">
                                     <div class="ac-card-head">
