@@ -9,7 +9,7 @@ SmartAC — a Laravel 13 IoT dashboard for remotely controlling air conditioners
 ## Common Commands
 
 ```bash
-# Full dev environment (server + queue + vite, concurrently)
+# Full dev environment (server + vite + reverb, concurrently)
 composer run dev
 
 # MQTT listener — must run separately alongside composer dev
@@ -108,7 +108,6 @@ Read-only endpoints (authenticated, available to all roles):
 - `GET /notifications/unread-count` — unread notification count
 - `GET /api/ac-status` — AC unit status with room relationships
 - `GET /users-online` — real-time online/offline user counts
-- `POST /session/ping` — keeps user session active
 
 AC control endpoints (`role:admin,operator`, rate-limited 30 req/min):
 - `GET /ac/{id}/on`, `/ac/{id}/off`, `POST /ac/{id}/toggle` — power control
@@ -122,7 +121,7 @@ All endpoints return JSON for API calls, Blade views for page requests. All cont
 
 ## Queue System
 
-`composer run dev` includes `queue:listen` which processes queued jobs. The default queue driver is `database`. In production ensure `queue:work` runs as a service.
+The queue driver is `sync` — jobs are processed immediately inline, no background worker needed. `composer run dev` no longer runs `queue:listen`.
 
 ## Testing
 

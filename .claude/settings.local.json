@@ -18,10 +18,14 @@
       "Bash(node -e ' *)",
       "Bash(node C:/pw-test/fix-lineheight.cjs)",
       "Bash(node C:/pw-test/fix-letterspacing.cjs)",
-      "Bash(node C:/pw-test/fix-fontfamily.cjs)"
+      "Bash(node C:/pw-test/fix-fontfamily.cjs)",
+      "Bash(sed -i \"s/\\\\`composer run dev\\\\` includes \\\\`queue:listen\\\\` which processes queued jobs. The default queue driver is \\\\`database\\\\`. In production ensure \\\\`queue:work\\\\` runs as a service./The queue driver is \\\\`sync\\\\` — jobs are processed immediately inline, no background worker needed. \\\\`composer run dev\\\\` no longer runs \\\\`queue:listen\\\\`./\" /c/laragon/www/tugasakhirremotac/CLAUDE.md && echo \"Done\")",
+      "Bash(sed -i 's/# Full dev environment \\(server + queue + vite, concurrently\\)/# Full dev environment \\(server + vite + reverb, concurrently\\)/' /c/laragon/www/tugasakhirremotac/CLAUDE.md)",
+      "Bash(sed -i '/^- `POST \\\\/session\\\\/ping` — keeps user session active$/d' /c/laragon/www/tugasakhirremotac/CLAUDE.md)"
     ],
     "additionalDirectories": [
-      "c:\\laragon\\www\\tugasakhirremotac"
+      "c:\\laragon\\www\\tugasakhirremotac",
+      "C:\\laragon\\www\\tugasakhirremotac"
     ]
   }
 }
