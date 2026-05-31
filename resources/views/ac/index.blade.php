@@ -137,89 +137,51 @@
             transition: box-shadow 0.5s var(--ease);
         }
 
-        /* Gradient ring via ::before — conic gradient masked to ring shape */
+        /* === Tick-mark dial ring === */
+        /* Tick aktif menyala sampai --fill-deg (sesuai level suhu 16-30°C), sisanya track redup */
         .temp-ring::before {
             content: '';
             position: absolute;
-            inset: -4px;
+            inset: -8px;
             border-radius: 50%;
             z-index: 0;
+            background: conic-gradient(from 0deg,
+                var(--tick-on, #4dd4ff) 0deg var(--fill-deg, 0deg),
+                rgba(255, 255, 255, 0.10) var(--fill-deg, 0deg) 360deg);
+            -webkit-mask:
+                repeating-conic-gradient(from 0deg, #000 0deg 1.5deg, transparent 1.5deg 6deg),
+                radial-gradient(farthest-side, transparent calc(100% - 16px), #000 calc(100% - 16px));
+            -webkit-mask-composite: source-in;
+            mask:
+                repeating-conic-gradient(from 0deg, #000 0deg 1.5deg, transparent 1.5deg 6deg),
+                radial-gradient(farthest-side, transparent calc(100% - 16px), #000 calc(100% - 16px));
+            mask-composite: intersect;
+            /* Mirror horizontal: fill tumbuh searah jarum jam (ke kanan) saat suhu naik */
+            transform: scaleX(-1);
             transition: background 0.5s var(--ease);
-            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px));
-            mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px));
         }
 
-        /* COOL — cyan gradient ring */
-        .temp-ring.temp-cool::before {
-            background: conic-gradient(
-                from 190deg,
-                rgba(77, 212, 255, 1.0)  0deg,
-                rgba(77, 212, 255, 0.80) 80deg,
-                rgba(77, 212, 255, 0.20) 160deg,
-                transparent              210deg,
-                transparent              300deg,
-                rgba(77, 212, 255, 0.50) 345deg,
-                rgba(77, 212, 255, 1.0)  360deg
-            );
-        }
         .temp-ring.temp-cool {
-            box-shadow:
-                0 0 0 1px rgba(77, 212, 255, 0.15),
-                -14px 8px 55px rgba(77, 212, 255, 0.55),
-                0 10px 35px rgba(77, 212, 255, 0.20),
-                inset 0 0 50px rgba(77, 212, 255, 0.08);
-        }
-
-        /* WARM — amber gradient ring */
-        .temp-ring.temp-warm::before {
-            background: conic-gradient(
-                from 190deg,
-                rgba(251, 191, 36, 1.0)  0deg,
-                rgba(251, 191, 36, 0.80) 80deg,
-                rgba(251, 146, 60, 0.20) 160deg,
-                transparent              210deg,
-                transparent              300deg,
-                rgba(251, 191, 36, 0.50) 345deg,
-                rgba(251, 191, 36, 1.0)  360deg
-            );
+            --tick-on: #4dd4ff;
+            box-shadow: -12px 8px 55px rgba(77, 212, 255, 0.32), inset 0 0 45px rgba(77, 212, 255, 0.06);
         }
         .temp-ring.temp-warm {
-            box-shadow:
-                0 0 0 1px rgba(251, 191, 36, 0.15),
-                -14px 8px 55px rgba(251, 191, 36, 0.55),
-                0 10px 35px rgba(251, 146, 60, 0.20),
-                inset 0 0 50px rgba(251, 191, 36, 0.08);
-        }
-
-        /* HOT — coral gradient ring */
-        .temp-ring.temp-hot::before {
-            background: conic-gradient(
-                from 190deg,
-                rgba(248, 113, 113, 1.0)  0deg,
-                rgba(248, 113, 113, 0.80) 80deg,
-                rgba(248, 113, 113, 0.20) 160deg,
-                transparent               210deg,
-                transparent               300deg,
-                rgba(248, 113, 113, 0.50) 345deg,
-                rgba(248, 113, 113, 1.0)  360deg
-            );
+            --tick-on: #fbbf24;
+            box-shadow: -12px 8px 55px rgba(251, 191, 36, 0.32), inset 0 0 45px rgba(251, 191, 36, 0.06);
         }
         .temp-ring.temp-hot {
-            box-shadow:
-                0 0 0 1px rgba(248, 113, 113, 0.15),
-                -14px 8px 55px rgba(248, 113, 113, 0.55),
-                0 10px 35px rgba(248, 113, 113, 0.20),
-                inset 0 0 50px rgba(248, 113, 113, 0.08);
+            --tick-on: #f87171;
+            box-shadow: -12px 8px 55px rgba(248, 113, 113, 0.32), inset 0 0 45px rgba(248, 113, 113, 0.06);
         }
 
-        /* Power OFF — ring redup */
+        /* Power OFF — ring redup, tick mati (cuma track) */
         .temp-ring.ring-off {
+            --fill-deg: 0deg !important;
             box-shadow:
-                0 0 0 3px rgba(100, 116, 139, 0.35),
                 0 4px 20px rgba(0, 0, 0, 0.30) !important;
             background: radial-gradient(circle at 50% 40%, #161a24 0%, #0a0c12 100%) !important;
-            filter: saturate(0.15) brightness(0.65);
-            transition: box-shadow 0.4s var(--ease), filter 0.4s var(--ease), background 0.4s var(--ease);
+            filter: saturate(0.15) brightness(0.7);
+            transition: filter 0.4s var(--ease), background 0.4s var(--ease);
         }
 
         .temp-ring.ring-off .ring-label,
@@ -550,13 +512,13 @@
         .timer-card {
             flex: 1;
             min-width: 0;
-            padding: 12px 14px;
-            background: var(--panel-1);
+            padding: 11px 14px;
+            background: var(--panel-2);
             border: 1px solid var(--line-soft);
             border-radius: var(--r-lg);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 11px;
         }
 
         .timer-card.is-on {
@@ -570,13 +532,13 @@
         }
 
         .timer-card .t-icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: var(--r-md);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 11px;
             background: var(--panel-2);
             color: var(--ink-3);
             flex-shrink: 0;
@@ -610,7 +572,7 @@
 
         .timer-card .t-value {
             font-family: var(--font-mono);
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--ink-0);
             margin: 2px 0 0;
@@ -642,6 +604,41 @@
             display: block;
             font-size: 18px;
         }
+
+        /* === Delete Timer button === */
+        .timer-delete-btn {
+            width: 100%;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0 16px;
+            border-radius: var(--r-lg);
+            background: rgba(248, 113, 113, 0.10);
+            border: 1px solid rgba(248, 113, 113, 0.30);
+            color: var(--coral);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: var(--t-base);
+        }
+
+        /* Form edit timer — input & tombol seimbang (~40px) */
+        .timer-form .input {
+            padding: 9px 14px;
+        }
+        .save-timer-btn {
+            min-height: 40px;
+        }
+        .timer-delete-btn:hover {
+            background: rgba(248, 113, 113, 0.18);
+            border-color: rgba(248, 113, 113, 0.55);
+            color: #fca5a5;
+            box-shadow: 0 4px 16px -4px rgba(248, 113, 113, 0.35);
+        }
+        .timer-delete-btn i { font-size: 11px; }
 
         .ac-ctrl-busy {
             opacity: 0.50 !important;
@@ -1133,11 +1130,12 @@
                                     @endphp
                                     @php
                                         $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
+                                        $fillDeg = round((max(16, min(30, $curTemp)) - 16) / 14 * 360);
                                     @endphp
                                     <div class="panel ac-ring-panel temp-panel-{{ $isPowerOn ? $tempCategory : 'off' }}"
                                         style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px 20px;">
                                         <div class="temp-ring temp-{{ $tempCategory }} {{ $isPowerOn ? '' : 'ring-off' }}"
-                                            id="tempRing-{{ $ac->id }}">
+                                            id="tempRing-{{ $ac->id }}" style="--fill-deg: {{ $fillDeg }}deg;">
                                             <div class="temp-ring-inner">
                                                 <p class="ring-label">Suhu AC</p>
                                                 <div class="ring-temp">
@@ -1191,7 +1189,7 @@
                                                     <form action="/ac/{{ $ac->id }}/mode/{{ $m }}"
                                                         method="POST" class="control-form">
                                                         @csrf
-                                                        <button type="submit"
+                                                        <button type="submit" data-mode="{{ $m }}"
                                                             class="mode-btn-h {{ strtolower($ac->status?->mode ?? 'cool') === $m ? 'active' : '' }}">
                                                             <i
                                                                 class="fa-solid {{ $icon }}"></i><span>{{ $lbl }}</span>
@@ -1210,7 +1208,7 @@
                                                         action="/ac/{{ $ac->id }}/fan-speed/{{ $s }}"
                                                         method="POST" class="control-form">
                                                         @csrf
-                                                        <button type="submit"
+                                                        <button type="submit" data-fan="{{ $s }}"
                                                             class="mode-btn-h {{ strtolower($ac->status?->fan_speed ?? 'auto') === $s ? 'active' : '' }}">
                                                             <i
                                                                 class="fa-solid {{ $icon }}"></i><span>{{ $lbl }}</span>
@@ -1287,8 +1285,8 @@
                                                         @csrf
                                                         <input type="hidden" name="timer_on" value="">
                                                         <input type="hidden" name="timer_off" value="">
-                                                        <button type="submit" class="btn btn-sm btn-block" style="background:rgba(248,113,113,0.10);border:1px solid rgba(248,113,113,0.30);color:var(--coral);">
-                                                            <i class="fa-solid fa-trash text-[10px]"></i>
+                                                        <button type="submit" class="timer-delete-btn">
+                                                            <i class="fa-solid fa-trash"></i>
                                                             <span>Delete Timer</span>
                                                         </button>
                                                     </form>
@@ -1320,15 +1318,12 @@
                                                             value="{{ $ac->timer_off ? \Carbon\Carbon::parse($ac->timer_off)->format('H:i') : '' }}">
                                                     </div>
                                                 </div>
-                                                <div class="flex gap-2">
-                                                    <button type="button" class="btn btn-ghost btn-sm flex-1"
-                                                        onclick="toggleTimer({{ $ac->id }})">Cancel</button>
-                                                    <button type="submit"
-                                                        class="btn btn-primary btn-sm flex-1 save-timer-btn">
-                                                        <i class="fa-solid fa-check text-[10px]"></i>
-                                                        <span>Save</span>
-                                                    </button>
-                                                </div>
+                                                <button type="submit"
+                                                    class="btn btn-primary btn-sm save-timer-btn"
+                                                    style="width:100%;">
+                                                    <i class="fa-solid fa-check text-[10px]"></i>
+                                                    <span>Save Timer</span>
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
@@ -1673,6 +1668,8 @@
             if (ring) {
                 ring.classList.remove('temp-cool', 'temp-warm', 'temp-hot');
                 ring.classList.add(temp <= 20 ? 'temp-cool' : temp <= 25 ? 'temp-warm' : 'temp-hot');
+                const fillDeg = Math.round((Math.max(16, Math.min(30, temp)) - 16) / 14 * 360);
+                ring.style.setProperty('--fill-deg', fillDeg + 'deg');
             }
 
             const acName = panel
@@ -1959,8 +1956,8 @@ document.querySelectorAll('.control-form').forEach(form => {
                         <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]')?.content || ''}">
                         <input type="hidden" name="timer_on" value="">
                         <input type="hidden" name="timer_off" value="">
-                        <button type="submit" class="btn btn-ghost btn-sm btn-block">
-                            <i class="fa-solid fa-trash text-[10px]"></i>
+                        <button type="submit" class="timer-delete-btn">
+                            <i class="fa-solid fa-trash"></i>
                             <span>Delete Timer</span>
                         </button>
                     </form>
