@@ -43,8 +43,14 @@
             padding: 20px;
             border-radius: var(--r-2xl);
             background: var(--panel-1);
-            border: 1px solid var(--line-soft);
+            border: none;
             box-shadow: var(--inset-hi);
+        }
+
+        /* Temperature chart panel */
+        .temp-chart-panel {
+            border: none !important;
+            position: relative;
         }
 
         /* Bottom row: Server Rooms + Recent Activity */
@@ -113,18 +119,9 @@
             padding: 20px;
             border-radius: var(--r-2xl);
             background: var(--panel-1);
-            border: 1px solid var(--line-soft);
+            border: none;
             box-shadow: var(--inset-hi);
             position: relative;
-        }
-
-        .dashboard-activity-panel::before {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.45), transparent);
-            opacity: 0.7;
         }
 
         .activity-header {
@@ -2089,7 +2086,7 @@
                             position: 'top',
                             align: s.legendAlign,
                             labels: {
-                                color: '#94a3b8',
+                                color: '#e2e6f0',
                                 font: {
                                     family: 'Inter',
                                     size: s.legendFontSize
@@ -2140,7 +2137,7 @@
                     scales: {
                         x: {
                             ticks: {
-                                color: '#64748b',
+                                color: '#c8d0e0',
                                 maxRotation: 0,
                                 font: {
                                     size: s.tickFontSize
@@ -2156,7 +2153,7 @@
                             min: 20,
                             max: 36,
                             ticks: {
-                                color: '#64748b',
+                                color: '#c8d0e0',
                                 font: {
                                     size: s.tickFontSize
                                 },

@@ -11,39 +11,109 @@
         height: 0;
     }
 
-    /* 2025 Modern Wallpaper — clean, harmonious color palette with much darker background */
+    /* Wallpaper — overlay 78% agar gambar samar di celah panel */
     html, body { height: 100%; overflow: hidden; }
     body {
         background:
-            /* Subtle cyan glow from top — primary accent */
-            radial-gradient(800px 400px at 50% -20%, rgba(78, 215, 255, 0.08), transparent 60%),
-            /* Complementary indigo glow from bottom-right — secondary accent */
-            radial-gradient(600px 350px at 85% 110%, rgba(139, 162, 255, 0.04), transparent 65%),
-            /* Darkened gradient overlay */
-            linear-gradient(135deg,
-                rgba(4, 7, 16, 0.86) 0%,
-                rgba(6, 11, 28, 0.84) 25%,
-                rgba(7, 14, 34, 0.83) 50%,
-                rgba(5, 10, 26, 0.84) 75%,
-                rgba(4, 7, 20, 0.86) 100%
-            ),
-            /* Wallpaper image — texture underneath */
+            linear-gradient(rgba(4, 4, 8, 0.82), rgba(4, 4, 8, 0.82)),
             url('/images/wallpaper.jpeg') center/cover no-repeat fixed !important;
-        background-blend-mode: multiply;
     }
 
-    /* Modern color system — harmonious palette */
+    /* Force solid panel colors — hitam + teks putih */
     :root {
-        --panel-1: rgba(13, 21, 44, 0.72) !important;
-        --panel-2: rgba(15, 25, 52, 0.78) !important;
-        --bg-1:    #0d1530 !important;
-        --cyan-d-rgb: 34 184 230;
+        --bg-1:         #0a0a0f;
+        --panel-1:      #0f1018;
+        --panel-2:      #131318;
+        --panel-3:      #17171e;
+        --line-soft:    rgba(255, 255, 255, 0.08);
+        --line:         rgba(255, 255, 255, 0.12);
+        --cyan-d-rgb:   34 184 230;
+        --ink-0:        #ffffff;
+        --ink-1:        #f0f2f8;
+        --ink-2:        #e2e6f0;
+        --ink-3:        #c8d0e0;
+        --ink-4:        #a8b4c8;
     }
 
-    /* Glass effect on all panels */
+    /* Semua panel solid hitam */
+    .panel,
+    .stat-card,
+    .card,
+    .dashboard-rooms-panel,
+    .dashboard-activity-panel,
+    .temp-chart-panel {
+        background: #0f1018 !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
+    /* ac-panel adalah wrapper — harus transparan */
+    .ac-panel {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Gradasi per stat card — tint gelap sesuai accent */
+    .stat-card.acc-cyan     { background: linear-gradient(135deg, #0e1a22 0%, #0f1018 65%) !important; }
+    .stat-card.acc-lavender { background: linear-gradient(135deg, #14101e 0%, #0f1018 65%) !important; }
+    .stat-card.acc-mint     { background: linear-gradient(135deg, #0c1a16 0%, #0f1018 65%) !important; }
+    .stat-card.acc-coral    { background: linear-gradient(135deg, #1a0e14 0%, #0f1018 65%) !important; }
+    .stat-card.acc-amber    { background: linear-gradient(135deg, #18140a 0%, #0f1018 65%) !important; }
+
+    /* Panel besar — gradasi berbeda tiap panel */
+    .temp-chart-panel        { background: linear-gradient(160deg, #0e1820 0%, #0f1018 55%) !important; }
+    .dashboard-rooms-panel   { background: linear-gradient(160deg, #0c1a14 0%, #0f1018 55%) !important; }
+    .dashboard-activity-panel{ background: linear-gradient(160deg, #120e1e 0%, #0f1018 55%) !important; }
+
+    /* Inner items — border putih + radius konsisten */
+    .dashboard-room-row,
+    .activity-item,
+    .ac-card,
+    .nlist-item {
+        background: #131318 !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        border-radius: var(--r-xl) !important;
+    }
+
+    /* Mode buttons — radius besar agar terlihat melengkung */
+    .mode-btn-h {
+        border-radius: var(--r-xl) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+    .mode-btn-v {
+        border-radius: var(--r-xl) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Min/Max chips — pill shape dengan border terlihat */
+    .ring-chip {
+        border-radius: 999px !important;
+        border: 1px solid rgba(255, 255, 255, 0.22) !important;
+        color: var(--ink-1) !important;
+    }
+
+    /* Panel ring AC — kotak dengan background */
+    .ac-ring-panel {
+        background: #0f1018 !important;
+        border: 1px solid rgba(255, 255, 255, 0.10) !important;
+        border-radius: var(--r-xl) !important;
+    }
+
+    /* Semua panel AC punya border tipis agar terlihat terpisah */
+    .ac-panel .panel {
+        border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    }
+
+    /* Buttons umum */
+    .btn, .btn-soft, .selector, .tbl-toolbar .btn {
+        border-radius: var(--r-lg) !important;
+    }
+
+    /* Panels fully opaque — no blur needed */
     .panel, .ac-panel, .stat-card, .card {
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
     }
 
     /* Main content area with much darker overlay */
@@ -68,41 +138,20 @@
         width: calc(100% - 76px);
     }
 
+    /* Header — gradasi kiri ke kanan */
     .main-header {
         flex-shrink: 0;
         height: 64px;
         display: flex; align-items: center; justify-content: space-between;
         padding: 0 24px;
-        background:
-            radial-gradient(950px 320px at 50% -40%, rgb(var(--cyan-d-rgb) / 0.12), transparent 65%),
-            radial-gradient(480px 320px at 85% 125%, rgb(var(--cyan-rgb) / 0.08), transparent 65%),
-            linear-gradient(180deg, rgba(13, 22, 46, 0.98) 0%, rgba(10, 17, 38, 0.99) 100%) !important;
-        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.12) !important;
-        box-shadow: 0 0 32px rgba(0, 0, 0, 0.40), inset 0 -1px 0 rgb(var(--cyan-d-rgb) / 0.08);
+        background: linear-gradient(90deg, #111115 0%, #0d0d12 50%, #08080d 100%) !important;
+        border-bottom: none !important;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.30);
         color: var(--ink-0);
         position: sticky; top: 0;
         z-index: 30;
     }
-    /* Top accent line — vibrant cyan glow */
-    .main-header::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 16%; right: 16%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb) / 0.45), transparent);
-        filter: blur(0.8px);
-        pointer-events: none;
-        z-index: 2;
-    }
-    /* Bottom accent line — complementary indigo glow */
-    .main-header::after {
-        content: '';
-        position: absolute;
-        left: 16%; right: 16%; bottom: -1px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgb(var(--cyan-rgb) / 0.20), transparent);
-        pointer-events: none;
-    }
+    .main-header::before, .main-header::after { display: none; }
     @media (max-width: 1024px) { .main-header { padding: 0 16px; } }
 
     /* Header title */
@@ -308,30 +357,14 @@
         pointer-events: none;
     }
 
-    /* 2026 modern sidebar with vibrant accents */
+    /* Sidebar hitam */
     .app-sidebar {
-        background:
-            /* Vibrant cyan glow from top */
-            radial-gradient(600px 400px at 50% -25%, rgb(var(--cyan-d-rgb) / 0.12), transparent 65%),
-            /* Vibrant indigo glow from bottom */
-            radial-gradient(480px 320px at 15% 125%, rgb(var(--cyan-rgb) / 0.08), transparent 65%),
-            /* Enhanced dark blue gradient */
-            linear-gradient(180deg, rgba(13, 22, 46, 0.98), rgba(10, 17, 38, 0.99)) !important;
-        border-right: 1px solid rgb(var(--cyan-d-rgb) / 0.12) !important;
-        box-shadow: 0 0 32px rgba(0, 0, 0, 0.40), inset -1px 0 0 rgb(var(--cyan-d-rgb) / 0.08);
+        background: linear-gradient(180deg, #111115 0%, #08080d 100%) !important;
+        border-right: none !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.60);
     }
 
-    /* Top accent line — vibrant and modern */
-    .app-sidebar::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 16%; right: 16%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb) / 0.40), transparent);
-        filter: blur(0.8px);
-        pointer-events: none;
-        z-index: 2;
-    }
+    .app-sidebar::before { display: none; }
 
     /* 2026 brand with vibrant, modern aesthetic */
     .brand {

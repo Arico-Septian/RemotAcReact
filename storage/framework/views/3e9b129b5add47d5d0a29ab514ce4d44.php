@@ -439,8 +439,8 @@
             gap: 6px;
             padding: 11px 10px;
             background: var(--panel-1);
-            border: 1px solid var(--line);
-            border-radius: var(--r-md);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--r-xl);
             font-size: 13px;
             font-weight: 600;
             color: var(--ink-2);
@@ -1073,7 +1073,7 @@
                                         };
                                         $isPowerOn = ($ac->status?->power ?? 'OFF') === 'ON';
                                     ?>
-                                    <div class="panel"
+                                    <div class="panel ac-ring-panel"
                                         style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px 20px;">
                                         <?php
                                             $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');

@@ -9,28 +9,28 @@
    Tokens
 ---------------------------------------------------------------- */
 :root {
-  /* Background layers â€” dark navy */
-  --bg-0: #07101f;
-  --bg-1: #0c1830;
-  --bg-2: #122042;
-  --bg-3: #182a55;
+  /* Background layers — dark slate */
+  --bg-0: #0f1117;
+  --bg-1: #14161e;
+  --bg-2: #1a1d28;
+  --bg-3: #20232f;
 
-  /* Glass panels */
-  --panel-1: rgba(255, 255, 255, 0.04);
-  --panel-2: rgba(255, 255, 255, 0.06);
-  --panel-3: rgba(255, 255, 255, 0.08);
+  /* Panels — fully opaque, sedikit lebih terang dari sidebar */
+  --panel-1: #181b28;
+  --panel-2: #1c1f2e;
+  --panel-3: #202334;
 
-  /* Borders */
-  --line-soft: rgba(255, 255, 255, 0.05);
-  --line:      rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.14);
+  /* Borders — sangat subtle */
+  --line-soft: rgba(255, 255, 255, 0.08);
+  --line:      rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.20);
 
-  /* Ink (text) */
-  --ink-0: #f5f7fb;
-  --ink-1: #cbd5e1;
-  --ink-2: #94a3b8;
-  --ink-3: #64748b;
-  --ink-4: #475569;
+  /* Ink (text) — putih semua */
+  --ink-0: #ffffff;
+  --ink-1: #f0f2f8;
+  --ink-2: #e2e6f0;
+  --ink-3: #c8d0e0;
+  --ink-4: #a8b4c8;
 
   /* Accents */
   --cyan:     #4dd4ff;
@@ -51,9 +51,9 @@
   --danger-d: #ff3355;
 
   /* RGB channels â€” for transparent tints: rgb(var(--xxx-rgb) / alpha) */
-  --bg-0-rgb:      7 16 31;
-  --bg-1-rgb:      12 24 48;
-  --bg-2-rgb:      18 32 66;
+  --bg-0-rgb:      15 17 23;
+  --bg-1-rgb:      20 22 30;
+  --bg-2-rgb:      26 29 40;
   --ink-2-rgb:     148 163 184;
   --ink-3-rgb:     100 116 139;
   --cyan-rgb:      77 212 255;
@@ -81,11 +81,11 @@
   --coral-soft:      rgb(var(--coral-rgb) / 0.12);
   --coral-soft-2:    rgb(var(--coral-rgb) / 0.22);
 
-  /* Radii */
-  --r-xs: 4px;
-  --r-sm: 8px;
-  --r-md: 10px;
-  --r-lg: 12px;
+  /* Radii — konsisten, semua lebih melengkung */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 12px;
+  --r-lg: 14px;
   --r-xl: 16px;
   --r-2xl: 20px;
   --r-3xl: 28px;
@@ -146,36 +146,10 @@ body { min-height: 100vh; }
   z-index: -1;
   overflow: hidden;
 
-  background:
-    radial-gradient(circle at top left,
-      rgba(34, 211, 238, 0.12),
-      transparent 30%),
-
-    radial-gradient(circle at top right,
-      rgba(167, 139, 250, 0.10),
-      transparent 28%),
-
-    radial-gradient(circle at bottom center,
-      rgba(59, 130, 246, 0.10),
-      transparent 35%),
-
-    linear-gradient(180deg,
-      #050816 0%,
-      #07111f 30%,
-      #0a1830 70%,
-      #08111f 100%);
+  background: #0f1117;
 }
 
-.app-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-
-  background:
-    radial-gradient(circle at center,
-      transparent 45%,
-      rgba(0, 0, 0, 0.40) 100%);
-}
+.app-bg::after { display: none; }
 
 /* =============================================================
    LAYOUT (sidebar + main + header)
@@ -468,7 +442,7 @@ body { min-height: 100vh; }
 
 .panel {
   background: var(--panel-1);
-  border: 1px solid var(--line-soft);
+  border: none;
   border-radius: var(--r-xl);
   box-shadow: var(--inset-hi);
   padding: 18px 20px;
@@ -509,7 +483,7 @@ body { min-height: 100vh; }
 .stat-card {
   position: relative;
   background: var(--panel-1);
-  border: 1px solid var(--line-soft);
+  border: none;
   border-radius: var(--r-xl);
   padding: 18px 20px;
   box-shadow: var(--inset-hi);
@@ -518,8 +492,8 @@ body { min-height: 100vh; }
 }
 .stat-card .accent-bar {
   position: absolute;
-  left: 0; top: 16px; bottom: 16px;
-  width: 2px; border-radius: var(--r-xs);
+  left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 0;
   background: var(--accent, var(--ink-3));
 }
 .stat-card .stat-label {
@@ -551,6 +525,13 @@ body { min-height: 100vh; }
 .acc-amber    { --accent: var(--amber);    --icon-bg: var(--amber-soft);    --icon-color: var(--amber); }
 .acc-coral    { --accent: var(--coral);    --icon-bg: var(--coral-soft);    --icon-color: var(--coral); }
 .acc-slate    { --accent: var(--ink-3);    --icon-bg: rgba(255,255,255,.06);--icon-color: var(--ink-2); }
+
+/* Stat card border mengikuti accent color */
+.stat-card.acc-cyan     { border-color: rgba(77, 212, 255, 0.22); }
+.stat-card.acc-mint     { border-color: rgba(110, 231, 183, 0.22); }
+.stat-card.acc-lavender { border-color: rgba(180, 163, 255, 0.22); }
+.stat-card.acc-amber    { border-color: rgba(251, 191, 36, 0.22); }
+.stat-card.acc-coral    { border-color: rgba(251, 113, 133, 0.22); }
 
 /* =============================================================
    BUTTONS
