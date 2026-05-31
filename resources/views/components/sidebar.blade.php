@@ -66,16 +66,6 @@
             </div>
         @endif
 
-        @if ($role === 'admin')
-            <p class="nav-section-label">SETTINGS</p>
-            <div class="nav-list">
-                <a href="/settings"
-                   class="nav-link menu-link {{ request()->is('settings*') ? 'active' : '' }}">
-                    <i class="fa-solid fa-gear"></i>
-                    <span class="menu-text">Settings</span>
-                </a>
-            </div>
-        @endif
 
     </nav>
 

@@ -66,16 +66,6 @@
             </div>
         <?php endif; ?>
 
-        <?php if($role === 'admin'): ?>
-            <p class="nav-section-label">SETTINGS</p>
-            <div class="nav-list">
-                <a href="/settings"
-                   class="nav-link menu-link <?php echo e(request()->is('settings*') ? 'active' : ''); ?>">
-                    <i class="fa-solid fa-gear"></i>
-                    <span class="menu-text">Settings</span>
-                </a>
-            </div>
-        <?php endif; ?>
 
     </nav>
 

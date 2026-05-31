@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Notification;
-use App\Models\Setting;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -12,9 +11,11 @@ use Illuminate\Console\Command;
 #[Description('Delete old notifications')]
 class CleanupNotifications extends Command
 {
+    private const RETENTION_DAYS = 3;
+
     public function handle(): int
     {
-        $days = Setting::getInt('notification_retention_days', 30);
+        $days = self::RETENTION_DAYS;
         $deleted = Notification::where('created_at', '<', now()->subDays($days))->delete();
 
         if ($deleted > 0) {

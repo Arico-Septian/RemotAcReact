@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schedule;
 
 Artisan::command('inspire', function () {
@@ -29,3 +30,8 @@ Schedule::command('notification:cleanup')
 
 Schedule::command('temperature:cleanup --days=7')
     ->dailyAt('00:10');
+
+Schedule::call(function () {
+    DB::table('cache')->where('expiration', '<', time())->delete();
+    DB::table('cache_locks')->where('expiration', '<', time())->delete();
+})->dailyAt('00:20');

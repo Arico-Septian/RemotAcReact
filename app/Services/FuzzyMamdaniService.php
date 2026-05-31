@@ -2,18 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\Setting;
-
 class FuzzyMamdaniService
 {
+    private const TEMP_COLD = 22;
+    private const TEMP_HOT  = 30;
+
     private int $cold;
     private int $hot;
     private int $mid;
 
     public function __construct()
     {
-        $this->cold = Setting::getInt('fuzzy_temp_cold', 22);
-        $this->hot  = Setting::getInt('fuzzy_temp_hot', 30);
+        $this->cold = self::TEMP_COLD;
+        $this->hot  = self::TEMP_HOT;
         $this->mid  = (int) round(($this->cold + $this->hot) / 2);
     }
 
