@@ -170,7 +170,7 @@
         height: 38px !important;
         border-radius: var(--r-md) !important;
         background: rgb(var(--cyan-d-rgb) / 0.08) !important;
-        border: 1px solid rgb(var(--cyan-d-rgb) / 0.16) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
         color: #7fa0c8 !important;
         transition: all var(--t-base) !important;
         display: flex !important;
@@ -183,7 +183,7 @@
     #notifBellBtn:hover,
     .main-header .btn-icon:hover {
         background: rgb(var(--cyan-d-rgb) / 0.15) !important;
-        border-color: rgb(var(--cyan-d-rgb) / 0.38) !important;
+        border-color: rgba(255, 255, 255, 0.45) !important;
         color: var(--cyan-d) !important;
         transform: translateY(-2px);
         box-shadow: 0 6px 20px -2px rgb(var(--cyan-d-rgb) / 0.40);
