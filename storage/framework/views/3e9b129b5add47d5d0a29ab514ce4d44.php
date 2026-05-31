@@ -128,38 +128,88 @@
 
         /* === Temperature Ring === */
         .temp-ring {
-            width: 240px;
-            height: 240px;
+            width: 280px;
+            height: 280px;
             border-radius: 50%;
             position: relative;
             flex-shrink: 0;
-            background: radial-gradient(circle at 50% 40%, #0f1e3d 0%, #070f1f 100%);
-            transition: box-shadow 0.4s var(--ease);
+            background: radial-gradient(circle at 45% 38%, #1c2030 0%, #0d0f17 100%);
+            transition: box-shadow 0.5s var(--ease);
         }
 
-        /* #10 Temperature color indicator — ring via box-shadow */
+        /* Gradient ring via ::before — conic gradient masked to ring shape */
+        .temp-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            z-index: 0;
+            transition: background 0.5s var(--ease);
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #fff calc(100% - 4px));
+        }
+
+        /* COOL — cyan gradient ring */
+        .temp-ring.temp-cool::before {
+            background: conic-gradient(
+                from 190deg,
+                rgba(77, 212, 255, 1.0)  0deg,
+                rgba(77, 212, 255, 0.80) 80deg,
+                rgba(77, 212, 255, 0.20) 160deg,
+                transparent              210deg,
+                transparent              300deg,
+                rgba(77, 212, 255, 0.50) 345deg,
+                rgba(77, 212, 255, 1.0)  360deg
+            );
+        }
         .temp-ring.temp-cool {
             box-shadow:
-                0 0 0 4px rgba(77, 212, 255, 0.85),
-                -12px 6px 50px rgba(77, 212, 255, 0.60),
-                0 8px 30px rgba(77, 212, 255, 0.20),
-                inset 0 0 40px rgba(77, 212, 255, 0.06);
+                0 0 0 1px rgba(77, 212, 255, 0.15),
+                -14px 8px 55px rgba(77, 212, 255, 0.55),
+                0 10px 35px rgba(77, 212, 255, 0.20),
+                inset 0 0 50px rgba(77, 212, 255, 0.08);
         }
 
+        /* WARM — amber gradient ring */
+        .temp-ring.temp-warm::before {
+            background: conic-gradient(
+                from 190deg,
+                rgba(251, 191, 36, 1.0)  0deg,
+                rgba(251, 191, 36, 0.80) 80deg,
+                rgba(251, 146, 60, 0.20) 160deg,
+                transparent              210deg,
+                transparent              300deg,
+                rgba(251, 191, 36, 0.50) 345deg,
+                rgba(251, 191, 36, 1.0)  360deg
+            );
+        }
         .temp-ring.temp-warm {
             box-shadow:
-                0 0 0 4px rgba(251, 191, 36, 0.85),
-                -12px 6px 50px rgba(251, 191, 36, 0.60),
-                0 8px 30px rgba(251, 146, 60, 0.20),
-                inset 0 0 40px rgba(251, 191, 36, 0.06);
+                0 0 0 1px rgba(251, 191, 36, 0.15),
+                -14px 8px 55px rgba(251, 191, 36, 0.55),
+                0 10px 35px rgba(251, 146, 60, 0.20),
+                inset 0 0 50px rgba(251, 191, 36, 0.08);
         }
 
+        /* HOT — coral gradient ring */
+        .temp-ring.temp-hot::before {
+            background: conic-gradient(
+                from 190deg,
+                rgba(248, 113, 113, 1.0)  0deg,
+                rgba(248, 113, 113, 0.80) 80deg,
+                rgba(248, 113, 113, 0.20) 160deg,
+                transparent               210deg,
+                transparent               300deg,
+                rgba(248, 113, 113, 0.50) 345deg,
+                rgba(248, 113, 113, 1.0)  360deg
+            );
+        }
         .temp-ring.temp-hot {
             box-shadow:
-                0 0 0 4px rgba(248, 113, 113, 0.85),
-                -12px 6px 50px rgba(248, 113, 113, 0.60),
-                0 8px 30px rgba(248, 113, 113, 0.20),
-                inset 0 0 40px rgba(248, 113, 113, 0.06);
+                0 0 0 1px rgba(248, 113, 113, 0.15),
+                -14px 8px 55px rgba(248, 113, 113, 0.55),
+                0 10px 35px rgba(248, 113, 113, 0.20),
+                inset 0 0 50px rgba(248, 113, 113, 0.08);
         }
 
         /* Power OFF — ring redup */
@@ -167,7 +217,7 @@
             box-shadow:
                 0 0 0 3px rgba(100, 116, 139, 0.35),
                 0 4px 20px rgba(0, 0, 0, 0.30) !important;
-            background: radial-gradient(circle at 50% 40%, #0a1225 0%, #050b16 100%) !important;
+            background: radial-gradient(circle at 50% 40%, #161a24 0%, #0a0c12 100%) !important;
             filter: saturate(0.15) brightness(0.65);
             transition: box-shadow 0.4s var(--ease), filter 0.4s var(--ease), background 0.4s var(--ease);
         }
@@ -316,6 +366,18 @@
                 0 0 30px rgb(var(--mint-rgb) / 0.45);
         }
 
+        /* === Panel ring — solid seragam, tidak berubah warna === */
+        .ac-ring-panel,
+        .ac-ring-panel.temp-panel-cool,
+        .ac-ring-panel.temp-panel-warm,
+        .ac-ring-panel.temp-panel-hot,
+        .ac-ring-panel.temp-panel-off {
+            background: #161a24 !important;
+            border: 1px solid rgba(255, 255, 255, 0.07) !important;
+            box-shadow: none !important;
+            border-radius: var(--r-xl) !important;
+        }
+
         /* === Min/Max chips === */
         .ring-chips {
             display: inline-flex;
@@ -346,7 +408,7 @@
             justify-content: center;
             gap: 8px;
             padding: 18px 10px;
-            background: var(--panel-1);
+            background: var(--panel-2);
             border: 1px solid var(--line);
             border-radius: var(--r-lg);
             font-size: 13px;
@@ -437,9 +499,9 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 11px 10px;
-            background: var(--panel-1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 13px 12px;
+            background: var(--panel-2);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             border-radius: var(--r-xl);
             font-size: 13px;
             font-weight: 600;
@@ -458,7 +520,7 @@
         }
 
         .mode-btn-h:hover {
-            background: var(--panel-2);
+            background: var(--panel-3);
             border-color: var(--line-strong);
             color: var(--ink-0);
         }
@@ -1073,15 +1135,15 @@
                                         };
                                         $isPowerOn = ($ac->status?->power ?? 'OFF') === 'ON';
                                     ?>
-                                    <div class="panel ac-ring-panel"
+                                    <?php
+                                        $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
+                                    ?>
+                                    <div class="panel ac-ring-panel temp-panel-<?php echo e($isPowerOn ? $tempCategory : 'off'); ?>"
                                         style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px 20px;">
-                                        <?php
-                                            $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
-                                        ?>
                                         <div class="temp-ring temp-<?php echo e($tempCategory); ?> <?php echo e($isPowerOn ? '' : 'ring-off'); ?>"
                                             id="tempRing-<?php echo e($ac->id); ?>">
                                             <div class="temp-ring-inner">
-                                                <p class="ring-label">AC Temp</p>
+                                                <p class="ring-label">Suhu AC</p>
                                                 <div class="ring-temp">
                                                     <span class="temp-value"><?php echo e($curTemp); ?></span><span
                                                         class="unit">°C</span>

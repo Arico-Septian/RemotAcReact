@@ -52,10 +52,10 @@
             border: 1px solid var(--line-soft);
             border-radius: var(--r-xl);
             box-shadow: var(--inset-hi);
-            padding: 14px;
+            padding: 18px 20px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             transition: var(--t-base);
             overflow: hidden;
         }
@@ -787,7 +787,7 @@
                                                     @endif
                                                     <div class="grid grid-cols-2 gap-2">
                                                         <div
-                                                            style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:6px 8px;text-align:center;">
+                                                            style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 6px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
                                                                 style="color:var(--mint);line-height:1;"
                                                                 id="active-{{ $room->id }}">
@@ -796,7 +796,7 @@
                                                             </p>
                                                         </div>
                                                         <div
-                                                            style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:6px 8px;text-align:center;">
+                                                            style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 6px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
                                                                 style="color:var(--ink-2);line-height:1;"
                                                                 id="idle-{{ $room->id }}">

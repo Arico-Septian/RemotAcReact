@@ -2102,7 +2102,7 @@
                         tooltip: {
                             enabled: true,
                             displayColors: false,
-                            backgroundColor: 'rgba(7,16,31,0.95)',
+                            backgroundColor: 'rgba(22,26,36,0.97)',
                             borderColor: 'rgba(255,255,255,0.12)',
                             borderWidth: 1,
                             padding: 10,
@@ -2162,7 +2162,7 @@
                                 callback: v => v + '°C'
                             },
                             grid: {
-                                color: 'rgba(103,232,249,0.12)'
+                                color: 'rgba(255,255,255,0.06)'
                             }
                         }
                     }

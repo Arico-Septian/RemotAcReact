@@ -10,7 +10,7 @@
 ---------------------------------------------------------------- */
 :root {
   /* Background layers — dark slate */
-  --bg-0: #0f1117;
+  --bg-0: #0a0c12;
   --bg-1: #14161e;
   --bg-2: #1a1d28;
   --bg-3: #20232f;
@@ -146,7 +146,7 @@ body { min-height: 100vh; }
   z-index: -1;
   overflow: hidden;
 
-  background: #0f1117;
+  background: #0a0c12;
 }
 
 .app-bg::after { display: none; }

@@ -11,20 +11,20 @@
         height: 0;
     }
 
-    /* Wallpaper — overlay 78% agar gambar samar di celah panel */
+    /* Wallpaper — overlay agar tekstur gambar samar terlihat di celah panel */
     html, body { height: 100%; overflow: hidden; }
     body {
         background:
-            linear-gradient(rgba(4, 4, 8, 0.82), rgba(4, 4, 8, 0.82)),
+            linear-gradient(rgba(8, 10, 16, 0.74), rgba(8, 10, 16, 0.74)),
             url('/images/wallpaper.jpeg') center/cover no-repeat fixed !important;
     }
 
-    /* Force solid panel colors — hitam + teks putih */
+    /* Dark blue-slate — layered depth, teks putih */
     :root {
-        --bg-1:         #0a0a0f;
-        --panel-1:      #0f1018;
-        --panel-2:      #131318;
-        --panel-3:      #17171e;
+        --bg-1:         #0a0c12;
+        --panel-1:      #161a24;
+        --panel-2:      #1d2230;
+        --panel-3:      #242a3a;
         --line-soft:    rgba(255, 255, 255, 0.08);
         --line:         rgba(255, 255, 255, 0.12);
         --cyan-d-rgb:   34 184 230;
@@ -35,14 +35,15 @@
         --ink-4:        #a8b4c8;
     }
 
-    /* Semua panel solid hitam */
+    /* Semua box seragam — satu warna solid */
     .panel,
     .stat-card,
     .card,
     .dashboard-rooms-panel,
     .dashboard-activity-panel,
     .temp-chart-panel {
-        background: #0f1018 !important;
+        background: #161a24 !important;
+        border: 1px solid rgba(255, 255, 255, 0.07) !important;
         -webkit-backdrop-filter: none !important;
         backdrop-filter: none !important;
     }
@@ -54,36 +55,20 @@
         box-shadow: none !important;
     }
 
-    /* Gradasi per stat card — tint gelap sesuai accent */
-    .stat-card.acc-cyan     { background: linear-gradient(135deg, #0e1a22 0%, #0f1018 65%) !important; }
-    .stat-card.acc-lavender { background: linear-gradient(135deg, #14101e 0%, #0f1018 65%) !important; }
-    .stat-card.acc-mint     { background: linear-gradient(135deg, #0c1a16 0%, #0f1018 65%) !important; }
-    .stat-card.acc-coral    { background: linear-gradient(135deg, #1a0e14 0%, #0f1018 65%) !important; }
-    .stat-card.acc-amber    { background: linear-gradient(135deg, #18140a 0%, #0f1018 65%) !important; }
-
-    /* Panel besar — gradasi berbeda tiap panel */
-    .temp-chart-panel        { background: linear-gradient(160deg, #0e1820 0%, #0f1018 55%) !important; }
-    .dashboard-rooms-panel   { background: linear-gradient(160deg, #0c1a14 0%, #0f1018 55%) !important; }
-    .dashboard-activity-panel{ background: linear-gradient(160deg, #120e1e 0%, #0f1018 55%) !important; }
-
-    /* Inner items — border putih + radius konsisten */
+    /* Inner items — selangkah lebih terang untuk kedalaman */
     .dashboard-room-row,
     .activity-item,
     .ac-card,
     .nlist-item {
-        background: #131318 !important;
-        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        background: #1d2230 !important;
+        border: 1px solid rgba(255, 255, 255, 0.10) !important;
         border-radius: var(--r-xl) !important;
     }
 
     /* Mode buttons — radius besar agar terlihat melengkung */
-    .mode-btn-h {
-        border-radius: var(--r-xl) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    }
+    .mode-btn-h,
     .mode-btn-v {
         border-radius: var(--r-xl) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
 
     /* Min/Max chips — pill shape dengan border terlihat */
@@ -93,16 +78,19 @@
         color: var(--ink-1) !important;
     }
 
-    /* Panel ring AC — kotak dengan background */
+    /* Panel ring AC — biarkan CSS blade yang handle warna */
     .ac-ring-panel {
-        background: #0f1018 !important;
-        border: 1px solid rgba(255, 255, 255, 0.10) !important;
         border-radius: var(--r-xl) !important;
     }
 
-    /* Semua panel AC punya border tipis agar terlihat terpisah */
-    .ac-panel .panel {
+    /* Panel AC biasa punya border tipis */
+    .ac-panel .panel:not(.ac-ring-panel) {
         border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    }
+
+    /* ac-ring-panel: jangan di-override, biarkan CSS blade yang handle */
+    .ac-panel .panel.ac-ring-panel {
+        border-radius: var(--r-xl) !important;
     }
 
     /* Buttons umum */
@@ -144,8 +132,8 @@
         height: 64px;
         display: flex; align-items: center; justify-content: space-between;
         padding: 0 24px;
-        background: linear-gradient(90deg, #111115 0%, #0d0d12 50%, #08080d 100%) !important;
-        border-bottom: none !important;
+        background: linear-gradient(90deg, #11141d 0%, #0e111a 60%, #0b0d14 100%) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
         box-shadow: 0 2px 16px rgba(0, 0, 0, 0.30);
         color: var(--ink-0);
         position: sticky; top: 0;
@@ -359,9 +347,9 @@
 
     /* Sidebar hitam */
     .app-sidebar {
-        background: linear-gradient(180deg, #111115 0%, #08080d 100%) !important;
-        border-right: none !important;
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.60);
+        background: linear-gradient(180deg, #11141d 0%, #0b0d14 100%) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45);
     }
 
     .app-sidebar::before { display: none; }
@@ -369,9 +357,9 @@
     /* 2026 brand with vibrant, modern aesthetic */
     .brand {
         height: 64px !important;
-        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.14) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
         position: relative;
-        background: linear-gradient(180deg, rgba(20, 32, 60, 0.6), rgba(14, 22, 46, 0.20));
+        background: transparent;
     }
     .brand::after {
         content: '';

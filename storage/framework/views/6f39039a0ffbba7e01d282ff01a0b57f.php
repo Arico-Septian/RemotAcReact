@@ -17,7 +17,7 @@
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
             border-radius: var(--r-xl);
-            padding: 14px;
+            padding: 18px 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
