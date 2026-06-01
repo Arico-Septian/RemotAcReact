@@ -336,10 +336,11 @@
             font-size: 11px;
         }
 
-        /* Badge aktivitas — kotak membulat 8px, konsisten dengan badge role */
+        /* Badge aktivitas — kotak membulat 8px, teks putih (semua varian) */
         .act-badge {
             border-radius: 8px !important;
             padding: 3px 10px !important;
+            color: #ffffff !important;
         }
 
 

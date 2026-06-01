@@ -44,7 +44,7 @@
         .room-card .room-card-chart-btn {
             background: var(--cyan-soft);
             border-color: var(--cyan-soft-2);
-            color: var(--cyan);
+            color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
             justify-content: center;
@@ -57,7 +57,7 @@
         .room-card .room-card-chart-btn:hover {
             background: var(--cyan-soft-2);
             border-color: var(--cyan-soft-2);
-            color: var(--cyan);
+            color: #ffffff;
             box-shadow: none;
             transform: none;
         }
@@ -157,15 +157,40 @@
             border: 1px solid rgba(248, 113, 113, 0.4) !important;
         }
 
-        /* Status pill Online/Offline → membulat penuh (pill), seragam dgn status ESP */
+        /* Status Online/Offline → teks saja, tanpa kotak */
         .room-card .room-status-pill {
-            border-radius: 999px !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            justify-content: center !important;
+            text-align: center;
+        }
+
+        /* Online = putih, Offline = abu-abu */
+        .room-card .room-status-pill.pill-online {
+            color: #ffffff !important;
+        }
+
+        .room-card .room-status-pill.pill-offline {
+            color: #94a3b8 !important;
         }
 
         .room-card .temp-chip.idle {
             background: var(--panel-2) !important;
             color: var(--ink-3) !important;
             border: 1px solid var(--line-soft) !important;
+        }
+
+        /* Suhu: sensor nyala = teks putih, mati = teks abu */
+        .room-card .temp-chip.cool,
+        .room-card .temp-chip.warm,
+        .room-card .temp-chip.hot {
+            color: #ffffff !important;
+        }
+
+        .room-card .temp-chip.idle {
+            color: #94a3b8 !important;
         }
 
         /* Toolbar responsiveness for small screens */
@@ -321,8 +346,8 @@
             }
 
             .room-card .room-status-pill {
-                padding: 2px 7px !important;
-                font-size: 10px !important;
+                padding: 0 !important;
+                font-size: 12px !important;
             }
 
             .room-card .temp-chip {
@@ -737,14 +762,14 @@
                                                 <div class="room-card" data-room-id="{{ $room->id }}"
                                                     data-name="{{ strtolower($room->name) }}"
                                                     data-status="{{ $status }}" data-floor="{{ $floorName }}">
-                                                    <div class="flex items-start justify-between gap-2">
+                                                    <div class="flex items-center justify-between gap-2">
                                                         <h3 class="font-semibold text-tight"
                                                             style="color:var(--ink-0);line-height: 1.3;font-size:16px;">
                                                             {{ ucfirst($room->name) }}
                                                         </h3>
                                                         <span
                                                             class="pill room-status-pill {{ $status === 'online' ? 'pill-online' : 'pill-offline' }}"
-                                                            style="padding:3px 8px;font-size:10px;">
+                                                            style="font-size:12px;">
                                                             <span
                                                                 class="room-status-text">{{ $status === 'online' ? 'Online' : 'Offline' }}</span>
                                                         </span>
@@ -769,7 +794,7 @@
                                                     <div class="ac-mini">
                                                         <div>
                                                             <p class="num"
-                                                                style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
+                                                                style="color:#ffffff;font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="ov-active-{{ $room->id }}">
                                                                 {{ $activeCount }}</p>
                                                             <p class="lbl"
@@ -778,7 +803,7 @@
                                                         </div>
                                                         <div>
                                                             <p class="num"
-                                                                style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
+                                                                style="color:#ffffff;font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="ov-idle-{{ $room->id }}">
                                                                 {{ $inactiveCount }}</p>
                                                             <p class="lbl"
@@ -1193,8 +1218,8 @@
                         },
                         tooltip: {
                             backgroundColor: 'rgba(7,16,31,0.96)',
-                            titleColor: '#f5f7fb',
-                            bodyColor: '#cbd5e1',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
                             borderColor: 'rgba(77,212,255,0.40)',
                             borderWidth: 1,
                             padding: 10,

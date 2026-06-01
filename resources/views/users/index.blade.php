@@ -161,19 +161,19 @@
 
         .badge-role.admin {
             background: var(--coral-soft);
-            color: var(--coral);
+            color: #ffffff;
             border: 1px solid var(--coral-soft-2);
         }
 
         .badge-role.operator {
             background: var(--amber-soft);
-            color: var(--amber);
+            color: #ffffff;
             border: 1px solid var(--amber-soft-2);
         }
 
         .badge-role.user {
             background: var(--cyan-soft);
-            color: var(--cyan);
+            color: #ffffff;
             border: 1px solid var(--cyan-soft-2);
         }
 
@@ -574,15 +574,11 @@
                 width: 100%;
             }
 
-            /* Sama ukuran dengan log activity row */
+            /* Kartu 2-baris meniru Activity Log (sedikit lebih rapat krn ada tombol aksi) */
             .user-card {
-                padding: 10px 12px;
+                padding: 12px 16px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-                display: flex;
-                align-items: center;
-                gap: 10px;
                 width: 100%;
-                min-height: 56px;
             }
 
             .user-card:last-child {
@@ -685,7 +681,6 @@
                 gap: 4px;
                 justify-content: flex-end;
                 flex-shrink: 0;
-                min-width: 64px;
             }
 
             .user-card-actions .btn-icon {
@@ -855,10 +850,9 @@
                 height: 32px;
             }
 
-            /* User card — tighter at 320 */
+            /* User card — selaras dgn log activity */
             .user-card {
-                padding: 12px 14px;
-                gap: 8px;
+                padding: 12px 16px;
             }
 
             .user-card-info {
@@ -961,70 +955,70 @@
             }
 
             #modal .modal {
-                max-width: 390px;
+                max-width: 440px;
                 border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
-                padding: 14px 18px 6px;
-                gap: 7px;
+                padding: 18px 20px 8px;
+                gap: 8px;
             }
 
             #modal .eyebrow {
-                font-size: 10px;
+                font-size: 11px;
                 margin-bottom: 4px;
             }
 
             #modal .modal-header h2 {
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 1.2;
             }
 
             #modal .modal-header .sub {
-                font-size: 11px;
-                line-height: 1.3;
+                font-size: 12px;
+                line-height: 1.4;
                 margin-top: 5px;
             }
 
             #modal .modal-body {
-                padding: 5px 18px 7px;
+                padding: 10px 20px 10px;
             }
 
             #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
-                margin-top: 7px !important;
+                margin-top: 14px !important;
             }
 
             #modal .field {
-                gap: 4px;
+                gap: 6px;
             }
 
             #modal .field-label {
-                font-size: 10px;
+                font-size: 11px;
                 letter-spacing: 0.05em;
             }
 
             #modal .input {
-                min-height: 36px;
-                padding: 0 12px;
+                min-height: 44px;
+                padding: 0 14px;
                 border-radius: var(--r-md);
-                font-size: 12px;
+                font-size: 13px;
             }
 
             #modal .field-hint {
-                font-size: 10px !important;
-                line-height: 1.3;
-                margin-top: 2px !important;
+                font-size: 11px !important;
+                line-height: 1.4;
+                margin-top: 3px !important;
             }
 
             #modal .modal-footer {
-                padding: 7px 18px 14px;
-                gap: 8px;
+                padding: 10px 20px 16px;
+                gap: 10px;
             }
 
             #modal .modal-footer .btn {
-                min-height: 34px;
-                padding: 0 14px;
-                font-size: 12px;
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
             }
         }
 
@@ -1035,7 +1029,7 @@
             }
 
             #modal .modal {
-                max-width: min(330px, calc(100vw - 44px));
+                max-width: calc(100vw - 28px);
                 border-radius: var(--r-xl);
             }
 
@@ -1050,8 +1044,8 @@
             }
 
             #modal .modal-header h2 {
-                font-size: 14px;
-                line-height: 1.1;
+                font-size: 17px;
+                line-height: 1.15;
             }
 
             #modal .modal-header .sub {
@@ -1065,11 +1059,11 @@
             }
 
             #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
-                margin-top: 6px !important;
+                margin-top: 14px !important;
             }
 
             #modal .field {
-                gap: 3px;
+                gap: 6px;
             }
 
             #modal .field-label {
@@ -1085,7 +1079,9 @@
             }
 
             #modal .field-hint {
-                display: none;
+                display: block;
+                font-size: 11px;
+                line-height: 1.35;
             }
 
             #modal .modal-footer {
@@ -1102,41 +1098,42 @@
 
         @media (max-width: 480px) {
             #modal .modal {
-                max-width: min(310px, calc(100vw - 44px));
+                max-width: calc(100vw - 28px);
             }
         }
 
         @media (max-width: 480px) {
             #modal.modal-backdrop {
-                padding: 8px;
+                padding: 14px;
             }
 
             #modal .modal {
-                max-width: min(286px, calc(100vw - 34px));
+                max-width: calc(100vw - 28px);
                 border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
-                padding: 10px 12px 3px;
+                padding: 16px 18px 6px;
             }
 
             #modal .modal-body {
-                padding: 3px 12px 5px;
+                padding: 10px 18px 10px;
             }
 
             #modal .input {
-                min-height: 32px;
-                font-size: 11px;
+                min-height: 44px;
+                padding: 0 14px;
+                font-size: 13px;
             }
 
             #modal .modal-footer {
-                padding: 5px 12px 10px;
+                padding: 10px 18px 16px;
             }
 
             #modal .modal-footer .btn {
-                min-height: 32px;
-                padding: 0 10px;
-                font-size: 11px;
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
             }
         }
     </style>
@@ -1286,49 +1283,35 @@
                                         };
                                     @endphp
                                     <div class="user-card">
-                                        <div class="user-card-header">
-                                            <div class="user-card-info">
-                                                @if ($user->avatar_url)
-                                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
-                                                        class="user-avatar-sm" style="object-fit:cover;">
-                                                @else
-                                                    <div class="user-avatar-sm"
-                                                        style="background:var(--{{ $colorName }});">
-                                                        {{ $initials }}
+                                        <div class="flex items-center gap-3">
+                                            @if ($user->avatar_url)
+                                                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
+                                                    style="width:38px;height:38px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+                                            @else
+                                                <div
+                                                    style="width:38px;height:38px;border-radius:10px;background:var(--{{ $colorName }});color:#0c1726;font-size:15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                    {{ $initials }}
+                                                </div>
+                                            @endif
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex items-center gap-2 min-w-0">
+                                                    <span class="user-card-name-text">{{ $user->name }}</span>
+                                                    <span class="badge-role {{ $user->role }}">{{ $roleLabel }}</span>
+                                                </div>
+                                                <div class="user-card-handle">{{ $handle }}</div>
+                                            </div>
+                                            <div class="flex items-center gap-2" style="flex-shrink:0;">
+                                                <span
+                                                    style="font-size:12px;font-weight:600;white-space:nowrap;color:{{ $isOnline ? 'var(--mint)' : 'var(--ink-3)' }};">{{ $isOnline ? 'Online' : 'Offline' }}</span>
+                                                @if ($user->id !== Auth::user()->id)
+                                                    <div class="user-card-actions">
+                                                        <button onclick="deleteUser({{ $user->id }})" type="button"
+                                                            class="btn-icon danger" title="Delete user">
+                                                            <i class="fa-solid fa-trash text-[10px]"></i>
+                                                        </button>
                                                     </div>
                                                 @endif
-                                                <div class="user-card-name">
-                                                    <span class="user-card-name-text">{{ $user->name }}</span>
-                                                    <span class="user-card-handle">{{ $handle }}</span>
-                                                    @if ($user->email)
-                                                        <span
-                                                            style="font-size:11px;color:var(--ink-4);margin-top:2px;display:block;">{{ $user->email }}</span>
-                                                    @endif
-                                                </div>
                                             </div>
-                                            <span class="badge-role {{ $user->role }}"
-                                                style="font-size:10px;padding:4px 8px;">{{ $roleLabel }}</span>
-                                        </div>
-                                        <div class="user-card-footer">
-                                            <div class="user-card-status">
-                                                <span class="status-dot {{ $isOnline ? 'online' : '' }}"></span>
-                                                {{ $isOnline ? 'Online' : 'Offline' }}
-                                            </div>
-                                            @if ($user->id !== Auth::user()->id)
-                                                <div class="user-card-actions">
-                                                    <button
-                                                        onclick="editRole({{ $user->id }}, '{{ $user->role }}')"
-                                                        type="button" class="btn-icon lavender" title="Edit role">
-                                                        <i class="fa-solid fa-pen text-[10px]"></i>
-                                                    </button>
-                                                    <button onclick="deleteUser({{ $user->id }})" type="button"
-                                                        class="btn-icon danger" title="Delete user">
-                                                        <i class="fa-solid fa-trash text-[10px]"></i>
-                                                    </button>
-                                                </div>
-                                            @else
-                                                <div class="user-card-actions" aria-hidden="true"></div>
-                                            @endif
                                         </div>
                                     </div>
                                 @empty
@@ -1404,12 +1387,6 @@
                                             <td>
                                                 <div class="actions-cell">
                                                     @if ($user->id !== Auth::user()->id)
-                                                        <button
-                                                            onclick="editRole({{ $user->id }}, '{{ $user->role }}')"
-                                                            type="button" class="btn-icon lavender"
-                                                            title="Edit role">
-                                                            <i class="fa-solid fa-pen text-[10px]"></i>
-                                                        </button>
                                                         <button onclick="deleteUser({{ $user->id }})"
                                                             type="button" class="btn-icon danger"
                                                             title="Delete user">
@@ -1543,36 +1520,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-ghost" onclick="closeModal()">Batal</button>
                     <button type="submit" class="btn btn-primary">Buat User</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    {{-- Modal: edit role --}}
-    <div id="editRoleModal" class="modal-backdrop">
-        <div class="modal">
-            <div class="modal-header">
-                <div>
-                    <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                    <h2>Edit User Role</h2>
-                </div>
-            </div>
-            <form id="editRoleForm" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="user_id" id="edit_user_id">
-                <div class="modal-body">
-                    <div class="field">
-                        <label class="field-label">Role</label>
-                        <select class="input select" name="role" id="edit_user_role">
-                            <option value="admin">Admin</option>
-                            <option value="operator">Operator</option>
-                            <option value="user">User</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update role</button>
                 </div>
             </form>
         </div>
@@ -1721,31 +1668,13 @@
             HTMLFormElement.prototype.submit.call(form);
         });
 
-        function openEditModal(userId, currentRole) {
-            document.getElementById('edit_user_id').value = userId;
-            document.getElementById('edit_user_role').value = currentRole;
-            document.getElementById('editRoleForm').action = `/users/${userId}`;
-            document.getElementById('editRoleModal')?.classList.add('is-open');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editRoleModal')?.classList.remove('is-open');
-        }
-
-        function editRole(id, role) {
-            openEditModal(id, role);
-        }
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
                 closeModal();
-                closeEditModal();
             }
         });
         document.getElementById('modal')?.addEventListener('click', e => {
             if (e.target === e.currentTarget) closeModal();
-        });
-        document.getElementById('editRoleModal')?.addEventListener('click', e => {
-            if (e.target === e.currentTarget) closeEditModal();
         });
 
         function deleteUser(id) {

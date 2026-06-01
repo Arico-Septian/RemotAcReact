@@ -43,6 +43,17 @@
             border: 1px solid var(--line-soft) !important;
         }
 
+        /* Suhu: sensor nyala = teks putih, mati = teks abu */
+        .room-card .temp-chip.cool,
+        .room-card .temp-chip.warm,
+        .room-card .temp-chip.hot {
+            color: #ffffff !important;
+        }
+
+        .room-card .temp-chip.idle {
+            color: #94a3b8 !important;
+        }
+
         /* Keputusan text color follows action */
         .keputusan-yellow {
             color: var(--yellow) !important;
@@ -101,16 +112,30 @@
 
         .room-card:hover {}
 
-        /* Status pill Online/Offline → membulat penuh (pill), seragam dgn status ESP */
+        /* Status Online/Offline → teks saja, tanpa kotak */
         .room-card .room-status-pill {
-            border-radius: 999px !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            justify-content: center !important;
+            text-align: center;
+        }
+
+        /* Online = putih, Offline = abu-abu */
+        .room-card .room-status-pill.pill-online {
+            color: #ffffff !important;
+        }
+
+        .room-card .room-status-pill.pill-offline {
+            color: #94a3b8 !important;
         }
 
         /* Tombol Control AC — soft cyan seperti Delete User */
         .room-card .btn.btn-primary {
             background: var(--cyan-soft);
             border-color: var(--cyan-soft-2);
-            color: var(--cyan);
+            color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
             border-radius: 8px !important;
@@ -126,7 +151,7 @@
         .room-card .btn.btn-danger {
             background: var(--coral-soft);
             border-color: var(--coral-soft-2);
-            color: var(--coral);
+            color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
             border-radius: 8px !important;
@@ -136,6 +161,24 @@
             background: var(--coral-soft-2);
             box-shadow: none;
             transform: none;
+        }
+
+        /* Samakan ukuran tombol kartu (Control AC / Delete) dengan Overview di mobile */
+        @media (max-width: 768px) {
+            .room-card .btn.btn-primary.btn-sm,
+            .room-card .btn.btn-danger.btn-sm {
+                min-height: 40px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .room-card .btn.btn-primary.btn-sm,
+            .room-card .btn.btn-danger.btn-sm {
+                font-size: 11px;
+                padding: 7px 10px;
+                min-height: 34px;
+            }
         }
 
         .floor-section {
@@ -496,8 +539,8 @@
             }
 
             .room-card .room-status-pill {
-                padding: 2px 7px !important;
-                font-size: 10px !important;
+                padding: 0 !important;
+                font-size: 12px !important;
             }
 
             .room-card .temp-chip {
@@ -514,75 +557,75 @@
             }
 
             #modal .modal {
-                max-width: 390px;
+                max-width: 440px;
                 border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
-                padding: 14px 18px 6px;
-                gap: 7px;
+                padding: 18px 20px 8px;
+                gap: 8px;
             }
 
             #modal .eyebrow {
-                font-size: 10px;
+                font-size: 11px;
                 margin-bottom: 4px;
             }
 
             #modal .modal-header h2 {
-                font-size: 14px;
+                font-size: 16px;
                 line-height: 1.2;
             }
 
             #modal .modal-header .sub {
-                font-size: 11px;
-                line-height: 1.3;
+                font-size: 12px;
+                line-height: 1.4;
                 margin-top: 5px;
             }
 
             #modal .modal-close {
-                width: 26px;
-                height: 26px;
-                font-size: 13px;
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
             }
 
             #modal .modal-body {
-                padding: 5px 18px 7px;
+                padding: 10px 20px 10px;
             }
 
             #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
-                margin-top: 7px !important;
+                margin-top: 14px !important;
             }
 
             #modal .field {
-                gap: 4px;
+                gap: 6px;
             }
 
             #modal .field-label {
-                font-size: 10px;
+                font-size: 11px;
                 letter-spacing: 0.05em;
             }
 
             #modal .input {
-                min-height: 36px;
-                padding: 0 12px;
+                min-height: 44px;
+                padding: 0 14px;
                 border-radius: var(--r-md);
-                font-size: 12px;
+                font-size: 13px;
             }
 
             #modal .field-help {
-                font-size: 10px;
-                line-height: 1.3;
+                font-size: 11px;
+                line-height: 1.4;
             }
 
             #modal .modal-footer {
-                padding: 7px 18px 14px;
-                gap: 8px;
+                padding: 10px 20px 16px;
+                gap: 10px;
             }
 
             #modal .modal-footer .btn {
-                min-height: 34px;
-                padding: 0 14px;
-                font-size: 12px;
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
             }
         }
 
@@ -593,7 +636,7 @@
             }
 
             #modal .modal {
-                max-width: min(330px, calc(100vw - 44px));
+                max-width: calc(100vw - 28px);
                 border-radius: var(--r-xl);
             }
 
@@ -608,8 +651,8 @@
             }
 
             #modal .modal-header h2 {
-                font-size: 14px;
-                line-height: 1.1;
+                font-size: 17px;
+                line-height: 1.15;
             }
 
             #modal .modal-header .sub {
@@ -629,11 +672,11 @@
             }
 
             #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
-                margin-top: 6px !important;
+                margin-top: 14px !important;
             }
 
             #modal .field {
-                gap: 3px;
+                gap: 6px;
             }
 
             #modal .field-label {
@@ -649,7 +692,9 @@
             }
 
             #modal .field-help {
-                display: none;
+                display: block;
+                font-size: 11px;
+                line-height: 1.35;
             }
 
             #modal .modal-footer {
@@ -666,41 +711,42 @@
 
         @media (max-width: 480px) {
             #modal .modal {
-                max-width: min(310px, calc(100vw - 44px));
+                max-width: calc(100vw - 28px);
             }
         }
 
         @media (max-width: 480px) {
             #modal.modal-backdrop {
-                padding: 8px;
+                padding: 14px;
             }
 
             #modal .modal {
-                max-width: min(286px, calc(100vw - 34px));
+                max-width: calc(100vw - 28px);
                 border-radius: var(--r-xl);
             }
 
             #modal .modal-header {
-                padding: 10px 12px 3px;
+                padding: 16px 18px 6px;
             }
 
             #modal .modal-body {
-                padding: 3px 12px 5px;
+                padding: 10px 18px 10px;
             }
 
             #modal .input {
-                min-height: 32px;
-                font-size: 11px;
+                min-height: 44px;
+                padding: 0 14px;
+                font-size: 13px;
             }
 
             #modal .modal-footer {
-                padding: 5px 12px 10px;
+                padding: 10px 18px 16px;
             }
 
             #modal .modal-footer .btn {
-                min-height: 32px;
-                padding: 0 10px;
-                font-size: 11px;
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
             }
         }
     </style>
@@ -798,13 +844,13 @@
                                                     data-room-name="{{ $room->name }}"
                                                     data-device-id="{{ $room->device_id }}"
                                                     data-status="{{ $online ? 'online' : 'offline' }}">
-                                                    <div class="flex items-start justify-between gap-2">
+                                                    <div class="flex items-center justify-between gap-2">
                                                         <h2 class="font-semibold text-tight truncate"
                                                             style="color:var(--ink-0);font-size:16px;line-height: 1.3;">
                                                             {{ ucfirst($room->name) }}</h2>
                                                         <span
                                                             class="pill room-status-pill {{ $online ? 'pill-online' : 'pill-offline' }}"
-                                                            style="padding:3px 8px;font-size:10px;flex-shrink:0;">
+                                                            style="font-size:12px;flex-shrink:0;">
                                                             <span
                                                                 class="room-status-text">{{ $online ? 'Online' : 'Offline' }}</span>
                                                         </span>
@@ -892,7 +938,7 @@
                                                         <div
                                                             style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 6px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
-                                                                style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
+                                                                style="color:#ffffff;font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="active-{{ $room->id }}">
                                                                 {{ $activeAcs }}</p>
                                                             <p class="label-tag mt-1"
@@ -903,7 +949,7 @@
                                                         <div
                                                             style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 6px;text-align:center;">
                                                             <p class="text-mono text-base font-bold"
-                                                                style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
+                                                                style="color:#ffffff;font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="idle-{{ $room->id }}">
                                                                 {{ $idleAcs }}</p>
                                                             <p class="label-tag mt-1"

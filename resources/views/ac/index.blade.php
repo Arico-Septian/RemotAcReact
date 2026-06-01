@@ -751,18 +751,18 @@
             }
 
             .selector-bar .btn.btn-sm {
-                padding: 0 !important;
-                width: 40px !important;
+                padding: 0 12px !important;
                 height: 40px !important;
                 min-height: 40px !important;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 14px;
+                font-size: 13px;
+                white-space: nowrap;
             }
 
             .selector-bar .btn.btn-sm span {
-                display: none;
+                display: inline;
             }
 
             .selector-bar .btn.btn-sm i {
@@ -942,13 +942,13 @@
             }
 
             .selector-bar .btn.btn-sm {
-                padding: 0 !important;
-                width: 38px !important;
+                padding: 0 12px !important;
                 height: 38px !important;
                 min-height: 38px;
                 display: inline-flex !important;
                 align-items: center;
                 justify-content: center;
+                white-space: nowrap;
             }
 
             .selector-bar .btn.btn-sm i {
@@ -980,11 +980,11 @@
 
             .main-header>.flex.items-center.gap-2 #espStatusPill span:not(.dot) {
                 display: inline;
-                font-size: 10px;
+                font-size: 12px;
             }
 
             .main-header>.flex.items-center.gap-2 #espStatusPill {
-                padding: 4px 6px;
+                padding: 0;
             }
 
             .main-header>.flex.items-center.gap-2 .btn-icon {
@@ -1057,9 +1057,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <span id="espStatusPill" data-room-id="{{ $room->id }}"
-                        class="pill {{ ($room->device_status ?? 'offline') === 'online' ? 'pill-online' : 'pill-error' }}">
-                        <span id="espStatusText">ESP
-                            {{ ($room->device_status ?? 'offline') === 'online' ? 'Online' : 'Offline' }}</span>
+                        class="pill {{ ($room->device_status ?? 'offline') === 'online' ? 'pill-online' : 'pill-error' }}"
+                        style="justify-content:center;text-align:center;background:transparent;border:none;box-shadow:none;padding:0;font-size:12px;">
+                        <span style="font-size:15px;font-weight:800;letter-spacing:0.02em;margin-right:5px;">ESP</span>
+                        <span id="espStatusText"
+                            style="font-size:12px;font-weight:600;">{{ ($room->device_status ?? 'offline') === 'online' ? 'Online' : 'Offline' }}</span>
                     </span>
                 </div>
             </header>
@@ -1104,10 +1106,6 @@
                             @auth
                                 @if (in_array(Auth::user()->role, ['admin', 'operator']))
                                     <div class="flex items-center gap-2">
-                                        <button type="button" onclick="openEditModal()" class="btn-icon lavender"
-                                            title="Edit Unit AC">
-                                            <i class="fa-solid fa-pen text-[10px]"></i>
-                                        </button>
                                         <form id="deleteForm" method="POST" onsubmit="return confirmDelete(event)"
                                             action="{{ $firstAc ? '/ac/' . $firstAc->id : '#' }}">
                                             @csrf
@@ -1122,7 +1120,7 @@
                                             onclick="{{ $acs->count() >= 15 ? '' : 'openModal()' }}"
                                             class="btn btn-primary btn-sm {{ $acs->count() >= 15 ? 'disabled' : '' }}">
                                             <i class="fa-solid fa-plus text-[10px]"></i>
-                                            <span class="hidden sm:inline">Add AC</span>
+                                            <span>Add AC</span>
                                         </button>
                                     </div>
                                 @endif
@@ -1416,45 +1414,6 @@
                     </form>
                 </div>
             </div>
-            <div id="editModal" class="modal-backdrop">
-                <div class="modal">
-                    <div class="modal-header">
-                        <div>
-                            <p class="eyebrow" style="color:var(--lavender);"><i class="fa-solid fa-pen"></i> Edit</p>
-                            <h2>Edit AC Unit</h2>
-                        </div>
-                    </div>
-                    <form id="editACForm" method="POST" action="">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-body space-y-3">
-                            <div class="field">
-                                <label class="field-label">AC Number</label>
-                                <input class="input text-mono" id="editAcNumber" type="number" name="ac_number"
-                                    min="1" max="15" required>
-                            </div>
-                            <div class="field">
-                                <label class="field-label">AC Name</label>
-                                <input class="input" id="editAcName" type="text" name="name" pattern="\S+"
-                                    title="AC name must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
-                                    allowed</p>
-                            </div>
-                            <div class="field">
-                                <label class="field-label">Brand</label>
-                                <input class="input" id="editAcBrand" type="text" name="brand" pattern="\S+"
-                                    title="Brand must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
-                                    allowed</p>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         @endif
     @endauth
     <script>
@@ -1542,7 +1501,7 @@
             };
         }
 
-        document.querySelectorAll('#addACForm input, #editACForm input').forEach(input => {
+        document.querySelectorAll('#addACForm input').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.name === 'name') {
                     validateNoSpaces(input, 'AC Name');
@@ -1588,56 +1547,6 @@
                 e.preventDefault();
                 blockDuplicateInput(nameInput, 'AC name already exists in this room');
             }
-        });
-
-        document.getElementById('editACForm')?.addEventListener('submit', e => {
-            const form = e.currentTarget;
-            const {
-                numberInput,
-                nameInput,
-                brandInput
-            } = normalizeAcForm(form);
-
-            if (!validateNoSpaces(nameInput, 'AC Name')) {
-                e.preventDefault();
-                nameInput.reportValidity();
-                return;
-            }
-
-            if (!validateNoSpaces(brandInput, 'Brand')) {
-                e.preventDefault();
-                brandInput.reportValidity();
-                return;
-            }
-
-            if (acNumberExists(numberInput.value, currentAcId)) {
-                e.preventDefault();
-                blockDuplicateInput(numberInput, 'AC number already exists in this room');
-                return;
-            }
-
-            if (acNameExists(nameInput.value, currentAcId)) {
-                e.preventDefault();
-                blockDuplicateInput(nameInput, 'AC name already exists in this room');
-            }
-        });
-
-        function openEditModal() {
-            if (!currentAcId) return;
-            const panel = document.getElementById('ac-' + currentAcId);
-            if (!panel) return;
-            document.getElementById('editAcNumber').value = panel.dataset.acNumber || '';
-            document.getElementById('editAcName').value = panel.dataset.acName || '';
-            document.getElementById('editAcBrand').value = panel.dataset.acBrand || '';
-            document.getElementById('editACForm').action = '/ac/' + currentAcId;
-            document.getElementById('editModal')?.classList.add('is-open');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal')?.classList.remove('is-open');
-        }
-        document.getElementById('editModal')?.addEventListener('click', e => {
-            if (e.target === document.getElementById('editModal')) closeEditModal();
         });
 
         function openModal() {
@@ -2053,7 +1962,7 @@
                     const online = current.is_online === true || current.status === 'online';
                     pill.classList.toggle('pill-online', online);
                     pill.classList.toggle('pill-error', !online);
-                    text.textContent = `ESP ${online ? 'Online' : 'Offline'}`;
+                    text.textContent = online ? 'Online' : 'Offline';
                 })
                 .catch(() => {
                     if (!_espFetchFailed) {
@@ -2201,7 +2110,6 @@
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
                 closeModal();
-                closeEditModal();
                 cancelPower();
                 document.getElementById('dropdownAC')?.classList.remove('show');
             }

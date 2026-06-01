@@ -21,11 +21,11 @@
             --coral: #fb7185;
             --coral-rgb: 251 113 133;
             --amber: #fbbf24;
-            --ink-0: #f5f7fb;
-            --ink-1: #cbd5e1;
-            --ink-2: #94a3b8;
-            --ink-3: #64748b;
-            --ink-4: #475569;
+            --ink-0: #ffffff;
+            --ink-1: #ffffff;
+            --ink-2: #ffffff;
+            --ink-3: #ffffff;
+            --ink-4: #ffffff;
             --line: rgba(255, 255, 255, .08);
             --line-soft: rgba(255, 255, 255, .05);
             --r-sm: 8px;

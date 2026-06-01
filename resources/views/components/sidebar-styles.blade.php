@@ -35,10 +35,10 @@
         --line: rgba(255, 255, 255, 0.12);
         --cyan-d-rgb: 34 184 230;
         --ink-0: #ffffff;
-        --ink-1: #f0f2f8;
-        --ink-2: #e2e6f0;
-        --ink-3: #c8d0e0;
-        --ink-4: #a8b4c8;
+        --ink-1: #ffffff;
+        --ink-2: #ffffff;
+        --ink-3: #ffffff;
+        --ink-4: #ffffff;
     }
 
     /* Semua box seragam — satu warna solid */
@@ -153,9 +153,9 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 24px;
-        background: linear-gradient(90deg, #11141d 0%, #0e111a 60%, #0b0d14 100%) !important;
+        background: #0a0a0c !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.30);
+        box-shadow: none !important;
         color: var(--ink-0);
         position: sticky;
         top: 0;
@@ -165,6 +165,14 @@
     .main-header::before,
     .main-header::after {
         display: none;
+    }
+
+    /* Sidebar — hitam solid */
+    .app-sidebar,
+    .sidebar {
+        background: #0a0a0c !important;
+        border-right: 1px solid var(--line) !important;
+        box-shadow: none !important;
     }
 
     @media (max-width: 1024px) {
@@ -203,7 +211,7 @@
         border-radius: var(--r-md) !important;
         background: rgb(var(--cyan-d-rgb) / 0.08) !important;
         border: 1px solid rgba(255, 255, 255, 0.25) !important;
-        color: #7fa0c8 !important;
+        color: #ffffff !important;
         transition: all var(--t-base) !important;
         display: flex !important;
         align-items: center !important;
@@ -226,18 +234,38 @@
         font-size: 14px !important;
     }
 
-    /* 2026 vibrant notification badge */
+    /* Ikon notif (bell): tanpa kotak, warna putih */
+    #notifBellBtn {
+        background: transparent !important;
+        border: none !important;
+        color: #fff !important;
+        box-shadow: none !important;
+    }
+
+    #notifBellBtn:hover {
+        background: transparent !important;
+        border: none !important;
+        color: #fff !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    #notifBellBtn i {
+        color: #fff !important;
+    }
+
+    /* Badge angka notif: lingkaran merah solid, teks putih */
     #notifBadge,
     .notif-badge {
-        background: linear-gradient(135deg, var(--danger), var(--danger-d)) !important;
+        background: var(--danger) !important;
         color: #fff !important;
         font-size: 10px !important;
         font-weight: 700 !important;
         min-width: 18px;
         height: 18px !important;
         border-radius: var(--r-full) !important;
-        border: 2px solid rgba(8, 12, 28, 0.97) !important;
-        box-shadow: 0 6px 16px -2px rgb(var(--danger-rgb) / 0.60) !important;
+        border: 2px solid #0a0a0c !important;
+        box-shadow: 0 0 8px rgb(var(--danger-rgb) / 0.55) !important;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -245,6 +273,15 @@
         top: -4px !important;
         right: -4px !important;
         padding: 0 4px;
+    }
+
+    /* Status ESP: Online = putih, Offline = abu-abu */
+    #espStatusPill.pill-online {
+        color: #ffffff !important;
+    }
+
+    #espStatusPill.pill-error {
+        color: #94a3b8 !important;
     }
 
     .page-body {
@@ -425,11 +462,11 @@
         pointer-events: none;
     }
 
-    /* Sidebar hitam */
+    /* Sidebar hitam solid, tanpa shadow */
     .app-sidebar {
-        background: linear-gradient(180deg, #11141d 0%, #0b0d14 100%) !important;
+        background: #0a0a0c !important;
         border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45);
+        box-shadow: none !important;
     }
 
     .app-sidebar::before {
@@ -456,7 +493,7 @@
 
     .brand-logo {
         background: conic-gradient(from 220deg, var(--cyan-d), var(--cyan), #70f5d0, var(--cyan-d)) !important;
-        box-shadow: 0 12px 40px -6px rgb(var(--cyan-d-rgb) / 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
         position: relative;
     }
 
@@ -490,7 +527,7 @@
     .nav-section-label {
         font-size: 10px !important;
         letter-spacing: 0.16em !important;
-        color: #85a0cc !important;
+        color: #ffffff !important;
         padding: 14px 12px 8px !important;
         margin-top: 8px !important;
         display: flex;
@@ -535,7 +572,7 @@
         text-align: center !important;
         padding: 0 !important;
         margin: 0 !important;
-        color: #7fa0c8 !important;
+        color: #ffffff !important;
         transition: all var(--t-base) !important;
         flex-shrink: 0;
         box-sizing: border-box !important;
@@ -628,7 +665,7 @@
         font-size: 10px !important;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #85a0cc !important;
+        color: #ffffff !important;
         font-weight: 600;
         margin-top: 2px;
     }
