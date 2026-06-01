@@ -154,10 +154,9 @@
             border: 1px solid rgba(248, 113, 113, 0.4) !important;
         }
 
-        /* Status pill Online/Offline → kotak membulat (badge pendek perlu radius kecil
-           agar tdk terlihat pill; 6px ≈ proporsi rounding tombol Detail/Grafik) */
+        /* Status pill Online/Offline → membulat penuh (pill), seragam dgn status ESP */
         .room-card .room-status-pill {
-            border-radius: 8px !important;
+            border-radius: 999px !important;
         }
         .room-card .temp-chip.idle {
             background: var(--panel-2) !important;
@@ -699,7 +698,7 @@
                                                         <span
                                                             class="pill room-status-pill {{ $status === 'online' ? 'pill-online' : 'pill-offline' }}"
                                                             style="padding:3px 8px;font-size:10px;">
-                                                            <span class="dot"></span><span
+                                                            <span
                                                                 class="room-status-text">{{ $status === 'online' ? 'Online' : 'Offline' }}</span>
                                                         </span>
                                                     </div>

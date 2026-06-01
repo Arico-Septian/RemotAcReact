@@ -1030,7 +1030,6 @@
                 <div class="flex items-center gap-2">
                     <span id="espStatusPill" data-room-id="{{ $room->id }}"
                         class="pill {{ ($room->device_status ?? 'offline') === 'online' ? 'pill-online' : 'pill-error' }}">
-                        <span class="dot"></span>
                         <span id="espStatusText">ESP
                             {{ ($room->device_status ?? 'offline') === 'online' ? 'Online' : 'Offline' }}</span>
                     </span>

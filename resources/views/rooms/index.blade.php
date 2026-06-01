@@ -81,9 +81,9 @@
 
         .room-card:hover {}
 
-        /* Status pill Online/Offline → kotak membulat 8px (seragam dgn overview) */
+        /* Status pill Online/Offline → membulat penuh (pill), seragam dgn status ESP */
         .room-card .room-status-pill {
-            border-radius: 8px !important;
+            border-radius: 999px !important;
         }
 
         /* Tombol Control AC — soft cyan seperti Delete User */
@@ -715,7 +715,7 @@
                                                             style="color:var(--ink-0);font-size:16px;line-height: 1.3;">{{ ucfirst($room->name) }}</h2>
                                                         <span class="pill room-status-pill {{ $online ? 'pill-online' : 'pill-offline' }}"
                                                             style="padding:3px 8px;font-size:10px;flex-shrink:0;">
-                                                            <span class="dot"></span><span class="room-status-text">{{ $online ? 'Online' : 'Offline' }}</span>
+                                                            <span class="room-status-text">{{ $online ? 'Online' : 'Offline' }}</span>
                                                         </span>
                                                     </div>
 
