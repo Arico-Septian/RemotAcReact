@@ -249,6 +249,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 10px;
+                transform: translateY(2px);
             }
         }
 
@@ -416,8 +417,6 @@
 
             .app-content-inner>.flex.items-center.gap-2:first-child .search-input i {
                 left: 12px;
-                top: 50%;
-                transform: translateY(-50%);
             }
 
             .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented {

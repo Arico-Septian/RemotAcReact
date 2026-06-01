@@ -169,6 +169,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 10px;
+                transform: translateY(1px);
             }
         }
 
@@ -914,55 +915,6 @@
                                     </div>
                                 @endforelse
                             </div>
-                            {{-- Active filter chips --}}
-                            @if (count($activeFilters))
-                                <div
-                                    style="display:flex;flex-wrap:wrap;gap:8px;padding:10px 0;align-items:center;border-bottom:1px solid var(--line-soft);">
-                                    <span style="font-size:12px;color:var(--ink-3);font-weight:500;">Filters:</span>
-                                    @if (request('search'))
-                                        <span
-                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
-                                            <i class="fa-solid fa-magnifying-glass text-[9px]"></i>
-                                            "{{ request('search') }}"
-                                            <button onclick="removeFilter('search')"
-                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
-                                                    class="fa-solid fa-xmark"></i></button>
-                                        </span>
-                                    @endif
-                                    @if (request('activity'))
-                                        @php $actLabel = $activityOptions[request('activity')] ?? request('activity'); @endphp
-                                        <span
-                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
-                                            <i class="fa-solid fa-filter text-[9px]"></i>
-                                            {{ $actLabel }}
-                                            <button onclick="removeFilter('activity')"
-                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
-                                                    class="fa-solid fa-xmark"></i></button>
-                                        </span>
-                                    @endif
-                                    @if (request('user_id'))
-                                        @php $userName = $users->firstWhere('id', request('user_id'))?->name ?? request('user_id'); @endphp
-                                        <span
-                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
-                                            <i class="fa-solid fa-user text-[9px]"></i>
-                                            {{ $userName }}
-                                            <button onclick="removeFilter('user_id')"
-                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
-                                                    class="fa-solid fa-xmark"></i></button>
-                                        </span>
-                                    @endif
-                                    @if (request('room'))
-                                        <span
-                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
-                                            <i class="fa-solid fa-server text-[9px]"></i>
-                                            {{ request('room') }}
-                                            <button onclick="removeFilter('room')"
-                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
-                                                    class="fa-solid fa-xmark"></i></button>
-                                        </span>
-                                    @endif
-                                </div>
-                            @endif
                             {{-- Desktop table --}}
                             <div class="hidden md:block" style="overflow-x:auto;">
                                 <table class="tbl tbl-log">

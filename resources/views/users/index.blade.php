@@ -307,6 +307,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 10px;
+                transform: translateY(2px);
             }
         }
 
@@ -394,6 +395,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 12px;
+                transform: translateY(2px);
             }
         }
 
@@ -1221,36 +1223,6 @@
                                     </button>
                                 </div>
                             </div>
-                            {{-- Filter chips --}}
-                            @if (request('role') || request('search'))
-                                <div class="filter-chips">
-                                    <span>Filters:</span>
-                                    @if (request('search'))
-                                        <div class="filter-chip">
-                                            <i class="fa-solid fa-magnifying-glass text-[9px]"></i>
-                                            "{{ request('search') }}"
-                                            <button onclick="window.location.href='/users'" title="Clear search"><i
-                                                    class="fa-solid fa-xmark"></i></button>
-                                        </div>
-                                    @endif
-                                    @if (request('role'))
-                                        @php
-                                            $roleLabel = match (request('role')) {
-                                                'admin' => 'Administrator',
-                                                'operator' => 'Operator',
-                                                'user' => 'User',
-                                                default => request('role'),
-                                            };
-                                        @endphp
-                                        <div class="filter-chip">
-                                            <i class="fa-solid fa-filter text-[9px]"></i>
-                                            {{ $roleLabel }}
-                                            <button onclick="window.location.href='/users'" title="Clear role filter"><i
-                                                    class="fa-solid fa-xmark"></i></button>
-                                        </div>
-                                    @endif
-                                </div>
-                            @endif
                             {{-- Mobile cards view --}}
                             <div class="user-cards">
                                 @forelse ($users as $user)

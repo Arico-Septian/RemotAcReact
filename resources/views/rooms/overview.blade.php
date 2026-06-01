@@ -224,6 +224,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 10px;
+                transform: translateY(1px);
             }
         }
 
@@ -246,18 +247,27 @@
                 display: inline-flex;
                 gap: 2px;
                 flex-shrink: 0;
+                height: 36px;
             }
 
             .segmented .seg {
                 font-size: 10px;
-                padding: 5px 6px;
+                padding: 0 8px;
                 min-width: auto;
-                min-height: auto;
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .search-input {
+                height: 36px;
             }
 
             .search-input input {
+                height: 36px;
+                padding: 0 12px 0 34px;
                 font-size: 12px;
-                padding: 6px 8px 6px 28px;
+                box-sizing: border-box;
             }
 
             .search-input input::placeholder {
@@ -271,6 +281,7 @@
 
             .search-input i {
                 font-size: 12px;
+                left: 12px;
                 transition: opacity var(--t-base);
             }
 
