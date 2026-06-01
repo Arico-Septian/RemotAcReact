@@ -142,39 +142,26 @@
             vertical-align: middle;
         }
 
-        /* Role color badges */
+        /* Role — teks saja, tanpa kotak */
         .badge-role {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 6px 14px;
-            border-radius: 8px;
+            padding: 0;
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            height: 28px;
-            min-width: 90px;
             white-space: nowrap;
             vertical-align: middle;
         }
 
-        .badge-role.admin {
-            background: var(--coral-soft);
-            color: #ffffff;
-            border: 1px solid var(--coral-soft-2);
-        }
-
-        .badge-role.operator {
-            background: var(--amber-soft);
-            color: #ffffff;
-            border: 1px solid var(--amber-soft-2);
-        }
-
+        .badge-role.admin,
+        .badge-role.operator,
         .badge-role.user {
-            background: var(--cyan-soft);
+            background: transparent;
             color: #ffffff;
-            border: 1px solid var(--cyan-soft-2);
+            border: none;
         }
 
         .user-avatar-sm {
@@ -642,11 +629,7 @@
 
             .user-card .badge-role {
                 font-size: 10px !important;
-                padding: 3px 10px !important;
-                height: auto !important;
-                min-width: 58px !important;
-                justify-content: center !important;
-                border-radius: 8px !important;
+                padding: 0 !important;
                 letter-spacing: 0.05em !important;
                 white-space: nowrap;
                 flex-shrink: 0;
@@ -876,7 +859,7 @@
 
             .user-card .badge-role {
                 font-size: 10px !important;
-                padding: 3px 6px !important;
+                padding: 0 !important;
             }
 
             .user-card-actions .btn-icon {
@@ -1302,7 +1285,7 @@
                                             </div>
                                             <div class="flex items-center gap-2" style="flex-shrink:0;">
                                                 <span
-                                                    style="font-size:12px;font-weight:600;white-space:nowrap;color:{{ $isOnline ? 'var(--mint)' : 'var(--ink-3)' }};">{{ $isOnline ? 'Online' : 'Offline' }}</span>
+                                                    style="font-size:12px;font-weight:600;white-space:nowrap;color:#ffffff;">{{ $isOnline ? 'Online' : 'Offline' }}</span>
                                                 @if ($user->id !== Auth::user()->id)
                                                     <div class="user-card-actions">
                                                         <button onclick="deleteUser({{ $user->id }})" type="button"
@@ -1368,19 +1351,10 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="badge-role {{ $user->role }}">
-                                                    @if ($user->role == 'admin')
-                                                        ADMIN
-                                                    @elseif ($user->role == 'operator')
-                                                        OPERATOR
-                                                    @else
-                                                        USER
-                                                    @endif
-                                                </span>
+                                                <span class="badge-role {{ $user->role }}">{{ strtoupper($user->role) }}</span>
                                             </td>
                                             <td>
                                                 <div class="status-cell">
-                                                    <span class="status-dot {{ $isOnline ? 'online' : '' }}"></span>
                                                     {{ $isOnline ? 'Online' : 'Offline' }}
                                                 </div>
                                             </td>

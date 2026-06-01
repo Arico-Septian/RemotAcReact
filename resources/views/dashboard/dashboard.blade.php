@@ -188,15 +188,14 @@
         .activity-title-icon {
             width: 36px;
             height: 36px;
-            border-radius: var(--r-md);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(167, 139, 250, 0.18));
-            border: 1px solid rgba(34, 211, 238, 0.30);
-            color: var(--cyan);
-            font-size: 15px;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 18px;
         }
 
         .activity-title {
