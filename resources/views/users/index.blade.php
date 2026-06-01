@@ -130,7 +130,7 @@
         }
 
         .user-email {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--ink-4);
             margin: 1px 0 0;
             line-height: 1.2;
@@ -148,10 +148,11 @@
             align-items: center;
             justify-content: center;
             padding: 0;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
+            line-height: 1;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             white-space: nowrap;
             vertical-align: middle;
         }
@@ -181,7 +182,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 1;
             color: var(--ink-2);
             justify-content: center;
@@ -561,9 +562,9 @@
                 width: 100%;
             }
 
-            /* Kartu 2-baris meniru Activity Log (sedikit lebih rapat krn ada tombol aksi) */
+            /* Kartu user — satu baris padat */
             .user-card {
-                padding: 12px 16px;
+                padding: 10px 14px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.08);
                 width: 100%;
             }
@@ -607,7 +608,7 @@
                 font-size: 14px;
                 font-weight: 600;
                 color: var(--ink-0);
-                line-height: 1.2;
+                line-height: 1;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -628,11 +629,13 @@
             }
 
             .user-card .badge-role {
-                font-size: 10px !important;
+                font-size: 12px !important;
                 padding: 0 !important;
                 letter-spacing: 0.05em !important;
                 white-space: nowrap;
                 flex-shrink: 0;
+                position: relative;
+                top: 1px;
             }
 
             /* Status — teks Online/Offline */
@@ -835,7 +838,7 @@
 
             /* User card — selaras dgn log activity */
             .user-card {
-                padding: 12px 16px;
+                padding: 10px 14px;
             }
 
             .user-card-info {
@@ -858,7 +861,7 @@
             }
 
             .user-card .badge-role {
-                font-size: 10px !important;
+                font-size: 12px !important;
                 padding: 0 !important;
             }
 
@@ -907,8 +910,7 @@
 
             /* User card: tighter padding, fonts match log card */
             .user-card {
-                padding: 12px 14px;
-                gap: 8px;
+                padding: 10px 14px;
             }
 
             /* Toolbar at 320 px: stack to 3 rows so segmented + Add User each get full width */
@@ -1269,23 +1271,21 @@
                                         <div class="flex items-center gap-3">
                                             @if ($user->avatar_url)
                                                 <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
-                                                    style="width:38px;height:38px;border-radius:10px;object-fit:cover;flex-shrink:0;">
+                                                    style="width:34px;height:34px;border-radius:9px;object-fit:cover;flex-shrink:0;">
                                             @else
                                                 <div
-                                                    style="width:38px;height:38px;border-radius:10px;background:var(--{{ $colorName }});color:#0c1726;font-size:15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                    style="width:34px;height:34px;border-radius:9px;background:var(--{{ $colorName }});color:#0c1726;font-size:14px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                     {{ $initials }}
                                                 </div>
                                             @endif
                                             <div class="flex-1 min-w-0">
-                                                <div class="flex items-center gap-2 min-w-0">
-                                                    <span class="user-card-name-text">{{ $user->name }}</span>
-                                                    <span class="badge-role {{ $user->role }}">{{ $roleLabel }}</span>
-                                                </div>
-                                                <div class="user-card-handle">{{ $handle }}</div>
+                                                <span class="user-card-name-text">{{ $user->name }}</span>
                                             </div>
                                             <div class="flex items-center gap-2" style="flex-shrink:0;">
+                                                <span class="badge-role {{ $user->role }}"
+                                                    style="min-width:62px;">{{ $roleLabel }}</span>
                                                 <span
-                                                    style="font-size:12px;font-weight:600;white-space:nowrap;color:#ffffff;">{{ $isOnline ? 'Online' : 'Offline' }}</span>
+                                                    style="min-width:48px;text-align:center;display:inline-block;font-size:12px;font-weight:600;line-height:1;white-space:nowrap;color:#ffffff;">{{ $isOnline ? 'Online' : 'Offline' }}</span>
                                                 @if ($user->id !== Auth::user()->id)
                                                     <div class="user-card-actions">
                                                         <button onclick="deleteUser({{ $user->id }})" type="button"
@@ -1293,6 +1293,8 @@
                                                             <i class="fa-solid fa-trash text-[10px]"></i>
                                                         </button>
                                                     </div>
+                                                @else
+                                                    <div class="user-card-actions" aria-hidden="true"></div>
                                                 @endif
                                             </div>
                                         </div>
@@ -1343,7 +1345,6 @@
                                                     @endif
                                                     <div class="user-info">
                                                         <p class="user-name">{{ $user->name }}</p>
-                                                        <p class="user-handle">{{ $handle }}</p>
                                                         @if ($user->email)
                                                             <p class="user-email">{{ $user->email }}</p>
                                                         @endif
