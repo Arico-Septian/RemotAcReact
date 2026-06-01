@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,30 +18,150 @@
             border-radius: var(--r-xl);
             box-shadow: var(--inset-hi);
             padding: 14px;
-            display: flex; flex-direction: column; gap: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
             transition: var(--t-base);
         }
+
         .ac-card:hover {}
-        .ac-card > .ac-stat { padding: 9px 0; min-height: 32px; }
-        .ac-card > .ac-stat + .ac-stat { border-top: 1px solid rgba(255, 255, 255, 0.22); }
-        .ac-card > .ac-stat:last-child { padding-bottom: 2px; }
-        .ac-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 12px; margin-bottom: 2px; border-bottom: 1px solid rgba(255, 255, 255, 0.22); }
-        .ac-card-head__text { min-width: 0; }
-        .ac-card-head__tag { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin: 0; line-height: 1.2; }
-        .ac-card-head__name { font-size: 16px; font-weight: 700; color: var(--ink-0); margin: 3px 0 0; line-height: 1.3; text-transform: capitalize; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .ac-card-head__icon { width: 32px; height: 32px; border-radius: var(--r-md); background: var(--cyan-soft); color: var(--cyan); border: 1px solid var(--cyan-soft-2); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; }
-        .ac-card .ac-stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; background: transparent; border-radius: 0; padding-left: 0; padding-right: 0; }
-        .ac-card .ac-stat .label { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-weight: 500; }
-        .ac-card .ac-stat .label i { color: var(--icon-color, var(--ink-3)); width: 14px; text-align: center; font-size: 12px; }
-        .ac-card .ac-stat .value { color: var(--icon-color, var(--ink-0)); font-weight: 700; letter-spacing: .02em; }
-        .ac-card .ac-stat.timer-empty .value { color: var(--ink-3); font-weight: 500; letter-spacing: 0; }
-        .ac-card .ac-stat .timer-times { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; line-height: 1.2; color: var(--amber); }
-        .ic-power  { --icon-color: var(--mint); }
-        .ic-temp   { --icon-color: var(--cyan); }
-        .ic-mode   { --icon-color: var(--lavender); }
-        .ic-fan    { --icon-color: var(--cyan); }
-        .ic-swing  { --icon-color: var(--lavender); }
-        .ic-timer  { --icon-color: var(--amber); }
+
+        .ac-card>.ac-stat {
+            padding: 9px 0;
+            min-height: 32px;
+        }
+
+        .ac-card>.ac-stat+.ac-stat {
+            border-top: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .ac-card>.ac-stat:last-child {
+            padding-bottom: 2px;
+        }
+
+        .ac-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 12px;
+            margin-bottom: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+        }
+
+        .ac-card-head__text {
+            min-width: 0;
+        }
+
+        .ac-card-head__tag {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--ink-2);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .ac-card-head__name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink-0);
+            margin: 3px 0 0;
+            line-height: 1.3;
+            text-transform: capitalize;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ac-card-head__icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--r-md);
+            background: var(--cyan-soft);
+            color: var(--cyan);
+            border: 1px solid var(--cyan-soft-2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 13px;
+        }
+
+        .ac-card .ac-stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+            background: transparent;
+            border-radius: 0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .ac-card .ac-stat .label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink-2);
+            font-weight: 500;
+        }
+
+        .ac-card .ac-stat .label i {
+            color: var(--icon-color, var(--ink-3));
+            width: 14px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .ac-card .ac-stat .value {
+            color: var(--icon-color, var(--ink-0));
+            font-weight: 700;
+            letter-spacing: .02em;
+        }
+
+        .ac-card .ac-stat.timer-empty .value {
+            color: var(--ink-3);
+            font-weight: 500;
+            letter-spacing: 0;
+        }
+
+        .ac-card .ac-stat .timer-times {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+            font-family: var(--font-mono, ui-monospace, monospace);
+            font-size: 11px;
+            line-height: 1.2;
+            color: var(--amber);
+        }
+
+        .ic-power {
+            --icon-color: var(--mint);
+        }
+
+        .ic-temp {
+            --icon-color: var(--cyan);
+        }
+
+        .ic-mode {
+            --icon-color: var(--lavender);
+        }
+
+        .ic-fan {
+            --icon-color: var(--cyan);
+        }
+
+        .ic-swing {
+            --icon-color: var(--lavender);
+        }
+
+        .ic-timer {
+            --icon-color: var(--amber);
+        }
 
         @media (max-width: 768px) {
             .ac-card {
@@ -148,8 +269,15 @@
             gap: 8px;
             flex-wrap: nowrap;
         }
-        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
-        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
 
         @media (max-width: 480px) {
             .main-header .pill {
@@ -164,9 +292,19 @@
         }
 
         @media (max-width: 480px) {
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; }
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
 
             .main-header .app-header-title h1 {
                 font-size: 13px;
@@ -180,7 +318,10 @@
 
             /* Shrink Online pill to dot-only — saves ~50px */
 
-            .main-header .btn-icon { width: 32px; height: 32px; }
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
         }
 
         /* Ultra-wide (>1600px) — cap content width */
@@ -206,182 +347,198 @@
         }
     </style>
 </head>
+
 <body>
-<div class="custom-bg"></div>
-<div id="overlay"></div>
-
-<div class="layout">
-    @include('components.sidebar')
-
-    <div class="main-content">
-        <header class="main-header">
-            <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
-                    <i class="fa-solid fa-bars-staggered"></i>
-                </button>
-                <div class="app-header-title">
-                    <h1 style="text-transform:capitalize;">{{ $room->name }}</h1>
-                    <p>AC status snapshot</p>
+    <div class="custom-bg"></div>
+    <div id="overlay"></div>
+    <div class="layout">
+        @include('components.sidebar')
+        <div class="main-content">
+            <header class="main-header">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="lg:hidden btn-icon" title="Menu">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                    </button>
+                    <div class="app-header-title">
+                        <h1 style="text-transform:capitalize;">{{ $room->name }}</h1>
+                        <p>AC status snapshot</p>
+                    </div>
                 </div>
-            </div>
-            <div class="flex items-center gap-2">
-                @include('components.notification-bell')
-
-            </div>
-        </header>
-
-        <div class="page-body">
-            <div class="app-content">
-                <div class="app-content-inner space-y-4">
-
-                    @if ($acs->count() > 0)
-                        <div class="ac-cards grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
-                            @foreach ($acs as $ac)
-                                <div class="ac-card">
-                                    <div class="ac-card-head">
-                                        <div class="ac-card-head__text">
-                                            <p class="ac-card-head__tag">AC {{ $ac->ac_number }}</p>
-                                            <p class="ac-card-head__name" title="{{ $ac->name ?: $ac->brand }}">{{ $ac->name ?: $ac->brand }}</p>
+                <div class="flex items-center gap-2">
+                    @include('components.notification-bell')
+                </div>
+            </header>
+            <div class="page-body">
+                <div class="app-content">
+                    <div class="app-content-inner space-y-4">
+                        @if ($acs->count() > 0)
+                            <div class="ac-cards grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3">
+                                @foreach ($acs as $ac)
+                                    <div class="ac-card">
+                                        <div class="ac-card-head">
+                                            <div class="ac-card-head__text">
+                                                <p class="ac-card-head__tag">AC {{ $ac->ac_number }}</p>
+                                                <p class="ac-card-head__name" title="{{ $ac->name ?: $ac->brand }}">
+                                                    {{ $ac->name ?: $ac->brand }}</p>
+                                            </div>
+                                            <div class="ac-card-head__icon">
+                                                <i class="fa-solid fa-snowflake"></i>
+                                            </div>
                                         </div>
-                                        <div class="ac-card-head__icon">
-                                            <i class="fa-solid fa-snowflake"></i>
+                                        <div class="ac-stat ic-power">
+                                            <span class="label"><i class="fa-solid fa-power-off"></i>Power</span>
+                                            <span id="power-{{ $ac->id }}"
+                                                class="value">{{ $ac->status?->power ?? 'OFF' }}</span>
+                                        </div>
+                                        <div class="ac-stat ic-temp">
+                                            <span class="label"><i class="fa-solid fa-temperature-half"></i>Temp</span>
+                                            <span id="temp-{{ $ac->id }}"
+                                                class="value">{{ $ac->status?->set_temperature ?? 24 }}°C</span>
+                                        </div>
+                                        <div class="ac-stat ic-mode">
+                                            <span class="label"><i class="fa-solid fa-fan"></i>Mode</span>
+                                            <span id="mode-{{ $ac->id }}"
+                                                class="value">{{ strtoupper($ac->status?->mode ?? 'COOL') }}</span>
+                                        </div>
+                                        <div class="ac-stat ic-fan">
+                                            <span class="label"><i class="fa-solid fa-wind"></i>Fan</span>
+                                            <span id="fan-{{ $ac->id }}"
+                                                class="value">{{ strtoupper($ac->status?->fan_speed ?? 'AUTO') }}</span>
+                                        </div>
+                                        <div class="ac-stat ic-swing">
+                                            <span class="label"><i class="fa-solid fa-arrows-up-down"></i>Swing</span>
+                                            <span id="swing-{{ $ac->id }}"
+                                                class="value">{{ strtoupper($ac->status?->swing ?? 'OFF') }}</span>
+                                        </div>
+                                        @php $hasTimer = $ac->timer_on || $ac->timer_off; @endphp
+                                        <div class="ac-stat ic-timer {{ $hasTimer ? '' : 'timer-empty' }}">
+                                            <span class="label"><i class="fa-solid fa-clock"></i>Timer</span>
+                                            <span id="timer-{{ $ac->id }}" class="value">
+                                                @if ($hasTimer)
+                                                    <span class="timer-times">
+                                                        @if ($ac->timer_on)
+                                                            <span>ON
+                                                                {{ \Carbon\Carbon::parse($ac->timer_on)->setTimezone('Asia/Jakarta')->format('H:i') }}</span>
+                                                        @endif
+                                                        @if ($ac->timer_off)
+                                                            <span>OFF
+                                                                {{ \Carbon\Carbon::parse($ac->timer_off)->setTimezone('Asia/Jakarta')->format('H:i') }}</span>
+                                                        @endif
+                                                    </span>
+                                                @else
+                                                    OFF
+                                                @endif
+                                            </span>
                                         </div>
                                     </div>
-
-                                    <div class="ac-stat ic-power">
-                                        <span class="label"><i class="fa-solid fa-power-off"></i>Power</span>
-                                        <span id="power-{{ $ac->id }}" class="value">{{ $ac->status?->power ?? 'OFF' }}</span>
-                                    </div>
-                                    <div class="ac-stat ic-temp">
-                                        <span class="label"><i class="fa-solid fa-temperature-half"></i>Temp</span>
-                                        <span id="temp-{{ $ac->id }}" class="value">{{ $ac->status?->set_temperature ?? 24 }}°C</span>
-                                    </div>
-                                    <div class="ac-stat ic-mode">
-                                        <span class="label"><i class="fa-solid fa-fan"></i>Mode</span>
-                                        <span id="mode-{{ $ac->id }}" class="value">{{ strtoupper($ac->status?->mode ?? 'COOL') }}</span>
-                                    </div>
-                                    <div class="ac-stat ic-fan">
-                                        <span class="label"><i class="fa-solid fa-wind"></i>Fan</span>
-                                        <span id="fan-{{ $ac->id }}" class="value">{{ strtoupper($ac->status?->fan_speed ?? 'AUTO') }}</span>
-                                    </div>
-                                    <div class="ac-stat ic-swing">
-                                        <span class="label"><i class="fa-solid fa-arrows-up-down"></i>Swing</span>
-                                        <span id="swing-{{ $ac->id }}" class="value">{{ strtoupper($ac->status?->swing ?? 'OFF') }}</span>
-                                    </div>
-                                    @php $hasTimer = $ac->timer_on || $ac->timer_off; @endphp
-                                    <div class="ac-stat ic-timer {{ $hasTimer ? '' : 'timer-empty' }}">
-                                        <span class="label"><i class="fa-solid fa-clock"></i>Timer</span>
-                                        <span id="timer-{{ $ac->id }}" class="value">
-                                            @if ($hasTimer)
-                                                <span class="timer-times">
-                                                    @if ($ac->timer_on)<span>ON {{ \Carbon\Carbon::parse($ac->timer_on)->setTimezone('Asia/Jakarta')->format('H:i') }}</span>@endif
-                                                    @if ($ac->timer_off)<span>OFF {{ \Carbon\Carbon::parse($ac->timer_off)->setTimezone('Asia/Jakarta')->format('H:i') }}</span>@endif
-                                                </span>
-                                            @else
-                                                OFF
-                                            @endif
-                                        </span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="empty-state">
-                            <div class="empty-icon"><i class="fa-solid fa-snowflake"></i></div>
-                            <p class="empty-title">No AC units</p>
-                            <p class="empty-sub">Add AC units from the room management page</p>
-                        </div>
-                    @endif
-
-
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fa-solid fa-snowflake"></i></div>
+                                <p class="empty-title">No AC units</p>
+                                <p class="empty-sub">Add AC units from the room management page</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    @include('components.bottom-nav')
+    <script>
+        function updateElement(id, val) {
+            const el = document.getElementById(id);
+            if (el && el.textContent.trim() !== String(val).trim()) {
+                el.style.transition = 'color .25s, transform .25s';
+                const original = el.style.color;
+                el.style.color = '#4dd4ff';
+                el.style.transform = 'scale(1.05)';
+                el.textContent = val;
+                setTimeout(() => {
+                    el.style.color = original;
+                    el.style.transform = '';
+                }, 460);
+            }
+        }
 
-@include('components.bottom-nav')
+        function formatTime(t) {
+            if (!t || t === '0000-00-00 00:00:00' || t === '00:00:00') return '';
+            const s = String(t).trim();
+            const timeOnly = s.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
+            if (timeOnly) {
+                return timeOnly[1].padStart(2, '0') + ':' + timeOnly[2];
+            }
+            try {
+                const d = new Date(s.replace(/-/g, '/').replace('T', ' ').replace(/\..*$/, ''));
+                return isNaN(d.getTime()) ? '' : d.toLocaleTimeString('id-ID', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+            } catch {
+                return '';
+            }
+        }
+        let _statusFetchFailed = false;
 
-<script>
-function updateElement(id, val) {
-    const el = document.getElementById(id);
-    if (el && el.textContent.trim() !== String(val).trim()) {
-        el.style.transition = 'color .25s, transform .25s';
-        const original = el.style.color;
-        el.style.color = '#4dd4ff';
-        el.style.transform = 'scale(1.05)';
-        el.textContent = val;
-        setTimeout(() => { el.style.color = original; el.style.transform = ''; }, 460);
-    }
-}
-function formatTime(t) {
-    if (!t || t === '0000-00-00 00:00:00' || t === '00:00:00') return '';
-    const s = String(t).trim();
-    const timeOnly = s.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
-    if (timeOnly) {
-        return timeOnly[1].padStart(2, '0') + ':' + timeOnly[2];
-    }
-    try {
-        const d = new Date(s.replace(/-/g, '/').replace('T', ' ').replace(/\..*$/, ''));
-        return isNaN(d.getTime()) ? '' : d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
-    } catch { return ''; }
-}
-let _statusFetchFailed = false;
-function loadStatus() {
-    fetch('/api/ac-status', { headers: { 'Accept':'application/json','X-Requested-With':'XMLHttpRequest' } })
-        .then(r => r.ok ? r.json() : Promise.reject(r.status))
-        .then(data => {
-            _statusFetchFailed = false;
-            if (!Array.isArray(data)) return;
-            data.forEach(item => {
-                // Laravel serialize relationship sebagai snake_case (ac_unit), bukan acUnit
-                const ac = item.ac_unit || item.acUnit;
-                const id = ac?.id ?? item.ac_unit_id;
-                if (!id) return;
-                updateElement('power-' + id, (item.power || 'OFF').toUpperCase());
-                updateElement('temp-'  + id, (item.set_temperature ?? 24) + '°C');
-                updateElement('mode-'  + id, (item.mode || 'COOL').toUpperCase());
-                updateElement('fan-'   + id, (item.fan_speed || 'AUTO').toUpperCase());
-                updateElement('swing-' + id, (item.swing || 'OFF').toUpperCase());
-                const timerEl = document.getElementById('timer-' + id);
-                if (timerEl && ac) {
-                    const on  = formatTime(ac.timer_on);
-                    const off = formatTime(ac.timer_off);
-                    const row = timerEl.closest('.ac-stat');
-                    if (on || off) {
-                        row?.classList.remove('timer-empty');
-                        timerEl.innerHTML = '<span class="timer-times">'
-                            + (on ? `<span>ON ${on}</span>` : '')
-                            + (off ? `<span>OFF ${off}</span>` : '')
-                            + '</span>';
-                    } else {
-                        row?.classList.add('timer-empty');
-                        timerEl.textContent = 'OFF';
+        function loadStatus() {
+            fetch('/api/ac-status', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
-                }
-            });
-        }).catch(() => {
-            if (!_statusFetchFailed) {
-                _statusFetchFailed = true;
-                if (window.smToast) window.smToast('Failed to load AC status', 'error');
+                })
+                .then(r => r.ok ? r.json() : Promise.reject(r.status))
+                .then(data => {
+                    _statusFetchFailed = false;
+                    if (!Array.isArray(data)) return;
+                    data.forEach(item => {
+                        // Laravel serialize relationship sebagai snake_case (ac_unit), bukan acUnit
+                        const ac = item.ac_unit || item.acUnit;
+                        const id = ac?.id ?? item.ac_unit_id;
+                        if (!id) return;
+                        updateElement('power-' + id, (item.power || 'OFF').toUpperCase());
+                        updateElement('temp-' + id, (item.set_temperature ?? 24) + '°C');
+                        updateElement('mode-' + id, (item.mode || 'COOL').toUpperCase());
+                        updateElement('fan-' + id, (item.fan_speed || 'AUTO').toUpperCase());
+                        updateElement('swing-' + id, (item.swing || 'OFF').toUpperCase());
+                        const timerEl = document.getElementById('timer-' + id);
+                        if (timerEl && ac) {
+                            const on = formatTime(ac.timer_on);
+                            const off = formatTime(ac.timer_off);
+                            const row = timerEl.closest('.ac-stat');
+                            if (on || off) {
+                                row?.classList.remove('timer-empty');
+                                timerEl.innerHTML = '<span class="timer-times">' +
+                                    (on ? `<span>ON ${on}</span>` : '') +
+                                    (off ? `<span>OFF ${off}</span>` : '') +
+                                    '</span>';
+                            } else {
+                                row?.classList.add('timer-empty');
+                                timerEl.textContent = 'OFF';
+                            }
+                        }
+                    });
+                }).catch(() => {
+                    if (!_statusFetchFailed) {
+                        _statusFetchFailed = true;
+                        if (window.smToast) window.smToast('Failed to load AC status', 'error');
+                    }
+                });
+        }
+        setInterval(loadStatus, 5000);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStatus();
+            // Real-time via Reverb: refresh segera saat AC/device berubah dari user/tab lain
+            if (window.Echo) {
+                window.Echo.channel('device-status')
+                    .listen('.AcStatusUpdated', () => loadStatus())
+                    .listen('.DeviceStatusUpdated', () => loadStatus());
             }
         });
-}
-setInterval(loadStatus, 5000);
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadStatus();
-// Real-time via Reverb: refresh segera saat AC/device berubah dari user/tab lain
-    if (window.Echo) {
-        window.Echo.channel('device-status')
-            .listen('.AcStatusUpdated', () => loadStatus())
-            .listen('.DeviceStatusUpdated', () => loadStatus());
-    }
-});
-</script>
-@include('components.sidebar-scripts')
+    </script>
+    @include('components.sidebar-scripts')
 </body>
+
 </html>
-
-

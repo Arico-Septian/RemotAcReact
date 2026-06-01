@@ -1,48 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In — SmartAC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --cyan:         #4dd4ff;
-            --cyan-d:       #22b8e6;
-            --cyan-rgb:     77 212 255;
-            --cyan-d-rgb:   34 184 230;
-            --mint:         #6ee7b7;
-            --mint-rgb:     110 231 183;
-            --lavender:     #b4a3ff;
+            --cyan: #4dd4ff;
+            --cyan-d: #22b8e6;
+            --cyan-rgb: 77 212 255;
+            --cyan-d-rgb: 34 184 230;
+            --mint: #6ee7b7;
+            --mint-rgb: 110 231 183;
+            --lavender: #b4a3ff;
             --lavender-rgb: 180 163 255;
-            --coral:        #fb7185;
-            --coral-rgb:    251 113 133;
-            --amber:        #fbbf24;
+            --coral: #fb7185;
+            --coral-rgb: 251 113 133;
+            --amber: #fbbf24;
             --ink-0: #f5f7fb;
             --ink-1: #cbd5e1;
             --ink-2: #94a3b8;
             --ink-3: #64748b;
             --ink-4: #475569;
-            --line:       rgba(255,255,255,.08);
-            --line-soft:  rgba(255,255,255,.05);
-            --r-sm: 8px; --r-md: 10px; --r-lg: 12px;
-            --r-xl: 16px; --r-2xl: 20px; --r-3xl: 28px;
+            --line: rgba(255, 255, 255, .08);
+            --line-soft: rgba(255, 255, 255, .05);
+            --r-sm: 8px;
+            --r-md: 10px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 20px;
+            --r-3xl: 28px;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
 
         body {
             color: var(--ink-0);
             -webkit-font-smoothing: antialiased;
             background:
-                radial-gradient(800px 400px at 50% -20%, rgba(78,215,255,.08), transparent 60%),
-                radial-gradient(600px 350px at 85% 110%, rgba(139,162,255,.04), transparent 65%),
+                radial-gradient(800px 400px at 50% -20%, rgba(78, 215, 255, .08), transparent 60%),
+                radial-gradient(600px 350px at 85% 110%, rgba(139, 162, 255, .04), transparent 65%),
                 linear-gradient(135deg,
-                    rgba(4,7,16,.86) 0%, rgba(6,11,28,.84) 25%,
-                    rgba(7,14,34,.83) 50%, rgba(5,10,26,.84) 75%,
-                    rgba(4,7,20,.86) 100%),
+                    rgba(4, 7, 16, .86) 0%, rgba(6, 11, 28, .84) 25%,
+                    rgba(7, 14, 34, .83) 50%, rgba(5, 10, 26, .84) 75%,
+                    rgba(4, 7, 20, .86) 100%),
                 url('/images/wallpaper.jpeg') center/cover no-repeat fixed;
             background-blend-mode: multiply;
         }
@@ -62,73 +80,145 @@
             position: relative;
             overflow: hidden;
         }
+
         .brand-inner {
             flex: 1;
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             gap: 40px;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
         }
+
         .brand::before {
             content: '';
-            position: absolute; inset: 0;
-            background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, .04) 1px, transparent 1px);
             background-size: 32px 32px;
             -webkit-mask-image: radial-gradient(ellipse 80% 80% at 30% 40%, black 0%, transparent 70%);
             mask-image: radial-gradient(ellipse 80% 80% at 30% 40%, black 0%, transparent 70%);
             pointer-events: none;
         }
+
         .brand::after {
             content: '';
-            position: absolute; top: -100px; left: -100px;
-            width: 500px; height: 500px; border-radius: 50%;
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
             background: radial-gradient(circle, rgb(var(--cyan-d-rgb)/.08) 0%, transparent 65%);
             pointer-events: none;
         }
 
         /* Logo */
-        .b-logo { display: flex; align-items: center; gap: 11px; }
+        .b-logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
         .b-mark {
-            position: relative; width: 40px; height: 40px; border-radius: var(--r-lg);
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--r-lg);
             background: conic-gradient(from 220deg, var(--cyan-d), var(--cyan), #70f5d0, var(--cyan-d));
-            box-shadow: 0 8px 28px -4px rgb(var(--cyan-d-rgb)/.5), inset 0 1px 0 rgba(255,255,255,.28);
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            box-shadow: 0 8px 28px -4px rgb(var(--cyan-d-rgb)/.5), inset 0 1px 0 rgba(255, 255, 255, .28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
+
         .b-mark::after {
-            content: ''; position: absolute; inset: 2px;
-            border-radius: 9px; background: rgba(7,12,30,.96);
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 9px;
+            background: rgba(7, 12, 30, .96);
         }
-        .b-mark i { position: relative; z-index: 2; font-size: 14px; color: var(--cyan-d); filter: drop-shadow(0 0 8px rgb(var(--cyan-d-rgb)/.7)); }
-        .b-name { font-size: 16px; font-weight: 700; letter-spacing: -.02em; display: block; }
-        .b-tag  { font-size: 10px; font-weight: 600; letter-spacing: .10em; text-transform: uppercase; color: var(--ink-3); display: block; margin-top: 2px; }
+
+        .b-mark i {
+            position: relative;
+            z-index: 2;
+            font-size: 14px;
+            color: var(--cyan-d);
+            filter: drop-shadow(0 0 8px rgb(var(--cyan-d-rgb)/.7));
+        }
+
+        .b-name {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            display: block;
+        }
+
+        .b-tag {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+            color: var(--ink-3);
+            display: block;
+            margin-top: 2px;
+        }
 
         /* Center content */
-        .b-content { }
+        .b-content {}
+
         .b-headline {
             font-size: clamp(36px, 4.2vw, 54px);
-            font-weight: 900; letter-spacing: -.05em; line-height: .95;
+            font-weight: 900;
+            letter-spacing: -.05em;
+            line-height: .95;
         }
-        .b-headline .plain { color: var(--ink-0); display: block; }
-        .b-headline .grad  {
+
+        .b-headline .plain {
+            color: var(--ink-0);
+            display: block;
+        }
+
+        .b-headline .grad {
             display: block;
             background: linear-gradient(115deg, var(--cyan) 0%, var(--lavender) 55%, var(--mint) 100%);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
+
         .b-desc {
             margin-top: 16px;
-            font-size: 14px; color: var(--ink-2); line-height: 1.75; max-width: 340px;
+            font-size: 14px;
+            color: var(--ink-2);
+            line-height: 1.75;
+            max-width: 340px;
         }
+
         .b-status {
-            display: inline-flex; align-items: center; gap: 7px;
-            margin-top: 20px; align-self: flex-start;
-            padding: 5px 14px 5px 8px; border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 20px;
+            align-self: flex-start;
+            padding: 5px 14px 5px 8px;
+            border-radius: 999px;
             background: rgb(var(--mint-rgb)/.08);
             border: 1px solid rgb(var(--mint-rgb)/.22);
-            font-size: 11.5px; font-weight: 600; color: var(--mint);
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--mint);
         }
+
         .s-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--mint); box-shadow: 0 0 8px var(--mint);
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--mint);
+            box-shadow: 0 0 8px var(--mint);
             animation: blink 2s ease-in-out infinite;
         }
 
@@ -137,25 +227,62 @@
         .b-feats {
             padding-top: 24px;
             border-top: 1px solid var(--line-soft);
-            display: flex; flex-direction: column; gap: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
-        .feat { display: flex; align-items: center; gap: 12px; }
+
+        .feat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .feat-ic {
-            width: 34px; height: 34px; border-radius: var(--r-md);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 13px; flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
         }
-        .feat-ic.c { background: rgb(var(--cyan-d-rgb)/.10); border: 1px solid rgb(var(--cyan-d-rgb)/.22); color: var(--cyan-d); }
-        .feat-ic.m { background: rgb(var(--mint-rgb)/.10);   border: 1px solid rgb(var(--mint-rgb)/.22);   color: var(--mint); }
-        .feat-ic.l { background: rgb(var(--lavender-rgb)/.10);border: 1px solid rgb(var(--lavender-rgb)/.22);color: var(--lavender); }
-        .feat-text { font-size: 13px; color: var(--ink-1); font-weight: 500; }
+
+        .feat-ic.c {
+            background: rgb(var(--cyan-d-rgb)/.10);
+            border: 1px solid rgb(var(--cyan-d-rgb)/.22);
+            color: var(--cyan-d);
+        }
+
+        .feat-ic.m {
+            background: rgb(var(--mint-rgb)/.10);
+            border: 1px solid rgb(var(--mint-rgb)/.22);
+            color: var(--mint);
+        }
+
+        .feat-ic.l {
+            background: rgb(var(--lavender-rgb)/.10);
+            border: 1px solid rgb(var(--lavender-rgb)/.22);
+            color: var(--lavender);
+        }
+
+        .feat-text {
+            font-size: 13px;
+            color: var(--ink-1);
+            font-weight: 500;
+        }
 
         /* Vertical divider */
         .divider {
-            position: absolute; top: 0; bottom: 0;
-            left: 50%; width: 1px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
             background: linear-gradient(180deg, transparent, var(--line) 15%, var(--line) 85%, transparent);
-            pointer-events: none; z-index: 10;
+            pointer-events: none;
+            z-index: 10;
         }
 
         /* ── Right: Form ── */
@@ -168,17 +295,27 @@
             overflow-y: auto;
             min-height: 0;
         }
+
         .form-side::before {
             content: '';
-            position: absolute; top: -120px; right: -60px;
-            width: 480px; height: 480px; border-radius: 50%;
+            position: absolute;
+            top: -120px;
+            right: -60px;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
             background: radial-gradient(circle, rgb(var(--cyan-d-rgb)/.06) 0%, transparent 60%);
             pointer-events: none;
         }
+
         .form-side::after {
             content: '';
-            position: absolute; bottom: -100px; left: -40px;
-            width: 360px; height: 360px; border-radius: 50%;
+            position: absolute;
+            bottom: -100px;
+            left: -40px;
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
             background: radial-gradient(circle, rgb(var(--lavender-rgb)/.05) 0%, transparent 65%);
             pointer-events: none;
         }
@@ -187,451 +324,772 @@
         /* Form body */
         .form-body {
             flex: 1;
-            display: flex; flex-direction: column;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             padding: 24px 0;
             min-height: 0;
-            position: relative; z-index: 1;
+            position: relative;
+            z-index: 1;
         }
 
         /* Glass form card */
         .form-card {
             padding: 36px 38px;
             border-radius: var(--r-3xl);
-            background: rgba(10,18,40,.65);
-            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(10, 18, 40, .65);
+            border: 1px solid rgba(255, 255, 255, .1);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             position: relative;
             overflow: hidden;
             box-shadow:
-                0 32px 80px rgba(0,0,0,.35),
-                0 0 0 1px rgba(255,255,255,.04),
-                inset 0 1px 0 rgba(255,255,255,.08);
+                0 32px 80px rgba(0, 0, 0, .35),
+                0 0 0 1px rgba(255, 255, 255, .04),
+                inset 0 1px 0 rgba(255, 255, 255, .08);
             z-index: 1;
         }
+
         .form-card::before {
             content: '';
-            position: absolute; top: 0; left: 0; right: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
             height: 1px;
             background: linear-gradient(90deg,
-                transparent 0%,
-                rgb(var(--cyan-d-rgb)/.8) 25%,
-                rgb(var(--lavender-rgb)/.6) 65%,
-                transparent 100%);
+                    transparent 0%,
+                    rgb(var(--cyan-d-rgb)/.8) 25%,
+                    rgb(var(--lavender-rgb)/.6) 65%,
+                    transparent 100%);
         }
 
         .eyebrow {
-            display: inline-flex; align-items: center; gap: 8px;
-            font-size: 11px; font-weight: 700; letter-spacing: .14em;
-            color: var(--cyan-d); text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            color: var(--cyan-d);
+            text-transform: uppercase;
         }
+
         .eyebrow::before {
-            content: ''; width: 16px; height: 1px;
+            content: '';
+            width: 16px;
+            height: 1px;
             background: linear-gradient(90deg, transparent, rgb(var(--cyan-d-rgb)/.7));
         }
+
         .form-title {
             margin-top: 12px;
-            font-size: 34px; font-weight: 800; letter-spacing: -.04em; line-height: 1.1;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -.04em;
+            line-height: 1.1;
         }
+
         .form-title .hi {
             background: linear-gradient(120deg, var(--cyan), var(--lavender));
-            -webkit-background-clip: text; background-clip: text; color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        .form-desc { margin-top: 8px; font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+
+        .form-desc {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--ink-2);
+            line-height: 1.65;
+        }
 
         /* Alert */
         .alert {
-            margin-top: 18px; padding: 12px 14px; border-radius: var(--r-lg);
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: var(--r-lg);
             background: rgb(var(--coral-rgb)/.10);
             border: 1px solid rgb(var(--coral-rgb)/.28);
-            color: #ffc6cf; font-size: 13px; font-weight: 500;
-            display: flex; align-items: flex-start; gap: 10px;
+            color: #ffc6cf;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
-        .alert i { color: var(--coral); flex-shrink: 0; margin-top: 1px; }
+
+        .alert i {
+            color: var(--coral);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
 
         /* Fields */
-        .fields { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .fields {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
         .field-lbl {
-            display: flex; align-items: center; justify-content: space-between;
-            font-size: 11px; font-weight: 700; letter-spacing: .10em;
-            color: var(--ink-3); text-transform: uppercase; margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .10em;
+            color: var(--ink-3);
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
-        .field-lbl .hint { font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: .04em; text-transform: none; }
+
+        .field-lbl .hint {
+            font-size: 10px;
+            color: var(--ink-4);
+            font-weight: 500;
+            letter-spacing: .04em;
+            text-transform: none;
+        }
 
         .input-wrap {
-            display: flex; align-items: center;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.12);
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .12);
             border-radius: var(--r-lg);
             transition: border-color .18s, background .18s, box-shadow .18s;
         }
+
         .input-wrap:focus-within {
             border-color: rgb(var(--cyan-d-rgb)/.6);
             background: rgb(var(--cyan-d-rgb)/.06);
             box-shadow: 0 0 0 3px rgb(var(--cyan-d-rgb)/.12);
         }
+
         .input-ic {
-            padding: 0 12px 0 16px; color: var(--ink-3); font-size: 13px;
-            display: flex; align-items: center; transition: color .18s;
+            padding: 0 12px 0 16px;
+            color: var(--ink-3);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            transition: color .18s;
         }
-        .input-wrap:focus-within .input-ic { color: var(--cyan-d); }
+
+        .input-wrap:focus-within .input-ic {
+            color: var(--cyan-d);
+        }
+
         .input-wrap input {
-            flex: 1; min-width: 0; background: transparent; border: none; outline: none;
-            color: var(--ink-0); font-family: inherit; font-size: 14px; font-weight: 500; padding: 14px 0;
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--ink-0);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 14px 0;
         }
-        .input-wrap input::placeholder { color: var(--ink-4); }
+
+        .input-wrap input::placeholder {
+            color: var(--ink-4);
+        }
+
         .input-btn {
-            background: transparent; border: none; cursor: pointer;
-            color: var(--ink-3); padding: 0 14px;
-            display: flex; align-items: center; font-size: 13px; transition: color .18s;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--ink-3);
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            transition: color .18s;
         }
-        .input-btn:hover { color: var(--ink-1); }
+
+        .input-btn:hover {
+            color: var(--ink-1);
+        }
 
         /* Caps */
         .caps-warn {
-            margin-top: 6px; display: none;
-            align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--amber);
+            margin-top: 6px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--amber);
         }
-        .caps-warn.on { display: flex; }
+
+        .caps-warn.on {
+            display: flex;
+        }
 
         /* Submit */
         .btn-submit {
-            width: 100%; margin-top: 8px;
-            padding: 14px 22px; border: none; border-radius: var(--r-lg);
+            width: 100%;
+            margin-top: 8px;
+            padding: 14px 22px;
+            border: none;
+            border-radius: var(--r-lg);
             background: var(--ink-0);
             color: #07101f;
-            font-family: inherit; font-size: 14px; font-weight: 700; letter-spacing: -.01em;
-            cursor: pointer; position: relative;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 4px 20px rgba(245,247,251,.12), inset 0 1px 0 rgba(255,255,255,.5);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -.01em;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(245, 247, 251, .12), inset 0 1px 0 rgba(255, 255, 255, .5);
             transition: filter .15s, transform .12s, box-shadow .15s;
         }
+
         .btn-submit:hover:not(:disabled) {
-            filter: brightness(1.05); transform: translateY(-1px);
-            box-shadow: 0 8px 28px rgba(245,247,251,.2);
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 28px rgba(245, 247, 251, .2);
         }
-        .btn-submit:active:not(:disabled) { transform: translateY(0); }
-        .btn-submit:disabled { opacity: .7; cursor: not-allowed; }
-        .btn-submit.loading { color: transparent; pointer-events: none; }
+
+        .btn-submit:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+            opacity: .7;
+            cursor: not-allowed;
+        }
+
+        .btn-submit.loading {
+            color: transparent;
+            pointer-events: none;
+        }
+
         .btn-submit.loading::after {
-            content: ''; position: absolute;
-            width: 16px; height: 16px;
-            border: 2px solid rgba(7,16,31,.25); border-top-color: #07101f;
-            border-radius: 50%; animation: spin .7s linear infinite;
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(7, 16, 31, .25);
+            border-top-color: #07101f;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
         }
 
         /* Admin note */
         .form-note {
             margin-top: 14px;
-            display: flex; align-items: center; justify-content: center; gap: 7px;
-            font-size: 12px; color: var(--ink-4); text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-size: 12px;
+            color: var(--ink-4);
+            text-align: center;
         }
-        .form-note i { font-size: 10px; color: var(--ink-4); }
+
+        .form-note i {
+            font-size: 10px;
+            color: var(--ink-4);
+        }
 
         /* Footer */
         .form-foot {
             padding-top: 20px;
             margin-top: 0;
             border-top: 1px solid var(--line-soft);
-            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         }
+
         .secure-pill {
-            display: inline-flex; align-items: center; gap: 7px;
-            font-size: 11px; color: var(--ink-3); font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 11px;
+            color: var(--ink-3);
+            font-weight: 500;
         }
+
         .secure-pill i {
-            width: 20px; height: 20px; border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
             background: rgb(var(--mint-rgb)/.10);
             border: 1px solid rgb(var(--mint-rgb)/.25);
-            color: var(--mint); font-size: 9px;
-            display: flex; align-items: center; justify-content: center;
+            color: var(--mint);
+            font-size: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .copy { font-size: 11px; color: var(--ink-4); }
+
+        .copy {
+            font-size: 11px;
+            color: var(--ink-4);
+        }
 
         /* Brand summary — mobile/tablet only */
-        .brand-summary { display: none; }
-        .bs-logo { display: flex; align-items: center; gap: 11px; margin-bottom: 20px; }
+        .brand-summary {
+            display: none;
+        }
+
+        .bs-logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 20px;
+        }
+
         .bs-headline {
             font-size: clamp(22px, 5vw, 34px);
-            font-weight: 900; letter-spacing: -.04em; line-height: 1.0; margin-bottom: 12px;
+            font-weight: 900;
+            letter-spacing: -.04em;
+            line-height: 1.0;
+            margin-bottom: 12px;
         }
-        .bs-desc { font-size: 13.5px; color: var(--ink-2); line-height: 1.68; }
+
+        .bs-desc {
+            font-size: 13.5px;
+            color: var(--ink-2);
+            line-height: 1.68;
+        }
+
         .bs-feats {
-            margin-top: 18px; padding-top: 18px;
+            margin-top: 18px;
+            padding-top: 18px;
             border-top: 1px solid var(--line-soft);
-            display: flex; flex-direction: column; gap: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
         }
 
         /* Animations */
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-        @keyframes spin  { to { transform: rotate(360deg); } }
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .2
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         /* ── Responsive ── */
         @media (max-width: 1024px) {
-            html, body { height: auto; overflow-y: auto; overflow-x: hidden; }
-            .page {
-                display: flex; align-items: flex-start; justify-content: center;
-                height: auto; min-height: 100vh; padding: 32px 24px;
+
+            html,
+            body {
+                height: auto;
+                overflow-y: auto;
+                overflow-x: hidden;
             }
-            .divider { display: none; }
-            .brand   { display: none; }
+
+            .page {
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                height: auto;
+                min-height: 100vh;
+                padding: 32px 24px;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .brand {
+                display: none;
+            }
+
             .form-side {
-                width: 100%; max-width: 520px; height: auto;
+                width: 100%;
+                max-width: 520px;
+                height: auto;
                 padding: 36px 28px 32px;
                 justify-content: flex-start;
-                background: none; border: none; border-radius: 0;
-                -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: none;
+                background: none;
+                border: none;
+                border-radius: 0;
+                -webkit-backdrop-filter: none;
+                backdrop-filter: none;
+                box-shadow: none;
             }
-            .form-side::before { display: none; }
+
+            .form-side::before {
+                display: none;
+            }
+
             .brand-summary {
-                display: block; padding-bottom: 28px;
-                margin-bottom: 8px; border-bottom: 1px solid var(--line-soft);
+                display: block;
+                padding-bottom: 28px;
+                margin-bottom: 8px;
+                border-bottom: 1px solid var(--line-soft);
             }
-            .form-body { flex: none; justify-content: flex-start; padding: 0; }
-            .form-card { padding: 28px 26px; }
-            .fields    { margin-top: 22px; }
-            .form-foot { margin-top: 22px; }
+
+            .form-body {
+                flex: none;
+                justify-content: flex-start;
+                padding: 0;
+            }
+
+            .form-card {
+                padding: 28px 26px;
+            }
+
+            .fields {
+                margin-top: 22px;
+            }
+
+            .form-foot {
+                margin-top: 22px;
+            }
         }
 
         @media (max-width: 480px) {
-            .page { padding: 24px 20px; }
-            .form-side  { padding: 24px 0 28px; max-width: 100%; }
-            .form-title { font-size: 22px; }
-            .bs-headline { font-size: 21px; }
-            .bs-desc    { font-size: 13px; }
-            .fields     { gap: 13px; margin-top: 18px; }
-            .form-foot  { margin-top: 18px; }
-            .feat-text  { font-size: 12.5px; }
-            .bs-feats   { gap: 10px; }
-            .brand-summary { padding-bottom: 22px; margin-bottom: 6px; }
-            .form-card  { padding: 22px 18px; }
+            .page {
+                padding: 24px 20px;
+            }
+
+            .form-side {
+                padding: 24px 0 28px;
+                max-width: 100%;
+            }
+
+            .form-title {
+                font-size: 22px;
+            }
+
+            .bs-headline {
+                font-size: 21px;
+            }
+
+            .bs-desc {
+                font-size: 13px;
+            }
+
+            .fields {
+                gap: 13px;
+                margin-top: 18px;
+            }
+
+            .form-foot {
+                margin-top: 18px;
+            }
+
+            .feat-text {
+                font-size: 12.5px;
+            }
+
+            .bs-feats {
+                gap: 10px;
+            }
+
+            .brand-summary {
+                padding-bottom: 22px;
+                margin-bottom: 6px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
+            }
         }
 
         @media (max-width: 360px) {
-            .page { padding: 20px 16px; }
-            .form-side  { padding: 20px 0 24px; }
-            .form-title { font-size: 20px; }
-            .bs-headline { font-size: 19px; }
-            .feat-text  { font-size: 12px; }
-            .input-wrap input { padding: 12px 0; font-size: 13px; }
-            .btn-submit { font-size: 13px; padding: 12px; }
-            .form-card  { padding: 18px 14px; }
+            .page {
+                padding: 20px 16px;
+            }
+
+            .form-side {
+                padding: 20px 0 24px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .bs-headline {
+                font-size: 19px;
+            }
+
+            .feat-text {
+                font-size: 12px;
+            }
+
+            .input-wrap input {
+                padding: 12px 0;
+                font-size: 13px;
+            }
+
+            .btn-submit {
+                font-size: 13px;
+                padding: 12px;
+            }
+
+            .form-card {
+                padding: 18px 14px;
+            }
         }
 
         @media (max-height: 500px) and (orientation: landscape) {
-            html, body { height: auto; overflow-y: auto; }
-            .page { padding: 16px 20px; }
-            .form-side  { padding: 20px 24px 18px; }
-            .bs-headline, .bs-desc, .bs-feats { display: none; }
-            .brand-summary { padding-bottom: 16px; margin-bottom: 4px; }
-            .form-title { font-size: 20px; }
-            .form-card  { padding: 20px 22px; }
-            .fields     { margin-top: 14px; gap: 10px; }
-            .form-foot  { margin-top: 14px; }
-            .form-note  { display: none; }
+
+            html,
+            body {
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .page {
+                padding: 16px 20px;
+            }
+
+            .form-side {
+                padding: 20px 24px 18px;
+            }
+
+            .bs-headline,
+            .bs-desc,
+            .bs-feats {
+                display: none;
+            }
+
+            .brand-summary {
+                padding-bottom: 16px;
+                margin-bottom: 4px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .form-card {
+                padding: 20px 22px;
+            }
+
+            .fields {
+                margin-top: 14px;
+                gap: 10px;
+            }
+
+            .form-foot {
+                margin-top: 14px;
+            }
+
+            .form-note {
+                display: none;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+            * {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
         }
-        * { scrollbar-width: none; -ms-overflow-style: none; }
-        *::-webkit-scrollbar { display: none; }
+
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
+
 <body>
-
-<main class="page">
-
-    {{-- ── BRAND (left) ── --}}
-    <aside class="brand">
-        <div class="brand-inner">
-
-            <div class="b-logo">
-                <div class="b-mark"><i class="fa-solid fa-snowflake"></i></div>
-                <div>
-                    <span class="b-name">SmartAC</span>
-                    <span class="b-tag">IoT Control System</span>
+    <main class="page">
+        {{-- ── BRAND (left) ── --}}
+        <aside class="brand">
+            <div class="brand-inner">
+                <div class="b-logo">
+                    <div class="b-mark"><i class="fa-solid fa-snowflake"></i></div>
+                    <div>
+                        <span class="b-name">SmartAC</span>
+                        <span class="b-tag">IoT Control System</span>
+                    </div>
+                </div>
+                <div class="b-content">
+                    <h1 class="b-headline">
+                        <span class="plain">Intelligent</span>
+                        <span class="plain">climate control</span>
+                        <span class="grad">for server rooms.</span>
+                    </h1>
+                    <p class="b-desc">
+                        Monitor temperatures, control AC units remotely, and automate climate responses — all from one
+                        real-time dashboard.
+                    </p>
+                    <div class="b-status">
+                        <span class="s-dot"></span>
+                        System online &amp; monitoring
+                    </div>
+                </div>
+                <div class="b-feats">
+                    <div class="feat">
+                        <span class="feat-ic c"><i class="fa-solid fa-bolt"></i></span>
+                        <span class="feat-text">Real-time updates via MQTT + WebSocket</span>
+                    </div>
+                    <div class="feat">
+                        <span class="feat-ic m"><i class="fa-solid fa-brain"></i></span>
+                        <span class="feat-text">Fuzzy logic auto-adjusts AC setpoints</span>
+                    </div>
+                    <div class="feat">
+                        <span class="feat-ic l"><i class="fa-solid fa-shield-halved"></i></span>
+                        <span class="feat-text">Role-based access: Admin, Operator, User</span>
+                    </div>
                 </div>
             </div>
-
-            <div class="b-content">
-                <h1 class="b-headline">
-                    <span class="plain">Intelligent</span>
-                    <span class="plain">climate control</span>
+        </aside>
+        <div class="divider"></div>
+        {{-- ── FORM (right) ── --}}
+        <section class="form-side">
+            {{-- Brand summary — tablet/mobile only --}}
+            <div class="brand-summary">
+                <div class="bs-logo">
+                    <div class="b-mark"><i class="fa-solid fa-snowflake"></i></div>
+                    <div>
+                        <span class="b-name">SmartAC</span>
+                        <span class="b-tag">IoT Control System</span>
+                    </div>
+                </div>
+                <h1 class="bs-headline">
+                    <span class="plain">Intelligent climate control</span>
                     <span class="grad">for server rooms.</span>
                 </h1>
-                <p class="b-desc">
-                    Monitor temperatures, control AC units remotely, and automate climate responses — all from one real-time dashboard.
-                </p>
+                <p class="bs-desc">Monitor temperatures, control AC units remotely, and automate climate responses — all
+                    from one real-time dashboard.</p>
                 <div class="b-status">
                     <span class="s-dot"></span>
                     System online &amp; monitoring
                 </div>
-            </div>
-
-            <div class="b-feats">
-                <div class="feat">
-                    <span class="feat-ic c"><i class="fa-solid fa-bolt"></i></span>
-                    <span class="feat-text">Real-time updates via MQTT + WebSocket</span>
-                </div>
-                <div class="feat">
-                    <span class="feat-ic m"><i class="fa-solid fa-brain"></i></span>
-                    <span class="feat-text">Fuzzy logic auto-adjusts AC setpoints</span>
-                </div>
-                <div class="feat">
-                    <span class="feat-ic l"><i class="fa-solid fa-shield-halved"></i></span>
-                    <span class="feat-text">Role-based access: Admin, Operator, User</span>
-                </div>
-            </div>
-
-        </div>
-    </aside>
-
-    <div class="divider"></div>
-
-    {{-- ── FORM (right) ── --}}
-    <section class="form-side">
-
-        {{-- Brand summary — tablet/mobile only --}}
-        <div class="brand-summary">
-            <div class="bs-logo">
-                <div class="b-mark"><i class="fa-solid fa-snowflake"></i></div>
-                <div>
-                    <span class="b-name">SmartAC</span>
-                    <span class="b-tag">IoT Control System</span>
-                </div>
-            </div>
-            <h1 class="bs-headline">
-                <span class="plain">Intelligent climate control</span>
-                <span class="grad">for server rooms.</span>
-            </h1>
-            <p class="bs-desc">Monitor temperatures, control AC units remotely, and automate climate responses — all from one real-time dashboard.</p>
-            <div class="b-status">
-                <span class="s-dot"></span>
-                System online &amp; monitoring
-            </div>
-            <div class="bs-feats">
-                <div class="feat">
-                    <span class="feat-ic c"><i class="fa-solid fa-bolt"></i></span>
-                    <span class="feat-text">Real-time updates via MQTT + WebSocket</span>
-                </div>
-                <div class="feat">
-                    <span class="feat-ic m"><i class="fa-solid fa-brain"></i></span>
-                    <span class="feat-text">Fuzzy logic auto-adjusts AC setpoints</span>
-                </div>
-                <div class="feat">
-                    <span class="feat-ic l"><i class="fa-solid fa-shield-halved"></i></span>
-                    <span class="feat-text">Role-based access: Admin, Operator, User</span>
-                </div>
-            </div>
-        </div>
-
-
-        {{-- Form body --}}
-        <div class="form-body">
-            <div class="form-card">
-                <p class="eyebrow">Sign In</p>
-                <h2 class="form-title">Welcome <span class="hi">back.</span></h2>
-                <p class="form-desc">Sign in with your account to access the SmartAC dashboard.</p>
-
-                @if (session('error'))
-                    <div class="alert" role="alert">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <span>{{ session('error') }}</span>
+                <div class="bs-feats">
+                    <div class="feat">
+                        <span class="feat-ic c"><i class="fa-solid fa-bolt"></i></span>
+                        <span class="feat-text">Real-time updates via MQTT + WebSocket</span>
                     </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert" role="alert">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <span>{{ $errors->first() }}</span>
+                    <div class="feat">
+                        <span class="feat-ic m"><i class="fa-solid fa-brain"></i></span>
+                        <span class="feat-text">Fuzzy logic auto-adjusts AC setpoints</span>
                     </div>
-                @endif
-
-                <div class="fields">
-                    <div>
-                        <label class="field-lbl" for="username">
-                            <span>Username</span>
-                            <span class="hint">3 – 20 characters</span>
-                        </label>
-                        <div class="input-wrap">
-                            <span class="input-ic"><i class="fa-regular fa-user"></i></span>
-                            <input id="username" type="text" name="name" form="loginForm"
-                                   required autofocus autocomplete="username"
-                                   minlength="3" maxlength="20"
-                                   placeholder="Enter your username"
-                                   value="{{ old('name') }}">
+                    <div class="feat">
+                        <span class="feat-ic l"><i class="fa-solid fa-shield-halved"></i></span>
+                        <span class="feat-text">Role-based access: Admin, Operator, User</span>
+                    </div>
+                </div>
+            </div>
+            {{-- Form body --}}
+            <div class="form-body">
+                <div class="form-card">
+                    <p class="eyebrow">Sign In</p>
+                    <h2 class="form-title">Welcome <span class="hi">back.</span></h2>
+                    <p class="form-desc">Sign in with your account to access the SmartAC dashboard.</p>
+                    @if (session('error'))
+                        <div class="alert" role="alert">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span>{{ session('error') }}</span>
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert" role="alert">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span>{{ $errors->first() }}</span>
+                        </div>
+                    @endif
+                    <div class="fields">
+                        <div>
+                            <label class="field-lbl" for="username">
+                                <span>Username</span>
+                                <span class="hint">3 – 20 characters</span>
+                            </label>
+                            <div class="input-wrap">
+                                <span class="input-ic"><i class="fa-regular fa-user"></i></span>
+                                <input id="username" type="text" name="name" form="loginForm" required autofocus
+                                    autocomplete="username" minlength="3" maxlength="20"
+                                    placeholder="Enter your username" value="{{ old('name') }}">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="field-lbl" for="password">
+                                <span>Password</span>
+                            </label>
+                            <div class="input-wrap">
+                                <span class="input-ic"><i class="fa-solid fa-lock"></i></span>
+                                <input id="password" type="password" name="password" form="loginForm" required
+                                    autocomplete="current-password" placeholder="Enter your password">
+                                <button type="button" class="input-btn" onclick="togglePw()"
+                                    aria-label="Toggle password">
+                                    <i id="pwIcon" class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <p class="caps-warn" id="capsWarn">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Caps Lock is on
+                            </p>
                         </div>
                     </div>
-                    <div>
-                        <label class="field-lbl" for="password">
-                            <span>Password</span>
-                        </label>
-                        <div class="input-wrap">
-                            <span class="input-ic"><i class="fa-solid fa-lock"></i></span>
-                            <input id="password" type="password" name="password" form="loginForm"
-                                   required autocomplete="current-password"
-                                   placeholder="Enter your password">
-                            <button type="button" class="input-btn" onclick="togglePw()" aria-label="Toggle password">
-                                <i id="pwIcon" class="fa-regular fa-eye"></i>
-                            </button>
-                        </div>
-                        <p class="caps-warn" id="capsWarn">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Caps Lock is on
-                        </p>
-                    </div>
+                    <form method="POST" action="/login" id="loginForm" novalidate style="margin-top:8px;">
+                        @csrf
+                        <button type="submit" class="btn-submit" id="loginBtn">
+                            <span>Sign In</span>
+                            <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
+                        </button>
+                    </form>
+                    <p class="form-note">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Accounts are managed by your system administrator.
+                    </p>
                 </div>
-
-                <form method="POST" action="/login" id="loginForm" novalidate style="margin-top:8px;">
-                    @csrf
-                    <button type="submit" class="btn-submit" id="loginBtn">
-                        <span>Sign In</span>
-                        <i class="fa-solid fa-arrow-right" style="font-size:11px;"></i>
-                    </button>
-                </form>
-
-                <p class="form-note">
-                    <i class="fa-solid fa-circle-info"></i>
-                    Accounts are managed by your system administrator.
-                </p>
             </div>
-        </div>
+            {{-- Footer --}}
+            <div class="form-foot">
+                <span class="secure-pill">
+                    <i class="fa-solid fa-lock"></i>
+                    Encrypted connection
+                </span>
+                <span class="copy">© {{ date('Y') }} SmartAC</span>
+            </div>
+        </section>
+    </main>
+    <script>
+        function togglePw() {
+            const pw = document.getElementById('password');
+            const ic = document.getElementById('pwIcon');
+            const show = pw.type === 'password';
+            pw.type = show ? 'text' : 'password';
+            ic.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+        }
 
-        {{-- Footer --}}
-        <div class="form-foot">
-            <span class="secure-pill">
-                <i class="fa-solid fa-lock"></i>
-                Encrypted connection
-            </span>
-            <span class="copy">© {{ date('Y') }} SmartAC</span>
-        </div>
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            document.getElementById('loginBtn').classList.add('loading');
+        });
 
-    </section>
-
-</main>
-
-<script>
-    function togglePw() {
         const pw = document.getElementById('password');
-        const ic = document.getElementById('pwIcon');
-        const show = pw.type === 'password';
-        pw.type = show ? 'text' : 'password';
-        ic.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
-    }
+        const capEl = document.getElementById('capsWarn');
 
-    document.getElementById('loginForm').addEventListener('submit', function () {
-        document.getElementById('loginBtn').classList.add('loading');
-    });
-
-    const pw    = document.getElementById('password');
-    const capEl = document.getElementById('capsWarn');
-    function checkCaps(e) {
-        capEl.classList.toggle('on', !!e.getModifierState?.('CapsLock'));
-    }
-    pw.addEventListener('keydown', checkCaps);
-    pw.addEventListener('keyup',   checkCaps);
-    pw.addEventListener('blur',    () => capEl.classList.remove('on'));
-</script>
+        function checkCaps(e) {
+            capEl.classList.toggle('on', !!e.getModifierState?.('CapsLock'));
+        }
+        pw.addEventListener('keydown', checkCaps);
+        pw.addEventListener('keyup', checkCaps);
+        pw.addEventListener('blur', () => capEl.classList.remove('on'));
+    </script>
 </body>
+
 </html>

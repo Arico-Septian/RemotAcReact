@@ -138,16 +138,19 @@
             padding: 7px 12px !important;
             font-size: 11px !important;
         }
+
         .room-card .temp-chip.cool {
             background: rgb(var(--cyan-rgb) / 0.15) !important;
             color: var(--cyan) !important;
             border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
         }
+
         .room-card .temp-chip.warm {
             background: rgb(var(--mint-rgb) / 0.15) !important;
             color: var(--mint) !important;
             border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
         }
+
         .room-card .temp-chip.hot {
             background: rgba(248, 113, 113, 0.15) !important;
             color: var(--red) !important;
@@ -158,6 +161,7 @@
         .room-card .room-status-pill {
             border-radius: 999px !important;
         }
+
         .room-card .temp-chip.idle {
             background: var(--panel-2) !important;
             color: var(--ink-3) !important;
@@ -170,13 +174,13 @@
                 gap: 6px;
             }
 
-            .flex.flex-row.items-center > label {
+            .flex.flex-row.items-center>label {
                 flex: 1;
                 min-width: 0;
                 transition: flex var(--t-base);
             }
 
-            .flex.flex-row.items-center > .segmented {
+            .flex.flex-row.items-center>.segmented {
                 display: inline-flex;
                 gap: 1px;
                 flex-shrink: 0;
@@ -204,16 +208,16 @@
                 gap: 6px;
             }
 
-            .flex.flex-row.items-center > label {
+            .flex.flex-row.items-center>label {
                 flex: 1;
                 min-width: 0;
             }
 
-            .flex.flex-row.items-center > label:focus-within {
+            .flex.flex-row.items-center>label:focus-within {
                 flex: 1;
             }
 
-            .flex.flex-row.items-center > .segmented {
+            .flex.flex-row.items-center>.segmented {
                 display: inline-flex;
                 gap: 2px;
                 flex-shrink: 0;
@@ -253,20 +257,23 @@
 
         /* Tablet & desktop (≥ 481 px): unify search & segmented height to 40 px */
         @media (min-width: 481px) {
-            .flex.flex-row.items-center.gap-2 > .search-input {
+            .flex.flex-row.items-center.gap-2>.search-input {
                 height: 40px;
             }
-            .flex.flex-row.items-center.gap-2 > .search-input input {
+
+            .flex.flex-row.items-center.gap-2>.search-input input {
                 height: 40px;
                 box-sizing: border-box;
             }
-            .flex.flex-row.items-center.gap-2 > .segmented {
+
+            .flex.flex-row.items-center.gap-2>.segmented {
                 height: 40px;
                 box-sizing: border-box;
                 display: inline-flex;
                 align-items: center;
             }
-            .flex.flex-row.items-center.gap-2 > .segmented .seg {
+
+            .flex.flex-row.items-center.gap-2>.segmented .seg {
                 height: 100%;
                 display: inline-flex;
                 align-items: center;
@@ -323,10 +330,22 @@
                 font-size: 10px !important;
             }
 
-            .ac-mini { gap: 8px; }
-            .ac-mini > div { padding: 8px 6px; }
-            .ac-mini .num { font-size: 16px; }
-            .ac-mini .lbl { font-size: 8px; margin-top: 2px; }
+            .ac-mini {
+                gap: 8px;
+            }
+
+            .ac-mini>div {
+                padding: 8px 6px;
+            }
+
+            .ac-mini .num {
+                font-size: 16px;
+            }
+
+            .ac-mini .lbl {
+                font-size: 8px;
+                margin-top: 2px;
+            }
 
             .room-card .btn.btn-primary.btn-sm,
             .room-card .room-card-chart-btn {
@@ -334,6 +353,7 @@
                 padding: 7px 10px;
                 min-height: 34px;
             }
+
             .room-card .btn-icon {
                 width: 34px;
                 height: 34px;
@@ -341,13 +361,26 @@
         }
 
         /* Header: keep on one row always */
-        .main-header { flex-wrap: nowrap; }
-        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
-        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
 
         /* Mobile M / L (≤ 480 px): subtitle moderately smaller so it fits 1 line */
         @media (max-width: 480px) {
-            .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
             .main-header .app-header-title p {
                 font-size: 11px;
                 line-height: 1.3;
@@ -364,13 +397,34 @@
             }
 
             /* Header: aggressive shrink so everything fits at 320 px */
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 10px; }
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+            }
+
             /* Pulse halo: keep dead-center using transform instead of inset */
-            .main-header .btn-icon { width: 32px; height: 32px; }
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
         }
 
         /* Touch targets optimization */
@@ -397,7 +451,7 @@
                 font-size: 12px;
             }
 
-            .ac-mini > div {
+            .ac-mini>div {
                 padding: 4px 4px;
             }
 
@@ -530,13 +584,13 @@
                 font-size: 16px;
             }
 
-        #historyModal .modal-header .sub {
-            font-size: 11px;
-        }
+            #historyModal .modal-header .sub {
+                font-size: 11px;
+            }
 
-        #historyMeta {
-            overflow-wrap: anywhere;
-        }
+            #historyMeta {
+                overflow-wrap: anywhere;
+            }
 
             #historyModal .modal-body {
                 padding: 6px 18px 18px;
@@ -610,10 +664,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -627,14 +679,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
-
                         {{-- Toolbar --}}
                         <div class="flex flex-row items-center gap-2">
                             <label class="search-input flex-1 min-w-0">
@@ -652,9 +701,7 @@
                                 </button>
                             </div>
                         </div>
-
                         <p id="roomCount" class="text-mono text-xs" style="color:var(--ink-3);"></p>
-
                         @if ($rooms->count() > 0)
                             <div id="allSections">
                                 @foreach ($roomsByFloor as $floorName => $floorRooms)
@@ -676,7 +723,7 @@
                                                     $inactiveCount = $room->acUnits
                                                         ->filter(fn($ac) => optional($ac->status)->power !== 'ON')
                                                         ->count();
-                                                    $temp = $room->temperature ?? $room->last_temperature ?? null;
+                                                    $temp = $room->temperature ?? ($room->last_temperature ?? null);
                                                     $status = $room->device_status ?? 'offline';
                                                     $tempClass =
                                                         $temp === null
@@ -702,49 +749,56 @@
                                                                 class="room-status-text">{{ $status === 'online' ? 'Online' : 'Offline' }}</span>
                                                         </span>
                                                     </div>
-
                                                     <div class="temp-chip {{ $room->temperature_is_offline ? 'idle' : $tempClass }}"
                                                         style="justify-content:space-between;width:100%;">
-                                                        <span style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
+                                                        <span
+                                                            style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
                                                             <i class="fa-solid fa-temperature-half text-[10px]"></i>Temp
                                                         </span>
                                                         <span style="display:inline-flex;align-items:center;gap:5px;">
                                                             @if ($room->temperature_is_offline)
-                                                                <i class="fa-solid fa-wifi-slash temp-offline-icon" style="font-size:11px;color:var(--coral);"></i>
+                                                                <i class="fa-solid fa-wifi-slash temp-offline-icon"
+                                                                    style="font-size:11px;color:var(--coral);"></i>
                                                             @endif
-                                                            <span id="temp-{{ $room->id }}" class="text-mono" data-offline="{{ $room->temperature_is_offline ? 'true' : 'false' }}">
+                                                            <span id="temp-{{ $room->id }}" class="text-mono"
+                                                                data-offline="{{ $room->temperature_is_offline ? 'true' : 'false' }}">
                                                                 {{ $temp ?? '–' }}°C
                                                             </span>
                                                         </span>
                                                     </div>
-
                                                     <div class="ac-mini">
                                                         <div>
-                                                            <p class="num" style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
+                                                            <p class="num"
+                                                                style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="ov-active-{{ $room->id }}">
                                                                 {{ $activeCount }}</p>
-                                                            <p class="lbl" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Active</p>
+                                                            <p class="lbl"
+                                                                style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">
+                                                                Active</p>
                                                         </div>
                                                         <div>
-                                                            <p class="num" style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
+                                                            <p class="num"
+                                                                style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="ov-idle-{{ $room->id }}">
                                                                 {{ $inactiveCount }}</p>
-                                                            <p class="lbl" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Idle</p>
+                                                            <p class="lbl"
+                                                                style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">
+                                                                Idle</p>
                                                         </div>
                                                     </div>
-
                                                     <p class="text-xs text-center"
                                                         style="color:var(--ink-4);margin-top:-2px;">
                                                         {{ $room->acUnits->count() }} unit total</p>
-
                                                     <div class="grid grid-cols-2 gap-2 mt-auto">
                                                         <a href="/rooms/{{ $room->id }}/status"
-                                                            class="btn btn-primary btn-sm" style="justify-content:center;">
+                                                            class="btn btn-primary btn-sm"
+                                                            style="justify-content:center;">
                                                             Detail
                                                         </a>
                                                         <button type="button"
                                                             onclick="openHistory({{ $room->id }}, @js(ucfirst($room->name)))"
-                                                            class="btn btn-sm room-card-chart-btn" title="24-hour temperature history">
+                                                            class="btn btn-sm room-card-chart-btn"
+                                                            title="24-hour temperature history">
                                                             Grafik
                                                         </button>
                                                     </div>
@@ -754,7 +808,6 @@
                                     </div>
                                 @endforeach
                             </div>
-
                             <div id="emptyState" class="empty-state" hidden>
                                 <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                                 <p class="empty-title">Not found</p>
@@ -767,13 +820,11 @@
                                 <p class="empty-sub">Contact an administrator to add rooms</p>
                             </div>
                         @endif
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     {{-- HISTORY MODAL --}}
     <div id="historyModal" class="modal-backdrop">
         <div class="modal modal-lg">
@@ -812,9 +863,7 @@
             </div>
         </div>
     </div>
-
     @include('components.bottom-nav')
-
     <script>
         /* ===== SEARCH, STATUS & FLOOR FILTER ===== */
         const cards = Array.from(document.querySelectorAll('.room-card'));
@@ -1246,9 +1295,15 @@
             fetch(`/temperature/history/${roomId}?range=${encodeURIComponent(getHistoryRange())}`)
                 .then(r => r.ok ? r.json() : [])
                 .then(data => {
-                    return fetchHistoryStatus(roomId).then(status => ({ data, status }));
+                    return fetchHistoryStatus(roomId).then(status => ({
+                        data,
+                        status
+                    }));
                 })
-                .then(({ data, status }) => {
+                .then(({
+                    data,
+                    status
+                }) => {
                     document.getElementById('historyLoading').hidden = true;
                     if (!data || data.length === 0) {
                         document.getElementById('historyEmpty').hidden = false;
@@ -1347,9 +1402,14 @@
         document.addEventListener('DOMContentLoaded', refreshTemps);
 
         document.addEventListener('DOMContentLoaded', () => {
-// Real-time: counter Active/Idle per kartu tanpa reload
+            // Real-time: counter Active/Idle per kartu tanpa reload
             function refreshAcCountersOverview() {
-                fetch('/api/ac-status', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
+                fetch('/api/ac-status', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    })
                     .then(r => r.ok ? r.json() : null)
                     .then(data => {
                         if (!Array.isArray(data)) return;
@@ -1357,7 +1417,10 @@
                         data.forEach(item => {
                             const roomId = item.ac_unit?.room?.id ?? item.acUnit?.room?.id;
                             if (!roomId) return;
-                            if (!counts[roomId]) counts[roomId] = { active: 0, idle: 0 };
+                            if (!counts[roomId]) counts[roomId] = {
+                                active: 0,
+                                idle: 0
+                            };
                             if ((item.power || 'OFF').toUpperCase() === 'ON') counts[roomId].active++;
                             else counts[roomId].idle++;
                         });

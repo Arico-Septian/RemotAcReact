@@ -354,6 +354,24 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
         }
 
+        /* Pastikan ikon tidak miring (tag <i> default italic) & benar-benar center */
+        /* Semua ikon di panel Recent Activity tidak boleh miring (tag <i> default italic) */
+        .dashboard-activity-panel i,
+        .activity-list i {
+            font-style: normal !important;
+        }
+
+        .activity-icon-badge i {
+            font-style: normal !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            height: 100% !important;
+            line-height: 1 !important;
+            text-align: center;
+        }
+
         .activity-item.tone-coral .activity-icon-badge,
         .activity-item.tone-lavender .activity-icon-badge,
         .activity-item.tone-slate .activity-icon-badge {

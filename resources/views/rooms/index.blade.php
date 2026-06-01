@@ -18,21 +18,25 @@
             padding: 7px 12px !important;
             font-size: 11px !important;
         }
+
         .room-card .temp-chip.cool {
             background: rgb(var(--cyan-rgb) / 0.15) !important;
             color: var(--cyan) !important;
             border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
         }
+
         .room-card .temp-chip.warm {
             background: rgb(var(--mint-rgb) / 0.15) !important;
             color: var(--mint) !important;
             border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
         }
+
         .room-card .temp-chip.hot {
             background: rgba(248, 113, 113, 0.15) !important;
             color: var(--red) !important;
             border: 1px solid rgba(248, 113, 113, 0.4) !important;
         }
+
         .room-card .temp-chip.idle {
             background: var(--panel-2) !important;
             color: var(--ink-3) !important;
@@ -40,11 +44,27 @@
         }
 
         /* Keputusan text color follows action */
-        .keputusan-yellow { color: var(--yellow) !important; } /* TURUNKAN */
-        .keputusan-cool   { color: var(--cyan) !important; }
-        .keputusan-warm   { color: var(--mint) !important; } /* DIAM (stabil) */
-        .keputusan-hot    { color: var(--orange) !important; }
-        .keputusan-idle   { color: var(--ink-3) !important; }
+        .keputusan-yellow {
+            color: var(--yellow) !important;
+        }
+
+        /* TURUNKAN */
+        .keputusan-cool {
+            color: var(--cyan) !important;
+        }
+
+        .keputusan-warm {
+            color: var(--mint) !important;
+        }
+
+        /* DIAM (stabil) */
+        .keputusan-hot {
+            color: var(--orange) !important;
+        }
+
+        .keputusan-idle {
+            color: var(--ink-3) !important;
+        }
 
         .room-card {
             position: relative;
@@ -95,6 +115,7 @@
             transition: var(--t-base);
             border-radius: 8px !important;
         }
+
         .room-card .btn.btn-primary:hover {
             background: var(--cyan-soft-2);
             box-shadow: none;
@@ -110,6 +131,7 @@
             transition: var(--t-base);
             border-radius: 8px !important;
         }
+
         .room-card .btn.btn-danger:hover {
             background: var(--coral-soft-2);
             box-shadow: none;
@@ -153,13 +175,13 @@
                 gap: 6px;
             }
 
-            .flex.items-center.gap-2 > form {
+            .flex.items-center.gap-2>form {
                 flex: 1;
                 min-width: 0;
                 transition: flex var(--t-base);
             }
 
-            .flex.items-center.gap-2 > div {
+            .flex.items-center.gap-2>div {
                 display: inline-flex;
                 gap: 1px;
                 flex-wrap: nowrap;
@@ -193,16 +215,16 @@
                 gap: 6px;
             }
 
-            .flex.items-center.gap-2 > form {
+            .flex.items-center.gap-2>form {
                 flex: 1;
                 min-width: 0;
             }
 
-            .flex.items-center.gap-2 > form:focus-within {
+            .flex.items-center.gap-2>form:focus-within {
                 flex: 1;
             }
 
-            .flex.items-center.gap-2 > div {
+            .flex.items-center.gap-2>div {
                 display: inline-flex;
                 gap: 4px;
                 flex-wrap: nowrap;
@@ -244,17 +266,17 @@
                 pointer-events: none;
             }
 
-            .flex.items-center.gap-2 > button.btn-primary {
+            .flex.items-center.gap-2>button.btn-primary {
                 padding: 6px 12px;
                 font-size: 11px;
                 white-space: nowrap;
             }
 
-            .flex.items-center.gap-2 > button.btn-primary span {
+            .flex.items-center.gap-2>button.btn-primary span {
                 display: inline;
             }
 
-            .flex.items-center.gap-2 > button.btn-primary i {
+            .flex.items-center.gap-2>button.btn-primary i {
                 margin-right: 4px;
                 font-size: 11px;
             }
@@ -262,27 +284,31 @@
 
         /* Tablet & desktop (≥ 481 px): unify search / segmented / Add Room height to 40 px */
         @media (min-width: 481px) {
-            .app-content-inner > .flex.items-center.gap-2:first-child .search-input {
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input {
                 height: 40px;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child .search-input input {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input input {
                 height: 40px;
                 box-sizing: border-box;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child .segmented {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .segmented {
                 height: 40px;
                 box-sizing: border-box;
                 display: inline-flex;
                 align-items: center;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child .segmented .seg {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .segmented .seg {
                 height: 100%;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 box-sizing: border-box;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary {
                 height: 40px;
                 box-sizing: border-box;
             }
@@ -290,13 +316,13 @@
 
         /* Tablet (481–768 px): slightly more breathing room between segmented and Add Room */
         @media (min-width: 481px) and (max-width: 768px) {
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex.gap-2 {
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex.gap-2 {
                 gap: 10px !important;
             }
         }
 
         /* ===== Room grid: 2 cols (mobile) / 3 cols (tablet) / 5 cols (laptop) ===== */
-        .floor-section > .grid {
+        .floor-section>.grid {
             display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             gap: 12px !important;
@@ -305,53 +331,61 @@
 
         /* Tablet (≥ 768px): 3 cols */
         @media (min-width: 768px) {
-            .floor-section > .grid {
+            .floor-section>.grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
             }
         }
 
         /* Laptop (≥ 1024px): 5 cols */
         @media (min-width: 1024px) {
-            .floor-section > .grid {
+            .floor-section>.grid {
                 grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
             }
         }
 
         /* Toolbar wraps to 2 rows on tiny phones so search field gets its full width */
         @media (max-width: 480px) {
-            .app-content-inner > .flex.items-center.gap-2:first-child {
+            .app-content-inner>.flex.items-center.gap-2:first-child {
                 flex-wrap: wrap;
                 row-gap: 8px;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child > form { flex: 1 1 100%; }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>form {
+                flex: 1 1 100%;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex {
                 flex: 1 1 100%;
                 justify-content: flex-start;
                 gap: 6px;
             }
 
             /* Unify height across search / segmented / Add Room — 36 px */
-            .app-content-inner > .flex.items-center.gap-2:first-child .search-input {
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input {
                 height: 36px;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child .search-input input {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input input {
                 height: 36px;
                 padding: 0 12px 0 34px;
                 font-size: 12px;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child .search-input i {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input i {
                 left: 12px;
                 top: 50%;
                 transform: translateY(-50%);
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > .segmented {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented {
                 flex: 1 1 auto;
                 display: flex;
                 height: 36px;
                 padding: 2px;
                 box-sizing: border-box;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > .segmented .seg {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented .seg {
                 flex: 1 1 0;
                 min-width: 0;
                 text-align: center;
@@ -362,7 +396,8 @@
                 justify-content: center;
                 font-size: 11px;
             }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary {
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary {
                 flex-shrink: 0;
                 height: 36px;
                 min-height: 36px;
@@ -376,37 +411,99 @@
 
         /* Mobile (≤ 480px): keep "Add Room" label visible, match 36 px unified height */
         @media (max-width: 480px) {
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary span { display: inline !important; font-size: 10px; }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary i { margin-right: 4px; font-size: 10px; }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > button.btn-primary { padding: 0 10px; font-size: 10px; white-space: nowrap; }
-            .app-content-inner > .flex.items-center.gap-2:first-child > .flex > .segmented .seg { font-size: 10px; padding: 0 4px; }
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary span {
+                display: inline !important;
+                font-size: 10px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary i {
+                margin-right: 4px;
+                font-size: 10px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary {
+                padding: 0 10px;
+                font-size: 10px;
+                white-space: nowrap;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented .seg {
+                font-size: 10px;
+                padding: 0 4px;
+            }
         }
 
         /* Header title wraps less awkwardly on small screens */
         @media (max-width: 480px) {
-            .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 11px; }
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 11px;
+            }
         }
+
         @media (max-width: 480px) {
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; min-width: 0; flex: 1; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; flex-shrink: 0; }
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+                min-width: 0;
+                flex: 1;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+                flex-shrink: 0;
+            }
+
             /* Shrink the Online pill to just the dot on tiny screens */
-            .main-header > .flex.items-center.gap-2 .btn-icon { width: 28px; height: 28px; }
+            .main-header>.flex.items-center.gap-2 .btn-icon {
+                width: 28px;
+                height: 28px;
+            }
         }
 
         /* Phones (≤ 480px): tighter card spacing — grid tetap 2 kolom */
         @media (max-width: 480px) {
-            .floor-section > .grid {
+            .floor-section>.grid {
                 gap: 10px !important;
             }
 
-            .room-card { padding: 11px; gap: 8px; }
-            .room-card h2 { font-size: 13px; }
-            .room-card .room-status-pill { padding: 2px 7px !important; font-size: 10px !important; }
-            .room-card .temp-chip { padding: 6px 10px !important; font-size: 10px !important; }
+            .room-card {
+                padding: 11px;
+                gap: 8px;
+            }
+
+            .room-card h2 {
+                font-size: 13px;
+            }
+
+            .room-card .room-status-pill {
+                padding: 2px 7px !important;
+                font-size: 10px !important;
+            }
+
+            .room-card .temp-chip {
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
         }
 
 
@@ -452,7 +549,7 @@
                 padding: 5px 18px 7px;
             }
 
-            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
                 margin-top: 7px !important;
             }
 
@@ -531,7 +628,7 @@
                 padding: 4px 14px 6px;
             }
 
-            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
                 margin-top: 6px !important;
             }
 
@@ -612,10 +709,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -629,14 +724,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
-
                         <div class="flex items-center gap-2">
                             <form method="GET" action="{{ route('rooms.index') }}" class="flex-1 min-w-0">
                                 <label class="search-input">
@@ -649,7 +741,6 @@
                                     @endif
                                 </label>
                             </form>
-
                             <div class="flex gap-2 flex-shrink-0 items-center">
                                 <div class="segmented">
                                     <button class="seg active" data-room-filter="all" type="button">All</button>
@@ -670,9 +761,7 @@
                                 @endauth
                             </div>
                         </div>
-
                         <p id="roomCount" class="text-mono text-xs" style="color:var(--ink-3);"></p>
-
                         @if ($rooms->count() > 0)
                             <div class="space-y-2">
                                 @foreach ($roomsByFloor as $floorName => $floorRooms)
@@ -684,13 +773,12 @@
                                             <div class="floor-divider"></div>
                                             <span class="floor-count">{{ $floorRooms->count() }} rooms</span>
                                         </div>
-
                                         <div
                                             class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-6">
                                             @foreach ($floorRooms as $room)
                                                 @php
                                                     $online = ($room->device_status ?? 'offline') === 'online';
-                                                    $temp = $room->temperature ?? $room->last_temperature ?? null;
+                                                    $temp = $room->temperature ?? ($room->last_temperature ?? null);
                                                     $tcls =
                                                         $temp === null
                                                             ? 'idle'
@@ -712,29 +800,33 @@
                                                     data-status="{{ $online ? 'online' : 'offline' }}">
                                                     <div class="flex items-start justify-between gap-2">
                                                         <h2 class="font-semibold text-tight truncate"
-                                                            style="color:var(--ink-0);font-size:16px;line-height: 1.3;">{{ ucfirst($room->name) }}</h2>
-                                                        <span class="pill room-status-pill {{ $online ? 'pill-online' : 'pill-offline' }}"
+                                                            style="color:var(--ink-0);font-size:16px;line-height: 1.3;">
+                                                            {{ ucfirst($room->name) }}</h2>
+                                                        <span
+                                                            class="pill room-status-pill {{ $online ? 'pill-online' : 'pill-offline' }}"
                                                             style="padding:3px 8px;font-size:10px;flex-shrink:0;">
-                                                            <span class="room-status-text">{{ $online ? 'Online' : 'Offline' }}</span>
+                                                            <span
+                                                                class="room-status-text">{{ $online ? 'Online' : 'Offline' }}</span>
                                                         </span>
                                                     </div>
-
                                                     {{-- BAR SUHU --}}
                                                     <div class="temp-chip {{ $room->temperature_is_offline ? 'idle' : $tcls }}"
                                                         style="justify-content:space-between;width:100%;">
-                                                        <span style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
+                                                        <span
+                                                            style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">
                                                             <i class="fa-solid fa-temperature-half text-[10px]"></i>Temp
                                                         </span>
                                                         <span style="display:inline-flex;align-items:center;gap:5px;">
-                                                            @if($room->temperature_is_offline)
-                                                                <i class="fa-solid fa-wifi-slash temp-offline-icon" style="font-size:11px;color:var(--coral);"></i>
+                                                            @if ($room->temperature_is_offline)
+                                                                <i class="fa-solid fa-wifi-slash temp-offline-icon"
+                                                                    style="font-size:11px;color:var(--coral);"></i>
                                                             @endif
-                                                            <span id="temp-{{ $room->id }}" class="text-mono" data-offline="{{ $room->temperature_is_offline ? 'true' : 'false' }}">
+                                                            <span id="temp-{{ $room->id }}" class="text-mono"
+                                                                data-offline="{{ $room->temperature_is_offline ? 'true' : 'false' }}">
                                                                 {{ $temp ?? '–' }}°C
                                                             </span>
                                                         </span>
                                                     </div>
-
                                                     {{-- FUZZY OUTPUT (taruh DI BAWAH BAR SUHU) --}}
                                                     @if ($room->temperature !== null)
                                                         <div class="mt-2"
@@ -745,39 +837,51 @@
                                                                 <span
                                                                     class="text-mono">{{ $room->delta_t ?? 0 }}</span>
                                                             </div>
-
                                                             @if (!empty($room->fuzzy))
                                                                 <div class="flex items-center justify-between mt-1"
                                                                     style="font-size:11px;">
-                                                                    <span style="color:var(--ink-3);flex-shrink:0;">Cooling</span>
+                                                                    <span
+                                                                        style="color:var(--ink-3);flex-shrink:0;">Cooling</span>
                                                                     <span class="text-mono"
                                                                         style="font-weight:700;color:var(--mint);white-space:nowrap;margin-left:6px;">
                                                                         {{ $room->fuzzy['status_pendinginan'] ?? '-' }}
                                                                     </span>
                                                                 </div>
-
                                                                 {{-- KEPUTUSAN FUZZY --}}
                                                                 @if (!empty($room->decision))
                                                                     @php
-                                                                        $action = strtoupper($room->decision['action'] ?? 'DIAM');
-                                                                        $keputusanClass = match($action) {
+                                                                        $action = strtoupper(
+                                                                            $room->decision['action'] ?? 'DIAM',
+                                                                        );
+                                                                        $keputusanClass = match ($action) {
                                                                             'TURUNKAN' => 'keputusan-yellow',
-                                                                            'NAIKKAN'  => 'keputusan-cool',
-                                                                            'DIAM'     => 'keputusan-warm',
-                                                                            default    => 'keputusan-idle',
+                                                                            'NAIKKAN' => 'keputusan-cool',
+                                                                            'DIAM' => 'keputusan-warm',
+                                                                            default => 'keputusan-idle',
                                                                         };
-                                                                        $spBefore = is_array($room->decision) ? ($room->decision['setpoint_before'] ?? '-') : '-';
-                                                                        $spAfter  = is_array($room->decision) ? ($room->decision['setpoint_after']  ?? '-') : '-';
+                                                                        $spBefore = is_array($room->decision)
+                                                                            ? $room->decision['setpoint_before'] ?? '-'
+                                                                            : '-';
+                                                                        $spAfter = is_array($room->decision)
+                                                                            ? $room->decision['setpoint_after'] ?? '-'
+                                                                            : '-';
                                                                     @endphp
-                                                                    <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">
+                                                                    <div
+                                                                        style="font-size:11px;color:var(--ink-3);margin-top:4px;">
                                                                         <div class="flex items-center justify-between">
-                                                                            <span style="flex-shrink:0;">Decision</span>
-                                                                            <span class="text-mono {{ $keputusanClass }}"
+                                                                            <span
+                                                                                style="flex-shrink:0;">Decision</span>
+                                                                            <span
+                                                                                class="text-mono {{ $keputusanClass }}"
                                                                                 style="font-weight:700;white-space:nowrap;margin-left:6px;">{{ $action }}</span>
                                                                         </div>
-                                                                        <div class="flex items-center justify-between" style="margin-top:2px;color:var(--ink-4);">
-                                                                            <span style="flex-shrink:0;">Setpoint</span>
-                                                                            <span class="text-mono" style="white-space:nowrap;margin-left:6px;">{{ $spBefore }} &rarr; {{ $spAfter }}</span>
+                                                                        <div class="flex items-center justify-between"
+                                                                            style="margin-top:2px;color:var(--ink-4);">
+                                                                            <span
+                                                                                style="flex-shrink:0;">Setpoint</span>
+                                                                            <span class="text-mono"
+                                                                                style="white-space:nowrap;margin-left:6px;">{{ $spBefore }}
+                                                                                &rarr; {{ $spAfter }}</span>
                                                                         </div>
                                                                     </div>
                                                                 @endif
@@ -791,7 +895,9 @@
                                                                 style="color:var(--mint);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="active-{{ $room->id }}">
                                                                 {{ $activeAcs }}</p>
-                                                            <p class="label-tag mt-1" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Active
+                                                            <p class="label-tag mt-1"
+                                                                style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">
+                                                                Active
                                                             </p>
                                                         </div>
                                                         <div
@@ -800,27 +906,29 @@
                                                                 style="color:var(--ink-2);font-family:var(--font-mono);font-size:16px;font-weight:700;line-height:1;margin:0;"
                                                                 id="idle-{{ $room->id }}">
                                                                 {{ $idleAcs }}</p>
-                                                            <p class="label-tag mt-1" style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">Idle
+                                                            <p class="label-tag mt-1"
+                                                                style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;">
+                                                                Idle
                                                             </p>
                                                         </div>
                                                     </div>
                                                     <p class="text-xs text-center"
                                                         style="color:var(--ink-4);margin-top:-2px;">
                                                         {{ $room->acUnits->count() }} unit total</p>
-
                                                     <div class="grid grid-cols-2 gap-2 mt-auto">
                                                         <a href="/rooms/{{ $room->id }}/ac"
-                                                            class="btn btn-primary btn-sm" style="justify-content:center;">
+                                                            class="btn btn-primary btn-sm"
+                                                            style="justify-content:center;">
                                                             Control AC
                                                         </a>
                                                         @auth
                                                             @if (in_array(Auth::user()->role, ['admin', 'operator']))
                                                                 <form action="/rooms/{{ $room->id }}" method="POST"
-                                                                    onsubmit="return confirmDelete(event)" style="display:contents;">
+                                                                    onsubmit="return confirmDelete(event)"
+                                                                    style="display:contents;">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit"
-                                                                        class="btn btn-danger btn-sm"
+                                                                    <button type="submit" class="btn btn-danger btn-sm"
                                                                         style="justify-content:center;"
                                                                         aria-label="Delete room {{ $room->name }}">
                                                                         Delete
@@ -847,15 +955,12 @@
                                 <p class="empty-sub">Add a room to get started</p>
                             </div>
                         @endif
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     @include('components.bottom-nav')
-
     {{-- Modal: Add Room --}}
     @auth
         @if (in_array(Auth::user()->role, ['admin', 'operator']))
@@ -874,25 +979,20 @@
                             <div class="field">
                                 <label class="field-label">Room Name</label>
                                 <input class="input text-mono" type="text" name="name" placeholder="server_1"
-                                    pattern="[A-Za-z0-9_]+"
-                                    title="Room name must not contain spaces"
-                                    required>
+                                    pattern="[A-Za-z0-9_]+" title="Room name must not contain spaces" required>
                                 <p class="field-help">Letters, numbers, and underscores (no spaces)</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">ESP Device ID</label>
                                 <input class="input text-mono" type="text" name="device_id" placeholder="esp32_01"
-                                    pattern="[A-Za-z0-9_-]+"
-                                    title="ESP Device ID must not contain spaces"
-                                    required>
+                                    pattern="[A-Za-z0-9_-]+" title="ESP Device ID must not contain spaces" required>
                                 <p class="field-help">Letters, numbers, underscores, and dashes (no spaces)</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Floor / Zone <span
                                         style="color:var(--ink-4);font-weight:400;">(optional)</span></label>
                                 <input class="input text-mono" type="text" name="floor" placeholder="floor_1"
-                                    pattern="[A-Za-z0-9_]*"
-                                    title="Floor or zone must not contain spaces">
+                                    pattern="[A-Za-z0-9_]*" title="Floor or zone must not contain spaces">
                                 <p class="field-help">Letters, numbers, and underscores (no spaces)</p>
                             </div>
                         </div>
@@ -905,7 +1005,6 @@
             </div>
         @endif
     @endauth
-
     <script>
         function openModal() {
             document.getElementById('modal')?.classList.add('is-open');
@@ -969,7 +1068,8 @@
         }
 
         document.querySelectorAll('#addRoomForm input').forEach(input => {
-            input.addEventListener('input', () => validateNoSpaces(input, input.closest('.field')?.querySelector('.field-label')?.textContent?.trim() || 'Input'));
+            input.addEventListener('input', () => validateNoSpaces(input, input.closest('.field')?.querySelector(
+                '.field-label')?.textContent?.trim() || 'Input'));
         });
 
         document.getElementById('addRoomForm')?.addEventListener('submit', e => {
@@ -1001,7 +1101,8 @@
             }
 
             const roomNames = new Set(roomCards.map(card => normalizeFormValue(card.dataset.roomName)));
-            const deviceIds = new Set(roomCards.map(card => normalizeFormValue(card.dataset.deviceId)).filter(Boolean));
+            const deviceIds = new Set(roomCards.map(card => normalizeFormValue(card.dataset.deviceId)).filter(
+                Boolean));
 
             if (roomNames.has(nameInput.value)) {
                 e.preventDefault();
@@ -1166,7 +1267,12 @@
 
             // Real-time via Reverb: refresh segera saat device/suhu/AC berubah (tanpa reload)
             function refreshAcCounters() {
-                fetch('/api/ac-status', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
+                fetch('/api/ac-status', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    })
                     .then(r => r.ok ? r.json() : null)
                     .then(data => {
                         if (!Array.isArray(data)) return;
@@ -1175,7 +1281,10 @@
                         data.forEach(item => {
                             const roomId = item.ac_unit?.room?.id ?? item.acUnit?.room?.id;
                             if (!roomId) return;
-                            if (!counts[roomId]) counts[roomId] = { active: 0, idle: 0 };
+                            if (!counts[roomId]) counts[roomId] = {
+                                active: 0,
+                                idle: 0
+                            };
                             if ((item.power || 'OFF').toUpperCase() === 'ON') counts[roomId].active++;
                             else counts[roomId].idle++;
                         });
@@ -1213,8 +1322,7 @@
             @endif
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-});
+        document.addEventListener('DOMContentLoaded', () => {});
     </script>
     @include('components.sidebar-scripts')
 </body>

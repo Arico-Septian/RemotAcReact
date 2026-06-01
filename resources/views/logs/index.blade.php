@@ -26,13 +26,17 @@
             box-shadow: none;
             transition: var(--t-base);
         }
+
         .btn.btn-danger:hover {
             background: var(--coral-soft-2);
             box-shadow: none;
             transform: none;
         }
 
-        .toolbar-row .search-input { flex: 1; min-width: 240px; }
+        .toolbar-row .search-input {
+            flex: 1;
+            min-width: 240px;
+        }
 
 
         .stat-card .stat-label-sm {
@@ -65,7 +69,8 @@
             line-height: 1;
             overflow: hidden;
         }
-        .stat-card .stat-icon > i {
+
+        .stat-card .stat-icon>i {
             font-size: inherit;
             line-height: 1;
             display: inline-flex;
@@ -76,13 +81,17 @@
         }
 
         /* Angka utama selalu putih untuk hierarki yang kuat */
-        .stat-card .stat-num-lg { color: var(--ink-0); }
+        .stat-card .stat-num-lg {
+            color: var(--ink-0);
+        }
 
         /* Label kecil di atas mengambil warna accent per kartu */
-        .stat-card.acc-cyan     .stat-label-sm,
-        .stat-card.acc-mint     .stat-label-sm,
+        .stat-card.acc-cyan .stat-label-sm,
+        .stat-card.acc-mint .stat-label-sm,
         .stat-card.acc-lavender .stat-label-sm,
-        .stat-card.acc-coral    .stat-label-sm { color: var(--ink-0); }
+        .stat-card.acc-coral .stat-label-sm {
+            color: var(--ink-0);
+        }
 
         .active-filters {
             display: flex;
@@ -112,7 +121,9 @@
             opacity: 0.7;
         }
 
-        .filter-tag button:hover { opacity: 1; }
+        .filter-tag button:hover {
+            opacity: 1;
+        }
 
         /* Toolbar responsiveness for very small screens */
         @media (max-width: 768px) {
@@ -126,7 +137,7 @@
                 min-width: 0;
             }
 
-            .tbl-toolbar > div {
+            .tbl-toolbar>div {
                 display: inline-flex;
                 flex-wrap: nowrap;
                 gap: 1px;
@@ -176,7 +187,7 @@
                 width: 100%;
             }
 
-            .tbl-toolbar > div {
+            .tbl-toolbar>div {
                 display: flex;
                 gap: 6px;
                 align-items: center;
@@ -244,7 +255,9 @@
             }
         }
 
-        .tbl tbody tr { transition: none; }
+        .tbl tbody tr {
+            transition: none;
+        }
 
         .tbl.tbl-log thead {
             background: transparent;
@@ -265,9 +278,14 @@
             font-size: 13px;
         }
 
-        .tbl.tbl-log tbody tr:first-child td { border-top: none; }
+        .tbl.tbl-log tbody tr:first-child td {
+            border-top: none;
+        }
 
-        .log-empty { color: var(--ink-5, var(--ink-4)); opacity: 0.5; }
+        .log-empty {
+            color: var(--ink-5, var(--ink-4));
+            opacity: 0.5;
+        }
 
         .log-user {
             display: flex;
@@ -307,8 +325,16 @@
             white-space: nowrap;
         }
 
-        .log-time .t { color: var(--ink-1); font-size: 12px; font-weight: 600; }
-        .log-time .d { color: var(--ink-4); font-size: 11px; }
+        .log-time .t {
+            color: var(--ink-1);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .log-time .d {
+            color: var(--ink-4);
+            font-size: 11px;
+        }
 
         /* Badge aktivitas — kotak membulat 8px, konsisten dengan badge role */
         .act-badge {
@@ -325,7 +351,8 @@
             flex-wrap: wrap;
         }
 
-        .pager a, .pager span {
+        .pager a,
+        .pager span {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -385,44 +412,62 @@
                 align-items: center;
                 gap: 10px;
             }
-            .tbl-footer > p {
+
+            .tbl-footer>p {
                 margin: 0;
                 font-size: 11px;
                 flex: 1;
                 min-width: 0;
                 line-height: 1.35;
             }
+
             .pager {
                 flex-wrap: nowrap;
                 flex-shrink: 0;
                 gap: 4px;
             }
-            .pager a, .pager span {
+
+            .pager a,
+            .pager span {
                 min-width: 30px;
                 height: 30px;
                 padding: 0 7px;
                 font-size: 12px;
             }
+
             /* Ringkas: sembunyikan nomor selain aktif & yang tepat setelahnya */
-            .pager a.text-mono { display: none; }
-            .pager .active + a.text-mono { display: inline-flex; }
+            .pager a.text-mono {
+                display: none;
+            }
+
+            .pager .active+a.text-mono {
+                display: inline-flex;
+            }
         }
 
         /* Page sections spacing */
-        .app-content-inner > * + * {
+        .app-content-inner>*+* {
             margin-top: 32px;
         }
 
         /* Tablet & desktop (≥ 481 px): unify search / segmented / button height to 40 px */
         @media (min-width: 481px) {
-            .tbl-toolbar .search-input { height: 40px; }
-            .tbl-toolbar .search-input input { height: 40px; box-sizing: border-box; }
+            .tbl-toolbar .search-input {
+                height: 40px;
+            }
+
+            .tbl-toolbar .search-input input {
+                height: 40px;
+                box-sizing: border-box;
+            }
+
             .tbl-toolbar .segmented {
                 height: 40px;
                 box-sizing: border-box;
                 display: inline-flex;
                 align-items: center;
             }
+
             .tbl-toolbar .segmented .seg {
                 height: 100%;
                 display: inline-flex;
@@ -430,6 +475,7 @@
                 justify-content: center;
                 box-sizing: border-box;
             }
+
             .tbl-toolbar .btn {
                 height: 40px;
                 min-height: 40px;
@@ -439,48 +485,159 @@
         }
 
         /* Header keep on one row across breakpoints */
-        .main-header { flex-wrap: nowrap; }
-        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
-        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
 
         /* Stat cards — Tablet (≤ 768px) */
         @media (max-width: 768px) {
-            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 12px; }
-            .stat-card { padding: 14px 16px; }
-            .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
-            .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
-            .stat-card .stat-sub { font-size: 10px; line-height: 1.4; }
-            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: var(--r-md); font-size: 14px; }
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px 16px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px;
+                letter-spacing: 0.08em;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 28px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.4;
+            }
+
+            .stat-card .stat-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: var(--r-md);
+                font-size: 14px;
+            }
         }
 
         /* Stat cards — Mobile M (≤ 480px) */
         @media (max-width: 480px) {
-            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 10px; }
-            .stat-card { padding: 12px 14px; }
-            .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.05em; white-space: nowrap; }
-            .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
-            .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
-            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: var(--r-md); font-size: 12px; }
-            .stat-card .accent-bar { top: 12px; bottom: 12px; }
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 8px;
+                letter-spacing: 0.05em;
+                white-space: nowrap;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 24px;
+                margin: 4px 0 2px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.3;
+            }
+
+            .stat-card .stat-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: var(--r-md);
+                font-size: 12px;
+            }
+
+            .stat-card .accent-bar {
+                top: 12px;
+                bottom: 12px;
+            }
         }
 
         /* Mobile (≤ 480px): shrink header + extra-tight stat cards */
         @media (max-width: 480px) {
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
-            .main-header .btn-icon { width: 32px; height: 32px; }
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
 
             /* Stat cards: keep 2-col, compact each card so labels/subs don't wrap awkwardly */
-            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
-            .stat-card { padding: 10px 12px !important; }
-            .stat-card .stat-label-sm { font-size: 10px !important; letter-spacing: 0.05em !important; white-space: nowrap !important; }
-            .stat-card .stat-num-lg { font-size: 20px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
-            .stat-card .stat-sub { font-size: 10px !important; line-height: 1.3 !important; }
-            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: var(--r-sm) !important; font-size: 11px !important; }
-            .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 8px !important;
+            }
+
+            .stat-card {
+                padding: 10px 12px !important;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px !important;
+                letter-spacing: 0.05em !important;
+                white-space: nowrap !important;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 20px !important;
+                margin: 3px 0 2px !important;
+                line-height: 1.1 !important;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px !important;
+                line-height: 1.3 !important;
+            }
+
+            .stat-card .stat-icon {
+                width: 26px !important;
+                height: 26px !important;
+                border-radius: var(--r-sm) !important;
+                font-size: 11px !important;
+            }
+
+            .stat-card .accent-bar {
+                top: 10px !important;
+                bottom: 10px !important;
+            }
         }
     </style>
 </head>
@@ -488,10 +645,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -505,14 +660,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
-
                         @php
                             function activityBadge($activity)
                             {
@@ -571,39 +723,49 @@
                             }
 
                             $activityOptions = [
-                                'auth'      => 'Auth (login/logout)',
-                                'ac'        => 'AC Control',
-                                'room'      => 'Room',
-                                'user'      => 'User',
-                                'power_on'  => 'Power ON',
+                                'auth' => 'Auth (login/logout)',
+                                'ac' => 'AC Control',
+                                'room' => 'Room',
+                                'user' => 'User',
+                                'power_on' => 'Power ON',
                                 'power_off' => 'Power OFF',
-                                'temp'      => 'Set Temperature',
-                                'mode'      => 'Mode Change',
-                                'fan'       => 'Fan Speed',
-                                'swing'     => 'Swing',
+                                'temp' => 'Set Temperature',
+                                'mode' => 'Mode Change',
+                                'fan' => 'Fan Speed',
+                                'swing' => 'Swing',
                             ];
 
                             $rangeOptions = [
-                                ''      => 'All time',
+                                '' => 'All time',
                                 'today' => 'Today',
-                                '7d'    => '7 Days',
-                                '30d'   => '30 Days',
+                                '7d' => '7 Days',
+                                '30d' => '30 Days',
                             ];
                             $currentRange = request('range', '');
                             $rangeLabel = $rangeOptions[$currentRange] ?? 'Custom';
 
                             $activeFilters = array_filter(
-                                request()->only(['user_id', 'room', 'activity', 'date_from', 'date_to', 'search', 'range']),
+                                request()->only([
+                                    'user_id',
+                                    'room',
+                                    'activity',
+                                    'date_from',
+                                    'date_to',
+                                    'search',
+                                    'range',
+                                ]),
                             );
 
                             $quickCats = [
-                                ''     => 'All',
+                                '' => 'All',
                                 'auth' => 'Auth',
-                                'ac'   => 'AC',
+                                'ac' => 'AC',
                                 'room' => 'Room',
                                 'user' => 'User',
                             ];
-                            $currentCat = in_array(request('activity'), ['auth', 'ac', 'room', 'user']) ? request('activity') : '';
+                            $currentCat = in_array(request('activity'), ['auth', 'ac', 'room', 'user'])
+                                ? request('activity')
+                                : '';
                         @endphp
 
                         {{-- Stats — 4 kartu sesuai mockup --}}
@@ -614,7 +776,8 @@
                                     <div>
                                         <p class="stat-label-sm">Total Activity</p>
                                         <p class="stat-num-lg">{{ $stats['total'] }}</p>
-                                        <p class="stat-sub">Page {{ $logs->currentPage() }} / {{ $logs->lastPage() }}</p>
+                                        <p class="stat-sub">Page {{ $logs->currentPage() }} / {{ $logs->lastPage() }}
+                                        </p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
                                 </div>
@@ -653,48 +816,42 @@
                                 </div>
                             </div>
                         </div>
-
                         {{-- Toolbar + Table wrapper (no space-y between them) --}}
                         <div class="tbl-wrap">
-                        {{-- Toolbar: search + quick category + date range --}}
-                        <form method="GET" action="/logs" id="filterForm">
-                            <div class="tbl-toolbar">
-                                <label class="search-input" style="flex:1;max-width:none;">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                    <input name="search" value="{{ request('search') }}" type="text"
-                                        placeholder="Search user / room / activity…" autocomplete="off">
-                                    @if (request('search'))
-                                        <button type="button" class="clear" title="Clear"
-                                            onclick="removeFilter('search')"><i
-                                                class="fa-solid fa-xmark text-[10px]"></i></button>
-                                    @endif
-                                </label>
-
-                                <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-                                    <div class="segmented">
-                                        @foreach ($quickCats as $val => $label)
-                                            <button type="button"
-                                                class="seg {{ $currentCat === $val ? 'active' : '' }}"
-                                                data-quick="{{ $val }}">{{ $label }}</button>
-                                        @endforeach
+                            {{-- Toolbar: search + quick category + date range --}}
+                            <form method="GET" action="/logs" id="filterForm">
+                                <div class="tbl-toolbar">
+                                    <label class="search-input" style="flex:1;max-width:none;">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <input name="search" value="{{ request('search') }}" type="text"
+                                            placeholder="Search user / room / activity…" autocomplete="off">
+                                        @if (request('search'))
+                                            <button type="button" class="clear" title="Clear"
+                                                onclick="removeFilter('search')"><i
+                                                    class="fa-solid fa-xmark text-[10px]"></i></button>
+                                        @endif
+                                    </label>
+                                    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                                        <div class="segmented">
+                                            @foreach ($quickCats as $val => $label)
+                                                <button type="button"
+                                                    class="seg {{ $currentCat === $val ? 'active' : '' }}"
+                                                    data-quick="{{ $val }}">{{ $label }}</button>
+                                            @endforeach
+                                        </div>
+                                        @if (Auth::user()->role == 'admin')
+                                            <button type="button" onclick="deleteAllLogs()"
+                                                class="btn btn-danger btn-sm" title="Delete All Logs">
+                                                <i class="fa-solid fa-trash text-[10px]"></i>
+                                            </button>
+                                        @endif
                                     </div>
-
-                                    @if (Auth::user()->role == 'admin')
-                                        <button type="button" onclick="deleteAllLogs()"
-                                            class="btn btn-danger btn-sm" title="Delete All Logs">
-                                            <i class="fa-solid fa-trash text-[10px]"></i>
-                                        </button>
-                                    @endif
                                 </div>
-                            </div>
-
-                        </form>
-
-                        @php
-                            $isEmpty = fn ($v) => $v === null || $v === '' || $v === '-' || $v === '—';
-                        @endphp
-
-                        {{-- Log table --}}
+                            </form>
+                            @php
+                                $isEmpty = fn($v) => $v === null || $v === '' || $v === '-' || $v === '—';
+                            @endphp
+                            {{-- Log table --}}
                             {{-- Mobile cards --}}
                             <div class="md:hidden" id="logsMobile">
                                 @forelse ($logs as $log)
@@ -703,31 +860,43 @@
                                         $roomAcText = collect([
                                             $isEmpty($log->room) ? null : $log->room,
                                             $isEmpty($log->ac) ? null : $log->ac,
-                                        ])->filter()->implode(' · ');
+                                        ])
+                                            ->filter()
+                                            ->implode(' · ');
                                         $avatarColors = ['cyan', 'mint', 'lavender', 'coral'];
-                                        $avatarColor = $avatarColors[(($log->user_id ?? 0) - 1) % 4 < 0 ? 0 : (($log->user_id ?? 0) - 1) % 4];
+                                        $avatarColor =
+                                            $avatarColors[
+                                                (($log->user_id ?? 0) - 1) % 4 < 0 ? 0 : (($log->user_id ?? 0) - 1) % 4
+                                            ];
                                     @endphp
                                     <div style="padding:14px 16px;border-bottom:1px solid rgba(255, 255, 255, 0.15);">
                                         <div class="flex items-center gap-3">
                                             @if ($log->user?->avatar_url)
                                                 <img src="{{ $log->user->avatar_url }}" alt="{{ $log->user->name }}"
-                                                     style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">
+                                                    style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">
                                             @else
-                                                <div style="width:38px;height:38px;border-radius: 10px;background:var(--{{ $avatarColor }});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                <div
+                                                    style="width:38px;height:38px;border-radius: 10px;background:var(--{{ $avatarColor }});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                     {{ strtoupper(substr($log->user->name ?? '?', 0, 1)) }}
                                                 </div>
                                             @endif
                                             <div class="flex-1 min-w-0">
                                                 <div class="flex items-center justify-between gap-2">
                                                     <div class="flex items-center gap-2 min-w-0">
-                                                        <span class="truncate" style="font-size: 14px;font-weight:600;color:var(--ink-0);">{{ $log->user->name ?? '—' }}</span>
-                                                        <span class="act-badge {{ $class }}" style="flex-shrink:0;">{{ $label }}</span>
+                                                        <span class="truncate"
+                                                            style="font-size: 14px;font-weight:600;color:var(--ink-0);">{{ $log->user->name ?? '—' }}</span>
+                                                        <span class="act-badge {{ $class }}"
+                                                            style="flex-shrink:0;">{{ $label }}</span>
                                                     </div>
-                                                    <span class="text-mono" style="font-size: 12px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">{{ $log->created_at->format('H:i') }}</span>
+                                                    <span class="text-mono"
+                                                        style="font-size: 12px;color:var(--ink-2);white-space:nowrap;flex-shrink:0;font-weight:600;">{{ $log->created_at->format('H:i') }}</span>
                                                 </div>
-                                                <div class="flex items-center justify-between gap-2" style="margin-top:5px;">
-                                                    <span class="truncate" style="font-size:12px;color:var(--ink-3);">{{ $roomAcText ?: '—' }}</span>
-                                                    <span class="text-mono" style="font-size: 12px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">{{ $log->created_at->format('d M Y') }}</span>
+                                                <div class="flex items-center justify-between gap-2"
+                                                    style="margin-top:5px;">
+                                                    <span class="truncate"
+                                                        style="font-size:12px;color:var(--ink-3);">{{ $roomAcText ?: '—' }}</span>
+                                                    <span class="text-mono"
+                                                        style="font-size: 12px;color:var(--ink-4);white-space:nowrap;flex-shrink:0;">{{ $log->created_at->format('d M Y') }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -736,48 +905,63 @@
                                     <div class="empty-state">
                                         <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                                         <p class="empty-title">No activities found</p>
-                                        <p class="empty-sub">{{ count($activeFilters) ? 'Try adjusting your filters or ' : '' }}<a href="/logs" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset all filters</a></p>
+                                        <p class="empty-sub">
+                                            {{ count($activeFilters) ? 'Try adjusting your filters or ' : '' }}<a
+                                                href="/logs"
+                                                style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset
+                                                all filters</a></p>
                                     </div>
                                 @endforelse
                             </div>
-
                             {{-- Active filter chips --}}
                             @if (count($activeFilters))
-                                <div style="display:flex;flex-wrap:wrap;gap:8px;padding:10px 0;align-items:center;border-bottom:1px solid var(--line-soft);">
+                                <div
+                                    style="display:flex;flex-wrap:wrap;gap:8px;padding:10px 0;align-items:center;border-bottom:1px solid var(--line-soft);">
                                     <span style="font-size:12px;color:var(--ink-3);font-weight:500;">Filters:</span>
                                     @if (request('search'))
-                                        <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
+                                        <span
+                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
                                             <i class="fa-solid fa-magnifying-glass text-[9px]"></i>
                                             "{{ request('search') }}"
-                                            <button onclick="removeFilter('search')" style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i class="fa-solid fa-xmark"></i></button>
+                                            <button onclick="removeFilter('search')"
+                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
+                                                    class="fa-solid fa-xmark"></i></button>
                                         </span>
                                     @endif
                                     @if (request('activity'))
                                         @php $actLabel = $activityOptions[request('activity')] ?? request('activity'); @endphp
-                                        <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
+                                        <span
+                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
                                             <i class="fa-solid fa-filter text-[9px]"></i>
                                             {{ $actLabel }}
-                                            <button onclick="removeFilter('activity')" style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i class="fa-solid fa-xmark"></i></button>
+                                            <button onclick="removeFilter('activity')"
+                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
+                                                    class="fa-solid fa-xmark"></i></button>
                                         </span>
                                     @endif
                                     @if (request('user_id'))
                                         @php $userName = $users->firstWhere('id', request('user_id'))?->name ?? request('user_id'); @endphp
-                                        <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
+                                        <span
+                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
                                             <i class="fa-solid fa-user text-[9px]"></i>
                                             {{ $userName }}
-                                            <button onclick="removeFilter('user_id')" style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i class="fa-solid fa-xmark"></i></button>
+                                            <button onclick="removeFilter('user_id')"
+                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
+                                                    class="fa-solid fa-xmark"></i></button>
                                         </span>
                                     @endif
                                     @if (request('room'))
-                                        <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
+                                        <span
+                                            style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(77,212,255,0.1);border:1px solid rgba(77,212,255,0.25);border-radius:999px;font-size:12px;color:var(--cyan);">
                                             <i class="fa-solid fa-server text-[9px]"></i>
                                             {{ request('room') }}
-                                            <button onclick="removeFilter('room')" style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i class="fa-solid fa-xmark"></i></button>
+                                            <button onclick="removeFilter('room')"
+                                                style="background:none;border:none;color:var(--cyan);cursor:pointer;padding:0;font-size:10px;"><i
+                                                    class="fa-solid fa-xmark"></i></button>
                                         </span>
                                     @endif
                                 </div>
                             @endif
-
                             {{-- Desktop table --}}
                             <div class="hidden md:block" style="overflow-x:auto;">
                                 <table class="tbl tbl-log">
@@ -796,9 +980,9 @@
                                                 <td>
                                                     <div class="log-user">
                                                         @if ($log->user?->avatar_url)
-                                                            <img src="{{ $log->user->avatar_url }}" alt="{{ $log->user->name }}"
-                                                                 class="avatar"
-                                                                 style="width:34px;height:34px;border-radius: 10px;flex-shrink:0;object-fit:cover;">
+                                                            <img src="{{ $log->user->avatar_url }}"
+                                                                alt="{{ $log->user->name }}" class="avatar"
+                                                                style="width:34px;height:34px;border-radius: 10px;flex-shrink:0;object-fit:cover;">
                                                         @else
                                                             <span class="avatar"
                                                                 style="width:34px;height:34px;font-size:13px;border-radius: 10px;flex-shrink:0;">
@@ -819,17 +1003,21 @@
                                                     @if ($isEmpty($log->ac))
                                                         <span class="log-empty">—</span>
                                                     @else
-                                                        <span class="log-detail" title="{{ $log->ac }}">{{ $log->ac }}</span>
+                                                        <span class="log-detail"
+                                                            title="{{ $log->ac }}">{{ $log->ac }}</span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     @php [$label, $class] = activityBadge($log->activity); @endphp
-                                                    <span class="act-badge {{ $class }}">{{ $label }}</span>
+                                                    <span
+                                                        class="act-badge {{ $class }}">{{ $label }}</span>
                                                 </td>
                                                 <td>
                                                     <div class="log-time">
-                                                        <span class="t">{{ $log->created_at->format('H:i') }}</span>
-                                                        <span class="d">{{ $log->created_at->format('d M Y') }}</span>
+                                                        <span
+                                                            class="t">{{ $log->created_at->format('H:i') }}</span>
+                                                        <span
+                                                            class="d">{{ $log->created_at->format('d M Y') }}</span>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -840,7 +1028,11 @@
                                                         <div class="empty-icon"><i
                                                                 class="fa-solid fa-magnifying-glass"></i></div>
                                                         <p class="empty-title">No activities found</p>
-                                                        <p class="empty-sub">{{ count($activeFilters) ? 'Try adjusting your filters or ' : '' }}<a href="/logs" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset all filters</a></p>
+                                                        <p class="empty-sub">
+                                                            {{ count($activeFilters) ? 'Try adjusting your filters or ' : '' }}<a
+                                                                href="/logs"
+                                                                style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset
+                                                                all filters</a></p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -848,7 +1040,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                             <div class="tbl-footer">
                                 <p>
                                     Showing <span class="text-mono"
@@ -865,19 +1056,25 @@
                                             $pages = range(1, $last);
                                         } else {
                                             $pages[] = 1;
-                                            if ($current > 3) $pages[] = '...';
-                                            for ($i = max(2, $current - 1); $i <= min($last - 1, $current + 1); $i++) $pages[] = $i;
-                                            if ($current < $last - 2) $pages[] = '...';
+                                            if ($current > 3) {
+                                                $pages[] = '...';
+                                            }
+                                            for ($i = max(2, $current - 1); $i <= min($last - 1, $current + 1); $i++) {
+                                                $pages[] = $i;
+                                            }
+                                            if ($current < $last - 2) {
+                                                $pages[] = '...';
+                                            }
                                             $pages[] = $last;
                                         }
                                     @endphp
-
                                     @if ($logs->onFirstPage())
-                                        <span class="disabled"><i class="fa-solid fa-chevron-left text-[9px]"></i></span>
+                                        <span class="disabled"><i
+                                                class="fa-solid fa-chevron-left text-[9px]"></i></span>
                                     @else
-                                        <a href="{{ $logs->previousPageUrl() }}"><i class="fa-solid fa-chevron-left text-[9px]"></i></a>
+                                        <a href="{{ $logs->previousPageUrl() }}"><i
+                                                class="fa-solid fa-chevron-left text-[9px]"></i></a>
                                     @endif
-
                                     @foreach ($pages as $p)
                                         @if ($p === '...')
                                             <span class="disabled">…</span>
@@ -887,26 +1084,23 @@
                                             <a class="text-mono" href="{{ $logs->url($p) }}">{{ $p }}</a>
                                         @endif
                                     @endforeach
-
                                     @if ($logs->hasMorePages())
-                                        <a href="{{ $logs->nextPageUrl() }}"><i class="fa-solid fa-chevron-right text-[9px]"></i></a>
+                                        <a href="{{ $logs->nextPageUrl() }}"><i
+                                                class="fa-solid fa-chevron-right text-[9px]"></i></a>
                                     @else
-                                        <span class="disabled"><i class="fa-solid fa-chevron-right text-[9px]"></i></span>
+                                        <span class="disabled"><i
+                                                class="fa-solid fa-chevron-right text-[9px]"></i></span>
                                     @endif
                                 </div>
                             </div>
                         </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     @include('components.bottom-nav')
     @include('components.sidebar-scripts')
-
     <script>
         // Quick category buttons -> set activity = auth/ac/room/user
         document.querySelectorAll('[data-quick]').forEach(btn => {
@@ -955,18 +1149,29 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-initializeSortIndicators();
+            initializeSortIndicators();
 
             // Real-time: prepend log baru ke tabel tanpa reload
             function escapeHtml(s) {
-                return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+                return String(s ?? '').replace(/[&<>"']/g, m => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                } [m]));
             }
+
             function activityBadgeJs(activity) {
                 const a = String(activity || '');
                 if (a.startsWith('set_temp_')) return [`TEMP ${a.replace('set_temp_', '')}°C`, 'act-amber'];
-                if (a.startsWith('mode_'))     return [`MODE ${a.replace('mode_', '').toUpperCase()}`, 'act-cyan'];
-                if (a.startsWith('fan_speed_'))return [`FAN ${a.replace('fan_speed_', '').toUpperCase()}`, 'act-cyan'];
-                if (a.startsWith('swing_'))    return [`SWING ${a.replace('swing_', '').toUpperCase()}`, 'act-lavender'];
+                if (a.startsWith('mode_')) return [`MODE ${a.replace('mode_', '').toUpperCase()}`, 'act-cyan'];
+                if (a.startsWith('fan_speed_')) return [`FAN ${a.replace('fan_speed_', '').toUpperCase()}`,
+                    'act-cyan'
+                ];
+                if (a.startsWith('swing_')) return [`SWING ${a.replace('swing_', '').toUpperCase()}`,
+                    'act-lavender'
+                ];
                 if (a.startsWith('set_timer')) {
                     const detail = a.slice(9);
                     const mOn = detail.match(/ON\s+(\d{2}:\d{2})/i);
@@ -980,14 +1185,22 @@ initializeSortIndicators();
                     return [label, 'act-amber'];
                 }
                 const map = {
-                    login: ['LOGIN', 'act-mint'], logout: ['LOGOUT', 'act-slate'],
-                    on: ['POWER ON', 'act-mint'], off: ['POWER OFF', 'act-coral'],
-                    bulk_on: ['ALL ON', 'act-mint'], bulk_off: ['ALL OFF', 'act-coral'],
-                    set_timer: ['SET TIMER', 'act-amber'], timer_on: ['TIMER ON', 'act-mint'],
-                    timer_off: ['TIMER OFF', 'act-amber'], control_ac: ['CONTROL AC', 'act-lavender'],
-                    add_room: ['ADD ROOM', 'act-cyan'], delete_room: ['DELETE ROOM', 'act-coral'],
-                    add_ac: ['ADD AC', 'act-cyan'], delete_ac: ['DELETE AC', 'act-coral'],
-                    add_user: ['ADD USER', 'act-lavender'], delete_user: ['DELETE USER', 'act-coral'],
+                    login: ['LOGIN', 'act-mint'],
+                    logout: ['LOGOUT', 'act-slate'],
+                    on: ['POWER ON', 'act-mint'],
+                    off: ['POWER OFF', 'act-coral'],
+                    bulk_on: ['ALL ON', 'act-mint'],
+                    bulk_off: ['ALL OFF', 'act-coral'],
+                    set_timer: ['SET TIMER', 'act-amber'],
+                    timer_on: ['TIMER ON', 'act-mint'],
+                    timer_off: ['TIMER OFF', 'act-amber'],
+                    control_ac: ['CONTROL AC', 'act-lavender'],
+                    add_room: ['ADD ROOM', 'act-cyan'],
+                    delete_room: ['DELETE ROOM', 'act-coral'],
+                    add_ac: ['ADD AC', 'act-cyan'],
+                    delete_ac: ['DELETE AC', 'act-coral'],
+                    add_user: ['ADD USER', 'act-lavender'],
+                    delete_user: ['DELETE USER', 'act-coral'],
                     update_role: ['UPDATE ROLE', 'act-lavender'],
                     change_password: ['CHG PASSWORD', 'act-amber'],
                 };
@@ -1001,7 +1214,8 @@ initializeSortIndicators();
                 if (!onFirstPage) return;
 
                 const name = escapeHtml(payload.user_name || '—');
-                const initial = escapeHtml(payload.user_initial || (payload.user_name || '?').charAt(0).toUpperCase());
+                const initial = escapeHtml(payload.user_initial || (payload.user_name || '?').charAt(0)
+                    .toUpperCase());
                 const isEmpty = (v) => v == null || v === '' || v === '-' || v === '—';
                 const [badgeLabel, badgeClass] = activityBadgeJs(payload.activity);
                 const safeAvatar = payload.user_avatar ? escapeHtml(payload.user_avatar) : null;
@@ -1009,8 +1223,9 @@ initializeSortIndicators();
                 const now = new Date();
                 const hh = String(now.getHours()).padStart(2, '0');
                 const mm = String(now.getMinutes()).padStart(2, '0');
-                const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-                const dateStr = `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()}`;
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                const dateStr =
+                    `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()}`;
 
                 // === DESKTOP TABLE ===
                 const tbody = document.getElementById('logsTbody');
@@ -1018,15 +1233,15 @@ initializeSortIndicators();
                     const empty = tbody.querySelector('.empty-state');
                     if (empty) empty.closest('tr')?.remove();
 
-                    const roomHtml = isEmpty(payload.room)
-                        ? '<span class="log-empty">—</span>'
-                        : `<span class="log-room">${escapeHtml(payload.room)}</span>`;
-                    const acHtml = isEmpty(payload.ac)
-                        ? '<span class="log-empty">—</span>'
-                        : `<span class="log-detail" title="${escapeHtml(payload.ac)}">${escapeHtml(payload.ac)}</span>`;
-                    const avatarHtml = safeAvatar
-                        ? `<img src="${safeAvatar}" alt="${name}" class="avatar" style="width:34px;height:34px;border-radius: 10px;flex-shrink:0;object-fit:cover;">`
-                        : `<span class="avatar" style="width:34px;height:34px;font-size:13px;border-radius: 10px;flex-shrink:0;">${initial}</span>`;
+                    const roomHtml = isEmpty(payload.room) ?
+                        '<span class="log-empty">—</span>' :
+                        `<span class="log-room">${escapeHtml(payload.room)}</span>`;
+                    const acHtml = isEmpty(payload.ac) ?
+                        '<span class="log-empty">—</span>' :
+                        `<span class="log-detail" title="${escapeHtml(payload.ac)}">${escapeHtml(payload.ac)}</span>`;
+                    const avatarHtml = safeAvatar ?
+                        `<img src="${safeAvatar}" alt="${name}" class="avatar" style="width:34px;height:34px;border-radius: 10px;flex-shrink:0;object-fit:cover;">` :
+                        `<span class="avatar" style="width:34px;height:34px;font-size:13px;border-radius: 10px;flex-shrink:0;">${initial}</span>`;
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
@@ -1061,9 +1276,9 @@ initializeSortIndicators();
                     const uid = Number(payload.user_id) || 0;
                     const avatarColor = avatarColors[((uid - 1) % 4 + 4) % 4];
 
-                    const mobileAvatar = safeAvatar
-                        ? `<img src="${safeAvatar}" alt="${name}" style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">`
-                        : `<div style="width:38px;height:38px;border-radius: 10px;background:var(--${avatarColor});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${initial}</div>`;
+                    const mobileAvatar = safeAvatar ?
+                        `<img src="${safeAvatar}" alt="${name}" style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">` :
+                        `<div style="width:38px;height:38px;border-radius: 10px;background:var(--${avatarColor});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${initial}</div>`;
 
                     const roomAcText = [
                         !isEmpty(payload.room) ? escapeHtml(payload.room) : '',
@@ -1129,11 +1344,8 @@ initializeSortIndicators();
         });
 
         function initializeSortIndicators() {
-            if (false) {
-        }
+            if (false) {}
     </script>
 </body>
 
 </html>
-
-

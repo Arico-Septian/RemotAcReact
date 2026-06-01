@@ -146,8 +146,8 @@
             border-radius: 50%;
             z-index: 0;
             background: conic-gradient(from 0deg,
-                var(--tick-on, #4dd4ff) 0deg var(--fill-deg, 0deg),
-                rgba(255, 255, 255, 0.10) var(--fill-deg, 0deg) 360deg);
+                    var(--tick-on, #4dd4ff) 0deg var(--fill-deg, 0deg),
+                    rgba(255, 255, 255, 0.10) var(--fill-deg, 0deg) 360deg);
             -webkit-mask:
                 repeating-conic-gradient(from 0deg, #000 0deg 1.5deg, transparent 1.5deg 6deg),
                 radial-gradient(farthest-side, transparent calc(100% - 16px), #000 calc(100% - 16px));
@@ -165,10 +165,12 @@
             --tick-on: #4dd4ff;
             box-shadow: -12px 8px 55px rgba(77, 212, 255, 0.32), inset 0 0 45px rgba(77, 212, 255, 0.06);
         }
+
         .temp-ring.temp-warm {
             --tick-on: #fbbf24;
             box-shadow: -12px 8px 55px rgba(251, 191, 36, 0.32), inset 0 0 45px rgba(251, 191, 36, 0.06);
         }
+
         .temp-ring.temp-hot {
             --tick-on: #f87171;
             box-shadow: -12px 8px 55px rgba(248, 113, 113, 0.32), inset 0 0 45px rgba(248, 113, 113, 0.06);
@@ -185,9 +187,14 @@
         }
 
         .temp-ring.ring-off .ring-label,
-        .temp-ring.ring-off .ring-summary { color: var(--ink-4); }
+        .temp-ring.ring-off .ring-summary {
+            color: var(--ink-4);
+        }
+
         .temp-ring.ring-off .temp-value,
-        .temp-ring.ring-off .unit { color: var(--ink-3); }
+        .temp-ring.ring-off .unit {
+            color: var(--ink-3);
+        }
 
         /* #1 Responsive temperature ring */
         @media (max-width: 768px) {
@@ -261,9 +268,17 @@
             letter-spacing: 0.02em;
         }
 
-        .temp-ring.temp-cool .ring-summary { color: rgb(var(--cyan-rgb) / 0.80); }
-        .temp-ring.temp-warm .ring-summary { color: rgba(250, 204, 21, 0.80); }
-        .temp-ring.temp-hot  .ring-summary { color: rgb(var(--coral-rgb) / 0.80); }
+        .temp-ring.temp-cool .ring-summary {
+            color: rgb(var(--cyan-rgb) / 0.80);
+        }
+
+        .temp-ring.temp-warm .ring-summary {
+            color: rgba(250, 204, 21, 0.80);
+        }
+
+        .temp-ring.temp-hot .ring-summary {
+            color: rgb(var(--coral-rgb) / 0.80);
+        }
 
         /* === Control Row (− power +) === */
         .ctrl-row {
@@ -408,50 +423,50 @@
         }
 
         .mode-btn-v.active {
-            background: linear-gradient(160deg, rgba(77,212,255,0.22) 0%, rgba(77,212,255,0.06) 60%, rgba(77,212,255,0.02) 100%);
-            border-color: rgba(77,212,255,0.90);
+            background: linear-gradient(160deg, rgba(77, 212, 255, 0.22) 0%, rgba(77, 212, 255, 0.06) 60%, rgba(77, 212, 255, 0.02) 100%);
+            border-color: rgba(77, 212, 255, 0.90);
             color: var(--cyan);
-            box-shadow: inset 0 0 16px rgba(77,212,255,0.12);
+            box-shadow: inset 0 0 16px rgba(77, 212, 255, 0.12);
         }
 
         .mode-btn-v.active .icon-wrap {
-            background: rgba(77,212,255,0.20);
+            background: rgba(77, 212, 255, 0.20);
             color: var(--cyan);
         }
 
         .mode-btn-v[data-mode="heat"].active {
             color: var(--coral);
-            border-color: rgba(248,113,113,0.90);
-            background: linear-gradient(160deg, rgba(248,113,113,0.22) 0%, rgba(248,113,113,0.06) 60%, rgba(248,113,113,0.02) 100%);
-            box-shadow: inset 0 0 16px rgba(248,113,113,0.12);
+            border-color: rgba(248, 113, 113, 0.90);
+            background: linear-gradient(160deg, rgba(248, 113, 113, 0.22) 0%, rgba(248, 113, 113, 0.06) 60%, rgba(248, 113, 113, 0.02) 100%);
+            box-shadow: inset 0 0 16px rgba(248, 113, 113, 0.12);
         }
 
         .mode-btn-v[data-mode="heat"].active .icon-wrap {
-            background: rgba(248,113,113,0.20);
+            background: rgba(248, 113, 113, 0.20);
             color: var(--coral);
         }
 
         .mode-btn-v[data-mode="dry"].active {
             color: var(--lavender);
-            border-color: rgba(180,163,255,0.90);
-            background: linear-gradient(160deg, rgba(180,163,255,0.22) 0%, rgba(180,163,255,0.06) 60%, rgba(180,163,255,0.02) 100%);
-            box-shadow: inset 0 0 16px rgba(180,163,255,0.12);
+            border-color: rgba(180, 163, 255, 0.90);
+            background: linear-gradient(160deg, rgba(180, 163, 255, 0.22) 0%, rgba(180, 163, 255, 0.06) 60%, rgba(180, 163, 255, 0.02) 100%);
+            box-shadow: inset 0 0 16px rgba(180, 163, 255, 0.12);
         }
 
         .mode-btn-v[data-mode="dry"].active .icon-wrap {
-            background: rgba(180,163,255,0.20);
+            background: rgba(180, 163, 255, 0.20);
             color: var(--lavender);
         }
 
         .mode-btn-v[data-mode="fan"].active {
             color: var(--mint);
-            border-color: rgba(110,231,183,0.90);
-            background: linear-gradient(160deg, rgba(110,231,183,0.22) 0%, rgba(110,231,183,0.06) 60%, rgba(110,231,183,0.02) 100%);
-            box-shadow: inset 0 0 16px rgba(110,231,183,0.12);
+            border-color: rgba(110, 231, 183, 0.90);
+            background: linear-gradient(160deg, rgba(110, 231, 183, 0.22) 0%, rgba(110, 231, 183, 0.06) 60%, rgba(110, 231, 183, 0.02) 100%);
+            box-shadow: inset 0 0 16px rgba(110, 231, 183, 0.12);
         }
 
         .mode-btn-v[data-mode="fan"].active .icon-wrap {
-            background: rgba(110,231,183,0.20);
+            background: rgba(110, 231, 183, 0.20);
             color: var(--mint);
         }
 
@@ -492,10 +507,10 @@
         }
 
         .mode-btn-h.active {
-            background: linear-gradient(160deg, rgba(77,212,255,0.22) 0%, rgba(77,212,255,0.06) 60%, rgba(77,212,255,0.02) 100%);
-            border-color: rgba(77,212,255,0.90);
+            background: linear-gradient(160deg, rgba(77, 212, 255, 0.22) 0%, rgba(77, 212, 255, 0.06) 60%, rgba(77, 212, 255, 0.02) 100%);
+            border-color: rgba(77, 212, 255, 0.90);
             color: var(--cyan);
-            box-shadow: inset 0 0 16px rgba(77,212,255,0.12);
+            box-shadow: inset 0 0 16px rgba(77, 212, 255, 0.12);
         }
 
         .mode-btn-h.active i {
@@ -567,8 +582,13 @@
             margin: 0;
         }
 
-        .timer-card.is-on  .t-label { color: #6ee7b7; }
-        .timer-card.is-off .t-label { color: #f87171; }
+        .timer-card.is-on .t-label {
+            color: #6ee7b7;
+        }
+
+        .timer-card.is-off .t-label {
+            color: #f87171;
+        }
 
         .timer-card .t-value {
             font-family: var(--font-mono);
@@ -579,8 +599,13 @@
             letter-spacing: 0em;
         }
 
-        .timer-card.is-on  .t-value { color: #6ee7b7; }
-        .timer-card.is-off .t-value { color: #f87171; }
+        .timer-card.is-on .t-value {
+            color: #6ee7b7;
+        }
+
+        .timer-card.is-off .t-value {
+            color: #f87171;
+        }
 
         .timer-card .t-value.empty {
             color: var(--ink-4);
@@ -629,16 +654,21 @@
         .timer-form .input {
             padding: 9px 14px;
         }
+
         .save-timer-btn {
             min-height: 40px;
         }
+
         .timer-delete-btn:hover {
             background: rgba(248, 113, 113, 0.18);
             border-color: rgba(248, 113, 113, 0.55);
             color: #fca5a5;
             box-shadow: 0 4px 16px -4px rgba(248, 113, 113, 0.35);
         }
-        .timer-delete-btn i { font-size: 11px; }
+
+        .timer-delete-btn i {
+            font-size: 11px;
+        }
 
         .ac-ctrl-busy {
             opacity: 0.50 !important;
@@ -1012,10 +1042,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -1035,12 +1063,10 @@
                     </span>
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-3">
                         @php $firstAc = $acs->first(); @endphp
-
                         {{-- AC SELECTOR + ACTIONS --}}
                         <div class="selector-bar">
                             <div class="flex items-center gap-3 min-w-0 flex-1">
@@ -1050,7 +1076,6 @@
                                         {{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : 'No AC' }}
                                     </span>
                                     <i class="fa-solid fa-chevron-down"></i>
-
                                     <div id="dropdownAC">
                                         @foreach ($acs as $ac)
                                             @php
@@ -1061,8 +1086,7 @@
                                                     $ac->name .
                                                     ($ac->brand ? ' · ' . $ac->brand : '');
                                             @endphp
-                                            <div data-id="{{ $ac->id }}"
-                                                data-label="{{ $acLabel }}"
+                                            <div data-id="{{ $ac->id }}" data-label="{{ $acLabel }}"
                                                 onclick="selectAC({{ $ac->id }}, @js($acLabel))">
                                                 <span class="num">#{{ $ac->ac_number }}</span>
                                                 <span style="text-transform:capitalize;">{{ $ac->name }}
@@ -1077,7 +1101,6 @@
                                 </div>
                                 <span class="kbd hidden sm:inline">{{ $room->name }}</span>
                             </div>
-
                             @auth
                                 @if (in_array(Auth::user()->role, ['admin', 'operator']))
                                     <div class="flex items-center gap-2">
@@ -1105,14 +1128,12 @@
                                 @endif
                             @endauth
                         </div>
-
                         {{-- AC PANELS --}}
                         @foreach ($acs as $ac)
                             <div id="ac-{{ $ac->id }}" class="ac-panel {{ $loop->first ? '' : 'hidden' }}"
                                 data-ac-id="{{ $ac->id }}" data-ac-number="{{ $ac->ac_number }}"
                                 data-ac-name="{{ $ac->name }}" data-ac-brand="{{ $ac->brand }}">
                                 <div class="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[340px_1fr] gap-3">
-
                                     {{-- LEFT: Temp ring + Power + Stepper --}}
                                     @php
                                         $curTemp = $ac->status?->set_temperature ?? 24;
@@ -1130,12 +1151,13 @@
                                     @endphp
                                     @php
                                         $tempCategory = $curTemp <= 20 ? 'cool' : ($curTemp <= 25 ? 'warm' : 'hot');
-                                        $fillDeg = round((max(16, min(30, $curTemp)) - 16) / 14 * 360);
+                                        $fillDeg = round(((max(16, min(30, $curTemp)) - 16) / 14) * 360);
                                     @endphp
                                     <div class="panel ac-ring-panel temp-panel-{{ $isPowerOn ? $tempCategory : 'off' }}"
                                         style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px 20px;">
                                         <div class="temp-ring temp-{{ $tempCategory }} {{ $isPowerOn ? '' : 'ring-off' }}"
-                                            id="tempRing-{{ $ac->id }}" style="--fill-deg: {{ $fillDeg }}deg;">
+                                            id="tempRing-{{ $ac->id }}"
+                                            style="--fill-deg: {{ $fillDeg }}deg;">
                                             <div class="temp-ring-inner">
                                                 <p class="ring-label">Suhu AC</p>
                                                 <div class="ring-temp">
@@ -1171,16 +1193,13 @@
                                                 <i class="fa-solid fa-plus"></i>
                                             </button>
                                         </div>
-
                                         <div class="ring-chips">
                                             <span class="ring-chip">16°C min</span>
                                             <span class="ring-chip">30°C max</span>
                                         </div>
                                     </div>
-
                                     {{-- RIGHT --}}
                                     <div class="flex flex-col gap-3">
-
                                         {{-- Mode --}}
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Mode</p>
@@ -1198,7 +1217,6 @@
                                                 @endforeach
                                             </div>
                                         </div>
-
                                         {{-- Fan --}}
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Fan Speed</p>
@@ -1217,7 +1235,6 @@
                                                 @endforeach
                                             </div>
                                         </div>
-
                                         {{-- Swing --}}
                                         <div class="panel">
                                             <p class="eyebrow" style="margin-bottom:12px;">Swing</p>
@@ -1235,7 +1252,6 @@
                                                 @endforeach
                                             </div>
                                         </div>
-
                                         {{-- Timer --}}
                                         <div class="panel">
                                             <div class="flex items-center justify-between mb-3">
@@ -1318,8 +1334,7 @@
                                                             value="{{ $ac->timer_off ? \Carbon\Carbon::parse($ac->timer_off)->format('H:i') : '' }}">
                                                     </div>
                                                 </div>
-                                                <button type="submit"
-                                                    class="btn btn-primary btn-sm save-timer-btn"
+                                                <button type="submit" class="btn btn-primary btn-sm save-timer-btn"
                                                     style="width:100%;">
                                                     <i class="fa-solid fa-check text-[10px]"></i>
                                                     <span>Save Timer</span>
@@ -1330,7 +1345,6 @@
                                 </div>
                             </div>
                         @endforeach
-
                         @if ($acs->count() === 0)
                             <div class="panel">
                                 <div class="empty-state">
@@ -1345,9 +1359,7 @@
             </div>
         </div>
     </div>
-
     @include('components.bottom-nav')
-
     {{-- Power confirm modal --}}
     <div id="powerModal" class="modal-backdrop">
         <div class="modal" style="max-width:380px;">
@@ -1363,8 +1375,6 @@
             </div>
         </div>
     </div>
-
-
     {{-- Add AC modal --}}
     @auth
         @if (in_array(Auth::user()->role, ['admin', 'operator']))
@@ -1388,13 +1398,15 @@
                                 <label class="field-label">AC Name</label>
                                 <input class="input" type="text" name="name" placeholder="unit_a" pattern="\S+"
                                     title="AC name must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
+                                    allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" type="text" name="brand" placeholder="daikin" pattern="\S+"
                                     title="Brand must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
+                                    allowed</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1404,7 +1416,6 @@
                     </form>
                 </div>
             </div>
-
             <div id="editModal" class="modal-backdrop">
                 <div class="modal">
                     <div class="modal-header">
@@ -1426,13 +1437,15 @@
                                 <label class="field-label">AC Name</label>
                                 <input class="input" id="editAcName" type="text" name="name" pattern="\S+"
                                     title="AC name must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
+                                    allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" id="editAcBrand" type="text" name="brand" pattern="\S+"
                                     title="Brand must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces allowed</p>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
+                                    allowed</p>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -1444,7 +1457,6 @@
             </div>
         @endif
     @endauth
-
     <script>
         let currentAcId = null;
         const normalizeFormValue = value => (value || '').trim().toLowerCase();
@@ -1455,7 +1467,10 @@
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json',
             };
-            const opts = { method: 'POST', headers };
+            const opts = {
+                method: 'POST',
+                headers
+            };
             if (body) {
                 headers['Content-Type'] = 'application/x-www-form-urlencoded';
                 opts.body = new URLSearchParams(body).toString();
@@ -1659,7 +1674,7 @@
             }
 
             const btnMinus = panel?.querySelector('.ctrl-btn[title*="Lower"]');
-            const btnPlus  = panel?.querySelector('.ctrl-btn[title*="Raise"]');
+            const btnPlus = panel?.querySelector('.ctrl-btn[title*="Raise"]');
             [btnMinus, btnPlus].forEach(b => b && b.classList.add('ac-ctrl-busy'));
 
             // Optimistic UI
@@ -1672,9 +1687,9 @@
                 ring.style.setProperty('--fill-deg', fillDeg + 'deg');
             }
 
-            const acName = panel
-                ? `AC ${panel.dataset.acNumber}${panel.dataset.acName ? ' · ' + panel.dataset.acName : ''}`
-                : 'AC';
+            const acName = panel ?
+                `AC ${panel.dataset.acNumber}${panel.dataset.acName ? ' · ' + panel.dataset.acName : ''}` :
+                'AC';
 
             const minDelay = new Promise(r => setTimeout(r, 2000));
             try {
@@ -1730,8 +1745,16 @@
 
                 const minDelay = new Promise(r => setTimeout(r, 2000));
                 try {
-                    await acFetch(this.action, { timer_on: on, timer_off: off });
-                    updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: on || null, timer_off: off || null });
+                    await acFetch(this.action, {
+                        timer_on: on,
+                        timer_off: off
+                    });
+                    updateTimerPanel({
+                        ac_unit_id: acId,
+                        room_id: null,
+                        timer_on: on || null,
+                        timer_off: off || null
+                    });
                     window.smToast?.('Timer saved successfully', 'success');
                 } catch {
                     window.smToast?.('Failed to save timer', 'error');
@@ -1753,9 +1776,17 @@
             const minDelay = new Promise(r => setTimeout(r, 2000));
             let ok = false;
             try {
-                await acFetch(form.action, { timer_on: '', timer_off: '' });
+                await acFetch(form.action, {
+                    timer_on: '',
+                    timer_off: ''
+                });
                 ok = true;
-                updateTimerPanel({ ac_unit_id: acId, room_id: null, timer_on: null, timer_off: null });
+                updateTimerPanel({
+                    ac_unit_id: acId,
+                    room_id: null,
+                    timer_on: null,
+                    timer_off: null
+                });
                 window.smToast?.('Timer deleted successfully', 'success');
             } catch {
                 window.smToast?.('Failed to delete timer', 'error');
@@ -1829,13 +1860,22 @@
         async function confirmPower() {
             document.getElementById('powerModal').classList.remove('is-open');
             if (!pendingPower) return;
-            const { id, power, acName, form, btn } = pendingPower;
+            const {
+                id,
+                power,
+                acName,
+                form,
+                btn
+            } = pendingPower;
             pendingPower = null;
 
             const turnOn = power === 'ON';
 
             // Optimistic UI
-            if (btn) { btn.classList.toggle('on', turnOn); btn.classList.add('ac-ctrl-busy'); }
+            if (btn) {
+                btn.classList.toggle('on', turnOn);
+                btn.classList.add('ac-ctrl-busy');
+            }
             const powerInput = form?.querySelector('[name="power"]');
             if (powerInput) powerInput.value = turnOn ? 'OFF' : 'ON';
             if (form) form.dataset.acPower = power;
@@ -1844,7 +1884,9 @@
 
             const minDelay = new Promise(r => setTimeout(r, 2000));
             try {
-                await acFetch(`/ac/${id}/toggle`, { power });
+                await acFetch(`/ac/${id}/toggle`, {
+                    power
+                });
                 window.smToast?.(`${acName} power ${power}`, 'success');
             } catch {
                 // Revert
@@ -1866,7 +1908,7 @@
             if (e.target === document.getElementById('powerModal')) cancelPower();
         });
 
-document.querySelectorAll('.control-form').forEach(form => {
+        document.querySelectorAll('.control-form').forEach(form => {
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const btn = this.querySelector('.mode-btn-v, .mode-btn-h');
@@ -1875,9 +1917,9 @@ document.querySelectorAll('.control-form').forEach(form => {
                 const action = this.action;
                 const panel = this.closest('.ac-panel');
                 const acId = panel?.dataset.acId;
-                const acName = panel
-                    ? `AC ${panel.dataset.acNumber}${panel.dataset.acName ? ' · ' + panel.dataset.acName : ''}`
-                    : 'AC';
+                const acName = panel ?
+                    `AC ${panel.dataset.acNumber}${panel.dataset.acName ? ' · ' + panel.dataset.acName : ''}` :
+                    'AC';
 
                 let prefix, segment, label;
                 if (action.includes('/mode/')) {
@@ -2122,7 +2164,7 @@ document.querySelectorAll('.control-form').forEach(form => {
                 const el = document.querySelector(`#dropdownAC div[data-id="${id}"]`);
                 selectAC(id, el ? el.dataset.label :
                     @js($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '')
-                    );
+                );
                 @if (session('success'))
                     window.smToast(@js(session('success')), 'success');
                 @endif
@@ -2132,13 +2174,13 @@ document.querySelectorAll('.control-form').forEach(form => {
                     const el = document.querySelector(`#dropdownAC div[data-id="${saved}"]`);
                     selectAC(saved, el ? el.dataset.label :
                         @js($firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : '')
-                        );
+                    );
                 } else {
                     localStorage.removeItem('selectedAC');
                     @if ($firstAc)
                         selectAC({{ $firstAc->id }},
                             @js('AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : ''))
-                            );
+                        );
                     @endif
                 }
             @endif
@@ -2168,7 +2210,6 @@ document.querySelectorAll('.control-form').forEach(form => {
 
         // Jalankan interval status perangkat
         setInterval(updateEspStatus, 5000);
-
     </script>
     @include('components.sidebar-scripts')
 </body>

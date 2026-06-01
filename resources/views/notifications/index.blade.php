@@ -84,21 +84,59 @@
         }
 
         /* Header — keep on one row */
-        .main-header { flex-wrap: nowrap; }
-        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
-        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
 
         /* Mobile M / L (≤ 480 px): compact notification list */
         @media (max-width: 480px) {
-            .nlist-item { padding: 11px 12px; gap: 10px; }
-            .nlist-icon { width: 30px; height: 30px; font-size: 12px; border-radius: var(--r-md); }
-            .nlist-item .text-base, .nlist-item h3 { font-size: 13px !important; }
-            .nlist-item .text-sm, .nlist-item p { font-size: 12px !important; line-height: 1.4 !important; }
-            .nlist-item .text-xs { font-size: 10px !important; }
-            /* Force time meta row to stay on one line with smaller fonts */
-            .nlist-item .text-mono { white-space: nowrap; font-size: 10px; }
+            .nlist-item {
+                padding: 11px 12px;
+                gap: 10px;
+            }
 
-            .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
+            .nlist-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+                border-radius: var(--r-md);
+            }
+
+            .nlist-item .text-base,
+            .nlist-item h3 {
+                font-size: 13px !important;
+            }
+
+            .nlist-item .text-sm,
+            .nlist-item p {
+                font-size: 12px !important;
+                line-height: 1.4 !important;
+            }
+
+            .nlist-item .text-xs {
+                font-size: 10px !important;
+            }
+
+            /* Force time meta row to stay on one line with smaller fonts */
+            .nlist-item .text-mono {
+                white-space: nowrap;
+                font-size: 10px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
             .main-header .app-header-title p {
                 font-size: 11px;
                 line-height: 1.3;
@@ -110,18 +148,59 @@
 
         /* Mobile S (≤ 480px): aggressive shrink */
         @media (max-width: 480px) {
-            .nlist-item { padding: 9px 10px; gap: 8px; }
-            .nlist-icon { width: 26px; height: 26px; font-size: 11px; border-radius: var(--r-sm); }
-            .nlist-item .text-base, .nlist-item h3 { font-size: 12px !important; }
-            .nlist-item .text-sm, .nlist-item p { font-size: 11px !important; }
-            .nlist-item .text-mono { font-size: 10px; }
+            .nlist-item {
+                padding: 9px 10px;
+                gap: 8px;
+            }
 
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 10px; }
-            .main-header .btn-icon { width: 32px; height: 32px; }
+            .nlist-icon {
+                width: 26px;
+                height: 26px;
+                font-size: 11px;
+                border-radius: var(--r-sm);
+            }
+
+            .nlist-item .text-base,
+            .nlist-item h3 {
+                font-size: 12px !important;
+            }
+
+            .nlist-item .text-sm,
+            .nlist-item p {
+                font-size: 11px !important;
+            }
+
+            .nlist-item .text-mono {
+                font-size: 10px;
+            }
+
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
         }
     </style>
 </head>
@@ -129,10 +208,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -155,10 +232,8 @@
                         </form>
                     @endif
                     @include('components.notification-bell')
-
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
@@ -199,8 +274,7 @@
                                             <span>{{ $n->created_at->format('d M Y H:i') }}</span>
                                             @if ($n->link)
                                                 <span>·</span>
-                                                <a href="{{ $n->link }}"
-                                                    data-redirect-to="{{ $n->link }}"
+                                                <a href="{{ $n->link }}" data-redirect-to="{{ $n->link }}"
                                                     onclick="markNotifReadInline(event, {{ $n->id }}, this.dataset.redirectTo)"
                                                     style="color:var(--cyan);">Buka detail →</a>
                                             @endif
@@ -228,7 +302,6 @@
                                     <p class="empty-sub">System notifications & alerts will appear here</p>
                                 </div>
                             @endforelse
-
                             @if ($notifications->hasPages())
                                 <div class="tbl-footer">
                                     <p>Page {{ $notifications->currentPage() }} of {{ $notifications->lastPage() }}
@@ -272,7 +345,10 @@
                 },
             }).then(r => {
                 if (!r.ok) throw new Error(r.status);
-                if (redirectTo) { window.location.href = redirectTo; return; }
+                if (redirectTo) {
+                    window.location.href = redirectTo;
+                    return;
+                }
                 const item = document.querySelector(`.nlist-item[data-id="${id}"]`);
                 if (item) item.classList.remove('unread');
             }).catch(() => {
@@ -298,6 +374,7 @@
         }
 
         let _markAllPending = false;
+
         function bulkMarkAllRead() {
             if (_markAllPending) return;
             _markAllPending = true;
@@ -317,9 +394,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-// Real-time: prepend notifikasi baru tanpa reload
+            // Real-time: prepend notifikasi baru tanpa reload
             function escapeHtml(s) {
-                return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+                return String(s ?? '').replace(/[&<>"']/g, m => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                } [m]));
             }
             const iconMap = {
                 device_offline: 'fa-plug-circle-exclamation',
@@ -353,15 +436,17 @@
                 const message = payload.message ? escapeHtml(payload.message) : '';
                 const timeAgo = escapeHtml(payload.time_ago || 'Baru saja');
                 const now = new Date();
-                const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-                const dateStr = `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-                const safeLink = payload.link && /^(https?:\/\/|\/)/.test(payload.link) ? escapeHtml(payload.link) : '';
-                const linkHtml = safeLink
-                    ? `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:var(--cyan);">Buka detail →</a>`
-                    : '';
-                const deleteBtn = payload.user_id
-                    ? `<button onclick="deleteNotif(${id})" class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash text-[11px]"></i></button>`
-                    : '';
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                const dateStr =
+                    `${String(now.getDate()).padStart(2,'0')} ${months[now.getMonth()]} ${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+                const safeLink = payload.link && /^(https?:\/\/|\/)/.test(payload.link) ? escapeHtml(payload.link) :
+                    '';
+                const linkHtml = safeLink ?
+                    `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:var(--cyan);">Buka detail →</a>` :
+                    '';
+                const deleteBtn = payload.user_id ?
+                    `<button onclick="deleteNotif(${id})" class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash text-[11px]"></i></button>` :
+                    '';
 
                 const item = document.createElement('div');
                 item.className = 'nlist-item unread';

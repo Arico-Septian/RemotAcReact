@@ -33,13 +33,15 @@
             font-size: 11px;
             color: var(--ink-3);
         }
+
         .stat-card .stat-icon {
             box-sizing: border-box;
             flex-shrink: 0;
             line-height: 1;
             overflow: hidden;
         }
-        .stat-card .stat-icon > i {
+
+        .stat-card .stat-icon>i {
             font-size: inherit;
             line-height: 1;
             display: inline-flex;
@@ -50,13 +52,17 @@
         }
 
         /* Angka utama selalu putih untuk hierarki yang kuat */
-        .stat-card .stat-num-lg { color: var(--ink-0); }
+        .stat-card .stat-num-lg {
+            color: var(--ink-0);
+        }
 
         /* Label kecil di atas mengambil warna accent per kartu */
-        .stat-card.acc-cyan     .stat-label-sm,
-        .stat-card.acc-mint     .stat-label-sm,
+        .stat-card.acc-cyan .stat-label-sm,
+        .stat-card.acc-mint .stat-label-sm,
         .stat-card.acc-lavender .stat-label-sm,
-        .stat-card.acc-coral    .stat-label-sm { color: var(--ink-0); }
+        .stat-card.acc-coral .stat-label-sm {
+            color: var(--ink-0);
+        }
 
         table {
             width: 100%;
@@ -251,7 +257,9 @@
         }
 
         @media (max-width: 768px) {
-            th, td {
+
+            th,
+            td {
                 padding: 10px 12px;
                 font-size: 12px;
             }
@@ -274,12 +282,12 @@
                 padding: 8px 10px;
             }
 
-            .tbl-toolbar > form {
+            .tbl-toolbar>form {
                 flex: 1;
                 min-width: 0;
             }
 
-            .tbl-toolbar > div {
+            .tbl-toolbar>div {
                 display: inline-flex;
                 flex-wrap: nowrap;
                 gap: 1px;
@@ -323,12 +331,12 @@
                 row-gap: 8px;
             }
 
-            .tbl-toolbar > form {
+            .tbl-toolbar>form {
                 flex: 1 1 100%;
                 min-width: 0;
             }
 
-            .tbl-toolbar > div {
+            .tbl-toolbar>div {
                 display: flex;
                 gap: 6px;
                 align-items: center;
@@ -382,8 +390,14 @@
                 box-sizing: border-box;
             }
 
-            .tbl-toolbar .btn span { display: inline; }
-            .tbl-toolbar .btn i { margin-right: 4px; font-size: 11px; }
+            .tbl-toolbar .btn span {
+                display: inline;
+            }
+
+            .tbl-toolbar .btn i {
+                margin-right: 4px;
+                font-size: 11px;
+            }
 
             .search-input input::placeholder {
                 color: var(--ink-3);
@@ -445,7 +459,8 @@
             flex-wrap: wrap;
         }
 
-        .pager a, .pager span {
+        .pager a,
+        .pager span {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -504,27 +519,37 @@
                 align-items: center;
                 gap: 10px;
             }
-            .tbl-footer > p {
+
+            .tbl-footer>p {
                 margin: 0;
                 font-size: 11px;
                 flex: 1;
                 min-width: 0;
                 line-height: 1.35;
             }
+
             .pager {
                 flex-wrap: nowrap;
                 flex-shrink: 0;
                 gap: 4px;
             }
-            .pager a, .pager span {
+
+            .pager a,
+            .pager span {
                 min-width: 30px;
                 height: 30px;
                 padding: 0 7px;
                 font-size: 12px;
             }
+
             /* Ringkas: sembunyikan nomor selain aktif & yang tepat setelahnya */
-            .pager a.text-mono { display: none; }
-            .pager .active + a.text-mono { display: inline-flex; }
+            .pager a.text-mono {
+                display: none;
+            }
+
+            .pager .active+a.text-mono {
+                display: inline-flex;
+            }
         }
 
         /* Sortable table headers */
@@ -559,6 +584,7 @@
                 width: 100%;
                 min-height: 56px;
             }
+
             .user-card:last-child {
                 border-bottom: none;
             }
@@ -614,7 +640,7 @@
             }
 
             /* Email disembunyikan di single-row */
-            .user-card-name > span:nth-child(3) {
+            .user-card-name>span:nth-child(3) {
                 display: none !important;
             }
 
@@ -675,20 +701,28 @@
         }
 
         /* Page sections spacing */
-        .app-content-inner > * + * {
+        .app-content-inner>*+* {
             margin-top: 32px;
         }
 
         /* Tablet & desktop (≥ 481 px): unify search / segmented / Add User height to 40 px */
         @media (min-width: 481px) {
-            .tbl-toolbar .search-input { height: 40px; }
-            .tbl-toolbar .search-input input { height: 40px; box-sizing: border-box; }
+            .tbl-toolbar .search-input {
+                height: 40px;
+            }
+
+            .tbl-toolbar .search-input input {
+                height: 40px;
+                box-sizing: border-box;
+            }
+
             .tbl-toolbar .segmented {
                 height: 40px;
                 box-sizing: border-box;
                 display: inline-flex;
                 align-items: center;
             }
+
             .tbl-toolbar .segmented .seg {
                 height: 100%;
                 display: inline-flex;
@@ -696,6 +730,7 @@
                 justify-content: center;
                 box-sizing: border-box;
             }
+
             .tbl-toolbar .btn {
                 height: 40px;
                 min-height: 40px;
@@ -705,74 +740,218 @@
         }
 
         /* Header keep on one row across breakpoints */
-        .main-header { flex-wrap: nowrap; }
-        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
-        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
 
         /* Stat cards — Tablet (≤ 768px) */
         @media (max-width: 768px) {
-            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 12px; }
-            .stat-card { padding: 14px 16px; }
-            .stat-card .stat-label-sm { font-size: 10px; letter-spacing: 0.08em; }
-            .stat-card .stat-num-lg { font-size: 28px; margin: 6px 0 4px; }
-            .stat-card .stat-sub { font-size: 10px; line-height: 1.4; }
-            .stat-card .stat-icon { width: 34px; height: 34px; border-radius: var(--r-md); font-size: 14px; }
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px 16px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px;
+                letter-spacing: 0.08em;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 28px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.4;
+            }
+
+            .stat-card .stat-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: var(--r-md);
+                font-size: 14px;
+            }
         }
 
         /* Stat cards — Mobile M (≤ 480px) */
         @media (max-width: 480px) {
-            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 10px; }
-            .stat-card { padding: 12px 14px; }
-            .stat-card .stat-label-sm { font-size: 8px; letter-spacing: 0.05em; }
-            .stat-card .stat-num-lg { font-size: 24px; margin: 4px 0 2px; }
-            .stat-card .stat-sub { font-size: 10px; line-height: 1.3; }
-            .stat-card .stat-icon { width: 30px; height: 30px; border-radius: var(--r-md); font-size: 12px; }
-            .stat-card .accent-bar { top: 12px; bottom: 12px; }
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 8px;
+                letter-spacing: 0.05em;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 24px;
+                margin: 4px 0 2px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.3;
+            }
+
+            .stat-card .stat-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: var(--r-md);
+                font-size: 12px;
+            }
+
+            .stat-card .accent-bar {
+                top: 12px;
+                bottom: 12px;
+            }
         }
 
         /* Mobile (≤ 480px): shrink header + toolbar so everything fits */
         @media (max-width: 480px) {
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 10px; line-height: 1.2; }
-            .main-header .btn-icon { width: 32px; height: 32px; }
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
 
             /* User card — tighter at 320 */
-            .user-card { padding: 12px 14px; gap: 8px; }
-            .user-card-info { gap: 10px; }
+            .user-card {
+                padding: 12px 14px;
+                gap: 8px;
+            }
+
+            .user-card-info {
+                gap: 10px;
+            }
+
             .user-card .user-avatar-sm {
                 width: 36px !important;
                 height: 36px !important;
                 font-size: 13px !important;
                 border-radius: var(--r-md) !important;
             }
-            .user-card-name-text { font-size: 14px; }
-            .user-card-handle { font-size: 12px; }
-            .user-card .badge-role { font-size: 10px !important; padding: 3px 6px !important; }
-            .user-card-actions .btn-icon { width: 32px; height: 32px; font-size: 11px; }
+
+            .user-card-name-text {
+                font-size: 14px;
+            }
+
+            .user-card-handle {
+                font-size: 12px;
+            }
+
+            .user-card .badge-role {
+                font-size: 10px !important;
+                padding: 3px 6px !important;
+            }
+
+            .user-card-actions .btn-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 11px;
+            }
 
             /* Stats grid: keep 2-col but compact each card so text doesn't wrap */
-            .grid.grid-cols-2.lg\:grid-cols-4 { gap: 8px !important; }
-            .stat-card { padding: 10px 12px !important; }
-            .stat-card .stat-label-sm { font-size: 10px !important; letter-spacing: 0.05em !important; }
-            .stat-card .stat-num-lg { font-size: 20px !important; margin: 3px 0 2px !important; line-height: 1.1 !important; }
-            .stat-card .stat-sub { font-size: 10px !important; line-height: 1.3 !important; }
-            .stat-card .stat-icon { width: 26px !important; height: 26px !important; border-radius: var(--r-sm) !important; font-size: 11px !important; }
-            .stat-card .accent-bar { top: 10px !important; bottom: 10px !important; }
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 8px !important;
+            }
+
+            .stat-card {
+                padding: 10px 12px !important;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px !important;
+                letter-spacing: 0.05em !important;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 20px !important;
+                margin: 3px 0 2px !important;
+                line-height: 1.1 !important;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px !important;
+                line-height: 1.3 !important;
+            }
+
+            .stat-card .stat-icon {
+                width: 26px !important;
+                height: 26px !important;
+                border-radius: var(--r-sm) !important;
+                font-size: 11px !important;
+            }
+
+            .stat-card .accent-bar {
+                top: 10px !important;
+                bottom: 10px !important;
+            }
 
             /* User card: tighter padding, fonts match log card */
-            .user-card { padding: 12px 14px; gap: 8px; }
+            .user-card {
+                padding: 12px 14px;
+                gap: 8px;
+            }
 
             /* Toolbar at 320 px: stack to 3 rows so segmented + Add User each get full width */
-            .tbl-toolbar > div {
+            .tbl-toolbar>div {
                 flex-wrap: wrap;
                 row-gap: 6px;
             }
-            .tbl-toolbar > div > .segmented { flex: 1 1 100%; }
-            .tbl-toolbar > div > .btn { flex: 1 1 100%; }
-            .tbl-toolbar .segmented .seg { font-size: 10px; padding: 0 4px; }
+
+            .tbl-toolbar>div>.segmented {
+                flex: 1 1 100%;
+            }
+
+            .tbl-toolbar>div>.btn {
+                flex: 1 1 100%;
+            }
+
+            .tbl-toolbar .segmented .seg {
+                font-size: 10px;
+                padding: 0 4px;
+            }
         }
 
         /* Compact Add User modal on tablets */
@@ -811,7 +990,7 @@
                 padding: 5px 18px 7px;
             }
 
-            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
                 margin-top: 7px !important;
             }
 
@@ -885,7 +1064,7 @@
                 padding: 4px 14px 6px;
             }
 
-            #modal .modal-body.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
                 margin-top: 6px !important;
             }
 
@@ -966,10 +1145,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -983,14 +1160,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
-
                         {{-- Stats --}}
                         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                             <div class="stat-card acc-cyan">
@@ -1010,7 +1184,8 @@
                                     <div>
                                         <p class="stat-label-sm">Online Now</p>
                                         <p class="stat-num-lg" id="onlineUsersCount">{{ $onlineUsers }}</p>
-                                        <p class="stat-sub"><span id="onlineUsersPct">{{ $onlinePercentage }}</span>% currently active</p>
+                                        <p class="stat-sub"><span id="onlineUsersPct">{{ $onlinePercentage }}</span>%
+                                            currently active</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
                                 </div>
@@ -1021,7 +1196,8 @@
                                     <div>
                                         <p class="stat-label-sm">Offline</p>
                                         <p class="stat-num-lg" id="offlineUsersCount">{{ $offlineUsers }}</p>
-                                        <p class="stat-sub"><span id="offlineUsersPct">{{ $offlinePercentage }}</span>% inactive</p>
+                                        <p class="stat-sub"><span id="offlineUsersPct">{{ $offlinePercentage }}</span>%
+                                            inactive</p>
                                     </div>
                                     <div class="stat-icon"><i class="fa-solid fa-user-slash"></i></div>
                                 </div>
@@ -1038,7 +1214,6 @@
                                 </div>
                             </div>
                         </div>
-
                         {{-- User table card --}}
                         <div class="tbl-wrap">
                             <div class="tbl-toolbar">
@@ -1064,7 +1239,6 @@
                                     </button>
                                 </div>
                             </div>
-
                             {{-- Filter chips --}}
                             @if (request('role') || request('search'))
                                 <div class="filter-chips">
@@ -1073,27 +1247,28 @@
                                         <div class="filter-chip">
                                             <i class="fa-solid fa-magnifying-glass text-[9px]"></i>
                                             "{{ request('search') }}"
-                                            <button onclick="window.location.href='/users'" title="Clear search"><i class="fa-solid fa-xmark"></i></button>
+                                            <button onclick="window.location.href='/users'" title="Clear search"><i
+                                                    class="fa-solid fa-xmark"></i></button>
                                         </div>
                                     @endif
                                     @if (request('role'))
                                         @php
-                                            $roleLabel = match(request('role')) {
+                                            $roleLabel = match (request('role')) {
                                                 'admin' => 'Administrator',
                                                 'operator' => 'Operator',
                                                 'user' => 'User',
-                                                default => request('role')
+                                                default => request('role'),
                                             };
                                         @endphp
                                         <div class="filter-chip">
                                             <i class="fa-solid fa-filter text-[9px]"></i>
                                             {{ $roleLabel }}
-                                            <button onclick="window.location.href='/users'" title="Clear role filter"><i class="fa-solid fa-xmark"></i></button>
+                                            <button onclick="window.location.href='/users'" title="Clear role filter"><i
+                                                    class="fa-solid fa-xmark"></i></button>
                                         </div>
                                     @endif
                                 </div>
                             @endif
-
                             {{-- Mobile cards view --}}
                             <div class="user-cards">
                                 @forelse ($users as $user)
@@ -1104,10 +1279,10 @@
                                         $colors = ['cyan', 'mint', 'lavender', 'coral'];
                                         $colorIndex = ($user->id - 1) % 4;
                                         $colorName = $colors[$colorIndex];
-                                        $roleLabel = match($user->role) {
+                                        $roleLabel = match ($user->role) {
                                             'admin' => 'ADMIN',
                                             'operator' => 'OPERATOR',
-                                            default => 'USER'
+                                            default => 'USER',
                                         };
                                     @endphp
                                     <div class="user-card">
@@ -1115,9 +1290,10 @@
                                             <div class="user-card-info">
                                                 @if ($user->avatar_url)
                                                     <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
-                                                         class="user-avatar-sm" style="object-fit:cover;">
+                                                        class="user-avatar-sm" style="object-fit:cover;">
                                                 @else
-                                                    <div class="user-avatar-sm" style="background:var(--{{ $colorName }});">
+                                                    <div class="user-avatar-sm"
+                                                        style="background:var(--{{ $colorName }});">
                                                         {{ $initials }}
                                                     </div>
                                                 @endif
@@ -1125,11 +1301,13 @@
                                                     <span class="user-card-name-text">{{ $user->name }}</span>
                                                     <span class="user-card-handle">{{ $handle }}</span>
                                                     @if ($user->email)
-                                                        <span style="font-size:11px;color:var(--ink-4);margin-top:2px;display:block;">{{ $user->email }}</span>
+                                                        <span
+                                                            style="font-size:11px;color:var(--ink-4);margin-top:2px;display:block;">{{ $user->email }}</span>
                                                     @endif
                                                 </div>
                                             </div>
-                                            <span class="badge-role {{ $user->role }}" style="font-size:10px;padding:4px 8px;">{{ $roleLabel }}</span>
+                                            <span class="badge-role {{ $user->role }}"
+                                                style="font-size:10px;padding:4px 8px;">{{ $roleLabel }}</span>
                                         </div>
                                         <div class="user-card-footer">
                                             <div class="user-card-status">
@@ -1157,11 +1335,12 @@
                                     <div class="empty-state" style="margin: 20px;">
                                         <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
                                         <p class="empty-title">No users found</p>
-                                        <p class="empty-sub">{{ (request('search') || request('role')) ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}</p>
+                                        <p class="empty-sub">
+                                            {{ request('search') || request('role') ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}
+                                        </p>
                                     </div>
                                 @endforelse
                             </div>
-
                             {{-- Desktop table view --}}
                             <table id="user-list" class="user-table">
                                 <thead>
@@ -1183,18 +1362,19 @@
                                             <td>
                                                 <div class="user-cell">
                                                     @php
-                                        $colors = ['cyan', 'mint', 'lavender', 'coral'];
-                                        $colorIndex = ($user->id - 1) % 4;
-                                        $colorName = $colors[$colorIndex];
-                                    @endphp
-                                    @if ($user->avatar_url)
-                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
-                                             class="user-avatar-sm" style="object-fit:cover;">
-                                    @else
-                                        <div class="user-avatar-sm" style="background:var(--{{ $colorName }});">
-                                            {{ $initials }}
-                                        </div>
-                                    @endif
+                                                        $colors = ['cyan', 'mint', 'lavender', 'coral'];
+                                                        $colorIndex = ($user->id - 1) % 4;
+                                                        $colorName = $colors[$colorIndex];
+                                                    @endphp
+                                                    @if ($user->avatar_url)
+                                                        <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
+                                                            class="user-avatar-sm" style="object-fit:cover;">
+                                                    @else
+                                                        <div class="user-avatar-sm"
+                                                            style="background:var(--{{ $colorName }});">
+                                                            {{ $initials }}
+                                                        </div>
+                                                    @endif
                                                     <div class="user-info">
                                                         <p class="user-name">{{ $user->name }}</p>
                                                         <p class="user-handle">{{ $handle }}</p>
@@ -1226,11 +1406,13 @@
                                                     @if ($user->id !== Auth::user()->id)
                                                         <button
                                                             onclick="editRole({{ $user->id }}, '{{ $user->role }}')"
-                                                            type="button" class="btn-icon lavender" title="Edit role">
+                                                            type="button" class="btn-icon lavender"
+                                                            title="Edit role">
                                                             <i class="fa-solid fa-pen text-[10px]"></i>
                                                         </button>
-                                                        <button onclick="deleteUser({{ $user->id }})" type="button"
-                                                            class="btn-icon danger" title="Delete user">
+                                                        <button onclick="deleteUser({{ $user->id }})"
+                                                            type="button" class="btn-icon danger"
+                                                            title="Delete user">
                                                             <i class="fa-solid fa-trash text-[10px]"></i>
                                                         </button>
                                                     @endif
@@ -1243,14 +1425,15 @@
                                                 <div class="empty-state">
                                                     <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
                                                     <p class="empty-title">No users found</p>
-                                                    <p class="empty-sub">{{ (request('search') || request('role')) ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}</p>
+                                                    <p class="empty-sub">
+                                                        {{ request('search') || request('role') ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}
+                                                    </p>
                                                 </div>
                                             </td>
                                         </tr>
                                     @endforelse
                                 </tbody>
                             </table>
-
                             @if ($users->hasPages())
                                 <div class="tbl-footer">
                                     <p>
@@ -1268,47 +1451,56 @@
                                                 $pages = range(1, $last);
                                             } else {
                                                 $pages[] = 1;
-                                                if ($current > 3) $pages[] = '...';
-                                                for ($i = max(2, $current - 1); $i <= min($last - 1, $current + 1); $i++) $pages[] = $i;
-                                                if ($current < $last - 2) $pages[] = '...';
+                                                if ($current > 3) {
+                                                    $pages[] = '...';
+                                                }
+                                                for (
+                                                    $i = max(2, $current - 1);
+                                                    $i <= min($last - 1, $current + 1);
+                                                    $i++
+                                                ) {
+                                                    $pages[] = $i;
+                                                }
+                                                if ($current < $last - 2) {
+                                                    $pages[] = '...';
+                                                }
                                                 $pages[] = $last;
                                             }
                                         @endphp
-
                                         @if ($users->onFirstPage())
-                                            <span class="disabled"><i class="fa-solid fa-chevron-left text-[9px]"></i></span>
+                                            <span class="disabled"><i
+                                                    class="fa-solid fa-chevron-left text-[9px]"></i></span>
                                         @else
-                                            <a href="{{ $users->previousPageUrl() }}"><i class="fa-solid fa-chevron-left text-[9px]"></i></a>
+                                            <a href="{{ $users->previousPageUrl() }}"><i
+                                                    class="fa-solid fa-chevron-left text-[9px]"></i></a>
                                         @endif
-
                                         @foreach ($pages as $p)
                                             @if ($p === '...')
                                                 <span class="disabled">…</span>
                                             @elseif ($p == $current)
                                                 <span class="active text-mono">{{ $p }}</span>
                                             @else
-                                                <a class="text-mono" href="{{ $users->url($p) }}">{{ $p }}</a>
+                                                <a class="text-mono"
+                                                    href="{{ $users->url($p) }}">{{ $p }}</a>
                                             @endif
                                         @endforeach
-
                                         @if ($users->hasMorePages())
-                                            <a href="{{ $users->nextPageUrl() }}"><i class="fa-solid fa-chevron-right text-[9px]"></i></a>
+                                            <a href="{{ $users->nextPageUrl() }}"><i
+                                                    class="fa-solid fa-chevron-right text-[9px]"></i></a>
                                         @else
-                                            <span class="disabled"><i class="fa-solid fa-chevron-right text-[9px]"></i></span>
+                                            <span class="disabled"><i
+                                                    class="fa-solid fa-chevron-right text-[9px]"></i></span>
                                         @endif
                                     </div>
                                 </div>
                             @endif
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     @include('components.bottom-nav')
-
     {{-- Modal: add user --}}
     <div id="modal" class="modal-backdrop">
         <div class="modal">
@@ -1325,18 +1517,19 @@
                     <div class="field">
                         <label class="field-label">Username</label>
                         <input class="input" type="text" name="name" id="newUserName"
-                            placeholder="e.g. admin"
-                            minlength="3" maxlength="20"
+                            placeholder="e.g. admin" minlength="3" maxlength="20"
                             pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
                             title="Username 3–20 characters, letters/numbers/underscore, must start with a letter"
                             autocomplete="off" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3–20 characters, start with a letter.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3–20
+                            characters, start with a letter.</p>
                     </div>
                     <div class="field">
                         <label class="field-label">Password</label>
                         <input class="input" type="password" name="password" placeholder="min. 8 characters"
                             minlength="8" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Min. 8 characters, upper/lowercase + numbers.</p>
+                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Min. 8
+                            characters, upper/lowercase + numbers.</p>
                     </div>
                     <div class="field">
                         <label class="field-label">Role</label>
@@ -1354,7 +1547,6 @@
             </form>
         </div>
     </div>
-
     {{-- Modal: edit role --}}
     <div id="editRoleModal" class="modal-backdrop">
         <div class="modal">
@@ -1385,7 +1577,6 @@
             </form>
         </div>
     </div>
-
     <script>
         function openModal() {
             document.getElementById('modal')?.classList.add('is-open');
@@ -1426,7 +1617,6 @@
                 setFieldFeedback(input, `${label} must not contain spaces`, true);
                 return false;
             }
-
             clearInputValidity(input);
             return true;
         }
@@ -1434,18 +1624,15 @@
         function visibleUserNames() {
             return new Set(
                 Array.from(document.querySelectorAll('.user-name, .user-card-name-text'))
-                    .map(el => normalizeFormValue(el.textContent))
-                    .filter(Boolean)
+                .map(el => normalizeFormValue(el.textContent))
+                .filter(Boolean)
             );
         }
-
         async function usernameExists(username) {
             if (visibleUserNames().has(username)) {
                 return true;
             }
-
             if (username.length < 3) return false;
-
             try {
                 // Gunakan endpoint khusus (jika ada) atau pastikan response minimalis
                 const response = await fetch(`/users?search=${encodeURIComponent(username)}&check_only=1`, {
@@ -1455,19 +1642,16 @@
                     },
                     cache: 'no-store'
                 });
-
                 if (response.ok) {
                     const data = await response.json();
                     // Asumsi server mengembalikan { exists: true/false } atau list user
                     return data.exists || (Array.isArray(data) && data.length > 0);
                 }
-
                 return false;
             } catch (error) {
                 return false;
             }
         }
-
         let usernameTimeout;
         document.getElementById('newUserName')?.addEventListener('input', e => {
             const input = e.currentTarget;
@@ -1478,7 +1662,6 @@
                 if (input.value.length >= 3) usernameExists(input.value.toLowerCase());
             }, 500);
         });
-
         // Validasi password sesuai aturan server (min 8, ada huruf besar, kecil, angka)
         function validatePassword(pw) {
             if (!pw || pw.length < 8) return 'Password minimal 8 karakter.';
@@ -1487,7 +1670,6 @@
             if (!/[0-9]/.test(pw)) return 'Password harus mengandung minimal 1 angka.';
             return null;
         }
-
         // Feedback real-time di dalam modal saat mengetik password
         const addUserPasswordInput = document.querySelector('#addUserForm [name="password"]');
         if (addUserPasswordInput) {
@@ -1500,10 +1682,8 @@
                 setFieldFeedback(addUserPasswordInput, err, !!err);
             });
         }
-
         document.getElementById('addUserForm')?.addEventListener('submit', async e => {
             e.preventDefault();
-
             const form = e.currentTarget;
             const nameInput = form.querySelector('[name="name"]');
             const passwordInput = form.querySelector('[name="password"]');
@@ -1511,17 +1691,14 @@
             // Preserve original case — only trim whitespace, do not lowercase
             const username = (nameInput.value || '').trim();
             nameInput.value = username;
-
             if (!validateNoSpaces(nameInput, 'Username')) {
                 nameInput.reportValidity();
                 return;
             }
-
             if (!username) {
                 form.reportValidity();
                 return;
             }
-
             // Validasi password — warning tampil di dalam modal (tidak perlu submit dulu)
             const pwError = validatePassword(passwordInput.value);
             if (pwError) {
@@ -1529,23 +1706,18 @@
                 passwordInput.focus();
                 return;
             }
-
             if (submitButton) {
                 submitButton.disabled = true;
             }
-
             // Case-insensitive duplicate check (server enforces this too)
             const exists = await usernameExists(username.toLowerCase());
-
             if (submitButton) {
                 submitButton.disabled = false;
             }
-
             if (exists) {
                 blockDuplicateInput(nameInput, 'Username already taken');
                 return;
             }
-
             HTMLFormElement.prototype.submit.call(form);
         });
 
@@ -1563,7 +1735,6 @@
         function editRole(id, role) {
             openEditModal(id, role);
         }
-
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
                 closeModal();
@@ -1596,7 +1767,6 @@
                 })
                 .catch(() => window.smToast('Failed to delete user', 'error'));
         }
-
         let pingInterval = null;
 
         function startActivityPing() {
@@ -1613,12 +1783,16 @@
                 }
             }, 60000);
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             startActivityPing();
-// Real-time: update counter online users tanpa reload halaman
+            // Real-time: update counter online users tanpa reload halaman
             function refreshUsersOnline() {
-                fetch('/users-online', { headers: { 'Accept': 'application/json' }, cache: 'no-store' })
+                fetch('/users-online', {
+                        headers: {
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
+                    })
                     .then(r => r.ok ? r.json() : null)
                     .then(data => {
                         if (!data) return;
@@ -1633,20 +1807,20 @@
                     })
                     .catch(() => {});
             }
-
             // Debounced reload saat ada aksi CRUD user dari admin lain
             let crudReloadTimer = null;
             const crudActivities = ['add_user', 'delete_user', 'update_role', 'change_password'];
+
             function scheduleCrudReload() {
                 if (crudReloadTimer) clearTimeout(crudReloadTimer);
                 crudReloadTimer = setTimeout(() => {
                     const modalOpen = document.querySelector('.is-open, .modal.is-open');
                     const activeTag = document.activeElement?.tagName;
-                    if (modalOpen || activeTag === 'INPUT' || activeTag === 'TEXTAREA' || document.hidden) return;
+                    if (modalOpen || activeTag === 'INPUT' || activeTag === 'TEXTAREA' || document.hidden)
+                        return;
                     location.reload();
                 }, 1000);
             }
-
             if (window.Echo) {
                 window.Echo.channel('device-status')
                     .listen('.UserLogCreated', (e) => {
@@ -1654,7 +1828,6 @@
                         if (e && crudActivities.includes(e.activity)) scheduleCrudReload();
                     });
             }
-
             // Poll juga tiap 30s sebagai fallback (kalau WS putus)
             setInterval(refreshUsersOnline, 30000);
             @if (session('success'))
@@ -1670,8 +1843,6 @@
         window.addEventListener('beforeunload', () => {
             if (pingInterval) clearInterval(pingInterval);
         });
-
-
         document.addEventListener('DOMContentLoaded', () => {});
     </script>
     @include('components.sidebar-scripts')

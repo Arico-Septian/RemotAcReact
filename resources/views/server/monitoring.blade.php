@@ -35,6 +35,7 @@
             align-items: baseline;
             gap: 4px;
         }
+
         .raspi-unit {
             font-size: 0.45em;
             font-weight: 600;
@@ -90,21 +91,57 @@
         }
 
         /* Header — keep on one row */
-        .main-header { flex-wrap: nowrap; }
-        .main-header > .flex.items-center.gap-3 { min-width: 0; flex: 1; }
-        .main-header > .flex.items-center.gap-2 { flex-shrink: 0; }
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
 
         /* Mobile M / L (≤ 480 px): compact card + smaller temp */
         @media (max-width: 480px) {
-            .raspi-card { padding: 22px 18px; }
-            .raspi-temp { font-size: 56px; white-space: nowrap; }
-            .raspi-label { font-size: 11px; }
-            .raspi-status { font-size: 12px; }
+            .raspi-card {
+                padding: 22px 18px;
+            }
 
-            .main-header { gap: 8px; padding-left: 12px; padding-right: 12px; }
-            .main-header > .flex.items-center.gap-3 { gap: 8px; }
-            .main-header > .flex.items-center.gap-2 { gap: 6px; }
-            .main-header .app-header-title h1 { font-size: 16px; line-height: 1.2; }
+            .raspi-temp {
+                font-size: 56px;
+                white-space: nowrap;
+            }
+
+            .raspi-label {
+                font-size: 11px;
+            }
+
+            .raspi-status {
+                font-size: 12px;
+            }
+
+            .main-header {
+                gap: 8px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 8px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 6px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
             .main-header .app-header-title p {
                 font-size: 11px;
                 line-height: 1.3;
@@ -112,22 +149,59 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
-            .main-header .btn-icon { width: 34px; height: 34px; }
+
+            .main-header .btn-icon {
+                width: 34px;
+                height: 34px;
+            }
         }
 
         /* Mobile S (≤ 480px): aggressive shrink */
         @media (max-width: 480px) {
-            .raspi-card { padding: 18px 14px; gap: 6px; }
-            .raspi-temp { font-size: 44px; }
-            .raspi-label { font-size: 10px; }
-            .raspi-status { font-size: 11px; }
+            .raspi-card {
+                padding: 18px 14px;
+                gap: 6px;
+            }
 
-            .main-header { gap: 6px; padding-left: 10px; padding-right: 10px; }
-            .main-header > .flex.items-center.gap-3 { gap: 6px; }
-            .main-header > .flex.items-center.gap-2 { gap: 4px; }
-            .main-header .app-header-title h1 { font-size: 13px; line-height: 1.2; }
-            .main-header .app-header-title p { font-size: 10px; }
-            .main-header .btn-icon { width: 32px; height: 32px; }
+            .raspi-temp {
+                font-size: 44px;
+            }
+
+            .raspi-label {
+                font-size: 10px;
+            }
+
+            .raspi-status {
+                font-size: 11px;
+            }
+
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
         }
     </style>
 </head>
@@ -135,10 +209,8 @@
 <body>
     <div class="custom-bg"></div>
     <div id="overlay"></div>
-
     <div class="layout">
         @include('components.sidebar')
-
         <div class="main-content">
             <header class="main-header">
                 <div class="flex items-center gap-3">
@@ -152,14 +224,11 @@
                 </div>
                 <div class="flex items-center gap-2">
                     @include('components.notification-bell')
-
                 </div>
             </header>
-
             <div class="page-body">
                 <div class="app-content">
                     <div class="app-content-inner space-y-4">
-
                         <div class="raspi-card">
                             <p class="raspi-label">
                                 <i class="fa-solid fa-microchip" style="margin-right:6px;"></i>
@@ -171,19 +240,18 @@
                                 Connecting...
                             </p>
                         </div>
-
                     </div>
                 </div>
             </div>
-
             @include('components.bottom-nav')
         </div>
     </div>
-
     @include('components.sidebar-scripts')
     <script>
         function getSuhu() {
-            fetch('/suhu-raspi?_=' + Date.now(), { cache: 'no-store' })
+            fetch('/suhu-raspi?_=' + Date.now(), {
+                    cache: 'no-store'
+                })
                 .then(res => {
                     if (!res.ok) throw new Error(res.status);
                     return res.json();
@@ -191,7 +259,6 @@
                 .then(data => {
                     const el = document.getElementById('raspi-temp');
                     const st = document.getElementById('raspi-status');
-
                     if (data.value !== null && data.value !== undefined) {
                         el.innerHTML = data.value + '<span class="raspi-unit">°C</span>';
                         el.className = 'raspi-temp ' + (
@@ -199,42 +266,42 @@
                             data.value >= 55 ? 'temp-warm' :
                             'temp-cool'
                         );
-                        st.innerHTML = '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Updates every 1 minute';
+                        st.innerHTML =
+                            '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Updates every 1 minute';
                     } else {
                         el.innerText = '--';
                         el.className = 'raspi-temp temp-muted';
-                        st.innerHTML = '<span class="raspi-indicator offline" id="raspi-dot"></span>Waiting for data...';
+                        st.innerHTML =
+                            '<span class="raspi-indicator offline" id="raspi-dot"></span>Waiting for data...';
                     }
                 })
                 .catch(err => {
                     const el = document.getElementById('raspi-temp');
                     const st = document.getElementById('raspi-status');
-                    const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                    const now = new Date().toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
                     if (el) {
                         el.innerText = '—';
                         el.className = 'raspi-temp temp-muted';
                     }
                     if (st) {
                         const code = err?.message && /^\d+$/.test(err.message) ? ` (${err.message})` : '';
-                        st.innerHTML = `<span class="raspi-indicator offline" id="raspi-dot"></span>Connection failed${code} · ${now} · Retrying...`;
+                        st.innerHTML =
+                            `<span class="raspi-indicator offline" id="raspi-dot"></span>Connection failed${code} · ${now} · Retrying...`;
                     }
                 });
         }
-
         getSuhu();
         setInterval(getSuhu, 3000);
-
         // Real-time: Raspi suhu push via Reverb tanpa nunggu polling 3s
         if (window.Echo) {
             window.Echo.channel('device-status')
                 .listen('.RaspiTemperatureUpdated', () => getSuhu());
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-});
+        document.addEventListener('DOMContentLoaded', () => {});
     </script>
 </body>
 
 </html>
-
-
