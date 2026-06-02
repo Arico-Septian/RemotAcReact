@@ -1139,7 +1139,7 @@
                 return;
             }
 
-            if (!validateNoSpaces(floorInput, 'Lantai atau zona')) {
+            if (!validateNoSpaces(floorInput, 'Floor or zone')) {
                 e.preventDefault();
                 floorInput.reportValidity();
                 return;

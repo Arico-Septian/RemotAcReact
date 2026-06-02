@@ -1363,13 +1363,13 @@
         <div class="modal" style="max-width:380px;">
             <div class="modal-body text-center" style="padding-top:22px;">
                 <div id="powerModalIcon" class="confirm-icon info"><i class="fa-solid fa-power-off"></i></div>
-                <h2 style="font-size:16px;font-weight:600;color:var(--ink-0);margin:0 0 4px;">Konfirmasi Power</h2>
+                <h2 style="font-size:16px;font-weight:600;color:var(--ink-0);margin:0 0 4px;">Confirm Power</h2>
                 <p id="powerModalDesc" class="text-sm" style="color:var(--ink-2);margin:0;"></p>
             </div>
             <div class="modal-footer" style="padding-top:6px;">
                 <button type="button" onclick="cancelPower()" class="btn btn-ghost flex-1">Cancel</button>
                 <button type="button" id="powerModalConfirm" onclick="confirmPower()"
-                    class="btn btn-primary flex-1">Lanjutkan</button>
+                    class="btn btn-primary flex-1">Continue</button>
             </div>
         </div>
     </div>
@@ -1382,6 +1382,7 @@
                         <div>
                             <p class="eyebrow"><i class="fa-solid fa-plus"></i> New</p>
                             <h2>Add AC Unit</h2>
+                            <p class="sub">Register a new AC unit in this room</p>
                         </div>
                     </div>
                     <form id="addACForm" method="POST" action="/rooms/{{ $room->id }}/ac">
@@ -1391,6 +1392,8 @@
                                 <label class="field-label">AC Number</label>
                                 <input class="input text-mono" type="number" name="ac_number" min="1"
                                     max="15" placeholder="1" required>
+                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">A number
+                                    from 1 to 15</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">AC Name</label>
@@ -1756,11 +1759,11 @@
                 if (turnOn) {
                     icon.className = 'confirm-icon success';
                     conf.className = 'btn btn-mint flex-1';
-                    desc.textContent = `Nyalakan ${acName}?`;
+                    desc.textContent = `Turn on ${acName}?`;
                 } else {
                     icon.className = 'confirm-icon danger';
                     conf.className = 'btn btn-danger flex-1';
-                    desc.textContent = `Matikan ${acName}?`;
+                    desc.textContent = `Turn off ${acName}?`;
                 }
                 document.getElementById('powerModal').classList.add('is-open');
             });

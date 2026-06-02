@@ -1441,7 +1441,7 @@
                     <div class="field">
                         <label class="field-label">Username</label>
                         <input class="input" type="text" name="name" id="newUserName"
-                            placeholder="e.g. admin" minlength="3" maxlength="20"
+                            placeholder="e.g. john_doe" minlength="3" maxlength="20"
                             pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
                             title="Username 3–20 characters, letters/numbers/underscore, must start with a letter"
                             autocomplete="off" required>
