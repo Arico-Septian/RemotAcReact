@@ -332,7 +332,7 @@
         }
 
         .profile-input::placeholder {
-            color: var(--ink-3);
+            color: #64748b;
         }
 
         /* Hide the browser's native password reveal/clear icon (Edge/IE) so only

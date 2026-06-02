@@ -2880,7 +2880,7 @@ body { min-height: 100vh; }
   outline: none;
   transition: border-color var(--t-base), background var(--t-base), box-shadow var(--t-base);
 }
-.input::placeholder { color: var(--ink-4); }
+.input::placeholder { color: #64748b; }
 /* Hide native password reveal/clear icons (Edge/IE) so only custom eye toggles show */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear { display: none; }
@@ -2905,7 +2905,7 @@ select.input, select.select {
 }
 select.input option, select option { background: var(--bg-2); color: var(--ink-0); }
 
-.field-help { font-size: 11px; color: var(--ink-3); }
+.field-help { font-size: 11px; color: #94a3b8; }
 
 .input-icon-wrap { position: relative; }
 .input-icon-wrap .input { padding-left: 38px; }
@@ -2919,6 +2919,8 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 .search-input { position: relative; }
 .search-input input {
   width: 100%;
+  height: 40px;
+  box-sizing: border-box;
   padding: 10px 14px 10px 40px;
   background: var(--panel-1);
   border: 1px solid var(--line);
@@ -2928,7 +2930,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
   outline: none;
   transition: var(--t-base);
 }
-.search-input input::placeholder { color: var(--ink-4); }
+.search-input input::placeholder { color: #64748b; }
 .search-input input:focus { border-color: var(--cyan); background: var(--panel-2); box-shadow: 0 0 0 3px var(--cyan-soft); }
 .search-input > i {
   position: absolute;
@@ -2959,6 +2961,8 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 .segmented {
   display: inline-flex; gap: 2px;
   padding: 3px;
+  height: 40px;
+  box-sizing: border-box;
   background: var(--panel-1);
   border: 1px solid var(--line-soft);
   border-radius: var(--r-md);
@@ -2979,6 +2983,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
   color: var(--ink-0);
   box-shadow: var(--inset-hi);
 }
+@media (max-width: 480px) { .segmented { height: 36px; } }
 
 .filter-pill {
   display: inline-flex; align-items: center; gap: 6px;

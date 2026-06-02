@@ -307,7 +307,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 10px;
-                transform: translateY(2px);
+                transform: translateY(1px);
             }
         }
 
@@ -395,7 +395,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 12px;
-                transform: translateY(2px);
+                transform: translateY(1px);
             }
         }
 
@@ -1445,7 +1445,7 @@
                             pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
                             title="Username 3–20 characters, letters/numbers/underscore, must start with a letter"
                             autocomplete="off" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">3–20
+                        <p class="field-hint" style="font-size:11px;color:#94a3b8;margin-top:4px;">3–20
                             characters, start with a letter.</p>
                     </div>
                     <div class="field">

@@ -1392,21 +1392,21 @@
                                 <label class="field-label">AC Number</label>
                                 <input class="input text-mono" type="number" name="ac_number" min="1"
                                     max="15" placeholder="1" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">A number
+                                <p class="field-hint" style="font-size:11px;color:#94a3b8;margin-top:4px;">A number
                                     from 1 to 15</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">AC Name</label>
                                 <input class="input" type="text" name="name" placeholder="unit_a" pattern="\S+"
                                     title="AC name must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
+                                <p class="field-hint" style="font-size:11px;color:#94a3b8;margin-top:4px;">No spaces
                                     allowed</p>
                             </div>
                             <div class="field">
                                 <label class="field-label">Brand</label>
                                 <input class="input" type="text" name="brand" placeholder="daikin" pattern="\S+"
                                     title="Brand must not contain spaces" required>
-                                <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">No spaces
+                                <p class="field-hint" style="font-size:11px;color:#94a3b8;margin-top:4px;">No spaces
                                     allowed</p>
                             </div>
                         </div>

@@ -249,7 +249,7 @@
             .search-input i {
                 font-size: 12px;
                 left: 10px;
-                transform: translateY(2px);
+                transform: translateY(1px);
             }
         }
 
@@ -288,7 +288,7 @@
 
             .search-input input {
                 font-size: 12px;
-                padding: 6px 8px 6px 28px;
+                padding: 0 12px 0 34px;
             }
 
             .search-input input::placeholder {
