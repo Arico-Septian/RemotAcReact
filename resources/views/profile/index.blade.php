@@ -128,15 +128,16 @@
             background: var(--panel-1);
             border: 1px solid var(--line-soft);
             border-radius: var(--r-xl);
-            padding: 24px 26px;
+            padding: 18px 26px;
         }
 
         /* Identity */
         .profile-id {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            text-align: center;
+            gap: 12px;
         }
 
         .profile-av {
@@ -155,8 +156,8 @@
             font-size: 40px;
             font-weight: 800;
             color: #fff;
-            background: linear-gradient(140deg, #5b8cff 0%, #8b5cf6 58%, #a855f7 100%);
-            box-shadow: 0 16px 36px -12px rgba(124, 92, 246, 0.65);
+            background: var(--panel-3);
+            box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.5);
         }
 
         .profile-av-cam {
@@ -179,6 +180,9 @@
 
         .profile-id-text {
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .profile-name-row {
@@ -197,38 +201,55 @@
         }
 
         .profile-verified {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: #10b981;
+            background: radial-gradient(circle at 50% 35%, #34d399 0%, #10b981 50%, #047857 100%);
             color: #fff;
+            box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.40), 0 0 12px rgba(16, 185, 129, 0.55);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 12px;
             flex-shrink: 0;
         }
 
         .profile-role {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            margin-top: 12px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 11px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 12px;
             font-weight: 700;
             letter-spacing: .08em;
             text-transform: uppercase;
-            background: rgba(139, 92, 246, 0.14);
-            border: 1px solid rgba(139, 92, 246, 0.32);
-            color: #c4b5fd;
+            color: var(--ink-0);
+        }
+
+        .profile-del-form {
+            margin-left: auto;
+        }
+
+        .profile-del-photo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #ff5577;
+            transition: color .15s;
+        }
+
+        .profile-del-photo:hover {
+            color: #ff7a93;
         }
 
         .profile-divider {
             height: 1px;
             background: var(--line-soft);
-            margin: 22px 0;
+            margin: 13px 0;
         }
 
         /* Info list */
@@ -292,6 +313,61 @@
         }
 
         /* Section label */
+        /* Account stats — 3 columns, label on top, value below */
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .profile-stat {
+            padding: 0 14px;
+            text-align: center;
+        }
+
+        .profile-stat+.profile-stat {
+            border-left: 1px solid var(--line-soft);
+        }
+
+        .profile-stat-label {
+            margin: 0 0 2px;
+            font-size: 11px;
+            color: var(--ink-0);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            font-weight: 700;
+        }
+
+        .profile-stat-value {
+            margin: 0;
+            font-size: 14px;
+            color: var(--ink-0);
+            font-weight: 700;
+            font-family: ui-monospace, 'SFMono-Regular', 'Consolas', monospace;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .profile-stat-value.is-online {
+            color: #34d399;
+            font-family: inherit;
+        }
+
+        @media (max-width: 600px) {
+            .profile-stat {
+                padding: 2px 6px;
+            }
+
+            .profile-stat-label {
+                font-size: 9px;
+                letter-spacing: .02em;
+                margin-bottom: 4px;
+            }
+
+            .profile-stat-value {
+                font-size: 11px;
+            }
+        }
+
         .profile-sec-label {
             font-size: 12px;
             font-weight: 700;
@@ -410,8 +486,8 @@
             font-size: 15px;
             font-weight: 700;
             color: #06121b;
-            background: linear-gradient(90deg, var(--cyan), var(--cyan-d));
-            box-shadow: 0 10px 30px -8px rgba(34, 184, 230, 0.55);
+            background: var(--cyan);
+            box-shadow: none;
             transition: filter .15s, transform .05s;
         }
 
@@ -441,7 +517,15 @@
             align-items: center;
             justify-content: space-between;
             gap: 14px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+        }
+
+        .profile-signout>div {
+            min-width: 0;
+        }
+
+        .profile-signout>form {
+            flex-shrink: 0;
         }
 
         .profile-signout-title {
@@ -482,24 +566,18 @@
                 padding: 18px 16px;
             }
 
+            .profile-id {
+                gap: 14px;
+            }
+
             .profile-av-img {
-                width: 80px;
-                height: 80px;
-                font-size: 32px;
+                width: 76px;
+                height: 76px;
+                font-size: 30px;
             }
 
             .profile-name {
-                font-size: 21px;
-            }
-
-            .profile-info-key,
-            .profile-info-val {
-                font-size: 13.5px;
-            }
-
-            .profile-info-ic {
-                width: 38px;
-                height: 38px;
+                font-size: 20px;
             }
         }
 
@@ -589,62 +667,45 @@
                         <div class="profile-card">
                             {{-- Identity --}}
                             <div class="profile-id">
-                                <div class="profile-av">
+                                <div class="profile-av" onclick="openPhotoModal()" style="cursor:pointer;"
+                                    title="View / change photo">
                                     @if ($user->avatar_url)
                                         <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
                                             class="profile-av-img">
                                     @else
                                         <div class="profile-av-img">{{ strtoupper(substr($user->name, 0, 1)) }}</div>
                                     @endif
-                                    <button type="button" class="profile-av-cam"
-                                        title="{{ $user->avatar ? 'Change photo' : 'Add photo' }}"
-                                        onclick="document.getElementById('avatarInput').click()">
-                                        <i class="fa-solid fa-camera"></i>
-                                    </button>
                                 </div>
                                 <div class="profile-id-text">
                                     <div class="profile-name-row">
                                         <span class="profile-name">{{ $user->name }}</span>
-                                        <span class="profile-verified" title="Verified account"><i
-                                                class="fa-solid fa-check"></i></span>
                                     </div>
-                                    <span class="profile-role">
-                                        <i class="fa-solid fa-shield-halved text-[11px]"></i>
-                                        {{ $user->role === 'admin' ? 'Administrator' : ucfirst($user->role) }}
-                                    </span>
                                 </div>
                             </div>
 
                             <div class="profile-divider"></div>
 
                             {{-- Account info --}}
-                            @php $isOnline = $user->last_activity && $user->last_activity->gt(now()->subMinutes(2)); @endphp
-                            <div class="profile-info-row">
-                                <span class="profile-info-ic ic-blue"><i class="fa-regular fa-clock"></i></span>
-                                <span class="profile-info-key">Last login</span>
-                                <span
-                                    class="profile-info-val">{{ $user->last_login_at ? $user->last_login_at->format('d M Y, H:i') : 'Never' }}</span>
+                            <div class="profile-stats">
+                                <div class="profile-stat">
+                                    <p class="profile-stat-label">Joined date</p>
+                                    <p class="profile-stat-value">{{ $user->created_at->format('d M Y') }}</p>
+                                </div>
+                                <div class="profile-stat">
+                                    <p class="profile-stat-label">Last login</p>
+                                    <p class="profile-stat-value">
+                                        {{ $user->last_login_at ? $user->last_login_at->format('d M Y, H:i') : 'Never' }}
+                                    </p>
+                                </div>
                             </div>
-                            <div class="profile-info-row">
-                                <span class="profile-info-ic ic-green"><i class="fa-solid fa-signal"></i></span>
-                                <span class="profile-info-key">Last activity</span>
-                                <span
-                                    class="profile-info-val {{ $isOnline ? 'is-online' : '' }}">{{ $isOnline ? 'Online now' : ($user->last_activity ? $user->last_activity->diffForHumans() : '-') }}</span>
-                            </div>
-                            <div class="profile-info-row">
-                                <span class="profile-info-ic ic-amber"><i class="fa-regular fa-calendar"></i></span>
-                                <span class="profile-info-key">Joined date</span>
-                                <span class="profile-info-val">{{ $user->created_at->format('d M Y') }}</span>
-                            </div>
-
                             <div class="profile-divider"></div>
-
                             {{-- Change password --}}
                             <p class="profile-sec-label">Change Password</p>
                             @if ($errors->any())
                                 <div class="profile-error-box">
                                     @foreach ($errors->all() as $err)
-                                        <p><i class="fa-solid fa-circle-exclamation text-[10px]"></i> {{ $err }}</p>
+                                        <p><i class="fa-solid fa-circle-exclamation text-[10px]"></i>
+                                            {{ $err }}</p>
                                     @endforeach
                                 </div>
                             @endif
@@ -701,7 +762,7 @@
                             <div class="profile-signout">
                                 <div>
                                     <p class="profile-signout-title">Sign out</p>
-                                    <p class="profile-signout-sub">End the login session in this browser.</p>
+                                    <p class="profile-signout-sub">End the login session.</p>
                                 </div>
                                 <form action="/logout" method="POST"
                                     onsubmit="return confirm('Sign out of your account?');" style="margin:0;">
@@ -719,8 +780,8 @@
         </div>
     </div>
     {{-- Hidden avatar upload form --}}
-    <form id="avatarForm" method="POST" action="{{ route('profile.avatar.upload') }}"
-        enctype="multipart/form-data" style="display:none;">
+    <form id="avatarForm" method="POST" action="{{ route('profile.avatar.upload') }}" enctype="multipart/form-data"
+        style="display:none;">
         @csrf
         <input type="file" id="avatarInput" name="avatar" accept="image/jpeg,image/png,image/webp"
             onchange="handleAvatarSelect(this)">
@@ -756,9 +817,75 @@
             </div>
         </div>
     </div>
+    {{-- Profile photo viewer (WhatsApp-style) --}}
+    <div id="photoModal"
+        style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(7,16,31,0.78);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;">
+        <div
+            style="max-width:320px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius:20px;padding:22px;text-align:center;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
+            <div style="display:flex;justify-content:center;margin-bottom:14px;">
+                @if ($user->avatar_url)
+                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
+                        style="width:200px;height:200px;border-radius:20px;object-fit:cover;border:1px solid var(--line);">
+                @else
+                    <div
+                        style="width:200px;height:200px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:72px;font-weight:800;color:#fff;background:var(--panel-3);">
+                        {{ strtoupper(substr($user->name, 0, 1)) }}</div>
+                @endif
+            </div>
+            <p style="margin:0 0 16px;font-size:16px;font-weight:700;color:var(--ink-0);">{{ $user->name }}</p>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <button type="button" onclick="photoUpload()" class="btn btn-primary" style="width:100%;">
+                    <i class="fa-solid fa-camera text-[12px]"></i>
+                    <span>{{ $user->avatar ? 'Change photo' : 'Upload photo' }}</span>
+                </button>
+                @if ($user->avatar)
+                    <form method="POST" action="{{ route('profile.avatar.delete') }}"
+                        onsubmit="return confirm('Delete profile photo?');" style="margin:0;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-soft"
+                            style="width:100%;color:#ff5577;border-color:rgba(255,85,119,0.3);">
+                            <i class="fa-solid fa-trash text-[12px]"></i>
+                            <span>Delete photo</span>
+                        </button>
+                    </form>
+                @endif
+                <button type="button" onclick="closePhotoModal()" class="btn btn-ghost"
+                    style="width:100%;">Close</button>
+            </div>
+        </div>
+    </div>
     @include('components.bottom-nav')
     @include('components.sidebar-scripts')
     <script>
+        function openPhotoModal() {
+            const m = document.getElementById('photoModal');
+            if (!m) return;
+            m.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePhotoModal() {
+            const m = document.getElementById('photoModal');
+            if (!m) return;
+            m.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function photoUpload() {
+            closePhotoModal();
+            document.getElementById('avatarInput').click();
+        }
+        (function() {
+            const pm = document.getElementById('photoModal');
+            if (pm) pm.addEventListener('click', e => {
+                if (e.target === pm) closePhotoModal();
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closePhotoModal();
+            });
+        })();
+
         (function() {
             const modal = document.getElementById('avatarPreviewModal');
             const previewImg = document.getElementById('avatarPreviewImg');

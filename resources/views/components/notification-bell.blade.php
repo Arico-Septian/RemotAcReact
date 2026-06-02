@@ -449,7 +449,6 @@
             return `
         <a href="${link}" class="notif-item ${n.is_unread ? 'unread' : ''}"
            data-id="${id}" data-redirect-to="${link}" onclick="markNotifRead(event, ${id}, this.dataset.redirectTo || '')">
-            <span class="notif-icon ${severity}"><i class="fa-solid ${notifIconFor(severity, n.type)}"></i></span>
             <div class="notif-meta">
                 <p class="notif-title">
                     ${n.is_unread ? '<span class="notif-unread-dot"></span>' : ''}

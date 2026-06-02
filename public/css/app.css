@@ -2916,9 +2916,11 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 }
 
 /* Search input convenience */
-.search-input { position: relative; }
+.search-input { position: relative; display: flex; align-items: center; }
 .search-input input {
   width: 100%;
+  flex: 1;
+  min-width: 0;
   height: 40px;
   box-sizing: border-box;
   padding: 10px 14px 10px 40px;
