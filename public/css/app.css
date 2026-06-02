@@ -2881,6 +2881,14 @@ body { min-height: 100vh; }
   transition: border-color var(--t-base), background var(--t-base), box-shadow var(--t-base);
 }
 .input::placeholder { color: var(--ink-4); }
+/* Hide native password reveal/clear icons (Edge/IE) so only custom eye toggles show */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear { display: none; }
+/* Password requirements checklist (shared: profile + add user) */
+.pwd-checklist { list-style: none; margin: 11px 0 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+.pwd-checklist li { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #94a3b8; transition: color .15s; }
+.pwd-checklist li i { font-size: 13px; width: 14px; text-align: center; color: #5b6677; transition: color .15s; }
+.pwd-checklist li.met, .pwd-checklist li.met i { color: #34d399; }
 .input:focus, .field input:focus, .field select:focus, .field textarea:focus {
   border-color: var(--cyan);
   background: var(--panel-3);

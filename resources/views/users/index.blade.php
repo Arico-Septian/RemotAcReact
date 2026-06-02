@@ -1452,8 +1452,13 @@
                         <label class="field-label">Password</label>
                         <input class="input" type="password" name="password" placeholder="min. 8 characters"
                             minlength="8" required>
-                        <p class="field-hint" style="font-size:11px;color:var(--ink-3);margin-top:4px;">Min. 8
-                            characters, upper/lowercase + numbers.</p>
+                        <ul class="pwd-checklist" id="addUserPwdChecklist">
+                            <li data-rule="len"><i class="fa-regular fa-circle"></i><span>At least 8 characters</span>
+                            </li>
+                            <li data-rule="case"><i class="fa-regular fa-circle"></i><span>One uppercase & one lowercase
+                                    letter</span></li>
+                            <li data-rule="num"><i class="fa-regular fa-circle"></i><span>At least one number</span></li>
+                        </ul>
                     </div>
                     <div class="field">
                         <label class="field-label">Role</label>
@@ -1465,8 +1470,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Batal</button>
-                    <button type="submit" class="btn btn-primary">Buat User</button>
+                    <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
                 </div>
             </form>
         </div>
@@ -1479,6 +1484,7 @@
         function closeModal() {
             document.getElementById('modal')?.classList.remove('is-open');
             document.querySelector('#modal form')?.reset();
+            if (typeof updateAddUserChecklist === 'function') updateAddUserChecklist();
         }
 
         const normalizeFormValue = value => (value || '').trim().toLowerCase();
@@ -1558,23 +1564,32 @@
         });
         // Validasi password sesuai aturan server (min 8, ada huruf besar, kecil, angka)
         function validatePassword(pw) {
-            if (!pw || pw.length < 8) return 'Password minimal 8 karakter.';
-            if (!/[a-z]/.test(pw)) return 'Password harus mengandung huruf kecil.';
-            if (!/[A-Z]/.test(pw)) return 'Password harus mengandung huruf besar.';
-            if (!/[0-9]/.test(pw)) return 'Password harus mengandung minimal 1 angka.';
+            if (!pw || pw.length < 8) return 'Password must be at least 8 characters.';
+            if (!/[a-z]/.test(pw)) return 'Password must contain a lowercase letter.';
+            if (!/[A-Z]/.test(pw)) return 'Password must contain an uppercase letter.';
+            if (!/[0-9]/.test(pw)) return 'Password must contain at least 1 number.';
             return null;
         }
-        // Feedback real-time di dalam modal saat mengetik password
+        // Live password requirements checklist (Add User)
         const addUserPasswordInput = document.querySelector('#addUserForm [name="password"]');
+        const addUserPwdChecklist = document.getElementById('addUserPwdChecklist');
+
+        function setAddUserRule(rule, ok) {
+            const li = addUserPwdChecklist && addUserPwdChecklist.querySelector('[data-rule="' + rule + '"]');
+            if (!li) return;
+            li.classList.toggle('met', ok);
+            const icon = li.querySelector('i');
+            if (icon) icon.className = ok ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle';
+        }
+
+        function updateAddUserChecklist() {
+            const v = addUserPasswordInput ? addUserPasswordInput.value : '';
+            setAddUserRule('len', v.length >= 8);
+            setAddUserRule('case', /[a-z]/.test(v) && /[A-Z]/.test(v));
+            setAddUserRule('num', /[0-9]/.test(v));
+        }
         if (addUserPasswordInput) {
-            addUserPasswordInput.addEventListener('input', () => {
-                if (!addUserPasswordInput.value) {
-                    setFieldFeedback(addUserPasswordInput);
-                    return;
-                }
-                const err = validatePassword(addUserPasswordInput.value);
-                setFieldFeedback(addUserPasswordInput, err, !!err);
-            });
+            addUserPasswordInput.addEventListener('input', updateAddUserChecklist);
         }
         document.getElementById('addUserForm')?.addEventListener('submit', async e => {
             e.preventDefault();
@@ -1596,7 +1611,8 @@
             // Validasi password — warning tampil di dalam modal (tidak perlu submit dulu)
             const pwError = validatePassword(passwordInput.value);
             if (pwError) {
-                setFieldFeedback(passwordInput, pwError, true);
+                updateAddUserChecklist();
+                (window.smToast || alert)(pwError, 'error');
                 passwordInput.focus();
                 return;
             }

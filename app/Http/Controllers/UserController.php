@@ -77,20 +77,20 @@ class UserController extends Controller
                 'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/',
                 function ($attribute, $value, $fail) {
                     if (User::whereRaw('LOWER(name) = ?', [strtolower($value)])->exists()) {
-                        $fail('Username sudah digunakan.');
+                        $fail('Username is already taken.');
                     }
                 },
             ],
             'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()],
             'role' => 'required|in:admin,operator,user',
         ], [
-            'name.min' => 'Username minimal 3 karakter.',
-            'name.max' => 'Username maksimal 20 karakter.',
-            'name.regex' => 'Username 3–20 karakter, hanya huruf/angka/underscore, dan diawali huruf.',
-            'password.min' => 'Password minimal 8 karakter.',
-            'password.letters' => 'Password harus mengandung huruf.',
-            'password.mixed' => 'Password harus mengandung huruf besar dan kecil.',
-            'password.numbers' => 'Password harus mengandung minimal 1 angka.',
+            'name.min' => 'Username must be at least 3 characters.',
+            'name.max' => 'Username must be at most 20 characters.',
+            'name.regex' => 'Username must be 3–20 characters, letters/numbers/underscore only, and start with a letter.',
+            'password.min' => 'Password must be at least 8 characters.',
+            'password.letters' => 'Password must contain letters.',
+            'password.mixed' => 'Password must contain both uppercase and lowercase letters.',
+            'password.numbers' => 'Password must contain at least 1 number.',
         ]);
 
         $user = User::create([
@@ -249,18 +249,18 @@ class UserController extends Controller
                 Password::min(8)->letters()->mixedCase()->numbers(),
             ],
         ], [
-            'current_password.required' => 'Password saat ini wajib diisi.',
-            'password.required' => 'Password baru wajib diisi.',
-            'password.min' => 'Password baru minimal 8 karakter.',
-            'password.letters' => 'Password baru harus mengandung huruf.',
-            'password.mixed' => 'Password baru harus mengandung huruf besar dan kecil.',
-            'password.numbers' => 'Password baru harus mengandung minimal 1 angka.',
-            'password.confirmed' => 'Konfirmasi password tidak cocok.',
-            'password.different' => 'Password baru harus berbeda dari password saat ini.',
+            'current_password.required' => 'Current password is required.',
+            'password.required' => 'New password is required.',
+            'password.min' => 'New password must be at least 8 characters.',
+            'password.letters' => 'New password must contain letters.',
+            'password.mixed' => 'New password must contain both uppercase and lowercase letters.',
+            'password.numbers' => 'New password must contain at least 1 number.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.different' => 'New password must be different from the current password.',
         ]);
 
         if (! Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Password saat ini salah.']);
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
         }
 
         $user->forceFill([
@@ -278,6 +278,6 @@ class UserController extends Controller
             'activity' => 'change_password',
         ]);
 
-        return back()->with('success', 'Password berhasil diubah');
+        return back()->with('success', 'Password changed successfully.');
     }
 }
