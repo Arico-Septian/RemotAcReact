@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Notifications — SmartAC</title>
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -29,6 +32,19 @@
         }
 
         .nlist-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 1 box berisi semua notifikasi — baris rata, garis pemisah LURUS (bukan kartu membulat) */
+        #notifListWrap .nlist-item {
+            margin: 0;
+            border: 0;
+            border-bottom: 1px solid var(--line-soft);
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        #notifListWrap .nlist-item:last-child {
             border-bottom: none;
         }
 
@@ -239,20 +255,9 @@
                     <div class="app-content-inner space-y-4">
                         <div class="tbl-wrap" id="notifListWrap">
                             @forelse ($notifications as $n)
-                                @php
-                                    $iconMap = [
-                                        'device_offline' => 'fa-plug-circle-exclamation',
-                                        'temp_alert' => 'fa-temperature-three-quarters',
-                                        'schedule_run' => 'fa-calendar-check',
-                                        'system' => 'fa-gear',
-                                    ];
-                                    $icon = $iconMap[$n->type] ?? 'fa-bell';
-                                @endphp
                                 <div class="nlist-item {{ $n->isUnreadForUser($userId) ? 'unread' : '' }}"
-                                    data-id="{{ $n->id }}">
-                                    <span class="nlist-icon {{ $n->severity }}">
-                                        <i class="fa-solid {{ $icon }}"></i>
-                                    </span>
+                                    data-id="{{ $n->id }}"
+                                    style="margin:0;border:0;border-radius:0;{{ $loop->last ? '' : 'border-bottom:1px solid var(--line-soft);' }}">
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2">
                                             @if ($n->isUnreadForUser($userId))
@@ -452,9 +457,6 @@
                 item.className = 'nlist-item unread';
                 item.dataset.id = id;
                 item.innerHTML = `
-                    <span class="nlist-icon ${severity}">
-                        <i class="fa-solid ${icon}"></i>
-                    </span>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2">
                             <span style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></span>

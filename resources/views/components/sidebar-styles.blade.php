@@ -64,8 +64,7 @@
     /* Inner items — selangkah lebih terang untuk kedalaman */
     .dashboard-room-row,
     .activity-item,
-    .ac-card,
-    .nlist-item {
+    .ac-card {
         background: #1d2230 !important;
         border: 1px solid rgba(255, 255, 255, 0.10) !important;
         border-radius: var(--r-xl) !important;
