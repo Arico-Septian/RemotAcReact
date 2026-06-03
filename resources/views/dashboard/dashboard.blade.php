@@ -352,9 +352,9 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            box-sizing: border-box;
+            display: grid;
+            place-items: center;
             background: var(--tone, var(--ink-2));
             color: #0b1220;
             font-size: 8px;
@@ -369,14 +369,9 @@
 
         .activity-icon-badge i {
             font-style: normal !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 100% !important;
-            height: 100% !important;
+            display: block !important;
             line-height: 1 !important;
-            text-align: center;
-            transform: translateY(0.8px);
+            transform: translateY(0.5px);
         }
 
         .activity-item.tone-coral .activity-icon-badge,
@@ -1845,7 +1840,7 @@
                                     </div>
                                 </div>
                                 <p id="trendInfo" class="panel-meta"
-                                    style="margin-top:8px;font-size:11px;color:var(--ink-4);"></p>
+                                    style="margin-top:8px;font-size:11px;color:#94a3b8;"></p>
                             </div>
 
                             {{-- Bottom row: Server Rooms + Recent Activity --}}

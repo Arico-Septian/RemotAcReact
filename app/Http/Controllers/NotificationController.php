@@ -26,11 +26,7 @@ class NotificationController extends Controller
             ->unreadForUser($userId)
             ->count();
 
-        return response()
-            ->view('notifications.index', compact('notifications', 'unreadCount', 'userId'))
-            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-            ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+        return view('notifications.index', compact('notifications', 'unreadCount', 'userId'));
     }
 
     /**
