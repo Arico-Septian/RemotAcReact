@@ -346,7 +346,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
                 $labels = $slots->map(fn ($t) => $t->format($labelFormat));
 
                 $palette = [
-                    '#fb7185', '#fbbf24', '#4dd4ff', '#a78bfa',
+                    '#fb7185', '#fbbf24', '#2563eb', '#a78bfa',
                     '#34d399', '#f472b6', '#60a5fa', '#fb923c',
                     '#facc15', '#22d3ee', '#c084fc', '#f87171',
                 ];

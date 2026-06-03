@@ -517,6 +517,9 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background: #0a0a0c;
+            background-image: none;
+            border: 1px solid rgba(255, 255, 255, 0.07);
         }
 
         #historyModal .modal-header {
@@ -531,6 +534,7 @@
 
         #historyModal .history-title-group .eyebrow {
             line-height: 1.3;
+            color: #3b6fd4;
         }
 
         #historyTitle {
@@ -575,7 +579,7 @@
             background-repeat: no-repeat;
             background-position: right 9px center;
             background-size: 11px;
-            border: 1px solid var(--line-soft);
+            border: 1px solid rgba(255, 255, 255, 0.6);
             color: var(--ink-1);
             border-radius: 8px;
             padding: 6px 28px 6px 12px;
@@ -588,18 +592,12 @@
             transition: var(--t-base);
         }
 
-        .history-range-select:hover {
-            background-color: rgba(77, 212, 255, 0.10);
-            border-color: rgba(77, 212, 255, 0.50);
-            color: var(--cyan);
-            box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
-        }
-
+        .history-range-select:hover,
         .history-range-select:focus {
-            background-color: rgba(77, 212, 255, 0.10);
-            border-color: rgba(77, 212, 255, 0.60);
-            color: var(--cyan);
-            box-shadow: 0 0 14px rgba(77, 212, 255, 0.20);
+            background-color: var(--panel-1);
+            border-color: rgba(255, 255, 255, 0.6);
+            color: var(--ink-1);
+            box-shadow: none;
             outline: none;
         }
 
@@ -866,7 +864,7 @@
         <div class="modal modal-lg">
             <div class="modal-header">
                 <div class="history-title-group">
-                    <p class="eyebrow" style="color:var(--cyan);"><i class="fa-solid fa-chart-line"></i> Temperature
+                    <p class="eyebrow" style="color:#3b6fd4;"><i class="fa-solid fa-chart-line"></i> Temperature
                         History</p>
                     <h2 id="historyTitle">Room</h2>
                     <p id="historyMeta" class="sub">Today · hourly average</p>
@@ -1196,7 +1194,7 @@
                     `${currentHistoryRangeText()} · hourly average${historyStatusSuffix(status)}`;
             }
 
-            const pointColor = t => t > 30 ? '#fb7185' : t > 25 ? '#fbbf24' : '#4dd4ff';
+            const pointColor = t => t > 30 ? '#fb7185' : t > 25 ? '#fbbf24' : '#2563eb';
             const ctx = document.getElementById('historyChart').getContext('2d');
 
             historyChartInstance = new Chart(ctx, {
@@ -1206,8 +1204,8 @@
                     datasets: [{
                         label: 'Temp (°C)',
                         data: temps,
-                        borderColor: '#4dd4ff',
-                        backgroundColor: 'rgba(77,212,255,0.10)',
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(38,99,235,0.10)',
                         pointBackgroundColor: temps.map(pointColor),
                         pointRadius: chartSizing.pointRadius,
                         pointHoverRadius: chartSizing.pointHoverRadius,

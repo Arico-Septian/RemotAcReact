@@ -798,7 +798,7 @@
                                 </div>
                                 @auth
                                     @if (in_array(Auth::user()->role, ['admin', 'operator']))
-                                        <button onclick="openModal()" class="btn btn-primary btn-sm" type="button">
+                                        <button onclick="openModal()" class="btn btn-primary btn-sm btn-add" type="button">
                                             <i class="fa-solid fa-plus text-[10px]"></i>
                                             <span>Add Room</span>
                                         </button>

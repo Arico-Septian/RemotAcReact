@@ -452,7 +452,7 @@
             if (el && el.textContent.trim() !== String(val).trim()) {
                 el.style.transition = 'color .25s, transform .25s';
                 const original = el.style.color;
-                el.style.color = '#4dd4ff';
+                el.style.color = '#2563eb';
                 el.style.transform = 'scale(1.05)';
                 el.textContent = val;
                 setTimeout(() => {

@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --cyan: #4dd4ff;
-            --cyan-d: #22b8e6;
-            --cyan-rgb: 77 212 255;
-            --cyan-d-rgb: 34 184 230;
+            --cyan: #2563eb;
+            --cyan-d: #1e40af;
+            --cyan-rgb: 38 99 235;
+            --cyan-d-rgb: 30 64 175;
             --mint: #6ee7b7;
             --mint-rgb: 110 231 183;
             --lavender: #b4a3ff;
@@ -35,8 +35,6 @@
             --r-2xl: 20px;
             --r-3xl: 28px;
         }
-
-        *,
         *::before,
         *::after {
             box-sizing: border-box;

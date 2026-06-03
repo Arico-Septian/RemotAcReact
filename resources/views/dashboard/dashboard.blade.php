@@ -20,8 +20,8 @@
             position: relative;
             display: inline-flex;
             align-items: center;
-            background-color: var(--panel-2);
-            border: 1px solid var(--line);
+            background-color: #0a0a0c;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             border-radius: 8px;
             transition: var(--t-base);
         }
@@ -38,12 +38,7 @@
             pointer-events: none;
         }
 
-        .trend-filter:hover,
-        .trend-filter:focus-within {
-            background-color: rgba(77, 212, 255, 0.10);
-            border-color: rgba(77, 212, 255, 0.50);
-            box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
-        }
+        /* no hover/focus highlight on the day dropdown (stays neutral) */
 
         .trend-filter-select {
             appearance: none;
@@ -68,10 +63,7 @@
             font-weight: 600;
         }
 
-        .trend-filter:hover .trend-filter-select,
-        .trend-filter-select:focus {
-            color: var(--cyan);
-        }
+        /* no color change on hover/focus */
 
         .dashboard-rooms-panel {
             padding: 20px;
@@ -714,8 +706,8 @@
             min-height: 40px;
             padding: 8px 14px;
             border-radius: var(--r-md);
-            background: var(--panel-2);
-            border: 1px solid var(--line-soft);
+            background: #0a0a0c;
+            border: 1px solid rgba(255, 255, 255, 0.6);
             color: var(--ink-0);
             display: inline-flex;
             align-items: center;
@@ -728,12 +720,7 @@
             transition: var(--t-base);
         }
 
-        .dashboard-rooms-action:hover {
-            background: rgba(77, 212, 255, 0.10);
-            border-color: rgba(77, 212, 255, 0.50);
-            color: var(--cyan);
-            box-shadow: 0 0 14px rgba(77, 212, 255, 0.18);
-        }
+        /* View all: no hover highlight (stays neutral) */
 
         .dashboard-room-list {
             display: grid;

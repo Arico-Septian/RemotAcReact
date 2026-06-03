@@ -33,8 +33,8 @@
   --ink-4: #a8b4c8;
 
   /* Accents */
-  --cyan:     #4dd4ff;
-  --cyan-d:   #22b8e6;
+  --cyan:     #2563eb;
+  --cyan-d:   #1e40af;
   --mint:     #6ee7b7;
   --mint-d:   #34d399;
   --lavender: #b4a3ff;
@@ -56,8 +56,8 @@
   --bg-2-rgb:      26 29 40;
   --ink-2-rgb:     148 163 184;
   --ink-3-rgb:     100 116 139;
-  --cyan-rgb:      77 212 255;
-  --cyan-d-rgb:    34 184 230;
+  --cyan-rgb:      38 99 235;
+  --cyan-d-rgb:    30 64 175;
   --mint-rgb:      110 231 183;
   --mint-d-rgb:    52 211 153;
   --lavender-rgb:  180 163 255;
@@ -561,6 +561,19 @@ body { min-height: 100vh; }
   box-shadow: none;
 }
 .btn-primary:hover { filter: brightness(1.05); box-shadow: none; }
+
+/* Add-button variant: make Add actions match the chart text color (cyan) */
+.btn.btn-add,
+.btn-add {
+  background: var(--bg-0) !important;
+  color: var(--ink-0) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5) !important;
+}
+.btn.btn-add:hover,
+.btn-add:hover {
+  filter: brightness(1.06) !important;
+}
 
 .btn-mint {
   background: linear-gradient(180deg, var(--mint), var(--mint-d));

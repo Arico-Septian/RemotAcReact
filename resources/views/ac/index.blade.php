@@ -146,7 +146,7 @@
             border-radius: 50%;
             z-index: 0;
             background: conic-gradient(from 0deg,
-                    var(--tick-on, #4dd4ff) 0deg var(--fill-deg, 0deg),
+                    var(--tick-on, #2563eb) 0deg var(--fill-deg, 0deg),
                     rgba(255, 255, 255, 0.10) var(--fill-deg, 0deg) 360deg);
             -webkit-mask:
                 repeating-conic-gradient(from 0deg, #000 0deg 1.5deg, transparent 1.5deg 6deg),
@@ -162,7 +162,7 @@
         }
 
         .temp-ring.temp-cool {
-            --tick-on: #4dd4ff;
+            --tick-on: #2563eb;
             box-shadow: -12px 8px 55px rgba(77, 212, 255, 0.32), inset 0 0 45px rgba(77, 212, 255, 0.06);
         }
 
@@ -1118,7 +1118,7 @@
                                         </form>
                                         <button type="button" {{ $acs->count() >= 15 ? 'disabled' : '' }}
                                             onclick="{{ $acs->count() >= 15 ? '' : 'openModal()' }}"
-                                            class="btn btn-primary btn-sm {{ $acs->count() >= 15 ? 'disabled' : '' }}">
+                                            class="btn btn-primary btn-sm btn-add {{ $acs->count() >= 15 ? 'disabled' : '' }}">
                                             <i class="fa-solid fa-plus text-[10px]"></i>
                                             <span>Add AC</span>
                                         </button>

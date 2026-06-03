@@ -1218,7 +1218,7 @@
                                         <a class="seg {{ request('role') == 'user' ? 'active' : '' }}"
                                             href="/users?role=user">User</a>
                                     </div>
-                                    <button onclick="openModal()" type="button" class="btn btn-primary btn-sm">
+                                    <button onclick="openModal()" type="button" class="btn btn-primary btn-sm btn-add">
                                         <i class="fa-solid fa-user-plus text-[10px]"></i> Add User
                                     </button>
                                 </div>

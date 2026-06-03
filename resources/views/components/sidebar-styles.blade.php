@@ -28,7 +28,7 @@
     /* Dark blue-slate — layered depth, teks putih */
     :root {
         --bg-1: #0a0c12;
-        --panel-1: #161a24;
+        --panel-1: #0a0a0c;
         --panel-2: #1d2230;
         --panel-3: #242a3a;
         --line-soft: rgba(255, 255, 255, 0.08);
@@ -48,7 +48,7 @@
     .dashboard-rooms-panel,
     .dashboard-activity-panel,
     .temp-chart-panel {
-        background: #161a24 !important;
+        background: #0a0a0c !important;
         border: 1px solid rgba(255, 255, 255, 0.07) !important;
         -webkit-backdrop-filter: none !important;
         backdrop-filter: none !important;
@@ -65,7 +65,7 @@
     .dashboard-room-row,
     .activity-item,
     .ac-card {
-        background: #1d2230 !important;
+        background: #0a0a0c !important;
         border: 1px solid rgba(255, 255, 255, 0.10) !important;
         border-radius: var(--r-xl) !important;
     }
