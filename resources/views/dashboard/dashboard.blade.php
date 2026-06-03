@@ -371,7 +371,6 @@
             font-style: normal !important;
             display: block !important;
             line-height: 1 !important;
-            transform: translateY(0.5px);
         }
 
         .activity-item.tone-coral .activity-icon-badge,
