@@ -185,7 +185,9 @@
             justify-content: center;
             flex-shrink: 0;
             background: transparent;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            box-sizing: border-box;
             color: #ffffff;
             font-size: 18px;
         }
@@ -332,9 +334,9 @@
             justify-content: center;
             font-size: 13px;
             font-weight: 700;
-            background: linear-gradient(135deg, color-mix(in srgb, var(--tone, var(--ink-2)) 35%, #1e293b), color-mix(in srgb, var(--tone, var(--ink-2)) 18%, #0f172a));
+            background: linear-gradient(135deg, #5a93ec, #335fc2);
             color: #ffffff;
-            border: 1px solid color-mix(in srgb, var(--tone, var(--ink-2)) 40%, transparent);
+            border: 1px solid rgba(90, 147, 236, 0.4);
         }
 
         .activity-icon-badge {

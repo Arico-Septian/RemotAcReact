@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --cyan: #2563eb;
-            --cyan-d: #1e40af;
-            --cyan-rgb: 38 99 235;
-            --cyan-d-rgb: 30 64 175;
+            --cyan: #5a93ec;
+            --cyan-d: #335fc2;
+            --cyan-rgb: 90 147 236;
+            --cyan-d-rgb: 51 95 194;
             --mint: #6ee7b7;
             --mint-rgb: 110 231 183;
             --lavender: #b4a3ff;
@@ -124,7 +124,7 @@
             width: 40px;
             height: 40px;
             border-radius: var(--r-lg);
-            background: conic-gradient(from 220deg, var(--cyan-d), var(--cyan), #70f5d0, var(--cyan-d));
+            background: linear-gradient(135deg, #5a93ec, #335fc2);
             box-shadow: 0 8px 28px -4px rgb(var(--cyan-d-rgb)/.5), inset 0 1px 0 rgba(255, 255, 255, .28);
             display: flex;
             align-items: center;
@@ -182,7 +182,7 @@
 
         .b-headline .grad {
             display: block;
-            background: linear-gradient(115deg, var(--cyan) 0%, var(--lavender) 55%, var(--mint) 100%);
+            background: linear-gradient(115deg, #6ea8ff 0%, #5a93ec 50%, #335fc2 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -389,7 +389,7 @@
         }
 
         .form-title .hi {
-            background: linear-gradient(120deg, var(--cyan), var(--lavender));
+            background: linear-gradient(120deg, #6ea8ff, #335fc2);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -423,6 +423,39 @@
             margin-top: 1px;
         }
 
+        /* Inline per-field validation */
+        .field-err {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            margin-top: 7px;
+            font-size: 11.5px;
+            font-weight: 500;
+            color: #fb7185;
+            line-height: 1.3;
+        }
+
+        .field-err.show {
+            display: flex;
+        }
+
+        .field-err i {
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .input-wrap.invalid {
+            border-color: rgba(251, 113, 133, .55);
+        }
+
+        .input-wrap.invalid:focus-within {
+            border-color: #fb7185;
+        }
+
+        .input-wrap.invalid .input-ic {
+            color: #fb7185;
+        }
+
         /* Fields */
         .fields {
             margin-top: 24px;
@@ -454,6 +487,7 @@
         .input-wrap {
             display: flex;
             align-items: center;
+            box-sizing: border-box;
             background: rgba(255, 255, 255, .05);
             border: 1px solid rgba(255, 255, 255, .12);
             border-radius: var(--r-lg);
@@ -461,9 +495,9 @@
         }
 
         .input-wrap:focus-within {
-            border-color: rgb(var(--cyan-d-rgb)/.6);
-            background: rgb(var(--cyan-d-rgb)/.06);
-            box-shadow: 0 0 0 3px rgb(var(--cyan-d-rgb)/.12);
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, .05);
+            box-shadow: none;
         }
 
         .input-ic {
@@ -476,7 +510,7 @@
         }
 
         .input-wrap:focus-within .input-ic {
-            color: var(--cyan-d);
+            color: #ffffff;
         }
 
         .input-wrap input {
@@ -493,7 +527,12 @@
         }
 
         .input-wrap input::placeholder {
-            color: var(--ink-4);
+            color: #64748b;
+        }
+
+        .input-wrap input::-ms-reveal,
+        .input-wrap input::-ms-clear {
+            display: none;
         }
 
         .input-btn {
@@ -546,18 +585,18 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 20px rgba(245, 247, 251, .12), inset 0 1px 0 rgba(255, 255, 255, .5);
-            transition: filter .15s, transform .12s, box-shadow .15s;
+            box-shadow: none;
+            transition: filter .15s, box-shadow .15s;
         }
 
         .btn-submit:hover:not(:disabled) {
-            filter: brightness(1.05);
-            transform: translateY(-1px);
-            box-shadow: 0 8px 28px rgba(245, 247, 251, .2);
+            filter: none;
+            transform: none;
+            box-shadow: none;
         }
 
         .btn-submit:active:not(:disabled) {
-            transform: translateY(0);
+            transform: none;
         }
 
         .btn-submit:disabled {
@@ -589,13 +628,13 @@
             justify-content: center;
             gap: 7px;
             font-size: 12px;
-            color: var(--ink-4);
+            color: #94a3b8;
             text-align: center;
         }
 
         .form-note i {
             font-size: 10px;
-            color: var(--ink-4);
+            color: #94a3b8;
         }
 
         /* Footer */
@@ -1023,6 +1062,8 @@
                                     autocomplete="username" minlength="3" maxlength="20"
                                     placeholder="Enter your username" value="{{ old('name') }}">
                             </div>
+                            <p class="field-err" id="errUsername"><i
+                                    class="fa-solid fa-circle-exclamation"></i><span></span></p>
                         </div>
                         <div>
                             <label class="field-lbl" for="password">
@@ -1034,12 +1075,14 @@
                                     autocomplete="current-password" placeholder="Enter your password">
                                 <button type="button" class="input-btn" onclick="togglePw()"
                                     aria-label="Toggle password">
-                                    <i id="pwIcon" class="fa-regular fa-eye"></i>
+                                    <i id="pwIcon" class="fa-solid fa-eye"></i>
                                 </button>
                             </div>
                             <p class="caps-warn" id="capsWarn">
                                 <i class="fa-solid fa-triangle-exclamation"></i> Caps Lock is on
                             </p>
+                            <p class="field-err" id="errPassword"><i
+                                    class="fa-solid fa-circle-exclamation"></i><span></span></p>
                         </div>
                     </div>
                     <form method="POST" action="/login" id="loginForm" novalidate style="margin-top:8px;">
@@ -1071,12 +1114,8 @@
             const ic = document.getElementById('pwIcon');
             const show = pw.type === 'password';
             pw.type = show ? 'text' : 'password';
-            ic.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+            ic.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
         }
-
-        document.getElementById('loginForm').addEventListener('submit', function() {
-            document.getElementById('loginBtn').classList.add('loading');
-        });
 
         const pw = document.getElementById('password');
         const capEl = document.getElementById('capsWarn');
@@ -1087,6 +1126,73 @@
         pw.addEventListener('keydown', checkCaps);
         pw.addEventListener('keyup', checkCaps);
         pw.addEventListener('blur', () => capEl.classList.remove('on'));
+
+        // Eye toggle only visible when the password field has text
+        const pwToggleBtn = document.getElementById('pwIcon').closest('.input-btn');
+
+        function syncPwToggle() {
+            const hasText = pw.value.length > 0;
+            pwToggleBtn.style.display = hasText ? '' : 'none';
+            if (!hasText && pw.type === 'text') {
+                pw.type = 'password';
+                document.getElementById('pwIcon').className = 'fa-solid fa-eye';
+            }
+        }
+        pw.addEventListener('input', syncPwToggle);
+        syncPwToggle();
+
+        // ---- Inline per-field validation (format check, like major apps) ----
+        const loginForm = document.getElementById('loginForm');
+        const uname = document.getElementById('username');
+        const errU = document.getElementById('errUsername');
+        const errP = document.getElementById('errPassword');
+        const wrapU = uname.closest('.input-wrap');
+        const wrapP = pw.closest('.input-wrap');
+        const nameRe = /^[A-Za-z][A-Za-z0-9_]{2,19}$/;
+
+        function setFieldErr(wrap, errEl, msg) {
+            if (msg) {
+                wrap.classList.add('invalid');
+                errEl.querySelector('span').textContent = msg;
+                errEl.classList.add('show');
+            } else {
+                wrap.classList.remove('invalid');
+                errEl.classList.remove('show');
+            }
+        }
+
+        function validateUsername(force) {
+            const v = uname.value.trim();
+            let msg = '';
+            if (!v) msg = 'Username is required.';
+            else if (v.length < 3) msg = 'Username must be at least 3 characters.';
+            else if (v.length > 20) msg = 'Username may not exceed 20 characters.';
+            else if (!nameRe.test(v)) msg = 'Use letters, numbers, or underscore; start with a letter.';
+            if (force || errU.classList.contains('show')) setFieldErr(wrapU, errU, msg);
+            return !msg;
+        }
+
+        function validatePassword(force) {
+            const msg = pw.value ? '' : 'Password is required.';
+            if (force || errP.classList.contains('show')) setFieldErr(wrapP, errP, msg);
+            return !msg;
+        }
+
+        uname.addEventListener('blur', () => validateUsername(true));
+        pw.addEventListener('blur', () => validatePassword(true));
+        uname.addEventListener('input', () => validateUsername(false));
+        pw.addEventListener('input', () => validatePassword(false));
+
+        loginForm.addEventListener('submit', function (e) {
+            const okU = validateUsername(true);
+            const okP = validatePassword(true);
+            if (!okU || !okP) {
+                e.preventDefault();
+                (okU ? pw : uname).focus();
+                return;
+            }
+            document.getElementById('loginBtn').classList.add('loading');
+        });
     </script>
 </body>
 

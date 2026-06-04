@@ -11,6 +11,18 @@
     @vite('resources/js/app.js')
     @include('components.sidebar-styles')
     <style>
+        /* Add Room fields — white focus border + black dropdown (consistent with login) */
+        #addRoomForm .input:focus,
+        #addRoomForm .select:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        #addRoomForm .select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+
         /* ===== Temperature chip — colored bg + matching text ===== */
         .room-card .temp-chip {
             display: flex !important;
@@ -807,14 +819,13 @@
                                 @endauth
                             </div>
                         </div>
-                        <p id="roomCount" class="text-mono text-xs" style="color:var(--ink-3);"></p>
                         @if ($rooms->count() > 0)
                             <div class="space-y-2">
                                 @foreach ($roomsByFloor as $floorName => $floorRooms)
                                     <section class="floor-section">
                                         <div class="floor-section-header">
                                             <i class="fa-solid fa-layer-group text-[10px]"
-                                                style="color:var(--lavender);"></i>
+                                                style="color:#ffffff;"></i>
                                             <span class="floor-label">{{ ucfirst($floorName) }}</span>
                                             <div class="floor-divider"></div>
                                             <span class="floor-count">{{ $floorRooms->count() }} rooms</span>

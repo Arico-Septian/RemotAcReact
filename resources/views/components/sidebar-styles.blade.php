@@ -337,8 +337,9 @@
         .app-sidebar .nav-link i {
             width: 24px !important;
             height: 24px !important;
-            font-size: 11px !important;
-            border-radius: var(--r-sm) !important;
+            font-size: 14px !important;
+            background: transparent !important;
+            border: none !important;
         }
 
         /* Section heading (OVERVIEW / MANAGEMENT / ADMINISTRATION) */
@@ -558,15 +559,15 @@
     }
 
     .nav-link i {
-        width: 28px !important;
-        height: 28px !important;
-        border-radius: var(--r-sm);
-        background: rgba(51, 95, 194, 0.08);
-        border: 1px solid rgba(51, 95, 194, 0.14);
+        width: 24px !important;
+        height: 24px !important;
+        border-radius: 0;
+        background: transparent !important;
+        border: none !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 12px !important;
+        font-size: 15px !important;
         line-height: 1 !important;
         text-align: center !important;
         padding: 0 !important;
@@ -590,24 +591,20 @@
     }
 
     .nav-link:hover i {
-        background: linear-gradient(135deg, rgba(51, 95, 194, 0.22), rgba(51, 95, 194, 0.12));
-        border-color: rgba(51, 95, 194, 0.40);
         color: #5a93ec !important;
     }
 
     .nav-link.active {
         background:
             linear-gradient(90deg, rgba(51, 95, 194, 0.16) 0%, rgba(51, 95, 194, 0.06) 100%) !important;
-        color: var(--ink-0) !important;
+        color: #5a93ec !important;
         font-weight: 600 !important;
         box-shadow: inset 0 1px 0 rgba(51, 95, 194, 0.14);
     }
 
-    .nav-link.active i {
-        background: linear-gradient(135deg, rgba(51, 95, 194, 0.28), rgba(51, 95, 194, 0.18));
-        border-color: rgba(51, 95, 194, 0.50);
+    .nav-link.active i,
+    .nav-link.active .menu-text {
         color: #5a93ec !important;
-        box-shadow: 0 0 16px -2px rgba(51, 95, 194, 0.50);
     }
 
     .nav-link.active::before {

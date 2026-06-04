@@ -27,8 +27,8 @@
             </a>
             <a href="{{ route('rooms.overview') }}"
                 class="nav-link menu-link {{ request()->routeIs('rooms.overview') || request()->is('rooms/*/status') ? 'active' : '' }}">
-                <i class="fa-solid fa-grip"></i>
-                <span class="menu-text">Server Rooms</span>
+                <i class="fa-solid fa-building"></i>
+                <span class="menu-text">Room Status</span>
             </a>
             <a href="{{ route('monitoring') }}"
                 class="nav-link menu-link {{ request()->routeIs('monitoring') ? 'active' : '' }}">
@@ -41,8 +41,8 @@
             <div class="nav-list">
                 <a href="/rooms"
                     class="nav-link menu-link {{ request()->is('rooms*') && !request()->routeIs('rooms.overview') && !request()->is('rooms/*/status') ? 'active' : '' }}">
-                    <i class="fa-solid fa-server"></i>
-                    <span class="menu-text">Rooms &amp; AC</span>
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    <span class="menu-text">Manage Rooms &amp; AC</span>
                 </a>
             </div>
         @endif

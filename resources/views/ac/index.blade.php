@@ -11,6 +11,18 @@
     @vite('resources/js/app.js')
     @include('components.sidebar-styles')
     <style>
+        /* Add AC fields — white focus border + black dropdown (consistent with login) */
+        #addACForm .input:focus,
+        #addACForm .select:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        #addACForm .select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+
         .ac-panel {
             transition: opacity .2s, transform .2s;
         }

@@ -11,6 +11,55 @@
     @vite('resources/js/app.js')
     @include('components.sidebar-styles')
     <style>
+        /* Password field — eye toggle + focus border like login */
+        .pwd-field {
+            position: relative;
+        }
+
+        .pwd-field .input {
+            padding-right: 42px;
+        }
+
+        .pwd-field .pwd-eye {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 13px;
+            transition: color .15s;
+        }
+
+        .pwd-field .pwd-eye:hover {
+            color: #ffffff;
+        }
+
+        .pwd-field .input:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        /* All Add User fields — white focus border (consistent with login) */
+        #addUserForm .input:focus,
+        #addUserForm .select:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        /* Role dropdown options — black instead of navy */
+        #addUserForm .select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+
         .stat-card .stat-label-sm {
             font-size: 10px;
             font-weight: 700;
@@ -1450,8 +1499,14 @@
                     </div>
                     <div class="field">
                         <label class="field-label">Password</label>
-                        <input class="input" type="password" name="password" placeholder="min. 8 characters"
-                            minlength="8" required>
+                        <div class="pwd-field">
+                            <input class="input" type="password" name="password" id="addUserPassword"
+                                placeholder="min. 8 characters" minlength="8" required>
+                            <button type="button" class="pwd-eye" id="addUserPwEye" onclick="toggleAddUserPw()"
+                                aria-label="Toggle password" style="display:none;">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
                         <ul class="pwd-checklist" id="addUserPwdChecklist">
                             <li data-rule="len"><i class="fa-regular fa-circle"></i><span>At least 8 characters</span>
                             </li>
@@ -1590,6 +1645,31 @@
         }
         if (addUserPasswordInput) {
             addUserPasswordInput.addEventListener('input', updateAddUserChecklist);
+        }
+
+        // Password show/hide eye — appears only when there is text (like login)
+        function toggleAddUserPw() {
+            const inp = document.getElementById('addUserPassword');
+            const ic = document.querySelector('#addUserPwEye i');
+            const show = inp.type === 'password';
+            inp.type = show ? 'text' : 'password';
+            ic.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        }
+
+        const addUserPwEye = document.getElementById('addUserPwEye');
+
+        function syncAddUserEye() {
+            if (!addUserPasswordInput || !addUserPwEye) return;
+            const hasText = addUserPasswordInput.value.length > 0;
+            addUserPwEye.style.display = hasText ? '' : 'none';
+            if (!hasText && addUserPasswordInput.type === 'text') {
+                addUserPasswordInput.type = 'password';
+                addUserPwEye.querySelector('i').className = 'fa-solid fa-eye';
+            }
+        }
+        if (addUserPasswordInput) {
+            addUserPasswordInput.addEventListener('input', syncAddUserEye);
+            syncAddUserEye();
         }
         document.getElementById('addUserForm')?.addEventListener('submit', async e => {
             e.preventDefault();

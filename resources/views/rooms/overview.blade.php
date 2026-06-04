@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Rooms – SmartAC</title>
+    <title>Room Status – SmartAC</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="/css/app.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -712,7 +712,7 @@
                         <i class="fa-solid fa-bars-staggered"></i>
                     </button>
                     <div class="app-header-title">
-                        <h1>Server Rooms</h1>
+                        <h1>Room Status</h1>
                         <p>{{ $rooms->count() }} rooms · AC monitoring</p>
                     </div>
                 </div>
@@ -740,14 +740,13 @@
                                 </button>
                             </div>
                         </div>
-                        <p id="roomCount" class="text-mono text-xs" style="color:var(--ink-3);"></p>
                         @if ($rooms->count() > 0)
                             <div id="allSections">
                                 @foreach ($roomsByFloor as $floorName => $floorRooms)
                                     <div class="floor-section" data-section-floor="{{ $floorName }}">
                                         <div class="floor-section-header">
                                             <i class="fa-solid fa-layer-group text-[10px]"
-                                                style="color:var(--lavender);"></i>
+                                                style="color:#ffffff;"></i>
                                             <span class="floor-label">{{ ucfirst($floorName) }}</span>
                                             <div class="floor-divider"></div>
                                             <span class="floor-count">{{ $floorRooms->count() }} rooms</span>
@@ -932,9 +931,11 @@
                 sec.style.display = hasVisible ? '' : 'none';
             });
 
-            countEl.textContent = visible === cards.length ?
-                `Showing ${cards.length} room${cards.length !== 1 ? 's' : ''}` :
-                `${visible} of ${cards.length} room${cards.length !== 1 ? 's' : ''}`;
+            if (countEl) {
+                countEl.textContent = visible === cards.length ?
+                    `Showing ${cards.length} room${cards.length !== 1 ? 's' : ''}` :
+                    `${visible} of ${cards.length} room${cards.length !== 1 ? 's' : ''}`;
+            }
 
             if (emptyState) emptyState.hidden = visible > 0;
         }
