@@ -39,11 +39,11 @@
 
         .room-card:hover {}
 
-        /* Tombol Detail & Grafik — soft cyan seperti Delete User */
+        /* Tombol Detail & Grafik — soft blue (senada tema) */
         .room-card .btn.btn-primary,
         .room-card .room-card-chart-btn {
-            background: var(--cyan-soft);
-            border-color: var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.15);
+            border-color: rgba(59, 111, 212, 0.30);
             color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
@@ -55,8 +55,8 @@
 
         .room-card .btn.btn-primary:hover,
         .room-card .room-card-chart-btn:hover {
-            background: var(--cyan-soft-2);
-            border-color: var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.26);
+            border-color: rgba(59, 111, 212, 0.45);
             color: #ffffff;
             box-shadow: none;
             transform: none;
@@ -534,7 +534,7 @@
 
         #historyModal .history-title-group .eyebrow {
             line-height: 1.3;
-            color: #3b6fd4;
+            color: #5a93ec;
         }
 
         #historyTitle {
@@ -590,6 +590,11 @@
             cursor: pointer;
             outline: none;
             transition: var(--t-base);
+        }
+
+        .history-range-select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
         }
 
         .history-range-select:hover,
@@ -864,7 +869,7 @@
         <div class="modal modal-lg">
             <div class="modal-header">
                 <div class="history-title-group">
-                    <p class="eyebrow" style="color:#3b6fd4;"><i class="fa-solid fa-chart-line"></i> Temperature
+                    <p class="eyebrow" style="color:#5a93ec;"><i class="fa-solid fa-chart-line"></i> Temperature
                         History</p>
                     <h2 id="historyTitle">Room</h2>
                     <p id="historyMeta" class="sub">Today · hourly average</p>

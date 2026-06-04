@@ -25,7 +25,7 @@
         }
 
         .nlist-item.unread {
-            background: rgb(var(--cyan-rgb) / 0.05);
+            background: rgba(90, 147, 236, 0.07);
         }
 
         .nlist-item:last-child {
@@ -74,8 +74,8 @@
         }
 
         .nlist-icon.info {
-            background: rgb(var(--cyan-rgb) / .16);
-            color: var(--cyan);
+            background: rgba(90, 147, 236, 0.16);
+            color: #5a93ec;
         }
 
         .nlist-actions {
@@ -259,7 +259,7 @@
                                         <div class="flex items-center gap-2">
                                             @if ($n->isUnreadForUser($userId))
                                                 <span
-                                                    style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></span>
+                                                    style="width:7px;height:7px;border-radius:50%;background:#5a93ec;box-shadow:0 0 8px #5a93ec;"></span>
                                             @endif
                                             <p class="text-sm font-semibold" style="color:var(--ink-0);margin:0;">
                                                 {{ $n->title }}</p>
@@ -278,7 +278,7 @@
                                                 <span>·</span>
                                                 <a href="{{ $n->link }}" data-redirect-to="{{ $n->link }}"
                                                     onclick="markNotifReadInline(event, {{ $n->id }}, this.dataset.redirectTo)"
-                                                    style="color:var(--cyan);">Buka detail →</a>
+                                                    style="color:#5a93ec;">View details →</a>
                                             @endif
                                         </div>
                                     </div>
@@ -444,7 +444,7 @@
                 const safeLink = payload.link && /^(https?:\/\/|\/)/.test(payload.link) ? escapeHtml(payload.link) :
                     '';
                 const linkHtml = safeLink ?
-                    `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:var(--cyan);">Buka detail →</a>` :
+                    `<span>·</span><a href="${safeLink}" data-redirect-to="${safeLink}" onclick="markNotifReadInline(event, ${id}, this.dataset.redirectTo)" style="color:#5a93ec;">View details →</a>` :
                     '';
                 const deleteBtn = payload.user_id ?
                     `<button onclick="deleteNotif(${id})" class="btn-icon danger" title="Delete"><i class="fa-solid fa-trash text-[11px]"></i></button>` :
@@ -456,7 +456,7 @@
                 item.innerHTML = `
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2">
-                            <span style="width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></span>
+                            <span style="width:7px;height:7px;border-radius:50%;background:#5a93ec;box-shadow:0 0 8px #5a93ec;"></span>
                             <p class="text-sm font-semibold" style="color:var(--ink-0);margin:0;">${title}</p>
                         </div>
                         ${message ? `<p class="text-xs mt-1" style="color:var(--ink-2);line-height:1.5;">${message}</p>` : ''}

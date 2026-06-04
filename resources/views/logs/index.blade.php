@@ -105,16 +105,16 @@
             gap: 5px;
             padding: 3px 8px 3px 10px;
             border-radius: var(--r-full);
-            background: rgb(var(--cyan-rgb) / 0.1);
-            border: 1px solid rgb(var(--cyan-rgb) / 0.25);
+            background: rgba(59, 111, 212, 0.12);
+            border: 1px solid rgba(59, 111, 212, 0.28);
             font-size: 11px;
-            color: var(--cyan);
+            color: #6ea8ff;
         }
 
         .filter-tag button {
             background: none;
             border: none;
-            color: var(--cyan);
+            color: #6ea8ff;
             cursor: pointer;
             padding: 0;
             line-height: 1;
@@ -295,6 +295,12 @@
             min-width: 0;
         }
 
+        /* No-photo initials avatar → biru, teks putih */
+        .log-user span.avatar {
+            background: linear-gradient(135deg, #5a93ec, #335fc2) !important;
+            color: #ffffff !important;
+        }
+
         .log-user .name {
             color: var(--ink-0);
             font-weight: 600;
@@ -382,9 +388,9 @@
         }
 
         .pager .active {
-            background: var(--cyan-soft);
-            color: var(--cyan);
-            border-color: var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.15);
+            color: #6ea8ff;
+            border-color: rgba(59, 111, 212, 0.30);
             font-weight: 700;
         }
 
@@ -878,7 +884,7 @@
                                                     style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">
                                             @else
                                                 <div
-                                                    style="width:38px;height:38px;border-radius: 10px;background:var(--{{ $avatarColor }});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                    style="width:38px;height:38px;border-radius: 10px;background:linear-gradient(135deg,#5a93ec,#335fc2);color:#ffffff;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                     {{ strtoupper(substr($log->user->name ?? '?', 0, 1)) }}
                                                 </div>
                                             @endif
@@ -910,7 +916,7 @@
                                         <p class="empty-sub">
                                             {{ count($activeFilters) ? 'Try adjusting your filters or ' : '' }}<a
                                                 href="/logs"
-                                                style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset
+                                                style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">reset
                                                 all filters</a></p>
                                     </div>
                                 @endforelse
@@ -984,7 +990,7 @@
                                                         <p class="empty-sub">
                                                             {{ count($activeFilters) ? 'Try adjusting your filters or ' : '' }}<a
                                                                 href="/logs"
-                                                                style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset
+                                                                style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">reset
                                                                 all filters</a></p>
                                                     </div>
                                                 </td>
@@ -1231,7 +1237,7 @@
 
                     const mobileAvatar = safeAvatar ?
                         `<img src="${safeAvatar}" alt="${name}" style="width:38px;height:38px;border-radius: 10px;object-fit:cover;flex-shrink:0;">` :
-                        `<div style="width:38px;height:38px;border-radius: 10px;background:var(--${avatarColor});color:#0c1726;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${initial}</div>`;
+                        `<div style="width:38px;height:38px;border-radius: 10px;background:linear-gradient(135deg,#5a93ec,#335fc2);color:#ffffff;font-size: 16px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">${initial}</div>`;
 
                     const roomAcText = [
                         !isEmpty(payload.room) ? escapeHtml(payload.room) : '',
@@ -1273,7 +1279,7 @@
                                 <div class="empty-state">
                                     <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                                     <p class="empty-title">No activities found</p>
-                                    <p class="empty-sub"><a href="/logs" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset all filters</a></p>
+                                    <p class="empty-sub"><a href="/logs" style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">reset all filters</a></p>
                                 </div>
                             </td>
                         </tr>`;
@@ -1284,7 +1290,7 @@
                         <div class="empty-state">
                             <div class="empty-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                             <p class="empty-title">No activities found</p>
-                            <p class="empty-sub"><a href="/logs" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset all filters</a></p>
+                            <p class="empty-sub"><a href="/logs" style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">reset all filters</a></p>
                         </div>`;
                 }
             }

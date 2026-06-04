@@ -79,9 +79,9 @@
             width: 32px;
             height: 32px;
             border-radius: var(--r-md);
-            background: var(--cyan-soft);
-            color: var(--cyan);
-            border: 1px solid var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.15);
+            color: #6ea8ff;
+            border: 1px solid rgba(59, 111, 212, 0.30);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -144,7 +144,7 @@
         }
 
         .ic-temp {
-            --icon-color: var(--cyan);
+            --icon-color: #6ea8ff;
         }
 
         .ic-mode {
@@ -152,7 +152,7 @@
         }
 
         .ic-fan {
-            --icon-color: var(--cyan);
+            --icon-color: #6ea8ff;
         }
 
         .ic-swing {

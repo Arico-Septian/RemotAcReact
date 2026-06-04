@@ -131,10 +131,10 @@
             color: #94a3b8 !important;
         }
 
-        /* Tombol Control AC — soft cyan seperti Delete User */
+        /* Tombol Control AC — soft blue (senada tema) */
         .room-card .btn.btn-primary {
-            background: var(--cyan-soft);
-            border-color: var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.15);
+            border-color: rgba(59, 111, 212, 0.30);
             color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
@@ -142,7 +142,8 @@
         }
 
         .room-card .btn.btn-primary:hover {
-            background: var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.26);
+            border-color: rgba(59, 111, 212, 0.45);
             box-shadow: none;
             transform: none;
         }

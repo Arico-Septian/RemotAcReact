@@ -491,7 +491,7 @@
     }
 
     .brand-logo {
-        background: conic-gradient(from 220deg, var(--cyan-d), var(--cyan), #70f5d0, var(--cyan-d)) !important;
+        background: linear-gradient(135deg, #5a93ec, #335fc2) !important;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
         position: relative;
     }
@@ -510,12 +510,12 @@
     .brand-logo i {
         position: relative;
         z-index: 2;
-        color: var(--cyan-d);
-        filter: drop-shadow(0 0 8px rgb(var(--cyan-d-rgb) / 0.65));
+        color: #5a93ec;
+        filter: drop-shadow(0 0 8px rgba(51, 95, 194, 0.65));
     }
 
     .brand-text .sub {
-        background: linear-gradient(90deg, var(--cyan-d), var(--cyan));
+        background: linear-gradient(90deg, #335fc2, #5a93ec);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -540,7 +540,7 @@
         content: '';
         width: 14px;
         height: 1px;
-        background: linear-gradient(90deg, rgb(var(--cyan-d-rgb) / 0.50), transparent);
+        background: linear-gradient(90deg, rgba(51, 95, 194, 0.55), transparent);
         flex-shrink: 0;
     }
 
@@ -561,8 +561,8 @@
         width: 28px !important;
         height: 28px !important;
         border-radius: var(--r-sm);
-        background: rgb(var(--cyan-d-rgb) / 0.06);
-        border: 1px solid rgb(var(--cyan-d-rgb) / 0.10);
+        background: rgba(51, 95, 194, 0.08);
+        border: 1px solid rgba(51, 95, 194, 0.14);
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -584,39 +584,39 @@
     }
 
     .nav-link:hover {
-        background: rgb(var(--cyan-d-rgb) / 0.10) !important;
+        background: rgba(51, 95, 194, 0.12) !important;
         color: var(--ink-0) !important;
         transform: translateX(2px);
     }
 
     .nav-link:hover i {
-        background: linear-gradient(135deg, rgb(var(--cyan-d-rgb) / 0.18), rgb(var(--cyan-rgb) / 0.10));
-        border-color: rgb(var(--cyan-d-rgb) / 0.35);
-        color: var(--cyan-d) !important;
+        background: linear-gradient(135deg, rgba(51, 95, 194, 0.22), rgba(51, 95, 194, 0.12));
+        border-color: rgba(51, 95, 194, 0.40);
+        color: #5a93ec !important;
     }
 
     .nav-link.active {
         background:
-            linear-gradient(90deg, rgb(var(--cyan-d-rgb) / 0.14) 0%, rgb(var(--cyan-d-rgb) / 0.06) 100%) !important;
+            linear-gradient(90deg, rgba(51, 95, 194, 0.16) 0%, rgba(51, 95, 194, 0.06) 100%) !important;
         color: var(--ink-0) !important;
         font-weight: 600 !important;
-        box-shadow: inset 0 1px 0 rgb(var(--cyan-d-rgb) / 0.12);
+        box-shadow: inset 0 1px 0 rgba(51, 95, 194, 0.14);
     }
 
     .nav-link.active i {
-        background: linear-gradient(135deg, rgb(var(--cyan-d-rgb) / 0.24), rgb(var(--cyan-rgb) / 0.16));
-        border-color: rgb(var(--cyan-d-rgb) / 0.45);
-        color: var(--cyan-d) !important;
-        box-shadow: 0 0 16px -2px rgb(var(--cyan-d-rgb) / 0.50);
+        background: linear-gradient(135deg, rgba(51, 95, 194, 0.28), rgba(51, 95, 194, 0.18));
+        border-color: rgba(51, 95, 194, 0.50);
+        color: #5a93ec !important;
+        box-shadow: 0 0 16px -2px rgba(51, 95, 194, 0.50);
     }
 
     .nav-link.active::before {
         width: 3px !important;
-        background: linear-gradient(180deg, var(--cyan-d), var(--cyan)) !important;
+        background: linear-gradient(180deg, #335fc2, #5a93ec) !important;
         top: 10px !important;
         bottom: 10px !important;
         border-radius: 0 3px 3px 0 !important;
-        box-shadow: 0 0 14px rgb(var(--cyan-d-rgb) / 0.55);
+        box-shadow: 0 0 14px rgba(51, 95, 194, 0.55);
     }
 
     /* Collapsed sidebar — icon-only state */
@@ -653,6 +653,8 @@
 
     .profile-full .avatar {
         transition: transform var(--t-base), box-shadow var(--t-base);
+        background: linear-gradient(135deg, #5a93ec, #335fc2) !important;
+        color: #ffffff !important;
     }
 
     .profile-full:hover .avatar {

@@ -34,9 +34,9 @@
             width: 26px;
             height: 26px;
             border-radius: var(--r-full);
-            background: var(--cyan-d);
+            background: #3b6fd4;
             border: 2px solid var(--panel-1);
-            color: #0b1220;
+            color: #ffffff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -167,9 +167,9 @@
             width: 34px;
             height: 34px;
             border-radius: 12px;
-            background: var(--cyan-d);
+            background: #3b6fd4;
             border: 3px solid var(--panel-1);
-            color: #06121b;
+            color: #ffffff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -419,8 +419,8 @@
         }
 
         .profile-input:focus {
-            border-color: var(--cyan);
-            box-shadow: 0 0 0 3px rgba(34, 184, 230, 0.15);
+            border-color: #6ea8ff;
+            box-shadow: 0 0 0 3px rgba(59, 111, 212, 0.18);
         }
 
         .profile-eye {
@@ -485,8 +485,8 @@
             gap: 9px;
             font-size: 15px;
             font-weight: 700;
-            color: #06121b;
-            background: var(--cyan);
+            color: #ffffff;
+            background: linear-gradient(135deg, #6ea8ff, #3b6fd4);
             box-shadow: none;
             transition: filter .15s, transform .05s;
         }
@@ -793,7 +793,7 @@
             style="max-width:360px;width:100%;background:var(--panel-1);border:1px solid var(--line);border-radius: 20px;padding:22px;box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
                 <span
-                    style="width:34px;height:34px;border-radius:10px;background:var(--cyan-soft);border:1px solid var(--cyan-soft-2);display:inline-flex;align-items:center;justify-content:center;color:var(--cyan);">
+                    style="width:34px;height:34px;border-radius:10px;background:rgba(59,111,212,0.15);border:1px solid rgba(59,111,212,0.30);display:inline-flex;align-items:center;justify-content:center;color:#6ea8ff;">
                     <i class="fa-solid fa-camera"></i>
                 </span>
                 <div>

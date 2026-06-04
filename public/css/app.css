@@ -2637,7 +2637,7 @@ body { min-height: 100vh; }
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 10px; font-weight: 700;
   letter-spacing: 0.10em; text-transform: uppercase;
-  color: #3b6fd4;
+  color: #5a93ec;
 }
 
 .divider {
@@ -2717,11 +2717,11 @@ body { min-height: 100vh; }
 .btn:disabled, .btn.disabled { opacity: 0.45; pointer-events: none; }
 
 .btn-primary {
-  background: #3b6fd4;
+  background: linear-gradient(135deg, #5a93ec, #335fc2);
   color: #fff;
   box-shadow: none;
 }
-.btn-primary:hover { filter: none; box-shadow: none; transform: none; }
+.btn-primary:hover { filter: brightness(1.05); box-shadow: none; }
 
 .btn-mint {
   background: linear-gradient(180deg, var(--mint), var(--mint-d));
@@ -3090,8 +3090,8 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .modal {
-  background: linear-gradient(180deg, rgba(18, 32, 66, 0.96), rgba(12, 24, 48, 0.96));
-  border: 1px solid var(--line);
+  background: #0a0a0c;
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: var(--r-2xl);
   box-shadow: var(--shadow-xl);
   width: 100%;
@@ -3162,13 +3162,13 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.toast.success .icon { background: var(--mint-soft-2); color: var(--mint); }
+.toast.success .icon { background: rgba(90, 147, 236, 0.16); color: #5a93ec; }
 .toast.error   .icon { background: var(--coral-soft-2); color: var(--coral); }
-.toast.info    .icon { background: var(--cyan-soft-2);  color: var(--cyan); }
+.toast.info    .icon { background: rgba(90, 147, 236, 0.16); color: #5a93ec; }
 .toast.warn    .icon { background: var(--amber-soft-2); color: var(--amber); }
-.toast.success { border-color: rgba(110, 231, 183, 0.30); }
+.toast.success { border-color: rgba(90, 147, 236, 0.30); }
 .toast.error   { border-color: rgba(251, 113, 133, 0.30); }
-.toast.info    { border-color: rgba(77, 212, 255, 0.30); }
+.toast.info    { border-color: rgba(90, 147, 236, 0.30); }
 .toast.warn    { border-color: rgba(251, 191, 36, 0.30); }
 .toast.toast-out { animation: toastOut .25s var(--ease) forwards; }
 @keyframes toastIn  { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }

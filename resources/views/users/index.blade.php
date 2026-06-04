@@ -420,17 +420,17 @@
             align-items: center;
             gap: 6px;
             padding: 4px 10px;
-            background: rgb(var(--cyan-rgb) / 0.1);
-            border: 1px solid rgb(var(--cyan-rgb) / 0.25);
+            background: rgba(59, 111, 212, 0.12);
+            border: 1px solid rgba(59, 111, 212, 0.28);
             border-radius: var(--r-full);
             font-size: 12px;
-            color: var(--cyan);
+            color: #6ea8ff;
         }
 
         .filter-chip button {
             background: none;
             border: none;
-            color: var(--cyan);
+            color: #6ea8ff;
             cursor: pointer;
             padding: 0;
             font-size: 10px;
@@ -478,9 +478,9 @@
         }
 
         .pager .active {
-            background: var(--cyan-soft);
-            color: var(--cyan);
-            border-color: var(--cyan-soft-2);
+            background: rgba(59, 111, 212, 0.15);
+            color: #6ea8ff;
+            border-color: rgba(59, 111, 212, 0.30);
             font-weight: 700;
         }
 
@@ -1246,7 +1246,7 @@
                                                     style="width:34px;height:34px;border-radius:9px;object-fit:cover;flex-shrink:0;">
                                             @else
                                                 <div
-                                                    style="width:34px;height:34px;border-radius:9px;background:var(--{{ $colorName }});color:#0c1726;font-size:14px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                    style="width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#5a93ec,#335fc2);color:#ffffff;font-size:14px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                     {{ $initials }}
                                                 </div>
                                             @endif
@@ -1276,7 +1276,7 @@
                                         <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
                                         <p class="empty-title">No users found</p>
                                         <p class="empty-sub">
-                                            {{ request('search') || request('role') ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}
+                                            {{ request('search') || request('role') ? 'Try adjusting the filter or <a href="/users" style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}
                                         </p>
                                     </div>
                                 @endforelse
@@ -1311,7 +1311,7 @@
                                                             class="user-avatar-sm" style="object-fit:cover;">
                                                     @else
                                                         <div class="user-avatar-sm"
-                                                            style="background:var(--{{ $colorName }});">
+                                                            style="background:linear-gradient(135deg,#5a93ec,#335fc2);color:#ffffff;">
                                                             {{ $initials }}
                                                         </div>
                                                     @endif
@@ -1350,7 +1350,7 @@
                                                     <div class="empty-icon"><i class="fa-solid fa-users"></i></div>
                                                     <p class="empty-title">No users found</p>
                                                     <p class="empty-sub">
-                                                        {{ request('search') || request('role') ? 'Try adjusting the filter or <a href="/users" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:var(--cyan);text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}
+                                                        {{ request('search') || request('role') ? 'Try adjusting the filter or <a href="/users" style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">reset filter</a>' : '<a href="javascript:void(0)" onclick="openModal()" style="color:#6ea8ff;text-decoration:underline;cursor:pointer;">Add a new user</a> to get started' }}
                                                     </p>
                                                 </div>
                                             </td>

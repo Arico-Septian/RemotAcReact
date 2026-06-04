@@ -131,11 +131,11 @@
     }
 
     .notif-item.unread {
-        background: rgb(var(--cyan-rgb) / 0.04);
+        background: rgba(90, 147, 236, 0.05);
     }
 
     .notif-item.unread:hover {
-        background: rgb(var(--cyan-rgb) / 0.08);
+        background: rgba(90, 147, 236, 0.09);
     }
 
     .notif-icon {
@@ -167,8 +167,8 @@
     }
 
     .notif-icon.info {
-        background: rgb(var(--cyan-rgb) / .16);
-        color: var(--cyan);
+        background: rgba(90, 147, 236, 0.16);
+        color: #5a93ec;
     }
 
     .notif-meta {
@@ -191,8 +191,8 @@
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background: var(--cyan);
-        box-shadow: 0 0 8px var(--cyan);
+        background: #5a93ec;
+        box-shadow: 0 0 8px #5a93ec;
         flex-shrink: 0;
     }
 
