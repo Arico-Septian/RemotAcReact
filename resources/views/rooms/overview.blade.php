@@ -39,10 +39,10 @@
 
         .room-card:hover {}
 
-        /* Tombol Detail & Grafik — solid blue (tidak transparan) */
+        /* Tombol Detail & Grafik — gradient biru (senada tombol Add) */
         .room-card .btn.btn-primary,
         .room-card .room-card-chart-btn {
-            background: #335fc2;
+            background: linear-gradient(135deg, #5a93ec, #335fc2);
             border-color: #335fc2;
             color: #ffffff;
             box-shadow: none;
@@ -55,8 +55,8 @@
 
         .room-card .btn.btn-primary:hover,
         .room-card .room-card-chart-btn:hover {
-            background: #2a4fa3;
-            border-color: #2a4fa3;
+            background: linear-gradient(135deg, #4d84db, #2c539e);
+            border-color: #2c539e;
             color: #ffffff;
             box-shadow: none;
             transform: none;
@@ -579,7 +579,7 @@
             background-repeat: no-repeat;
             background-position: right 9px center;
             background-size: 11px;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             color: var(--ink-1);
             border-radius: 8px;
             padding: 6px 28px 6px 12px;
@@ -599,8 +599,8 @@
 
         .history-range-select:hover,
         .history-range-select:focus {
-            background-color: var(--panel-1);
-            border-color: rgba(255, 255, 255, 0.6);
+            background-color: #15171d;
+            border-color: rgba(255, 255, 255, 0.42);
             color: var(--ink-1);
             box-shadow: none;
             outline: none;

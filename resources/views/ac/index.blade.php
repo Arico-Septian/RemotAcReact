@@ -23,6 +23,16 @@
             color: #ffffff;
         }
 
+        /* Delete AC — bigger icon, box keeps its fixed size */
+        #deleteForm .btn-icon.danger {
+            overflow: hidden;
+        }
+
+        #deleteForm .btn-icon.danger i {
+            font-size: 20px !important;
+            line-height: 1;
+        }
+
         .ac-panel {
             transition: opacity .2s, transform .2s;
         }
@@ -49,8 +59,8 @@
             align-items: center;
             gap: 8px;
             padding: 7px 12px;
-            background: var(--panel-2);
-            border: 1px solid var(--line);
+            background: #0a0a0c;
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: var(--r-md);
             cursor: pointer;
             color: var(--ink-0);
@@ -61,7 +71,8 @@
         }
 
         .selector:hover {
-            background: var(--panel-3);
+            background: #15171d;
+            border-color: rgba(255, 255, 255, 0.42);
         }
 
         .selector i {
@@ -74,8 +85,8 @@
             top: 44px;
             left: 0;
             min-width: 220px;
-            background: var(--bg-2);
-            border: 1px solid var(--line);
+            background: #0a0a0c;
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: var(--r-md);
             box-shadow: var(--shadow-lg);
             opacity: 0;
@@ -104,8 +115,8 @@
         }
 
         #dropdownAC>div:hover {
-            background: var(--cyan-soft);
-            color: var(--cyan);
+            background: #4b5563;
+            color: #ffffff;
         }
 
         #dropdownAC>div .num {
@@ -158,7 +169,7 @@
             border-radius: 50%;
             z-index: 0;
             background: conic-gradient(from 0deg,
-                    var(--tick-on, #2563eb) 0deg var(--fill-deg, 0deg),
+                    var(--tick-on, #5a93ec) 0deg var(--fill-deg, 0deg),
                     rgba(255, 255, 255, 0.10) var(--fill-deg, 0deg) 360deg);
             -webkit-mask:
                 repeating-conic-gradient(from 0deg, #000 0deg 1.5deg, transparent 1.5deg 6deg),
@@ -174,8 +185,8 @@
         }
 
         .temp-ring.temp-cool {
-            --tick-on: #2563eb;
-            box-shadow: -12px 8px 55px rgba(77, 212, 255, 0.32), inset 0 0 45px rgba(77, 212, 255, 0.06);
+            --tick-on: #5a93ec;
+            box-shadow: -12px 8px 55px rgba(90, 147, 236, 0.32), inset 0 0 45px rgba(90, 147, 236, 0.06);
         }
 
         .temp-ring.temp-warm {
@@ -281,7 +292,7 @@
         }
 
         .temp-ring.temp-cool .ring-summary {
-            color: rgb(var(--cyan-rgb) / 0.80);
+            color: rgba(90, 147, 236, 0.85);
         }
 
         .temp-ring.temp-warm .ring-summary {
@@ -361,7 +372,7 @@
         .ac-ring-panel.temp-panel-warm,
         .ac-ring-panel.temp-panel-hot,
         .ac-ring-panel.temp-panel-off {
-            background: #161a24 !important;
+            background: #0a0a0c !important;
             border: 1px solid rgba(255, 255, 255, 0.07) !important;
             box-shadow: none !important;
             border-radius: var(--r-xl) !important;
@@ -435,15 +446,15 @@
         }
 
         .mode-btn-v.active {
-            background: linear-gradient(160deg, rgba(77, 212, 255, 0.22) 0%, rgba(77, 212, 255, 0.06) 60%, rgba(77, 212, 255, 0.02) 100%);
-            border-color: rgba(77, 212, 255, 0.90);
-            color: var(--cyan);
-            box-shadow: inset 0 0 16px rgba(77, 212, 255, 0.12);
+            background: linear-gradient(160deg, rgba(90, 147, 236, 0.22) 0%, rgba(90, 147, 236, 0.06) 60%, rgba(90, 147, 236, 0.02) 100%);
+            border-color: rgba(90, 147, 236, 0.90);
+            color: #5a93ec;
+            box-shadow: inset 0 0 16px rgba(90, 147, 236, 0.12);
         }
 
         .mode-btn-v.active .icon-wrap {
-            background: rgba(77, 212, 255, 0.20);
-            color: var(--cyan);
+            background: rgba(90, 147, 236, 0.20);
+            color: #5a93ec;
         }
 
         .mode-btn-v[data-mode="heat"].active {
@@ -519,14 +530,14 @@
         }
 
         .mode-btn-h.active {
-            background: linear-gradient(160deg, rgba(77, 212, 255, 0.22) 0%, rgba(77, 212, 255, 0.06) 60%, rgba(77, 212, 255, 0.02) 100%);
-            border-color: rgba(77, 212, 255, 0.90);
-            color: var(--cyan);
-            box-shadow: inset 0 0 16px rgba(77, 212, 255, 0.12);
+            background: linear-gradient(160deg, rgba(90, 147, 236, 0.22) 0%, rgba(90, 147, 236, 0.06) 60%, rgba(90, 147, 236, 0.02) 100%);
+            border-color: rgba(90, 147, 236, 0.90);
+            color: #5a93ec;
+            box-shadow: inset 0 0 16px rgba(90, 147, 236, 0.12);
         }
 
         .mode-btn-h.active i {
-            color: var(--cyan);
+            color: #5a93ec;
         }
 
         /* === Timer panel === */
@@ -549,13 +560,13 @@
         }
 
         .timer-card.is-on {
-            background: rgba(110, 231, 183, 0.08);
-            border-color: rgba(110, 231, 183, 0.40);
+            background: #0a0a0c;
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
         .timer-card.is-off {
-            background: rgba(248, 113, 113, 0.08);
-            border-color: rgba(248, 113, 113, 0.40);
+            background: #0a0a0c;
+            border-color: rgba(255, 255, 255, 0.08);
         }
 
         .timer-card .t-icon {
@@ -611,12 +622,9 @@
             letter-spacing: 0em;
         }
 
-        .timer-card.is-on .t-value {
-            color: #6ee7b7;
-        }
-
+        .timer-card.is-on .t-value,
         .timer-card.is-off .t-value {
-            color: #f87171;
+            color: var(--ink-0);
         }
 
         .timer-card .t-value.empty {
@@ -652,9 +660,9 @@
             gap: 8px;
             padding: 0 16px;
             border-radius: var(--r-lg);
-            background: rgba(248, 113, 113, 0.10);
-            border: 1px solid rgba(248, 113, 113, 0.30);
-            color: var(--coral);
+            background: #dc2626;
+            border: 1px solid #dc2626;
+            color: #ffffff;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -672,14 +680,14 @@
         }
 
         .timer-delete-btn:hover {
-            background: rgba(248, 113, 113, 0.18);
-            border-color: rgba(248, 113, 113, 0.55);
-            color: #fca5a5;
-            box-shadow: 0 4px 16px -4px rgba(248, 113, 113, 0.35);
+            background: #b91c1c;
+            border-color: #b91c1c;
+            color: #ffffff;
+            box-shadow: none;
         }
 
         .timer-delete-btn i {
-            font-size: 11px;
+            font-size: 13px;
         }
 
         .ac-ctrl-busy {
@@ -1085,7 +1093,7 @@
                         <div class="selector-bar">
                             <div class="flex items-center gap-3 min-w-0 flex-1">
                                 <div class="selector" onclick="toggleDropdown()">
-                                    <i class="fa-solid fa-snowflake" style="color:var(--cyan);font-size:11px;"></i>
+                                    <i class="fa-solid fa-snowflake" style="color:#5a93ec;font-size:11px;"></i>
                                     <span id="selectedAC" style="text-transform:capitalize;">
                                         {{ $firstAc ? 'AC ' . $firstAc->ac_number . ' · ' . $firstAc->name . ($firstAc->brand ? ' · ' . $firstAc->brand : '') : 'No AC' }}
                                     </span>
@@ -1169,7 +1177,7 @@
                                             id="tempRing-{{ $ac->id }}"
                                             style="--fill-deg: {{ $fillDeg }}deg;">
                                             <div class="temp-ring-inner">
-                                                <p class="ring-label">Suhu AC</p>
+                                                <p class="ring-label">AC Temp</p>
                                                 <div class="ring-temp">
                                                     <span class="temp-value">{{ $curTemp }}</span><span
                                                         class="unit">°C</span>

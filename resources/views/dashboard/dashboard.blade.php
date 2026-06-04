@@ -21,9 +21,14 @@
             display: inline-flex;
             align-items: center;
             background-color: #0a0a0c;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: 8px;
             transition: var(--t-base);
+        }
+
+        .trend-filter:hover {
+            background-color: #15171d;
+            border-color: rgba(255, 255, 255, 0.42);
         }
 
         .trend-filter::after {
@@ -58,7 +63,7 @@
         }
 
         .trend-filter-select option {
-            background: #161a24;
+            background: #0a0a0c;
             color: #f0f2f8;
             font-weight: 600;
         }
@@ -709,7 +714,7 @@
             padding: 8px 14px;
             border-radius: var(--r-md);
             background: #0a0a0c;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             color: var(--ink-0);
             display: inline-flex;
             align-items: center;
@@ -722,7 +727,10 @@
             transition: var(--t-base);
         }
 
-        /* View all: no hover highlight (stays neutral) */
+        .dashboard-rooms-action:hover {
+            background: #15171d;
+            border-color: rgba(255, 255, 255, 0.42);
+        }
 
         .dashboard-room-list {
             display: grid;

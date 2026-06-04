@@ -143,9 +143,9 @@
             color: #94a3b8 !important;
         }
 
-        /* Tombol Control AC — solid blue (tidak transparan) */
+        /* Tombol Control AC — gradient biru (senada tombol Add) */
         .room-card .btn.btn-primary {
-            background: #335fc2;
+            background: linear-gradient(135deg, #5a93ec, #335fc2);
             border-color: #335fc2;
             color: #ffffff;
             box-shadow: none;
@@ -154,8 +154,8 @@
         }
 
         .room-card .btn.btn-primary:hover {
-            background: #2a4fa3;
-            border-color: #2a4fa3;
+            background: linear-gradient(135deg, #4d84db, #2c539e);
+            border-color: #2c539e;
             box-shadow: none;
             transform: none;
         }

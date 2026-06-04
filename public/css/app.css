@@ -2775,10 +2775,14 @@ body { min-height: 100vh; }
   border-color: var(--line);
   color: var(--ink-2);
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 .btn-icon:hover { background: var(--panel-2); color: var(--ink-0); }
-.btn-icon.danger { color: var(--coral); border-color: var(--coral-soft-2); background: var(--coral-soft); }
-.btn-icon.danger:hover { background: var(--coral-soft-2); }
+.btn-icon.danger { color: #ffffff; border-color: #dc2626; background: #dc2626; }
+.btn-icon.danger:hover { background: #b91c1c; border-color: #b91c1c; }
 .btn-icon.warning { color: var(--amber); border-color: var(--amber-soft-2); background: var(--amber-soft); }
 .btn-icon.lavender { color: var(--lavender); border-color: var(--lavender-soft-2); background: var(--lavender-soft); }
 .btn-icon.lavender:hover { background: var(--lavender-soft-2); color: var(--lavender); }
@@ -3041,7 +3045,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
 
 .tbl-toolbar {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; flex-wrap: wrap;
+  gap: 10px; flex-wrap: wrap;
   padding: 14px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
