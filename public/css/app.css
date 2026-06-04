@@ -2719,7 +2719,7 @@ body { min-height: 100vh; }
 .btn:disabled, .btn.disabled { opacity: 0.45; pointer-events: none; }
 
 .btn-primary {
-  background: linear-gradient(135deg, #5a93ec, #335fc2);
+  background: #335fc2;
   color: #fff;
   box-shadow: none;
 }
