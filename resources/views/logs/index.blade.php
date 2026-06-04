@@ -20,17 +20,41 @@
 
         /* Delete Activity — sama seperti Delete User */
         .btn.btn-danger {
-            background: var(--coral-soft);
-            border-color: var(--coral-soft-2);
-            color: var(--coral);
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
         }
 
         .btn.btn-danger:hover {
-            background: var(--coral-soft-2);
+            background: #b91c1c;
             box-shadow: none;
             transform: none;
+        }
+
+        /* Delete All Logs — enlarge trash icon so the box isn't empty */
+        .tbl-toolbar .btn.btn-danger i {
+            font-size: 18px !important;
+        }
+
+        /* Keep the box a fixed square so it doesn't grow with the icon */
+        .tbl-toolbar .btn.btn-danger {
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            padding: 0 !important;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        @media (max-width: 480px) {
+            .tbl-toolbar .btn.btn-danger {
+                width: 36px;
+                height: 36px;
+                min-height: 36px;
+            }
         }
 
         .toolbar-row .search-input {
@@ -243,7 +267,7 @@
 
             .tbl-toolbar .btn.btn-danger i {
                 margin: 0 !important;
-                font-size: 13px;
+                font-size: 15px;
             }
 
             .search-input input::placeholder {
@@ -850,7 +874,7 @@
                                         @if (Auth::user()->role == 'admin')
                                             <button type="button" onclick="deleteAllLogs()"
                                                 class="btn btn-danger btn-sm" title="Delete All Logs">
-                                                <i class="fa-solid fa-trash text-[10px]"></i>
+                                                <i class="fa-solid fa-trash text-[15px]"></i>
                                             </button>
                                         @endif
                                     </div>

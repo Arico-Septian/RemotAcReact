@@ -143,10 +143,10 @@
             color: #94a3b8 !important;
         }
 
-        /* Tombol Control AC — soft blue (senada tema) */
+        /* Tombol Control AC — solid blue (tidak transparan) */
         .room-card .btn.btn-primary {
-            background: rgba(59, 111, 212, 0.15);
-            border-color: rgba(59, 111, 212, 0.30);
+            background: #335fc2;
+            border-color: #335fc2;
             color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
@@ -154,16 +154,16 @@
         }
 
         .room-card .btn.btn-primary:hover {
-            background: rgba(59, 111, 212, 0.26);
-            border-color: rgba(59, 111, 212, 0.45);
+            background: #2a4fa3;
+            border-color: #2a4fa3;
             box-shadow: none;
             transform: none;
         }
 
-        /* Tombol Delete Room — sama seperti Delete User */
+        /* Tombol Delete Room — solid red (tidak transparan) */
         .room-card .btn.btn-danger {
-            background: var(--coral-soft);
-            border-color: var(--coral-soft-2);
+            background: #dc2626;
+            border-color: #dc2626;
             color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
@@ -171,7 +171,8 @@
         }
 
         .room-card .btn.btn-danger:hover {
-            background: var(--coral-soft-2);
+            background: #b91c1c;
+            border-color: #b91c1c;
             box-shadow: none;
             transform: none;
         }

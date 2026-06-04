@@ -2935,7 +2935,7 @@ select.input option, select option { background: var(--bg-2); color: var(--ink-0
   transition: var(--t-base);
 }
 .search-input input::placeholder { color: #64748b; }
-.search-input input:focus { border-color: var(--cyan); background: var(--panel-2); box-shadow: 0 0 0 3px var(--cyan-soft); }
+.search-input input:focus { border-color: #ffffff; background: var(--panel-2); box-shadow: none; }
 .search-input > i {
   position: absolute;
   left: 13px;

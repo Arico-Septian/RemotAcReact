@@ -60,6 +60,17 @@
             color: #ffffff;
         }
 
+        /* Delete user — solid dark red box, white icon */
+        .btn-icon.danger {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
+        }
+
+        .btn-icon.danger:hover {
+            background: #b91c1c;
+        }
+
         .stat-card .stat-label-sm {
             font-size: 10px;
             font-weight: 700;

@@ -39,11 +39,11 @@
 
         .room-card:hover {}
 
-        /* Tombol Detail & Grafik — soft blue (senada tema) */
+        /* Tombol Detail & Grafik — solid blue (tidak transparan) */
         .room-card .btn.btn-primary,
         .room-card .room-card-chart-btn {
-            background: rgba(59, 111, 212, 0.15);
-            border-color: rgba(59, 111, 212, 0.30);
+            background: #335fc2;
+            border-color: #335fc2;
             color: #ffffff;
             box-shadow: none;
             transition: var(--t-base);
@@ -55,8 +55,8 @@
 
         .room-card .btn.btn-primary:hover,
         .room-card .room-card-chart-btn:hover {
-            background: rgba(59, 111, 212, 0.26);
-            border-color: rgba(59, 111, 212, 0.45);
+            background: #2a4fa3;
+            border-color: #2a4fa3;
             color: #ffffff;
             box-shadow: none;
             transform: none;
