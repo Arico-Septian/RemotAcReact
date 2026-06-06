@@ -923,8 +923,9 @@
             window.handleAvatarSelect = function(el) {
                 const file = el.files[0];
                 if (!file) return;
-                if (file.size > 2 * 1024 * 1024) {
-                    (window.smToast || alert)('Maximum file size is 2 MB.', 'error');
+                // Sanity bound only; the photo is downscaled+compressed before upload.
+                if (file.size > 25 * 1024 * 1024) {
+                    (window.smToast || alert)('Maximum file size is 25 MB.', 'error');
                     el.value = '';
                     return;
                 }
@@ -941,15 +942,85 @@
                 openModal();
             };
 
+            // Downscale + compress in the browser so big phone photos upload
+            // reliably over slow networks and never hit the 2 MB server limit.
+            async function compressImage(file, maxDim = 512, quality = 0.85) {
+                try {
+                    const bitmap = await createImageBitmap(file);
+                    let w = bitmap.width,
+                        h = bitmap.height;
+                    if (w > maxDim || h > maxDim) {
+                        const scale = maxDim / Math.max(w, h);
+                        w = Math.round(w * scale);
+                        h = Math.round(h * scale);
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+                    if (bitmap.close) bitmap.close();
+                    const blob = await new Promise((r) => canvas.toBlob(r, 'image/jpeg', quality));
+                    return (blob && blob.size < file.size) ? blob : file;
+                } catch (e) {
+                    return file; // unsupported/undecodable → let the server validate
+                }
+            }
+
             cancelBtn.addEventListener('click', () => closeModal());
-            confirmBtn.addEventListener('click', () => {
+            confirmBtn.addEventListener('click', async () => {
+                const file = input.files[0];
+                if (!file) {
+                    closeModal();
+                    return;
+                }
+
+                const originalLabel = confirmBtn.innerHTML;
                 confirmBtn.disabled = true;
                 confirmBtn.innerHTML =
                     '<i class="fa-solid fa-spinner fa-spin text-[11px]"></i><span>Uploading...</span>';
-                closeModal({
-                    clearInput: false
-                });
-                form.submit();
+
+                try {
+                    const payload = await compressImage(file);
+                    const fd = new FormData();
+                    fd.append('avatar', payload, (payload instanceof File) ? payload.name : 'avatar.jpg');
+
+                    const res = await fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: fd,
+                    });
+
+                    if (res.ok) {
+                        (window.smToast || alert)('Profile photo updated.', 'success');
+                        closeModal();
+                        setTimeout(() => location.reload(), 600);
+                        return;
+                    }
+
+                    if (res.status === 419) {
+                        (window.smToast || alert)(
+                            'Session expired. Please refresh the page and try again.', 'error');
+                    } else if (res.status === 422) {
+                        const data = await res.json().catch(() => ({}));
+                        const msg = (data.errors && data.errors.avatar && data.errors.avatar[0]) ||
+                            data.message || 'Upload rejected.';
+                        (window.smToast || alert)(msg, 'error');
+                    } else {
+                        (window.smToast || alert)('Upload failed (' + res.status + '). Please try again.',
+                            'error');
+                    }
+                } catch (e) {
+                    (window.smToast || alert)('Network error. Check your connection and try again.',
+                        'error');
+                }
+
+                // Failure → keep the preview open so the user can retry the same photo.
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = originalLabel;
             });
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) closeModal();

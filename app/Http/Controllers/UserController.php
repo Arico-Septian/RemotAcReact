@@ -200,12 +200,12 @@ class UserController extends Controller
     public function uploadAvatar(Request $request)
     {
         $request->validate([
-            'avatar' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'avatar' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
         ], [
             'avatar.required' => 'Pilih file gambar dulu.',
             'avatar.image' => 'File harus berupa gambar.',
             'avatar.mimes' => 'Format yang didukung: JPG, PNG, WEBP.',
-            'avatar.max' => 'Ukuran maksimal 2 MB.',
+            'avatar.max' => 'Ukuran maksimal 5 MB.',
         ]);
 
         /** @var User $user */
@@ -218,6 +218,14 @@ class UserController extends Controller
         $path = $request->file('avatar')->store('avatars', 'public');
         $user->avatar = $path;
         $user->save();
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'avatar_url' => $user->avatar_url,
+                'message' => 'Foto profil berhasil diperbarui.',
+            ]);
+        }
 
         return back()->with('success', 'Foto profil berhasil diperbarui.');
     }

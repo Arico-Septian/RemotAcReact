@@ -885,21 +885,23 @@
                                                             </span>
                                                         </span>
                                                     </div>
-                                                    {{-- FUZZY OUTPUT (taruh DI BAWAH BAR SUHU) --}}
+                                                    {{-- DELTA T (di bawah bar suhu, DI LUAR kotak fuzzy) --}}
                                                     @if ($room->temperature !== null)
+                                                        <div class="temp-chip {{ $room->temperature_is_offline ? 'idle' : $tcls }} mt-2"
+                                                            style="justify-content:space-between;width:100%;">
+                                                            <span
+                                                                style="display:inline-flex;align-items:center;gap:6px;font-weight:500;">ΔT</span>
+                                                            <span class="text-mono">{{ $room->delta_t ?? 0 }}</span>
+                                                        </div>
+                                                    @endif
+                                                    {{-- FUZZY OUTPUT (di bawah ΔT) --}}
+                                                    @if (!empty($room->fuzzy))
                                                         <div class="mt-2"
                                                             style="background:var(--panel-1);border:1px solid var(--line-soft);border-radius:var(--r-md);padding:8px 10px;">
-                                                            <div class="flex items-center justify-between"
-                                                                style="font-size:12px;color:var(--ink-3);">
-                                                                <span>ΔT</span>
-                                                                <span
-                                                                    class="text-mono">{{ $room->delta_t ?? 0 }}</span>
-                                                            </div>
-                                                            @if (!empty($room->fuzzy))
                                                                 <div class="flex items-center justify-between mt-1"
                                                                     style="font-size:11px;">
                                                                     <span
-                                                                        style="color:var(--ink-3);flex-shrink:0;">Cooling</span>
+                                                                        style="color:var(--ink-3);flex-shrink:0;">Tingkat Pendinginan</span>
                                                                     <span class="text-mono"
                                                                         style="font-weight:700;color:var(--mint);white-space:nowrap;margin-left:6px;">
                                                                         {{ $room->fuzzy['status_pendinginan'] ?? '-' }}
@@ -928,7 +930,7 @@
                                                                         style="font-size:11px;color:var(--ink-3);margin-top:4px;">
                                                                         <div class="flex items-center justify-between">
                                                                             <span
-                                                                                style="flex-shrink:0;">Decision</span>
+                                                                                style="flex-shrink:0;">Keputusan</span>
                                                                             <span
                                                                                 class="text-mono {{ $keputusanClass }}"
                                                                                 style="font-weight:700;white-space:nowrap;margin-left:6px;">{{ $action }}</span>
@@ -943,7 +945,6 @@
                                                                         </div>
                                                                     </div>
                                                                 @endif
-                                                            @endif
                                                         </div>
                                                     @endif
                                                     <div class="grid grid-cols-2 gap-2">

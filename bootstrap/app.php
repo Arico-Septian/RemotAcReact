@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function ($middleware) {
+        // Trust the ngrok/reverse-proxy so Laravel honours X-Forwarded-Proto (https).
+        // Without this, requests behind ngrok look like http and route()/url() generate
+        // http:// links on an https page -> the browser blocks uploads as mixed content.
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'activity' => \App\Http\Middleware\UpdateLastActivity::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
