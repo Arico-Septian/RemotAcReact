@@ -1500,10 +1500,39 @@
             }
         }
 
+        /* Scroll viewport untuk grafik suhu (skala 16–40 setiap derajat) */
+        .temp-chart-scroll {
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+        }
+
+        .temp-chart-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .temp-chart-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 8px;
+        }
+
+        /* Canvas dibuat tinggi supaya 25 label (16–40°C) punya ruang & bisa di-scroll */
+        .temp-chart-tall {
+            position: relative;
+            height: 720px;
+            min-height: 100%;
+        }
+
         /* Temperature chart height responsive */
         @media (max-width: 768px) {
             .temp-chart-wrap {
                 height: 260px !important;
+            }
+
+            .temp-chart-tall {
+                height: 580px;
             }
         }
 
@@ -1526,7 +1555,12 @@
 
         @media (max-width: 480px) {
             .temp-chart-wrap {
-                height: 240px !important;
+                height: 260px !important;
+            }
+
+            /* Canvas mobile sedikit lebih pendek -> garis suhu tidak terdistorsi memanjang */
+            .temp-chart-tall {
+                height: 540px;
             }
 
             /* Panel temperatur lebih kompak di mobile */
@@ -1587,10 +1621,6 @@
         }
 
         @media (max-width: 480px) {
-            .temp-chart-wrap {
-                height: 220px !important;
-            }
-
             .temp-chart-panel {
                 padding: 16px !important;
             }
@@ -1820,7 +1850,13 @@
                                     </div>
                                 </div>
                                 <div class="temp-chart-wrap" style="height:300px;position:relative;">
-                                    <canvas id="tempChart"></canvas>
+                                    {{-- Scroll viewport: skala suhu 16–40 ditampilkan penuh di canvas tinggi,
+                                         user bisa scroll atas/bawah untuk lihat semua derajat. --}}
+                                    <div class="temp-chart-scroll">
+                                        <div class="temp-chart-tall">
+                                            <canvas id="tempChart"></canvas>
+                                        </div>
+                                    </div>
                                     <div id="tempChartEmpty" class="empty-state"
                                         style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;">
                                         <div style="text-align:center;">
@@ -2333,15 +2369,17 @@
                                 }
                             },
                             y: {
-                                min: 20,
-                                max: 36,
+                                min: 16,
+                                max: 40,
                                 ticks: {
                                     color: '#ffffff',
                                     font: {
                                         size: s.tickFontSize
                                     },
-                                    maxTicksLimit: s.yMaxTicks,
-                                    stepSize: 2,
+                                    // Tampilkan setiap derajat 16–40 (tanpa loncat / auto-skip).
+                                    // autoSkip:false bikin maxTicksLimit diabaikan -> semua label tampil.
+                                    stepSize: 1,
+                                    autoSkip: false,
                                     callback: v => v + '°C'
                                 },
                                 grid: {

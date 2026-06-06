@@ -1,6 +1,5 @@
 #include <WiFi.h>
 #include "esp_wifi.h"
-#include <WiFiClientSecure.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <DHT.h>
@@ -18,10 +17,10 @@
 const char* WIFI_SSID = "INDOCENTER";
 const char* WIFI_PASSWORD = "segosambel";
 
-const char* MQTT_HOST = "4edb07bbc98d48ba9e9154ee9bf84ccd.s1.eu.hivemq.cloud";
-const int MQTT_PORT = 8883;
-const char* MQTT_USER = "Arico";
-const char* MQTT_PASS = "Arico170903";
+const char* MQTT_HOST = "202.154.5.158";
+const int MQTT_PORT = 1883;
+const char* MQTT_USER = "Radnext";
+const char* MQTT_PASS = "RadnextTUS01";
 
 #define DEVICE_ID "esp32_01"
 
@@ -40,7 +39,7 @@ const unsigned long PING_OK_LOG_EVERY_MS = 600000;
 
 const int MAX_PUBLISH_FAILURES = 3;
 
-WiFiClientSecure espClient;
+WiFiClient espClient;
 PubSubClient client(espClient);
 DHT dht(DHT_PIN, DHT_TYPE);
 
@@ -921,7 +920,7 @@ void reconnect() {
     if (client.connect(cid.c_str(), MQTT_USER, MQTT_PASS,
                        lwtTopic, 1, true, "offline")) {
 
-      logLine("MQTT", "✅", "CONNECTED (TLS:%d)", MQTT_PORT);
+      logLine("MQTT", "✅", "CONNECTED (port:%d)", MQTT_PORT);
       consecutivePublishFails = 0;
 
       char stTopic[60];
@@ -987,7 +986,6 @@ void setup() {
 
   connectWiFi();
 
-  espClient.setInsecure();
   client.setBufferSize(2048);
   client.setKeepAlive(20);
   client.setSocketTimeout(8);

@@ -42,7 +42,7 @@ The scheduler is defined in `routes/console.php` (Laravel 13 pattern). Every min
 
 ### IoT Communication Flow
 
-1. **ESP32 devices** publish to MQTT topics (`broker.hivemq.com:1883`, public, no auth).
+1. **ESP32 devices** publish to MQTT topics. The broker host/port/credentials come from `.env` (`MQTT_HOST`, `MQTT_PORT`, `MQTT_USERNAME`, `MQTT_PASSWORD`); TLS is auto-enabled only when `MQTT_PORT=8883` (see `MqttService`). The ESP32 firmware (`esp`) must point at the same broker.
 2. **`php artisan mqtt:subscribe`** (`MqttSubscribe` command) listens in an infinite loop and updates `Cache` + DB on each message.
 3. **Cache** is the authoritative real-time source for device status (`device_{id}_last_seen`, `device_status_{id}`). DB values are a fallback.
 4. **Laravel Reverb** broadcasts events to WebSocket channels so the browser refreshes without polling. Eight events: `DeviceStatusUpdated`, `RoomTemperatureUpdated`, `AcStatusUpdated`, `AcTimerUpdated`, `NotificationCreated`, `UserLogCreated`, `UserLogsCleared`, `RaspiTemperatureUpdated`.
