@@ -45,7 +45,7 @@ class RoomController extends Controller
             $isOnline =
                 ($status === 'online' || $status === 'available')
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= 300;
+                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
 
             $room->device_status = $isOnline ? 'online' : 'offline';
 
@@ -61,7 +61,7 @@ class RoomController extends Controller
             $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
             if ($lastTempRecord && $lastTempRecord->created_at) {
                 $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
-                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 120;
+                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > Room::TEMPERATURE_STALE_SECONDS;
             } elseif (! $lastTempRecord) {
                 $room->temperature_is_offline = true;
             }
@@ -348,7 +348,7 @@ class RoomController extends Controller
 
             $isOnline = ($status === 'online' || $status === 'available')
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= 300;
+                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
 
             $room->device_status = $isOnline ? 'online' : 'offline';
 
@@ -357,7 +357,7 @@ class RoomController extends Controller
             $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
             if ($lastTempRecord && $lastTempRecord->created_at) {
                 $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
-                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 120;
+                $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > Room::TEMPERATURE_STALE_SECONDS;
             } elseif (! $lastTempRecord) {
                 $room->temperature_is_offline = true;
             }
@@ -394,14 +394,14 @@ class RoomController extends Controller
 
         $isOnline = ($status === 'online' || $status === 'available')
             && $lastSeen
-            && now()->diffInSeconds($lastSeen, true) <= 300;
+            && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
 
         $room->device_status = $isOnline ? 'online' : 'offline';
 
         $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
         if ($lastTempRecord && $lastTempRecord->created_at) {
             $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
-            $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > 120;
+            $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > Room::TEMPERATURE_STALE_SECONDS;
         } elseif (! $lastTempRecord) {
             $room->temperature_is_offline = true;
         }

@@ -40,7 +40,7 @@ class AcUnitController extends Controller
         $latestTempRecord = $tempHistory->first();
         $isFresh = $latestTempRecord
             && $latestTempRecord->created_at
-            && now()->diffInSeconds($latestTempRecord->created_at, true) <= 120;
+            && now()->diffInSeconds($latestTempRecord->created_at, true) <= Room::TEMPERATURE_STALE_SECONDS;
         $currentTemp = $isFresh ? $latestTempRecord->temperature : null;
 
         if ($currentTemp !== null) {
@@ -367,7 +367,7 @@ class AcUnitController extends Controller
 
         $isOnline = ($status === 'online' || $status === 'available')
             && $lastSeen
-            && now()->diffInSeconds($lastSeen, true) <= 300;
+            && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
 
         $room->device_status = $isOnline ? 'online' : 'offline';
     }

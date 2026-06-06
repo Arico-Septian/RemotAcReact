@@ -18,7 +18,7 @@ class CheckDeviceStatus extends Command
 
     const STATUS_OFFLINE = 'offline';
 
-    const OFFLINE_THRESHOLD = 90;
+    const OFFLINE_THRESHOLD = Room::ONLINE_THRESHOLD_SECONDS;
 
     const STATUS_TTL = 300;
 
@@ -37,27 +37,24 @@ class CheckDeviceStatus extends Command
         try {
             $this->info('Starting device status checker...');
 
-            for ($i = 0; $i < 12; $i++) {
+            // One pass per run; the scheduler fires this command every minute,
+            // so device status is re-evaluated every 60 s.
+            $now = now('Asia/Jakarta');
 
-                $now = now('Asia/Jakarta');
+            // Get all devices from rooms table
+            $devices = Room::whereNotNull('device_id')
+                ->select('id', 'device_id')
+                ->get();
 
-                // Get all devices from rooms table
-                $devices = Room::whereNotNull('device_id')
-                    ->select('id', 'device_id')
-                    ->get();
+            foreach ($devices as $room) {
+                // Normalize like MqttSubscribe to share the same cache keys
+                $deviceId = strtolower(trim((string) $room->device_id));
 
-                foreach ($devices as $room) {
-                    // Normalize like MqttSubscribe to share the same cache keys
-                    $deviceId = strtolower(trim((string) $room->device_id));
-
-                    $this->checkDeviceStatus($deviceId, $now);
-                }
-
-                // Also check for devices not in rooms table (if any)
-                $this->checkOrphanDevices($now);
-
-                sleep(5);
+                $this->checkDeviceStatus($deviceId, $now);
             }
+
+            // Also check for devices not in rooms table (if any)
+            $this->checkOrphanDevices($now);
 
             $this->info('Device status check completed');
 

@@ -59,9 +59,9 @@ The scheduler is defined in `routes/console.php` (Laravel 13 pattern). Every min
 | Server → Device | `device/{id}/config` | Sends room + AC list on reconnect |
 | Server → Device | `room/{room}/ac/{n}/control` | AC control command (retained QoS 1) |
 
-Room names in topics are always `strtolower(trim())`. A device is considered **online** in two contexts:
-- **Dashboard view** (DashboardController): `last_seen` within **300 seconds** (5 minutes)
-- **API endpoint** (`/device-status`): `last_seen` within **15 seconds**
+Room names in topics are always `strtolower(trim())`. A device is considered **online** when `last_seen` is within **`Room::ONLINE_THRESHOLD_SECONDS` (180 seconds)** — sized for the 60 s device ping (3x). This constant is the source of truth for **device** liveness — used by every UI view (DashboardController, RoomController, AcUnitController, `/device-status`), by `RunFuzzyLogic`, and by `CheckDeviceStatus` (as `OFFLINE_THRESHOLD`), so on-screen status and offline notifications always agree. `CheckDeviceStatus` does one pass per scheduled run, so device status is re-evaluated every **60 seconds**.
+
+**Temperature staleness** is governed by a separate constant, `Room::TEMPERATURE_STALE_SECONDS` (**180 s**): a room's latest `RoomTemperature` older than this is treated as offline/null. The ESP32 sends temperature **report-by-exception** — immediately when the reading changes ≥1 °C, otherwise a heartbeat every **60 s** — so 180 s ≈ 3× the slowest send rate. ESP32 firmware (`esp`) pings every **60 s** (`PING_INTERVAL`) and reads the DHT every 5 s (`SENSOR_INTERVAL`) but only publishes on change or on the 60 s heartbeat (`SENSOR_HEARTBEAT_INTERVAL`).
 
 ### Role System
 
@@ -100,7 +100,7 @@ Blade templates in `resources/views/`. Sidebar and bottom-nav are Blade componen
 ## Key Endpoints
 
 Read-only endpoints (authenticated, available to all roles):
-- `GET /device-status` — room device online/offline status (15 s online threshold)
+- `GET /device-status` — room device online/offline status (180 s online threshold, `Room::ONLINE_THRESHOLD_SECONDS`)
 - `GET /temperature` or `/temperatures` — latest room temperatures
 - `GET /temperature/history/{id}` — 24-hour temperature data grouped by hour
 - `GET /temperature/trend` — temperature chart with configurable range (1h/3h/6h/24h)

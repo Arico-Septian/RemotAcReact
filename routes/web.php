@@ -82,7 +82,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 if ($lastSeen) {
                     $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
-                    $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= 300;
+                    $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= Room::ONLINE_THRESHOLD_SECONDS;
                 }
 
                 return [
@@ -147,7 +147,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
         $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
 
         return in_array($status, ['online', 'available'], true)
-            && now()->diffInSeconds($lastSeenAt, true) <= 300;
+            && now()->diffInSeconds($lastSeenAt, true) <= Room::ONLINE_THRESHOLD_SECONDS;
     };
 
     $temperatureEndpoint = function () use ($roomDeviceIsOnline) {

@@ -39,7 +39,7 @@ class DashboardController extends Controller
 
             $isOnline = ($status === 'online' || $status === 'available')
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= 300;
+                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
 
             $room->device_status = $isOnline ? 'online' : 'offline';
 
@@ -48,7 +48,7 @@ class DashboardController extends Controller
             $temperatureIsOffline = ! $isOnline || $sensorStatus === 'offline';
             if ($latestTemperature && $latestTemperature->created_at) {
                 $temperatureIsOffline = $temperatureIsOffline
-                    || now()->diffInSeconds($latestTemperature->created_at, true) > 120;
+                    || now()->diffInSeconds($latestTemperature->created_at, true) > Room::TEMPERATURE_STALE_SECONDS;
             } else {
                 $temperatureIsOffline = true;
             }
@@ -106,7 +106,7 @@ class DashboardController extends Controller
 
             $isOnline = ($status === 'online' || $status === 'available')
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= 300;
+                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
 
             $isOnline ? $onlineRooms++ : $offlineRooms++;
         }
