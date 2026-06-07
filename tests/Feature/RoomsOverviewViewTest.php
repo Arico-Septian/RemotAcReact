@@ -12,7 +12,7 @@ class RoomsOverviewViewTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_rooms_overview_renders_demo_history_controls(): void
+    public function test_rooms_overview_renders_history_controls(): void
     {
         $user = User::factory()->create();
         $room = Room::create([
@@ -33,10 +33,8 @@ class RoomsOverviewViewTest extends TestCase
         $response
             ->assertOk()
             ->assertSee('historyRange')
-            ->assertSee('Hari ini')
-            ->assertSee('historyDemoButton')
+            ->assertSee('Today')
             ->assertSee('fetchHistoryStatus')
-            ->assertSee('Suhu: Tidak ada data')
-            ->assertSee('makeDemoHistoryData');
+            ->assertSee('Temp: No data');
     }
 }

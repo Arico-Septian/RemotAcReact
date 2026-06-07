@@ -14,6 +14,7 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        // Guests hitting the root are redirected to the login page.
+        $response->assertRedirect(route('login'));
     }
 }

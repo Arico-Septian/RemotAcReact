@@ -24,7 +24,7 @@ class ChangePasswordTest extends TestCase
             'password_confirmation' => 'NewPass123',
         ]);
 
-        $response->assertSessionHas('success', 'Password berhasil diubah');
+        $response->assertSessionHas('success', 'Password changed successfully.');
 
         $user->refresh();
 
