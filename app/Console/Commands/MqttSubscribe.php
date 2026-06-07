@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Events\DeviceStatusUpdated;
+use App\Events\RaspiTemperatureUpdated;
 use App\Events\RoomTemperatureUpdated;
 use App\Models\AcStatus;
 use App\Models\AcUnit;
@@ -56,6 +57,40 @@ class MqttSubscribe extends Command
                         Cache::put("device_{$deviceId}_config_sent", true, 300);
 
                         event(new DeviceStatusUpdated($deviceId, 'online'));
+                    },
+
+                    /* === RASPI / SERVER CPU TEMP (via MQTT) === */
+                    'raspi/temperature' => function ($topic, $message, $retained = false, $matchedWildcards = []) {
+                        // Terima JSON {"suhu":48.3} / {"temp":48.3} / {"temperature":48.3}, atau angka polos "48.3".
+                        $data = json_decode($message, true);
+                        $temp = is_array($data)
+                            ? ($data['suhu'] ?? $data['temp'] ?? $data['temperature'] ?? null)
+                            : $message;
+
+                        if (! is_numeric($temp)) {
+                            $this->warn("RASPI TEMP tidak valid: [{$message}]");
+
+                            return;
+                        }
+
+                        $temp = (float) $temp;
+
+                        // lm-sensors kadang kirim millidegree (mis. 48000) -> konversi ke °C.
+                        if ($temp > 1000) {
+                            $temp = round($temp / 1000, 1);
+                        }
+
+                        if ($temp <= 0 || $temp > 150) {
+                            $this->warn("RASPI TEMP di luar rentang wajar ({$temp}°C), diabaikan");
+
+                            return;
+                        }
+
+                        // Jalur yang sama dengan dashboard: cache 'raspi_temperature' (TTL 300s) + broadcast.
+                        Cache::put('raspi_temperature', $temp, 300);
+                        event(new RaspiTemperatureUpdated($temp));
+
+                        $this->info("RASPI TEMP (MQTT): {$temp}°C");
                     },
 
                     /* === PING === */

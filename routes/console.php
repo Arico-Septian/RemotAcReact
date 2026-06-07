@@ -25,10 +25,6 @@ Schedule::command('fuzzy:run')
     ->everyMinute()
     ->withoutOverlapping();
 
-Schedule::command('snmp:raspi-temp')
-    ->everyMinute()
-    ->withoutOverlapping();
-
 Schedule::command('notification:cleanup')
     ->dailyAt('00:00');
 
