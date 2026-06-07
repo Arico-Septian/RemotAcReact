@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Events\DeviceStatusUpdated;
-use App\Events\RaspiTemperatureUpdated;
 use App\Events\RoomTemperatureUpdated;
 use App\Models\AcStatus;
 use App\Models\AcUnit;
@@ -293,16 +292,6 @@ class MqttSubscribe extends Command
                                 'topic' => $topic,
                                 'error' => $e->getMessage(),
                             ]);
-                        }
-                    },
-
-                    /* === RASPI TEMPERATURE === */
-                    'raspi/temperature' => function ($topic, $message) {
-                        $temp = (float) trim($message);
-                        if ($temp > 0) {
-                            Cache::put('raspi_temperature', $temp, 300);
-                            $this->line("RASPI TEMP: {$temp}°C");
-                            event(new RaspiTemperatureUpdated($temp));
                         }
                     },
 

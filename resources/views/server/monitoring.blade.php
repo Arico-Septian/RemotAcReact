@@ -294,8 +294,8 @@
                 });
         }
         getSuhu();
-        setInterval(getSuhu, 3000);
-        // Real-time: Raspi suhu push via Reverb tanpa nunggu polling 3s
+        setInterval(getSuhu, 30000);
+        // Real-time: Raspi suhu push via Reverb tanpa nunggu polling 30s
         if (window.Echo) {
             window.Echo.channel('device-status')
                 .listen('.RaspiTemperatureUpdated', () => getSuhu());

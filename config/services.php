@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    // SNMP — baca suhu CPU Raspberry Pi via snmpwalk (command snmp:raspi-temp).
+    // temp_oid default = nsExtendOutLine dari extend "cpu-temp" di snmpd.conf Raspi.
+    'snmp' => [
+        'enabled' => env('SNMP_ENABLED', false),
+        'host' => env('SNMP_HOST', '127.0.0.1'),
+        'community' => env('SNMP_COMMUNITY', 'public'),
+        'temp_oid' => env('SNMP_TEMP_OID', '.1.3.6.1.4.1.8072.1.3.2.3.1.1'),
+    ],
+
 ];
