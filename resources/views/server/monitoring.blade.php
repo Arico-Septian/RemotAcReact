@@ -248,6 +248,16 @@
     </div>
     @include('components.sidebar-scripts')
     <script>
+        function formatAge(sec) {
+            if (sec === null || sec === undefined) return '–';
+            sec = Math.max(0, Math.floor(sec));
+            if (sec < 60) return sec + 's';
+            const m = Math.floor(sec / 60);
+            if (m < 60) return m + ' min';
+            const h = Math.floor(m / 60);
+            return h + ' h ' + (m % 60) + ' min';
+        }
+
         function getSuhu() {
             fetch('/suhu-raspi?_=' + Date.now(), {
                     cache: 'no-store'
@@ -259,7 +269,9 @@
                 .then(data => {
                     const el = document.getElementById('raspi-temp');
                     const st = document.getElementById('raspi-status');
-                    if (data.value !== null && data.value !== undefined) {
+                    const hasValue = data.value !== null && data.value !== undefined;
+                    if (data.online && hasValue) {
+                        // ONLINE — suhu live
                         el.innerHTML = data.value + '<span class="raspi-unit">°C</span>';
                         el.className = 'raspi-temp ' + (
                             data.value >= 70 ? 'temp-hot' :
@@ -267,8 +279,17 @@
                             'temp-cool'
                         );
                         st.innerHTML =
-                            '<span class="raspi-indicator online" id="raspi-dot"></span>Online · Updates every 1 minute';
+                            '<span class="raspi-indicator online" id="raspi-dot"></span>Online · updated ' +
+                            formatAge(data.age) + ' ago';
+                    } else if (hasValue) {
+                        // OFFLINE tapi ada pembacaan terakhir — tampilkan redup + last seen
+                        el.innerHTML = data.value + '<span class="raspi-unit">°C</span>';
+                        el.className = 'raspi-temp temp-muted';
+                        st.innerHTML =
+                            '<span class="raspi-indicator offline" id="raspi-dot"></span>Offline · last seen ' +
+                            formatAge(data.age) + ' ago';
                     } else {
+                        // Belum pernah ada data sama sekali
                         el.innerText = '--';
                         el.className = 'raspi-temp temp-muted';
                         st.innerHTML =

@@ -86,8 +86,11 @@ class MqttSubscribe extends Command
                             return;
                         }
 
-                        // Jalur yang sama dengan dashboard: cache 'raspi_temperature' (TTL 300s) + broadcast.
-                        Cache::put('raspi_temperature', $temp, 300);
+                        // Simpan nilai + waktu terima. TTL panjang (30 mnt) supaya nilai terakhir
+                        // tetap bisa ditampilkan sebagai "last seen" walau Raspi sudah offline.
+                        // Status online/offline ditentukan endpoint /suhu-raspi dari umur data.
+                        Cache::put('raspi_temperature', $temp, 1800);
+                        Cache::put('raspi_temperature_at', now()->timestamp, 1800);
                         event(new RaspiTemperatureUpdated($temp));
 
                         $this->info("RASPI TEMP (MQTT): {$temp}°C");

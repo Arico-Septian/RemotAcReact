@@ -484,10 +484,20 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
     Route::get('/suhu-raspi', function () {
         $temp = Cache::get('raspi_temperature');
+        $at = Cache::get('raspi_temperature_at');
+
+        // Umur data (detik) sejak terakhir Raspi kirim suhu.
+        $ageSeconds = $at !== null ? max(0, now()->timestamp - (int) $at) : null;
+
+        // Online jika ada data & umurnya <= 180 detik (3x interval kirim 60s).
+        // Konsisten dengan Room::TEMPERATURE_STALE_SECONDS untuk sensor ruangan.
+        $isOnline = $temp !== null && $ageSeconds !== null && $ageSeconds <= 180;
 
         return response()->json([
             'suhu' => $temp !== null ? $temp.' °C' : null,
             'value' => $temp,
+            'online' => $isOnline,
+            'age' => $ageSeconds,
         ])->header('Cache-Control', 'no-store, no-cache, must-revalidate');
     });
 
