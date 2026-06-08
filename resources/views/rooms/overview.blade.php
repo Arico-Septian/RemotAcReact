@@ -548,13 +548,45 @@
             padding-bottom: 22px;
         }
 
+        /* Frozen panes: sumbu Y beku di kiri (scroll vertikal), sumbu X beku di bawah (scroll horizontal),
+           plot di tengah bisa di-scroll 2 arah. Lebar sumbu Y = 44px, tinggi sumbu X = 26px. */
         #historyChartWrap {
+            position: relative;
             height: clamp(220px, 45vh, 300px);
             min-height: 0;
         }
 
+        #historyYAxisClip {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 26px;
+            width: 44px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        #historyYAxis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 44px;
+            will-change: transform;
+        }
+
         #historyChartScroller {
-            height: 100%;
+            position: absolute;
+            left: 44px;
+            right: 0;
+            top: 0;
+            bottom: 26px;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgb(var(--ink-2-rgb) / 0.42) transparent;
+        }
+
+        #historyChartInner {
+            position: relative;
         }
 
         #historyChart {
@@ -562,12 +594,22 @@
             height: 100% !important;
         }
 
-        #historyChartWrap.show-full-range {
-            overflow-x: auto;
-            overflow-y: hidden;
-            padding-bottom: 2px;
-            scrollbar-width: thin;
-            scrollbar-color: rgb(var(--ink-2-rgb) / 0.42) transparent;
+        #historyXAxisClip {
+            position: absolute;
+            left: 44px;
+            right: 0;
+            bottom: 0;
+            height: 26px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        #historyXAxis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 26px;
+            will-change: transform;
         }
 
         .history-range-select {
@@ -892,8 +934,16 @@
                     <p class="empty-sub">No temperature data in the last 24 hours</p>
                 </div>
                 <div id="historyChartWrap" hidden>
+                    <div id="historyYAxisClip">
+                        <canvas id="historyYAxis"></canvas>
+                    </div>
                     <div id="historyChartScroller">
-                        <canvas id="historyChart"></canvas>
+                        <div id="historyChartInner">
+                            <canvas id="historyChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="historyXAxisClip">
+                        <canvas id="historyXAxis"></canvas>
                     </div>
                 </div>
             </div>
@@ -1107,9 +1157,9 @@
                     borderWidth: 2,
                     tickSize: slotCount >= 18 ? 8 : 8.5,
                     xMaxTicks: slotCount,
-                    xAutoSkip: true,
+                    xAutoSkip: false,
                     yMaxTicks: 9,
-                    minWidth: 0,
+                    minWidth: Math.max(420, slotCount * 32),
                     padding: {
                         top: 8,
                         right: 4,
@@ -1126,9 +1176,9 @@
                     borderWidth: 2,
                     tickSize: slotCount >= 18 ? 8.5 : 9,
                     xMaxTicks: slotCount,
-                    xAutoSkip: true,
+                    xAutoSkip: false,
                     yMaxTicks: 9,
-                    minWidth: 0,
+                    minWidth: Math.max(420, slotCount * 32),
                     padding: {
                         top: 10,
                         right: 8,
@@ -1144,9 +1194,9 @@
                 borderWidth: 2,
                 tickSize: slotCount >= 18 ? 9 : 10,
                 xMaxTicks: slotCount,
-                xAutoSkip: true,
+                xAutoSkip: false,
                 yMaxTicks: 9,
-                minWidth: 0,
+                minWidth: Math.max(420, slotCount * 32),
                 padding: {
                     top: 12,
                     right: 10,
@@ -1155,6 +1205,78 @@
                 }
             };
         }
+
+        // Sumbu Y beku: gambar 16–33°C di canvas #historyYAxis (tinggi = tinggi plot penuh).
+        // Disinkronkan vertikal lewat transform saat plot di-scroll; diam saat scroll horizontal.
+        const frozenYAxisPlugin = {
+            id: 'frozenYAxis',
+            afterDraw(chart) {
+                const overlay = document.getElementById('historyYAxis');
+                const yScale = chart.scales.y;
+                if (!overlay || !yScale) return;
+
+                const dpr = window.devicePixelRatio || 1;
+                const cssW = 44;
+                const cssH = chart.height;
+                overlay.style.height = cssH + 'px';
+                if (overlay.width !== Math.round(cssW * dpr) || overlay.height !== Math.round(cssH * dpr)) {
+                    overlay.width = Math.round(cssW * dpr);
+                    overlay.height = Math.round(cssH * dpr);
+                }
+
+                const octx = overlay.getContext('2d');
+                octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                octx.clearRect(0, 0, cssW, cssH);
+
+                const fontSize = chart.options.scales.y.ticks.font?.size || 10;
+                octx.font = `${fontSize}px Inter, system-ui, sans-serif`;
+                octx.fillStyle = '#64748b';
+                octx.textAlign = 'right';
+                octx.textBaseline = 'middle';
+
+                const lo = Math.ceil(yScale.min);
+                const hi = Math.floor(yScale.max);
+                for (let v = lo; v <= hi; v++) {
+                    octx.fillText(v + '°C', cssW - 5, yScale.getPixelForValue(v));
+                }
+            }
+        };
+
+        // Sumbu X beku: gambar label waktu di canvas #historyXAxis (lebar = lebar plot penuh).
+        // Disinkronkan horizontal lewat transform saat plot di-scroll; diam saat scroll vertikal.
+        const frozenXAxisPlugin = {
+            id: 'frozenXAxis',
+            afterDraw(chart) {
+                const overlay = document.getElementById('historyXAxis');
+                const xScale = chart.scales.x;
+                if (!overlay || !xScale) return;
+
+                const dpr = window.devicePixelRatio || 1;
+                const cssW = chart.width;
+                const cssH = 26;
+                overlay.style.width = cssW + 'px';
+                if (overlay.width !== Math.round(cssW * dpr) || overlay.height !== Math.round(cssH * dpr)) {
+                    overlay.width = Math.round(cssW * dpr);
+                    overlay.height = Math.round(cssH * dpr);
+                }
+
+                const octx = overlay.getContext('2d');
+                octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                octx.clearRect(0, 0, cssW, cssH);
+
+                const fontSize = chart.options.scales.x.ticks.font?.size || 9;
+                octx.font = `${fontSize}px Inter, system-ui, sans-serif`;
+                octx.fillStyle = '#64748b';
+                octx.textAlign = 'center';
+                octx.textBaseline = 'top';
+
+                const xLabels = chart.data.labels || [];
+                xLabels.forEach((label, i) => {
+                    if (label == null || label === '') return;
+                    octx.fillText(String(label), xScale.getPixelForValue(i), 5);
+                });
+            }
+        };
 
         function renderHistoryChart(data, status = null) {
             const chartSizing = historyChartOptionsForViewport();
@@ -1165,9 +1287,10 @@
             chartWrap.hidden = false;
             chartWrap.classList.add('show-full-range');
 
-            const chartScroller = document.getElementById('historyChartScroller');
-            if (chartScroller) {
-                chartScroller.style.minWidth = chartSizing.minWidth > 0 ? `${chartSizing.minWidth}px` : '';
+            const chartInner = document.getElementById('historyChartInner');
+            if (chartInner) {
+                chartInner.style.minWidth = chartSizing.minWidth > 0 ? `${chartSizing.minWidth}px` : '';
+                chartInner.style.height = '520px';
             }
 
             if (historyChartInstance) {
@@ -1193,6 +1316,7 @@
 
             historyChartInstance = new Chart(ctx, {
                 type: 'line',
+                plugins: [frozenYAxisPlugin, frozenXAxisPlugin],
                 data: {
                     labels,
                     datasets: [{
@@ -1242,14 +1366,19 @@
                     scales: {
                         x: {
                             ticks: {
+                                // Label disembunyikan; digambar di canvas #historyXAxis yang "beku".
                                 color: '#64748b',
                                 autoSkip: chartSizing.xAutoSkip,
                                 maxTicksLimit: chartSizing.xMaxTicks,
                                 maxRotation: 0,
                                 minRotation: 0,
+                                display: false,
                                 font: {
                                     size: chartSizing.tickSize
                                 }
+                            },
+                            border: {
+                                display: false
                             },
                             grid: {
                                 display: false
@@ -1259,14 +1388,18 @@
                             min: 16,
                             max: 33,
                             ticks: {
+                                // Label disembunyikan di sini; digambar di canvas #historyYAxis yang "beku".
                                 color: '#64748b',
-                                // Tampilkan setiap derajat 16–33 (tanpa loncat / auto-skip), sama seperti dashboard.
                                 stepSize: 1,
                                 autoSkip: false,
+                                display: false,
                                 font: {
                                     size: chartSizing.tickSize
                                 },
                                 callback: v => v + '°C'
+                            },
+                            border: {
+                                display: false
                             },
                             grid: {
                                 color: 'rgba(255,255,255,0.04)'
@@ -1275,6 +1408,19 @@
                     }
                 }
             });
+
+            // Sinkronkan sumbu beku dengan posisi scroll plot (Y ikut vertikal, X ikut horizontal).
+            const histScroller = document.getElementById('historyChartScroller');
+            if (histScroller) {
+                histScroller.onscroll = () => {
+                    const yEl = document.getElementById('historyYAxis');
+                    const xEl = document.getElementById('historyXAxis');
+                    if (yEl) yEl.style.transform = `translateY(${-histScroller.scrollTop}px)`;
+                    if (xEl) xEl.style.transform = `translateX(${-histScroller.scrollLeft}px)`;
+                };
+                histScroller.scrollTop = 0;
+                histScroller.scrollLeft = 0;
+            }
         }
 
         function applyHistoryChartResponsiveSizing() {
@@ -1290,9 +1436,10 @@
             historyChartInstance.options.scales.y.ticks.maxTicksLimit = chartSizing.yMaxTicks;
             document.getElementById('historyChartWrap')?.classList.add('show-full-range');
 
-            const chartScroller = document.getElementById('historyChartScroller');
-            if (chartScroller) {
-                chartScroller.style.minWidth = chartSizing.minWidth > 0 ? `${chartSizing.minWidth}px` : '';
+            const chartInner = document.getElementById('historyChartInner');
+            if (chartInner) {
+                chartInner.style.minWidth = chartSizing.minWidth > 0 ? `${chartSizing.minWidth}px` : '';
+                chartInner.style.height = '520px';
             }
 
             historyChartInstance.data.datasets.forEach(dataset => {
