@@ -1288,7 +1288,20 @@
                 const xLabels = chart.data.labels || [];
                 xLabels.forEach((label, i) => {
                     if (label == null || label === '') return;
-                    octx.fillText(String(label), xScale.getPixelForValue(i), 5);
+                    const px = xScale.getPixelForValue(i);
+
+                    // Cegah label tepi terpotong: anchor kiri/kanan kalau dekat tepi canvas.
+                    const halfW = octx.measureText(String(label)).width / 2;
+                    let drawX = px;
+                    octx.textAlign = 'center';
+                    if (px - halfW < 1) {
+                        octx.textAlign = 'left';
+                        drawX = 1;
+                    } else if (px + halfW > cssW - 1) {
+                        octx.textAlign = 'right';
+                        drawX = cssW - 1;
+                    }
+                    octx.fillText(String(label), drawX, 5);
                 });
             }
         };

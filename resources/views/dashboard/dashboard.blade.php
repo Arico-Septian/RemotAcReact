@@ -2256,10 +2256,29 @@
                     octx.textAlign = 'center';
                     octx.textBaseline = 'top';
 
+                    // Jarangkan label biar tidak tumpang tindih (label asli disembunyikan,
+                    // jadi auto-skip Chart.js tidak jalan — kita atur jarak minimum sendiri).
+                    let lastDrawnX = -Infinity;
+                    const minGap = 44;
                     (xScale.ticks || []).forEach((t, i) => {
                         const label = (t.label != null) ? t.label : '';
                         if (label === '') return;
-                        octx.fillText(label, xScale.getPixelForTick(i), 6);
+                        const px = xScale.getPixelForTick(i);
+                        if (px - lastDrawnX < minGap) return;
+
+                        // Cegah label tepi terpotong: anchor kiri/kanan kalau dekat tepi canvas.
+                        const halfW = octx.measureText(label).width / 2;
+                        let drawX = px;
+                        octx.textAlign = 'center';
+                        if (px - halfW < 1) {
+                            octx.textAlign = 'left';
+                            drawX = 1;
+                        } else if (px + halfW > cssW - 1) {
+                            octx.textAlign = 'right';
+                            drawX = cssW - 1;
+                        }
+                        octx.fillText(label, drawX, 6);
+                        lastDrawnX = px;
                     });
                 }
             };
