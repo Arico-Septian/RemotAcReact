@@ -32,21 +32,21 @@
         }
 
         .room-card .temp-chip.cool {
-            background: rgb(var(--cyan-rgb) / 0.15) !important;
-            color: var(--cyan) !important;
-            border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
+            background: rgba(37, 99, 235, 0.85) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(37, 99, 235, 0.9) !important;
         }
 
         .room-card .temp-chip.warm {
-            background: rgb(var(--mint-rgb) / 0.15) !important;
-            color: var(--mint) !important;
-            border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
+            background: rgba(5, 150, 105, 0.85) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(5, 150, 105, 0.9) !important;
         }
 
         .room-card .temp-chip.hot {
-            background: rgba(248, 113, 113, 0.15) !important;
-            color: var(--red) !important;
-            border: 1px solid rgba(248, 113, 113, 0.4) !important;
+            background: rgba(220, 38, 38, 0.85) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(220, 38, 38, 0.9) !important;
         }
 
         .room-card .temp-chip.idle {

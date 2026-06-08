@@ -1500,7 +1500,7 @@
             }
         }
 
-        /* Scroll viewport untuk grafik suhu (skala 16–40 setiap derajat) */
+        /* Scroll viewport untuk grafik suhu (skala 16–33 setiap derajat) */
         .temp-chart-scroll {
             height: 100%;
             overflow-y: auto;
@@ -1518,10 +1518,10 @@
             border-radius: 8px;
         }
 
-        /* Canvas dibuat tinggi supaya 25 label (16–40°C) punya ruang & bisa di-scroll */
+        /* Canvas dibuat tinggi supaya 18 label (16–33°C) punya ruang & bisa di-scroll */
         .temp-chart-tall {
             position: relative;
-            height: 720px;
+            height: 540px;
             min-height: 100%;
         }
 
@@ -1532,7 +1532,7 @@
             }
 
             .temp-chart-tall {
-                height: 580px;
+                height: 480px;
             }
         }
 
@@ -1556,11 +1556,6 @@
         @media (max-width: 480px) {
             .temp-chart-wrap {
                 height: 260px !important;
-            }
-
-            /* Canvas mobile sedikit lebih pendek -> garis suhu tidak terdistorsi memanjang */
-            .temp-chart-tall {
-                height: 540px;
             }
 
             /* Panel temperatur lebih kompak di mobile */
@@ -1834,24 +1829,21 @@
                                 <div class="panel-header">
                                     <div>
                                         <p class="eyebrow"><i class="fa-solid fa-chart-line"></i> <span
-                                                id="trendRangeLabel">Trend last 1 hour</span></p>
-                                        <h2 class="panel-title">Room Temperatures</h2>
+                                                id="trendRangeLabel">Trend last 24 hours</span></p>
+                                        <h2 class="panel-title">Average Room Temperature</h2>
                                     </div>
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="trend-filter">
                                             <select id="trendRange" class="trend-filter-select"
                                                 title="Select time range">
+                                                <option value="1d">1 Day</option>
                                                 <option value="1h">1 Hour</option>
-                                                <option value="3h">3 Hours</option>
-                                                <option value="6h">6 Hours</option>
-                                                <option value="today">Today</option>
                                             </select>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="temp-chart-wrap" style="height:300px;position:relative;">
-                                    {{-- Scroll viewport: skala suhu 16–40 ditampilkan penuh di canvas tinggi,
-                                         user bisa scroll atas/bawah untuk lihat semua derajat. --}}
+                                    {{-- Scroll viewport: skala suhu 16–33 ditampilkan penuh di canvas tinggi. --}}
                                     <div class="temp-chart-scroll">
                                         <div class="temp-chart-tall">
                                             <canvas id="tempChart"></canvas>
@@ -2370,7 +2362,7 @@
                             },
                             y: {
                                 min: 16,
-                                max: 40,
+                                max: 33,
                                 ticks: {
                                     color: '#ffffff',
                                     font: {
@@ -2421,34 +2413,27 @@
 
             function getTrendRange() {
                 const saved = localStorage.getItem('trendRange');
-                const normalized = saved === '24h' ? 'today' : saved;
-                const allowed = ['1h', '3h', '6h', 'today'];
-                return allowed.includes(normalized) ? normalized : '1h';
+                return ['1d', '1h'].includes(saved) ? saved : '1d';
             }
 
             const RANGE_LABELS = {
+                '1d': 'Trend last 24 hours',
                 '1h': 'Trend last 1 hour',
-                '3h': 'Trend last 3 hours',
-                '6h': 'Trend last 6 hours',
-                'today': 'Trend today',
             };
 
             function refreshTrendChart(showLoader = false) {
                 if (!tempChart) return;
 
-                const limit = getTrendLimit();
                 const range = getTrendRange();
-
                 const labelEl = document.getElementById('trendRangeLabel');
-                if (labelEl) labelEl.textContent = RANGE_LABELS[range] || RANGE_LABELS['1h'];
+                if (labelEl) labelEl.textContent = RANGE_LABELS[range] || RANGE_LABELS['1d'];
 
                 if (showLoader) {
                     const spinner = document.getElementById('tempChartLoading');
                     if (spinner) spinner.style.display = 'flex';
                 }
 
-                const trendRequest = fetch(
-                        `/temperature/trend?limit=${encodeURIComponent(limit)}&range=${encodeURIComponent(range)}`)
+                const trendRequest = fetch(`/temperature/trend?range=${encodeURIComponent(range)}`)
                     .then(r => (r.ok ? r.json() : Promise.reject(r.status)));
 
                 trendRequest
@@ -2467,13 +2452,9 @@
                             canvasEl.style.display = hasAnyData ? 'block' : 'none';
                             const emptyTextEl = emptyEl.querySelector('.empty-sub');
                             if (emptyTextEl) {
-                                const rangeText = {
-                                    '1h': 'last 1 hour',
-                                    '3h': 'last 3 hours',
-                                    '6h': 'last 6 hours',
-                                    'today': 'today'
-                                };
-                                emptyTextEl.textContent = `No temperature data for ${rangeText[range] || range}`;
+                                emptyTextEl.textContent = range === '1h'
+                                    ? 'No temperature data for last 1 hour'
+                                    : 'No temperature data for last 24 hours';
                             }
                         }
 
@@ -2529,11 +2510,10 @@
 
                         const infoEl = document.getElementById('trendInfo');
                         if (infoEl) {
-                            const shown = (data.datasets || []).length;
-                            const onlineCount = (data.datasets || []).filter(d => !d.is_offline).length;
-                            const offlineCount = shown - onlineCount;
+                            const total = data.total_rooms ?? 0;
+                            const online = data.rooms_online ?? 0;
                             infoEl.textContent =
-                                `${onlineCount} online, ${offlineCount} offline. Chart uses recorded historical data.`;
+                                `Average of ${total} room(s) · ${online} online. Chart uses recorded historical data.`;
                         }
                     })
                     .catch(() => {
@@ -2648,7 +2628,6 @@
                         });
                 }
 
-                // Setup trend filter dropdowns
                 const rangeSelect = document.getElementById('trendRange');
                 if (rangeSelect) {
                     rangeSelect.value = getTrendRange();

@@ -194,11 +194,10 @@ Route::middleware(['auth', 'activity'])->group(function () {
         $normalized = RoomTemperature::normalizeRoomName($room->name);
         $range = (string) $request->query('range', 'today');
         $range = $range === '24h' ? 'today' : $range;
+        // Samakan dengan dashboard: 1 Hour = per menit (60 titik), 1 Day = 24 jam rolling per jam.
         $rangeConfig = [
-            '1h' => ['hours' => 1,  'interval' => 5,  'slots' => 12, 'label' => 'H:i'],
-            '3h' => ['hours' => 3,  'interval' => 10, 'slots' => 18, 'label' => 'H:i'],
-            '6h' => ['hours' => 6,  'interval' => 15, 'slots' => 24, 'label' => 'H:i'],
-            'today' => ['interval' => 60, 'label' => 'H:00', 'today' => true],
+            '1h' => ['hours' => 1,  'interval' => 1,  'slots' => 60, 'label' => 'H:i'],
+            'today' => ['hours' => 24, 'interval' => 60, 'slots' => 24, 'label' => 'H:00'],
         ];
         $cfg = $rangeConfig[$range] ?? $rangeConfig['today'];
         $interval = $cfg['interval'];
@@ -253,23 +252,18 @@ Route::middleware(['auth', 'activity'])->group(function () {
     });
 
     Route::get('/temperature/trend', function (Request $request) use ($roomDeviceIsOnline) {
-        $limit = min(max((int) $request->query('limit', 5), 1), 5);
-        $range = $request->query('range', '1h');
-        $range = $range === '24h' ? 'today' : $range;
-
-        // Konfigurasi range: total jam, interval menit, label format
+        // Dua pilihan: 1 Day (24 jam, per jam) & 1 Hour (1 jam, per menit).
+        $range = $request->query('range', '1d');
         $rangeConfig = [
-            '1h' => ['hours' => 1,  'interval' => 5,  'slots' => 12, 'label' => 'H:i'],
-            '3h' => ['hours' => 3,  'interval' => 10, 'slots' => 18, 'label' => 'H:i'],
-            '6h' => ['hours' => 6,  'interval' => 15, 'slots' => 24, 'label' => 'H:i'],
-            'today' => ['interval' => 60, 'label' => 'H:00', 'today' => true],
+            '1d' => ['hours' => 24, 'interval' => 60, 'slots' => 24, 'label' => 'H:00'],
+            '1h' => ['hours' => 1,  'interval' => 1,  'slots' => 60, 'label' => 'H:i'],
         ];
-        $cfg = $rangeConfig[$range] ?? $rangeConfig['1h'];
+        $cfg = $rangeConfig[$range] ?? $rangeConfig['1d'];
 
         $payload = Cache::remember(
-            "temperature_trend:{$range}:{$limit}",
+            "temperature_trend_avg:{$range}",
             10,
-            function () use ($cfg, $range, $limit, $roomDeviceIsOnline) {
+            function () use ($cfg, $range, $roomDeviceIsOnline) {
                 $interval = $cfg['interval'];
                 $labelFormat = $cfg['label'];
 
@@ -298,10 +292,6 @@ Route::middleware(['auth', 'activity'])->group(function () {
                 })->values();
 
                 $totalRooms = $rooms->count();
-
-                if ($limit > 0) {
-                    $rooms = $rooms->take($limit);
-                }
 
                 // Helper: bikin slot key (include tanggal supaya slot per jam tidak konflik antar hari)
                 $slotKeyFor = function (Carbon $time) use ($interval) {
@@ -345,13 +335,14 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 $labels = $slots->map(fn ($t) => $t->format($labelFormat));
 
-                $palette = [
-                    '#fb7185', '#fbbf24', '#2563eb', '#a78bfa',
-                    '#34d399', '#f472b6', '#60a5fa', '#fb923c',
-                    '#facc15', '#22d3ee', '#c084fc', '#f87171',
-                ];
+                // === SATU GARIS: rata-rata suhu semua ruangan per slot waktu ===
+                $slotKeys = $slots->map($slotKeyFor)->all();
 
-                $datasets = $rooms->values()->map(function ($room, $idx) use ($startTime, $slots, $palette, $latestTemperatures, $slotKeyFor, $slotExpr, $roomDeviceIsOnline) {
+                $perRoomSeries = [];   // per ruangan: [slotIdx => suhu|null]
+                $currentTemps = [];    // suhu terkini ruangan yang online
+                $onlineCount = 0;
+
+                foreach ($rooms as $room) {
                     $normalized = RoomTemperature::normalizeRoomName($room->name);
 
                     $grouped = RoomTemperature::where('room', $normalized)
@@ -361,45 +352,55 @@ Route::middleware(['auth', 'activity'])->group(function () {
                         ->pluck('avg_temp', 'slot_key')
                         ->map(fn ($v) => round((float) $v, 1));
 
-                    $data = $slots->map(fn ($t) => $grouped->get($slotKeyFor($t)));
+                    $perRoomSeries[] = array_map(fn ($k) => $grouped->get($k), $slotKeys);
 
+                    // status online + suhu terkini ruangan (untuk rata-rata "sekarang")
                     $lastRecord = $latestTemperatures->get($normalized);
-                    $lastKnownTemp = optional($lastRecord)->temperature;
-                    $currentTemp = $lastKnownTemp;
-
-                    // Cek apakah sensor suhu offline (data terakhir > 120 detik lalu)
                     $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
-                    $offlineSince = null;
                     if ($lastRecord && $lastRecord->created_at) {
-                        $secondsAgo = now()->diffInSeconds($lastRecord->created_at, true);
-                        $isOffline = $isOffline || $secondsAgo > 120;
-                        if ($isOffline) {
-                            $offlineSince = $lastRecord->created_at->format('H:i');
-                            $currentTemp = null;
-                        }
+                        $isOffline = $isOffline || now()->diffInSeconds($lastRecord->created_at, true) > 120;
                     } else {
                         $isOffline = true;
-                        $currentTemp = null;
                     }
+                    if (! $isOffline && $lastRecord) {
+                        $currentTemps[] = (float) $lastRecord->temperature;
+                        $onlineCount++;
+                    }
+                }
 
-                    return [
-                        'room' => ucfirst($room->name),
-                        'room_id' => $room->id,
-                        'current_temp' => $currentTemp,
-                        'last_temp' => $lastKnownTemp,
-                        'is_offline' => $isOffline,
-                        'offline_since' => $offlineSince,
-                        'data' => $data->values()->all(),
-                        'color' => $palette[$idx % count($palette)],
-                    ];
-                });
+                // Rata-ratakan tiap slot lintas ruangan (slot tanpa data mana pun = null).
+                // Rata-rata dihitung dari rata-rata per-ruangan, jadi tiap ruangan berbobot sama.
+                $avgData = [];
+                foreach (array_keys($slotKeys) as $i) {
+                    $vals = [];
+                    foreach ($perRoomSeries as $series) {
+                        if ($series[$i] !== null) {
+                            $vals[] = $series[$i];
+                        }
+                    }
+                    $avgData[] = $vals === [] ? null : round(array_sum($vals) / count($vals), 1);
+                }
+
+                $avgCurrent = $currentTemps === [] ? null : round(array_sum($currentTemps) / count($currentTemps), 1);
+
+                $datasets = [[
+                    'room' => 'Rata-rata Ruangan',
+                    'room_id' => 0,
+                    'current_temp' => $avgCurrent,
+                    'last_temp' => $avgCurrent,
+                    'is_offline' => $onlineCount === 0,
+                    'offline_since' => null,
+                    'data' => $avgData,
+                    'color' => '#22d3ee',
+                ]];
 
                 return [
                     'labels' => $labels->values()->all(),
-                    'datasets' => $datasets->values()->all(),
+                    'datasets' => $datasets,
                     'total_rooms' => $totalRooms,
-                    'shown' => $datasets->count(),
-                    'limit' => $limit,
+                    'rooms_online' => $onlineCount,
+                    'rooms_offline' => $totalRooms - $onlineCount,
+                    'shown' => 1,
                     'range' => $range,
                     'interval_minutes' => $interval,
                 ];

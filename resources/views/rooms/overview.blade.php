@@ -875,10 +875,8 @@
                 </div>
                 <div class="history-actions">
                     <select id="historyRange" class="history-range-select" title="Select history range">
-                        <option value="1h">1h</option>
-                        <option value="3h">3h</option>
-                        <option value="6h">6h</option>
-                        <option value="today">Today</option>
+                        <option value="1h">1 Hour</option>
+                        <option value="today">1 Day</option>
                     </select>
                     <button type="button" class="modal-close" onclick="closeHistory()"><i
                             class="fa-solid fa-xmark"></i></button>
@@ -1006,26 +1004,16 @@
         let historyRoomId = null;
         const historyRangeText = {
             '1h': 'Last 1 hour',
-            '3h': 'Last 3 hours',
-            '6h': 'Last 6 hours',
-            'today': 'Today'
+            'today': 'Last 1 day'
         };
         const historyRangeConfig = {
             '1h': {
-                intervalMinutes: 5,
-                slots: 12
-            },
-            '3h': {
-                intervalMinutes: 10,
-                slots: 18
-            },
-            '6h': {
-                intervalMinutes: 15,
-                slots: 24
+                intervalMinutes: 1,
+                slots: 60
             },
             'today': {
                 intervalMinutes: 60,
-                today: true
+                slots: 24
             }
         };
 
@@ -1119,9 +1107,9 @@
                     borderWidth: 2,
                     tickSize: slotCount >= 18 ? 8 : 8.5,
                     xMaxTicks: slotCount,
-                    xAutoSkip: false,
+                    xAutoSkip: true,
                     yMaxTicks: 9,
-                    minWidth: Math.max(420, slotCount * 30),
+                    minWidth: 0,
                     padding: {
                         top: 8,
                         right: 4,
@@ -1138,9 +1126,9 @@
                     borderWidth: 2,
                     tickSize: slotCount >= 18 ? 8.5 : 9,
                     xMaxTicks: slotCount,
-                    xAutoSkip: false,
+                    xAutoSkip: true,
                     yMaxTicks: 9,
-                    minWidth: Math.max(520, slotCount * 32),
+                    minWidth: 0,
                     padding: {
                         top: 10,
                         right: 8,
@@ -1156,9 +1144,9 @@
                 borderWidth: 2,
                 tickSize: slotCount >= 18 ? 9 : 10,
                 xMaxTicks: slotCount,
-                xAutoSkip: false,
+                xAutoSkip: true,
                 yMaxTicks: 9,
-                minWidth: slotCount >= 18 ? slotCount * 34 : 0,
+                minWidth: 0,
                 padding: {
                     top: 12,
                     right: 10,
@@ -1268,12 +1256,13 @@
                             }
                         },
                         y: {
-                            min: 20,
-                            max: 36,
+                            min: 16,
+                            max: 33,
                             ticks: {
                                 color: '#64748b',
-                                maxTicksLimit: chartSizing.yMaxTicks,
-                                stepSize: 2,
+                                // Tampilkan setiap derajat 16–33 (tanpa loncat / auto-skip), sama seperti dashboard.
+                                stepSize: 1,
+                                autoSkip: false,
                                 font: {
                                     size: chartSizing.tickSize
                                 },
