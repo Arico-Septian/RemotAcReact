@@ -466,18 +466,15 @@ class MqttSubscribe extends Command
                             return;
                         }
 
-                        RoomTemperature::create([
-                            'room' => $roomName,
-                            'temperature' => $temp,
-                        ]);
-
+                        // PENTING: suhu TIDAK di-insert ke DB di sini — handler 'room/+/sensor'
+                        // yang menyimpannya. ESP kirim suhu sama ke 2 topic (device/ + room/),
+                        // jadi insert cukup 1x supaya tidak dobel. Di sini hanya update cache +
+                        // tandai device online (liveness).
                         Cache::put("room_temp_{$roomName}", $temp, 300);
                         Cache::put("room_temp_status_{$roomName}", 'online', 300);
 
                         // Sensor masuk = device pasti online (sekalian update last_seen)
                         $this->setOnline($deviceId);
-
-                        $this->line("DEVICE SENSOR [{$deviceId}/{$roomName}]: {$temp}°C");
 
                         event(new RoomTemperatureUpdated($roomName, $temp));
                     },

@@ -18,10 +18,10 @@
 const char* WIFI_SSID = "TUGASAKHIR_2.4G";
 const char* WIFI_PASSWORD = "kopisusu";
 
-const char* MQTT_HOST = "4edb07bbc98d48ba9e9154ee9bf84ccd.s1.eu.hivemq.cloud";
-const int MQTT_PORT = 8883;
-const char* MQTT_USER = "Arico";
-const char* MQTT_PASS = "Arico170903";
+const char* MQTT_HOST = "202.154.5.158";
+const int MQTT_PORT = 1883;
+const char* MQTT_USER = "Radnext";
+const char* MQTT_PASS = "RadnextTUS01";
 
 #define DEVICE_ID "esp32_01"
 
@@ -30,7 +30,9 @@ const char* MQTT_PASS = "Arico170903";
 
 const unsigned long PING_INTERVAL = 15000;
 const unsigned long STATUS_INTERVAL = 10000;
-const unsigned long SENSOR_INTERVAL = 5000;
+const unsigned long SENSOR_INTERVAL = 5000;            // irama baca DHT (deteksi perubahan cepat)
+const unsigned long SENSOR_HEARTBEAT_INTERVAL = 60000; // kirim suhu minimal tiap 1 menit walau tidak berubah
+const float TEMP_DELTA_SEND = 1.0;                     // kirim langsung kalau suhu berubah >= 1 C
 const unsigned long CONFIG_TIMEOUT = 10000;
 const float TEMP_DELTA_LOG = 1.0;
 const unsigned long DHT_LOG_MIN_MS = 30000;
@@ -38,7 +40,7 @@ const unsigned long PING_OK_LOG_EVERY_MS = 600000;
 
 const int MAX_PUBLISH_FAILURES = 3;
 
-WiFiClientSecure espClient;
+WiFiClient espClient;
 PubSubClient client(espClient);
 DHT dht(DHT_PIN, DHT_TYPE);
 
@@ -60,6 +62,7 @@ bool configReceived = false;
 unsigned long startWait = 0;
 unsigned long lastStatusPublish = 0;
 unsigned long lastSensorPublish = 0;
+unsigned long lastSensorRead = 0;
 
 int consecutivePublishFails = 0;
 
@@ -518,10 +521,7 @@ void publishSensorStatus(const char* status, bool retain = true) {
   char buf[192];
   serializeJson(doc, buf, sizeof(buf));
 
-  char topicDev[80];
-  sprintf(topicDev, "device/%s/sensor", DEVICE_ID);
-  safePublish(topicDev, buf, retain);
-
+  // Konsisten dengan publishDHT: status sensor hanya ke room/{room}/sensor.
   char topicRoom[120];
   sprintf(topicRoom, "room/%s/sensor", currentRoom.c_str());
   safePublish(topicRoom, buf, retain);
@@ -530,8 +530,9 @@ void publishSensorStatus(const char* status, bool retain = true) {
 void publishDHT(bool forceSend = false, bool forceLog = false) {
   if (currentRoom == "") return;
 
-  if (!forceSend && (millis() - lastSensorPublish < SENSOR_INTERVAL)) return;
-  lastSensorPublish = millis();
+  // Baca DHT tiap SENSOR_INTERVAL (deteksi perubahan cepat) — belum tentu dikirim.
+  if (!forceSend && (millis() - lastSensorRead < SENSOR_INTERVAL)) return;
+  lastSensorRead = millis();
 
   float temp = dht.readTemperature();
   if (isnan(temp)) {
@@ -546,6 +547,15 @@ void publishDHT(bool forceSend = false, bool forceLog = false) {
 
   lastDhtOk = true;
 
+  // Report-by-exception: kirim hanya kalau suhu berubah >= TEMP_DELTA_SEND,
+  // atau sudah lewat heartbeat (60s), atau dipaksa (forceSend). Hemat broker & DB.
+  bool changed = isnan(lastTempSent) || (fabs(temp - lastTempSent) >= TEMP_DELTA_SEND);
+  bool heartbeatDue = (millis() - lastSensorPublish) >= SENSOR_HEARTBEAT_INTERVAL;
+  if (!forceSend && !changed && !heartbeatDue) return;
+
+  lastSensorPublish = millis();
+  lastTempSent = temp;
+
   StaticJsonDocument<256> doc;
   doc["device_id"] = DEVICE_ID;
   doc["room"] = currentRoom;
@@ -556,22 +566,20 @@ void publishDHT(bool forceSend = false, bool forceLog = false) {
   char buf[256];
   serializeJson(doc, buf, sizeof(buf));
 
-  char topicDev[80];
-  sprintf(topicDev, "device/%s/sensor", DEVICE_ID);
-  bool ok1 = safePublish(topicDev, buf, true);
-
+  // Kirim suhu HANYA ke room/{room}/sensor. Topic + payload sudah berisi nama room
+  // (dan device_id), jadi Laravel tetap tahu ini suhu room mana — cukup 1 topic.
   String safeRoom = currentRoom;
   safeRoom.toLowerCase();
   safeRoom.replace(" ", "_");
   char topicRoom[120];
   sprintf(topicRoom, "room/%s/sensor", safeRoom.c_str());
-  safePublish(topicRoom, buf, true);
+  bool ok1 = safePublish(topicRoom, buf, true);
 
   bool changed1C = isnan(lastTempLogged) || (fabs(temp - lastTempLogged) >= 1.0f);
   bool shouldLog = forceLog || changed1C || !ok1;
 
   if (shouldLog) {
-    logLine("DHT", "🌡️", "%.1f°C -> %s %s", temp, topicDev, ok1 ? "✅" : "❌");
+    logLine("DHT", "🌡️", "%.1f°C -> %s %s", temp, topicRoom, ok1 ? "✅" : "❌");
     lastTempLogged = temp;
   }
 }
@@ -910,7 +918,7 @@ void reconnect() {
     if (client.connect(cid.c_str(), MQTT_USER, MQTT_PASS,
                        lwtTopic, 1, true, "offline")) {
 
-      logLine("MQTT", "✅", "CONNECTED (TLS:%d)", MQTT_PORT);
+      logLine("MQTT", "✅", "CONNECTED (port:%d)", MQTT_PORT);
       consecutivePublishFails = 0;
 
       char stTopic[60];
@@ -919,6 +927,11 @@ void reconnect() {
 
       publishOnline();
       client.loop();
+
+      // Hapus retained device/{id}/sensor lama — firmware ini cuma pakai room/{room}/sensor.
+      char devSensorTopic[80];
+      sprintf(devSensorTopic, "device/%s/sensor", DEVICE_ID);
+      client.publish(devSensorTopic, "", true);
 
       char subConfig[80];
       sprintf(subConfig, "device/%s/config", DEVICE_ID);
@@ -976,7 +989,7 @@ void setup() {
 
   connectWiFi();
 
-  espClient.setInsecure();
+  // Port 1883 = tanpa TLS, jadi tidak perlu setInsecure().
   client.setBufferSize(2048);
   client.setKeepAlive(20);
   client.setSocketTimeout(8);
