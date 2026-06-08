@@ -256,15 +256,15 @@
     /* Badge angka notif: lingkaran merah solid, teks putih */
     #notifBadge,
     .notif-badge {
-        background: var(--danger) !important;
+        background: #ef4444 !important;
         color: #fff !important;
         font-size: 10px !important;
         font-weight: 700 !important;
         min-width: 18px;
         height: 18px !important;
-        border-radius: var(--r-full) !important;
+        border-radius: 999px !important;
         border: 2px solid #0a0a0c !important;
-        box-shadow: 0 0 8px rgb(var(--danger-rgb) / 0.55) !important;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.55) !important;
         display: inline-flex;
         align-items: center;
         justify-content: center;

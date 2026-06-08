@@ -140,21 +140,21 @@
         }
 
         .room-card .temp-chip.cool {
-            background: rgb(var(--cyan-rgb) / 0.15) !important;
-            color: var(--cyan) !important;
-            border: 1px solid rgb(var(--cyan-rgb) / 0.35) !important;
+            background: rgba(37, 99, 235, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(37, 99, 235, 0.4) !important;
         }
 
         .room-card .temp-chip.warm {
-            background: rgb(var(--mint-rgb) / 0.15) !important;
-            color: var(--mint) !important;
-            border: 1px solid rgb(var(--mint-rgb) / 0.35) !important;
+            background: rgba(5, 150, 105, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(5, 150, 105, 0.4) !important;
         }
 
         .room-card .temp-chip.hot {
-            background: rgba(248, 113, 113, 0.15) !important;
-            color: var(--red) !important;
-            border: 1px solid rgba(248, 113, 113, 0.4) !important;
+            background: rgba(220, 38, 38, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(220, 38, 38, 0.4) !important;
         }
 
         /* Status Online/Offline → teks saja, tanpa kotak */
@@ -512,7 +512,8 @@
         }
 
         #historyModal .modal {
-            width: min(640px, 100%);
+            width: min(1120px, 96vw);
+            max-width: min(1120px, 96vw);
             max-height: calc(100dvh - 36px);
             display: flex;
             flex-direction: column;
@@ -552,7 +553,7 @@
            plot di tengah bisa di-scroll 2 arah. Lebar sumbu Y = 44px, tinggi sumbu X = 26px. */
         #historyChartWrap {
             position: relative;
-            height: clamp(220px, 45vh, 300px);
+            height: clamp(300px, 58vh, 440px);
             min-height: 0;
         }
 
@@ -582,7 +583,21 @@
             bottom: 26px;
             overflow: auto;
             scrollbar-width: thin;
-            scrollbar-color: rgb(var(--ink-2-rgb) / 0.42) transparent;
+            scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
+        }
+
+        #historyChartScroller::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        #historyChartScroller::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.55);
+            border-radius: 8px;
+        }
+
+        #historyChartScroller::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         #historyChartInner {
@@ -678,7 +693,7 @@
             }
 
             #historyChartWrap {
-                height: clamp(210px, 42vh, 260px);
+                height: clamp(260px, 52vh, 360px);
             }
 
         }
@@ -718,7 +733,7 @@
             }
 
             #historyChartWrap {
-                height: min(230px, 43vh);
+                height: min(320px, 55vh);
             }
 
             .history-actions {
@@ -1152,9 +1167,9 @@
 
             if (width <= 420) {
                 return {
-                    pointRadius: 2.8,
+                    pointRadius: 2,
                     pointHoverRadius: 5,
-                    borderWidth: 2,
+                    borderWidth: 3.2,
                     tickSize: slotCount >= 18 ? 8 : 8.5,
                     xMaxTicks: slotCount,
                     xAutoSkip: false,
@@ -1171,9 +1186,9 @@
 
             if (width <= 768) {
                 return {
-                    pointRadius: 3.2,
-                    pointHoverRadius: 5.5,
-                    borderWidth: 2,
+                    pointRadius: 2,
+                    pointHoverRadius: 5,
+                    borderWidth: 3.2,
                     tickSize: slotCount >= 18 ? 8.5 : 9,
                     xMaxTicks: slotCount,
                     xAutoSkip: false,
@@ -1189,9 +1204,9 @@
             }
 
             return {
-                pointRadius: 4,
-                pointHoverRadius: 6,
-                borderWidth: 2,
+                pointRadius: 2,
+                pointHoverRadius: 5,
+                borderWidth: 3.2,
                 tickSize: slotCount >= 18 ? 9 : 10,
                 xMaxTicks: slotCount,
                 xAutoSkip: false,
@@ -1322,12 +1337,22 @@
                     datasets: [{
                         label: 'Temp (°C)',
                         data: temps,
-                        borderColor: '#2563eb',
-                        backgroundColor: 'rgba(38,99,235,0.10)',
-                        pointBackgroundColor: temps.map(pointColor),
+                        borderColor: '#22d3ee',
+                        backgroundColor: (c) => {
+                            const area = c.chart.chartArea;
+                            if (!area) return 'rgba(34,211,238,0.12)';
+                            const g = c.chart.ctx.createLinearGradient(0, area.top, 0, area.bottom);
+                            g.addColorStop(0, 'rgba(34,211,238,0.55)');
+                            g.addColorStop(0.6, 'rgba(34,211,238,0.22)');
+                            g.addColorStop(1, 'rgba(34,211,238,0)');
+                            return g;
+                        },
+                        pointBackgroundColor: '#67e8f9',
+                        pointBorderWidth: 0,
                         pointRadius: chartSizing.pointRadius,
                         pointHoverRadius: chartSizing.pointHoverRadius,
-                        tension: 0.4,
+                        tension: 0.48,
+                        cubicInterpolationMode: 'monotone',
                         fill: true,
                         spanGaps: true,
                         borderWidth: chartSizing.borderWidth

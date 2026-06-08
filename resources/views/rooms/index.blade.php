@@ -32,21 +32,21 @@
         }
 
         .room-card .temp-chip.cool {
-            background: rgba(37, 99, 235, 0.85) !important;
+            background: rgba(37, 99, 235, 0.15) !important;
             color: #ffffff !important;
-            border: 1px solid rgba(37, 99, 235, 0.9) !important;
+            border: 1px solid rgba(37, 99, 235, 0.4) !important;
         }
 
         .room-card .temp-chip.warm {
-            background: rgba(5, 150, 105, 0.85) !important;
+            background: rgba(5, 150, 105, 0.15) !important;
             color: #ffffff !important;
-            border: 1px solid rgba(5, 150, 105, 0.9) !important;
+            border: 1px solid rgba(5, 150, 105, 0.4) !important;
         }
 
         .room-card .temp-chip.hot {
-            background: rgba(220, 38, 38, 0.85) !important;
+            background: rgba(220, 38, 38, 0.15) !important;
             color: #ffffff !important;
-            border: 1px solid rgba(220, 38, 38, 0.9) !important;
+            border: 1px solid rgba(220, 38, 38, 0.4) !important;
         }
 
         .room-card .temp-chip.idle {

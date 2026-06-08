@@ -290,7 +290,7 @@
             justify-content: flex-start;
             padding: 52px 48px 52px 60px;
             position: relative;
-            overflow-y: auto;
+            overflow: hidden;
             min-height: 0;
         }
 

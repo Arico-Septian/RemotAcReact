@@ -1500,13 +1500,23 @@
             }
         }
 
-        /* Scroll viewport untuk grafik suhu (skala 16–33 setiap derajat) */
+        /* Scroll viewport untuk grafik suhu (skala 16–33). Sisakan 28px di bawah untuk sumbu X beku. */
         .temp-chart-scroll {
-            height: 100%;
+            height: calc(100% - 28px);
             overflow-y: auto;
             overflow-x: hidden;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+        }
+
+        /* Sumbu X (jam) beku di bawah — tidak ikut scroll vertikal */
+        #tempChartXAxis {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 28px;
+            pointer-events: none;
         }
 
         .temp-chart-scroll::-webkit-scrollbar {
@@ -1849,6 +1859,7 @@
                                             <canvas id="tempChart"></canvas>
                                         </div>
                                     </div>
+                                    <canvas id="tempChartXAxis"></canvas>
                                     <div id="tempChartEmpty" class="empty-state"
                                         style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;">
                                         <div style="text-align:center;">
@@ -2217,6 +2228,42 @@
                 tempChart.update('none');
             }
 
+            // Sumbu X beku: gambar label jam di canvas #tempChartXAxis (fixed di bawah),
+            // posisinya dibaca dari skala X chart -> tidak ikut scroll vertikal.
+            const frozenXAxisPlugin = {
+                id: 'frozenXAxis',
+                afterDraw(chart) {
+                    const overlay = document.getElementById('tempChartXAxis');
+                    const xScale = chart.scales.x;
+                    if (!overlay || !xScale) return;
+
+                    const dpr = window.devicePixelRatio || 1;
+                    const cssW = chart.width;
+                    const cssH = 28;
+                    overlay.style.width = cssW + 'px';
+                    if (overlay.width !== Math.round(cssW * dpr) || overlay.height !== Math.round(cssH * dpr)) {
+                        overlay.width = Math.round(cssW * dpr);
+                        overlay.height = Math.round(cssH * dpr);
+                    }
+
+                    const octx = overlay.getContext('2d');
+                    octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                    octx.clearRect(0, 0, cssW, cssH);
+
+                    const fontSize = chart.options.scales.x.ticks.font?.size || 10;
+                    octx.font = `${fontSize}px Inter, system-ui, sans-serif`;
+                    octx.fillStyle = '#ffffff';
+                    octx.textAlign = 'center';
+                    octx.textBaseline = 'top';
+
+                    (xScale.ticks || []).forEach((t, i) => {
+                        const label = (t.label != null) ? t.label : '';
+                        if (label === '') return;
+                        octx.fillText(label, xScale.getPixelForTick(i), 6);
+                    });
+                }
+            };
+
             function initChart() {
                 const canvas = document.getElementById('tempChart');
                 if (!canvas) return;
@@ -2229,7 +2276,7 @@
                         labels: [],
                         datasets: []
                     },
-                    plugins: [glowLinePlugin, crosshairGlowPlugin, {
+                    plugins: [glowLinePlugin, crosshairGlowPlugin, frozenXAxisPlugin, {
                         id: 'hoverFocus',
                         _lastActive: -1,
                         afterEvent(chart, args) {
@@ -2348,13 +2395,15 @@
                         scales: {
                             x: {
                                 ticks: {
+                                    // Label disembunyikan; digambar di canvas #tempChartXAxis yang "beku".
                                     color: '#ffffff',
                                     maxRotation: 0,
                                     font: {
                                         size: s.tickFontSize
                                     },
                                     maxTicksLimit: s.xMaxTicks,
-                                    autoSkip: true
+                                    autoSkip: true,
+                                    display: false
                                 },
                                 grid: {
                                     display: false

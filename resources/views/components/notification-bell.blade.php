@@ -36,8 +36,8 @@
         right: -4px;
         min-width: 18px;
         height: 18px;
-        border-radius: var(--r-full);
-        background: var(--coral);
+        border-radius: 999px;
+        background: #ef4444;
         color: #fff;
         font-size: 10px;
         font-weight: 700;
@@ -45,8 +45,8 @@
         align-items: center;
         justify-content: center;
         padding: 0 5px;
-        border: 2px solid var(--bg-1);
-        box-shadow: 0 0 10px rgba(248, 113, 113, .45);
+        border: 2px solid #0c1830;
+        box-shadow: 0 0 10px rgba(239, 68, 68, .55);
         font-family: var(--font-mono);
     }
 
