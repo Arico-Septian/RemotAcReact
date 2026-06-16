@@ -1,0 +1,1173 @@
+        /* Password field — eye toggle + focus border like login */
+        .pwd-field {
+            position: relative;
+        }
+
+        .pwd-field .input {
+            padding-right: 42px;
+        }
+
+        .pwd-field .pwd-eye {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            font-size: 13px;
+            transition: color .15s;
+        }
+
+        .pwd-field .pwd-eye:hover {
+            color: #ffffff;
+        }
+
+        .pwd-field .input:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        /* All Add User fields — white focus border (consistent with login) */
+        #addUserForm .input:focus,
+        #addUserForm .select:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        /* Role dropdown options — black instead of navy */
+        #addUserForm .select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+
+        /* Delete user — solid dark red box, white icon */
+        .btn-icon.danger {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
+        }
+
+        .btn-icon.danger:hover {
+            background: #b91c1c;
+        }
+
+        .stat-card .stat-label-sm {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-3);
+        }
+
+        .stat-card .stat-num-lg {
+            font-family: var(--font-sans);
+            font-feature-settings: 'tnum' 1, 'lnum' 1, 'cv11' 1;
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin: 8px 0 6px;
+        }
+
+        .stat-card .stat-sub {
+            font-size: 11px;
+            color: var(--ink-3);
+        }
+
+        .stat-card .stat-icon {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            line-height: 1;
+            overflow: hidden;
+        }
+
+        .stat-card .stat-icon>i {
+            font-size: inherit;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        }
+
+        /* Angka utama selalu putih untuk hierarki yang kuat */
+        .stat-card .stat-num-lg {
+            color: var(--ink-0);
+        }
+
+        /* Label kecil di atas mengambil warna accent per kartu */
+        .stat-card.acc-cyan .stat-label-sm,
+        .stat-card.acc-mint .stat-label-sm,
+        .stat-card.acc-lavender .stat-label-sm,
+        .stat-card.acc-coral .stat-label-sm {
+            color: var(--ink-0);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--panel-1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-3);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: background var(--t-fast);
+            height: auto;
+            min-height: 56px;
+        }
+
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            height: 100%;
+        }
+
+        .user-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink-0);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .user-handle {
+            font-size: 12px;
+            color: var(--ink-3);
+            margin: 2px 0 0;
+            line-height: 1.2;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--ink-4);
+            margin: 1px 0 0;
+            line-height: 1.2;
+        }
+
+        /* Unify user-table row padding with logs table (14 × 18) */
+        .user-table td {
+            padding: 14px 18px;
+            vertical-align: middle;
+        }
+
+        /* Role — teks saja, tanpa kotak */
+        .badge-role {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .badge-role.admin,
+        .badge-role.operator,
+        .badge-role.user {
+            background: transparent;
+            color: #ffffff;
+            border: none;
+        }
+
+        .user-avatar-sm {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--bg-1);
+            flex-shrink: 0;
+        }
+
+        .status-cell {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            line-height: 1;
+            color: var(--ink-2);
+            justify-content: center;
+            vertical-align: middle;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            background: var(--ink-3);
+            margin: 0;
+            padding: 0;
+        }
+
+        .status-dot.online {
+            background: var(--mint);
+        }
+
+        .status-dot.active {
+            background: var(--mint);
+        }
+
+        .actions-cell {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: flex-end;
+            vertical-align: middle;
+        }
+
+        /* Table column alignment */
+        .user-table th:nth-child(2),
+        .user-table td:nth-child(2) {
+            text-align: center;
+            vertical-align: middle;
+            padding: 14px 12px;
+        }
+
+        .user-table th:nth-child(3),
+        .user-table td:nth-child(3) {
+            text-align: center;
+            vertical-align: middle;
+            padding: 14px 12px;
+        }
+
+        .user-table th:nth-child(4),
+        .user-table td:nth-child(4) {
+            text-align: right;
+            vertical-align: middle;
+            padding: 14px 24px 14px 12px;
+        }
+
+        .user-table th {
+            padding: 14px 18px;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            color: var(--ink-0);
+        }
+
+        @media (max-width: 768px) {
+
+            th,
+            td {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .user-table td:nth-child(4) {
+                padding-right: 12px;
+            }
+
+            .user-avatar-sm {
+                width: 38px;
+                height: 38px;
+                font-size: 14px;
+            }
+        }
+
+        /* Toolbar responsiveness for tablet and below */
+        @media (max-width: 768px) {
+            .tbl-toolbar {
+                gap: 6px;
+                padding: 8px 10px;
+            }
+
+            .tbl-toolbar>form {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .tbl-toolbar>div {
+                display: inline-flex;
+                flex-wrap: nowrap;
+                gap: 1px;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .segmented {
+                display: inline-flex;
+                gap: 1px;
+            }
+
+            .segmented .seg {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+
+            .tbl-toolbar .btn {
+                padding: 5px 8px;
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
+            .search-input input {
+                font-size: 11px;
+                padding: 6px 10px 6px 36px;
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 10px;
+                transform: translateY(1px);
+            }
+        }
+
+        /* Very small screens (< 480px) — wrap toolbar to 2 rows: search full width, filters + Add on row 2 */
+        @media (max-width: 480px) {
+            .tbl-toolbar {
+                padding: 8px;
+                gap: 8px;
+                flex-wrap: wrap;
+                row-gap: 8px;
+            }
+
+            .tbl-toolbar>form {
+                flex: 1 1 100%;
+                min-width: 0;
+            }
+
+            .tbl-toolbar>div {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                flex: 1 1 100%;
+                justify-content: flex-start;
+                flex-shrink: 0;
+            }
+
+            /* Unify height across search / segmented / Add User — 36 px */
+            .tbl-toolbar .search-input {
+                width: 100%;
+                height: 36px;
+            }
+
+            .tbl-toolbar .search-input input {
+                height: 36px;
+                padding: 0 12px 0 34px;
+                font-size: 12px;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .segmented {
+                flex: 1 1 auto;
+                display: flex;
+                height: 36px;
+                padding: 2px;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .segmented .seg {
+                flex: 1 1 0;
+                min-width: 0;
+                text-align: center;
+                height: 100%;
+                padding: 0 6px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+            }
+
+            .tbl-toolbar .btn {
+                flex-shrink: 0;
+                height: 36px;
+                min-height: 36px;
+                padding: 0 12px;
+                font-size: 11px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .btn span {
+                display: inline;
+            }
+
+            .tbl-toolbar .btn i {
+                margin-right: 4px;
+                font-size: 11px;
+            }
+
+            .search-input input::placeholder {
+                color: var(--ink-3);
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 12px;
+                transform: translateY(1px);
+            }
+        }
+
+        /* Filter chips */
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 0;
+            align-items: center;
+            border-bottom: 1px solid var(--line-soft);
+        }
+
+        .filter-chips span {
+            font-size: 12px;
+            color: var(--ink-3);
+            font-weight: 500;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(59, 111, 212, 0.12);
+            border: 1px solid rgba(59, 111, 212, 0.28);
+            border-radius: var(--r-full);
+            font-size: 12px;
+            color: #6ea8ff;
+        }
+
+        .filter-chip button {
+            background: none;
+            border: none;
+            color: #6ea8ff;
+            cursor: pointer;
+            padding: 0;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .filter-chip button:hover {
+            opacity: 1;
+        }
+
+        /* Pagination — tombol konsisten, rapi */
+        .pager {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .pager a,
+        .pager span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            height: 34px;
+            padding: 0 11px;
+            border-radius: var(--r-md);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-2);
+            background: var(--panel-2);
+            border: 1px solid var(--line-soft);
+            text-decoration: none;
+            transition: all var(--t-fast);
+        }
+
+        .pager a {
+            cursor: pointer;
+        }
+
+        .pager a:hover {
+            background: var(--panel-3);
+            color: var(--ink-0);
+            border-color: var(--line);
+        }
+
+        .pager .active {
+            background: rgba(59, 111, 212, 0.15);
+            color: #6ea8ff;
+            border-color: rgba(59, 111, 212, 0.30);
+            font-weight: 700;
+        }
+
+        /* Item nonaktif (panah disabled & "...") tanpa kotak tombol */
+        .pager .disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+            background: transparent;
+            border-color: transparent;
+        }
+
+        .pager i {
+            opacity: 0.7;
+        }
+
+        .pager a:hover i {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .tbl-footer {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .tbl-footer>p {
+                margin: 0;
+                font-size: 11px;
+                flex: 1;
+                min-width: 0;
+                line-height: 1.35;
+            }
+
+            .pager {
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+                gap: 4px;
+            }
+
+            .pager a,
+            .pager span {
+                min-width: 30px;
+                height: 30px;
+                padding: 0 7px;
+                font-size: 12px;
+            }
+
+            /* Ringkas: sembunyikan nomor selain aktif & yang tepat setelahnya */
+            .pager a.text-mono {
+                display: none;
+            }
+
+            .pager .active+a.text-mono {
+                display: inline-flex;
+            }
+        }
+
+        /* Sortable table headers */
+        .user-table th {
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+            position: relative;
+            transition: background var(--t-fast);
+        }
+
+
+
+        /* Mobile user list — clean simple layout */
+        .user-cards {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .user-cards {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            /* Kartu user — satu baris padat */
+            .user-card {
+                padding: 10px 14px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+                width: 100%;
+            }
+
+            .user-card:last-child {
+                border-bottom: none;
+            }
+
+            /* Header & footer wrappers transparent — children jadi direct child .user-card */
+            .user-card-header,
+            .user-card-footer {
+                display: contents;
+            }
+
+            .user-card-info {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex: 1;
+                min-width: 0;
+            }
+
+            .user-card .user-avatar-sm {
+                width: 34px !important;
+                height: 34px !important;
+                border-radius: var(--r-md) !important;
+                font-size: 13px !important;
+                font-weight: 600 !important;
+                flex-shrink: 0;
+            }
+
+            .user-card-name {
+                display: flex;
+                flex-direction: column;
+                gap: 1px;
+                min-width: 0;
+                overflow: hidden;
+            }
+
+            .user-card-name-text {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--ink-0);
+                line-height: 1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .user-card-handle {
+                font-size: 12px;
+                color: var(--ink-3);
+                line-height: 1.2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* Email disembunyikan di single-row */
+            .user-card-name>span:nth-child(3) {
+                display: none !important;
+            }
+
+            .user-card .badge-role {
+                font-size: 12px !important;
+                padding: 0 !important;
+                letter-spacing: 0.05em !important;
+                white-space: nowrap;
+                flex-shrink: 0;
+                position: relative;
+                top: 1px;
+            }
+
+            /* Status — teks Online/Offline */
+            .user-card-status {
+                display: inline-flex;
+                align-items: center;
+                justify-content: flex-end;
+                min-width: 56px;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--ink-3);
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                flex-shrink: 0;
+            }
+
+            /* Dot disembunyikan, hanya teks */
+            .user-card-status .status-dot {
+                display: none;
+            }
+
+            /* Color berdasarkan parent status (online/offline) */
+            .user-card-status:has(.status-dot.online) {
+                color: var(--mint);
+            }
+
+            .user-card-actions {
+                display: flex;
+                gap: 4px;
+                justify-content: flex-end;
+                flex-shrink: 0;
+            }
+
+            .user-card-actions .btn-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 11px;
+                border-radius: var(--r-sm);
+            }
+
+            .user-table {
+                display: none;
+            }
+        }
+
+        /* Page sections spacing */
+        .app-content-inner>*+* {
+            margin-top: 32px;
+        }
+
+        /* Tablet & desktop (≥ 481 px): unify search / segmented / Add User height to 40 px */
+        @media (min-width: 481px) {
+            .tbl-toolbar .search-input {
+                height: 40px;
+            }
+
+            .tbl-toolbar .search-input input {
+                height: 40px;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .segmented {
+                height: 40px;
+                box-sizing: border-box;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .tbl-toolbar .segmented .seg {
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .btn {
+                height: 40px;
+                min-height: 40px;
+                box-sizing: border-box;
+                padding: 0 16px;
+            }
+        }
+
+        /* Header keep on one row across breakpoints */
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
+
+        /* Stat cards — Tablet (≤ 768px) */
+        @media (max-width: 768px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px 16px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px;
+                letter-spacing: 0.08em;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 28px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.4;
+            }
+
+            .stat-card .stat-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: var(--r-md);
+                font-size: 14px;
+            }
+        }
+
+        /* Stat cards — Mobile M (≤ 480px) */
+        @media (max-width: 480px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 8px;
+                letter-spacing: 0.05em;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 24px;
+                margin: 4px 0 2px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.3;
+            }
+
+            .stat-card .stat-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: var(--r-md);
+                font-size: 12px;
+            }
+
+            .stat-card .accent-bar {
+                top: 12px;
+                bottom: 12px;
+            }
+        }
+
+        /* Mobile (≤ 480px): shrink header + toolbar so everything fits */
+        @media (max-width: 480px) {
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            /* User card — selaras dgn log activity */
+            .user-card {
+                padding: 10px 14px;
+            }
+
+            .user-card-info {
+                gap: 10px;
+            }
+
+            .user-card .user-avatar-sm {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 13px !important;
+                border-radius: var(--r-md) !important;
+            }
+
+            .user-card-name-text {
+                font-size: 14px;
+            }
+
+            .user-card-handle {
+                font-size: 12px;
+            }
+
+            .user-card .badge-role {
+                font-size: 12px !important;
+                padding: 0 !important;
+            }
+
+            .user-card-actions .btn-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 11px;
+            }
+
+            /* Stats grid: keep 2-col but compact each card so text doesn't wrap */
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 8px !important;
+            }
+
+            .stat-card {
+                padding: 10px 12px !important;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px !important;
+                letter-spacing: 0.05em !important;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 20px !important;
+                margin: 3px 0 2px !important;
+                line-height: 1.1 !important;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px !important;
+                line-height: 1.3 !important;
+            }
+
+            .stat-card .stat-icon {
+                width: 26px !important;
+                height: 26px !important;
+                border-radius: var(--r-sm) !important;
+                font-size: 11px !important;
+            }
+
+            .stat-card .accent-bar {
+                top: 10px !important;
+                bottom: 10px !important;
+            }
+
+            /* User card: tighter padding, fonts match log card */
+            .user-card {
+                padding: 10px 14px;
+            }
+
+            /* Toolbar at 320 px: stack to 3 rows so segmented + Add User each get full width */
+            .tbl-toolbar>div {
+                flex-wrap: wrap;
+                row-gap: 6px;
+            }
+
+            .tbl-toolbar>div>.segmented {
+                flex: 1 1 100%;
+            }
+
+            .tbl-toolbar>div>.btn {
+                flex: 1 1 100%;
+            }
+
+            .tbl-toolbar .segmented .seg {
+                font-size: 10px;
+                padding: 0 4px;
+            }
+        }
+
+        /* Compact Add User modal on tablets */
+        @media (min-width: 601px) and (max-width: 900px) {
+            #modal.modal-backdrop {
+                padding: 12px;
+            }
+
+            #modal .modal {
+                max-width: 440px;
+                border-radius: var(--r-xl);
+            }
+
+            #modal .modal-header {
+                padding: 18px 20px 8px;
+                gap: 8px;
+            }
+
+            #modal .eyebrow {
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 12px;
+                line-height: 1.4;
+                margin-top: 5px;
+            }
+
+            #modal .modal-body {
+                padding: 10px 20px 10px;
+            }
+
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
+                margin-top: 14px !important;
+            }
+
+            #modal .field {
+                gap: 6px;
+            }
+
+            #modal .field-label {
+                font-size: 11px;
+                letter-spacing: 0.05em;
+            }
+
+            #modal .input {
+                min-height: 44px;
+                padding: 0 14px;
+                border-radius: var(--r-md);
+                font-size: 13px;
+            }
+
+            #modal .field-hint {
+                font-size: 11px !important;
+                line-height: 1.4;
+                margin-top: 3px !important;
+            }
+
+            #modal .modal-footer {
+                padding: 10px 20px 16px;
+                gap: 10px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
+            }
+        }
+
+        /* Compact Add User modal on mobile */
+        @media (max-width: 480px) {
+            #modal.modal-backdrop {
+                padding: 10px;
+            }
+
+            #modal .modal {
+                max-width: calc(100vw - 28px);
+                border-radius: var(--r-xl);
+            }
+
+            #modal .modal-header {
+                padding: 12px 14px 4px;
+                gap: 6px;
+            }
+
+            #modal .eyebrow {
+                font-size: 10px;
+                margin-bottom: 3px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 17px;
+                line-height: 1.15;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 10px;
+                line-height: 1.3;
+                margin-top: 4px;
+            }
+
+            #modal .modal-body {
+                padding: 4px 14px 6px;
+            }
+
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
+                margin-top: 14px !important;
+            }
+
+            #modal .field {
+                gap: 6px;
+            }
+
+            #modal .field-label {
+                font-size: 10px;
+                letter-spacing: 0.05em;
+            }
+
+            #modal .input {
+                min-height: 34px;
+                padding: 0 10px;
+                border-radius: var(--r-md);
+                font-size: 11px;
+            }
+
+            #modal .field-hint {
+                display: block;
+                font-size: 11px;
+                line-height: 1.35;
+            }
+
+            #modal .modal-footer {
+                padding: 6px 14px 12px;
+                gap: 7px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 34px;
+                padding: 0 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #modal .modal {
+                max-width: calc(100vw - 28px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #modal.modal-backdrop {
+                padding: 14px;
+            }
+
+            #modal .modal {
+                max-width: calc(100vw - 28px);
+                border-radius: var(--r-xl);
+            }
+
+            #modal .modal-header {
+                padding: 16px 18px 6px;
+            }
+
+            #modal .modal-body {
+                padding: 10px 18px 10px;
+            }
+
+            #modal .input {
+                min-height: 44px;
+                padding: 0 14px;
+                font-size: 13px;
+            }
+
+            #modal .modal-footer {
+                padding: 10px 18px 16px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
+            }
+        }

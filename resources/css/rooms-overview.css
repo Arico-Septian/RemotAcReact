@@ -1,0 +1,742 @@
+        .room-card {
+            position: relative;
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+            border-radius: var(--r-xl);
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: var(--t-base);
+            box-shadow: var(--inset-hi);
+            overflow: hidden;
+        }
+
+        .room-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 2px;
+            background: var(--card-accent, var(--ink-3));
+            opacity: 0.7;
+        }
+
+        .room-card:hover {}
+
+        /* Tombol Detail & Grafik — solid biru (senada tombol Add) */
+        .room-card .btn.btn-primary,
+        .room-card .room-card-chart-btn {
+            background: #335fc2;
+            border-color: #335fc2;
+            color: #ffffff;
+            box-shadow: none;
+            transition: var(--t-base);
+            justify-content: center;
+            padding: 7px 12px;
+            font-size: 12px;
+            border-radius: 8px !important;
+        }
+
+        .room-card .btn.btn-primary:hover,
+        .room-card .room-card-chart-btn:hover {
+            background: #2a4fa3;
+            border-color: #2a4fa3;
+            color: #ffffff;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .room-card[data-status="online"] {
+            --card-accent: var(--mint);
+        }
+
+        .room-card[data-status="offline"] {
+            --card-accent: var(--coral);
+        }
+
+        .room-card .ac-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .room-card .ac-mini>div {
+            text-align: center;
+            padding: 8px 6px;
+            border-radius: var(--r-md);
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+        }
+
+        .room-card .ac-mini .num {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .room-card .ac-mini .lbl {
+            font-size: 10px;
+            color: var(--ink-3);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-top: 4px;
+            font-weight: 700;
+        }
+
+        .floor-section {
+            margin-bottom: 4px;
+        }
+
+        .floor-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .floor-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--ink-3);
+            white-space: nowrap;
+        }
+
+        .floor-divider {
+            flex: 1;
+            height: 1px;
+            background: var(--line-soft);
+        }
+
+        .floor-count {
+            font-size: 10px;
+            color: var(--ink-4);
+            white-space: nowrap;
+        }
+
+        /* ===== Temperature chip — colored bg + matching text ===== */
+        .room-card .temp-chip {
+            display: flex !important;
+            border-radius: var(--r-md) !important;
+            padding: 7px 12px !important;
+            font-size: 11px !important;
+        }
+
+        .room-card .temp-chip.cool {
+            background: rgba(37, 99, 235, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(37, 99, 235, 0.4) !important;
+        }
+
+        .room-card .temp-chip.warm {
+            background: rgba(5, 150, 105, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(5, 150, 105, 0.4) !important;
+        }
+
+        .room-card .temp-chip.hot {
+            background: rgba(220, 38, 38, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(220, 38, 38, 0.4) !important;
+        }
+
+        /* Status Online/Offline → teks saja, tanpa kotak */
+        .room-card .room-status-pill {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            justify-content: center !important;
+            text-align: center;
+        }
+
+        /* Online = putih, Offline = abu-abu */
+        .room-card .room-status-pill.pill-online {
+            color: #ffffff !important;
+        }
+
+        .room-card .room-status-pill.pill-offline {
+            color: #94a3b8 !important;
+        }
+
+        .room-card .temp-chip.idle {
+            background: var(--panel-2) !important;
+            color: var(--ink-3) !important;
+            border: 1px solid var(--line-soft) !important;
+        }
+
+        /* Suhu: sensor nyala = teks putih, mati = teks abu */
+        .room-card .temp-chip.cool,
+        .room-card .temp-chip.warm,
+        .room-card .temp-chip.hot {
+            color: #ffffff !important;
+        }
+
+        .room-card .temp-chip.idle {
+            color: #94a3b8 !important;
+        }
+
+        /* Toolbar responsiveness for small screens */
+        @media (max-width: 768px) {
+            .flex.flex-row.items-center {
+                gap: 6px;
+            }
+
+            .flex.flex-row.items-center>label {
+                flex: 1;
+                min-width: 0;
+                transition: flex var(--t-base);
+            }
+
+            .flex.flex-row.items-center>.segmented {
+                display: inline-flex;
+                gap: 1px;
+                flex-shrink: 0;
+            }
+
+            .segmented .seg {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+
+            .search-input input {
+                font-size: 11px;
+                padding: 6px 10px 6px 36px;
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 10px;
+                transform: translateY(1px);
+            }
+        }
+
+        /* Very small screens (< 480px) */
+        @media (max-width: 480px) {
+            .flex.flex-row.items-center {
+                gap: 6px;
+            }
+
+            .flex.flex-row.items-center>label {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .flex.flex-row.items-center>label:focus-within {
+                flex: 1;
+            }
+
+            .flex.flex-row.items-center>.segmented {
+                display: inline-flex;
+                gap: 2px;
+                flex-shrink: 0;
+                height: 36px;
+            }
+
+            .segmented .seg {
+                font-size: 10px;
+                padding: 0 8px;
+                min-width: auto;
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .search-input {
+                height: 36px;
+            }
+
+            .search-input input {
+                height: 36px;
+                padding: 0 12px 0 34px;
+                font-size: 12px;
+                box-sizing: border-box;
+            }
+
+            .search-input input::placeholder {
+                color: var(--ink-3);
+                transition: color var(--t-base);
+            }
+
+            .search-input input:focus::placeholder {
+                color: transparent;
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 12px;
+                transition: opacity var(--t-base);
+            }
+
+            .search-input:focus-within i {
+                opacity: 0;
+                pointer-events: none;
+            }
+        }
+
+        /* Tablet & desktop (≥ 481 px): unify search & segmented height to 40 px */
+        @media (min-width: 481px) {
+            .flex.flex-row.items-center.gap-2>.search-input {
+                height: 40px;
+            }
+
+            .flex.flex-row.items-center.gap-2>.search-input input {
+                height: 40px;
+                box-sizing: border-box;
+            }
+
+            .flex.flex-row.items-center.gap-2>.segmented {
+                height: 40px;
+                box-sizing: border-box;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .flex.flex-row.items-center.gap-2>.segmented .seg {
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+        }
+
+        /* Room grid: 2 cols (mobile) / 3 cols (tablet) / 5 cols (laptop) — same as Manajemen Ruangan */
+        .floor-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+            justify-content: stretch;
+        }
+
+        /* Tablet (≥ 768px): 3 cols */
+        @media (min-width: 768px) {
+            .floor-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+        }
+
+        /* Laptop (≥ 1024px): 5 cols */
+        @media (min-width: 1024px) {
+            .floor-grid {
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            }
+        }
+
+        /* Phones (≤480px): tighter card spacing — grid tetap 2 kolom */
+        @media (max-width: 480px) {
+            .floor-grid {
+                gap: 10px !important;
+                margin-bottom: 12px !important;
+            }
+
+            .room-card {
+                padding: 11px;
+                gap: 8px;
+            }
+
+            .room-card h3 {
+                font-size: 13px;
+            }
+
+            .room-card .room-status-pill {
+                padding: 0 !important;
+                font-size: 12px !important;
+            }
+
+            .room-card .temp-chip {
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
+
+            .ac-mini {
+                gap: 8px;
+            }
+
+            .ac-mini>div {
+                padding: 8px 6px;
+            }
+
+            .ac-mini .num {
+                font-size: 16px;
+            }
+
+            .ac-mini .lbl {
+                font-size: 8px;
+                margin-top: 2px;
+            }
+
+            .room-card .btn.btn-primary.btn-sm,
+            .room-card .room-card-chart-btn {
+                font-size: 11px;
+                padding: 7px 10px;
+                min-height: 34px;
+            }
+
+            .room-card .btn-icon {
+                width: 34px;
+                height: 34px;
+            }
+        }
+
+        /* Header: keep on one row always */
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
+
+        /* Mobile M / L (≤ 480 px): subtitle moderately smaller so it fits 1 line */
+        @media (max-width: 480px) {
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 11px;
+                line-height: 1.3;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        /* Tiny phones (≤480px): grid tetap 2 kolom, lebih rapat */
+        @media (max-width: 480px) {
+            .floor-grid {
+                gap: 8px !important;
+            }
+
+            /* Header: aggressive shrink so everything fits at 320 px */
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+            }
+
+            /* Pulse halo: keep dead-center using transform instead of inset */
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        /* Touch targets optimization */
+        @media (max-width: 768px) {
+            .btn.btn-primary.btn-sm {
+                min-height: 40px;
+                padding: 8px 12px;
+            }
+
+            .btn-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Landscape mode */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .room-card {
+                padding: 10px;
+                gap: 6px;
+            }
+
+            .room-card h3 {
+                font-size: 12px;
+            }
+
+            .ac-mini>div {
+                padding: 4px 4px;
+            }
+
+            .ac-mini .num {
+                font-size: 12px;
+            }
+
+            .floor-section-header {
+                margin-bottom: 8px;
+            }
+        }
+
+        .history-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        #historyModal {
+            padding: 18px;
+        }
+
+        #historyModal .modal {
+            width: min(1120px, 96vw);
+            max-width: min(1120px, 96vw);
+            max-height: calc(100dvh - 36px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #0a0a0c;
+            background-image: none;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        #historyModal .modal-header {
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        #historyModal .history-title-group {
+            min-width: 0;
+            flex: 1;
+        }
+
+        #historyModal .history-title-group .eyebrow {
+            line-height: 1.3;
+            color: #5a93ec;
+        }
+
+        #historyTitle {
+            overflow-wrap: anywhere;
+            line-height: 1.2;
+        }
+
+        #historyModal .modal-body {
+            flex: 1;
+            min-height: 0;
+            padding-bottom: 22px;
+        }
+
+        /* Frozen panes: sumbu Y beku di kiri (scroll vertikal), sumbu X beku di bawah (scroll horizontal),
+           plot di tengah bisa di-scroll 2 arah. Lebar sumbu Y = 44px, tinggi sumbu X = 26px. */
+        #historyChartWrap {
+            position: relative;
+            height: clamp(300px, 58vh, 440px);
+            min-height: 0;
+        }
+
+        #historyYAxisClip {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 26px;
+            width: 44px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        #historyYAxis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 44px;
+            will-change: transform;
+        }
+
+        #historyChartScroller {
+            position: absolute;
+            left: 44px;
+            right: 0;
+            top: 0;
+            bottom: 26px;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
+        }
+
+        #historyChartScroller::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        #historyChartScroller::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.55);
+            border-radius: 8px;
+        }
+
+        #historyChartScroller::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #historyChartInner {
+            position: relative;
+        }
+
+        #historyChart {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        #historyXAxisClip {
+            position: absolute;
+            left: 44px;
+            right: 0;
+            bottom: 0;
+            height: 26px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        #historyXAxis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 26px;
+            will-change: transform;
+        }
+
+        .history-range-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: var(--panel-1);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a7b0c0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 9px center;
+            background-size: 11px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            color: var(--ink-1);
+            border-radius: 8px;
+            padding: 6px 28px 6px 12px;
+            font-size: 11px;
+            font-family: var(--font-sans);
+            line-height: 1.2;
+            text-align: left;
+            cursor: pointer;
+            outline: none;
+            transition: var(--t-base);
+        }
+
+        .history-range-select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+
+        .history-range-select:hover,
+        .history-range-select:focus {
+            background-color: #15171d;
+            border-color: rgba(255, 255, 255, 0.42);
+            color: var(--ink-1);
+            box-shadow: none;
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            #historyModal {
+                padding: 14px;
+            }
+
+            #historyModal .modal {
+                max-height: calc(100dvh - 28px);
+            }
+
+            #historyModal .modal-header {
+                padding: 18px 18px 10px;
+            }
+
+            #historyModal .modal-header h2 {
+                font-size: 16px;
+            }
+
+            #historyModal .modal-header .sub {
+                font-size: 11px;
+            }
+
+            #historyMeta {
+                overflow-wrap: anywhere;
+            }
+
+            #historyModal .modal-body {
+                padding: 6px 18px 18px;
+            }
+
+            #historyChartWrap {
+                height: clamp(260px, 52vh, 360px);
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            #historyModal {
+                padding: 10px;
+                align-items: center;
+            }
+
+            #historyModal .modal {
+                max-height: calc(100dvh - 20px);
+                border-radius: var(--r-2xl);
+            }
+
+            #historyModal .modal-header {
+                padding: 16px 16px 8px;
+                gap: 10px;
+            }
+
+            #historyModal .history-title-group .eyebrow {
+                font-size: 10px;
+                letter-spacing: 0.05em;
+            }
+
+            #historyModal .modal-header h2 {
+                font-size: 14px;
+            }
+
+            #historyModal .modal-header .sub {
+                font-size: 11px;
+                line-height: 1.4;
+            }
+
+            #historyModal .modal-body {
+                padding: 4px 14px 16px;
+            }
+
+            #historyChartWrap {
+                height: min(320px, 55vh);
+            }
+
+            .history-actions {
+                gap: 6px;
+            }
+
+
+            .history-range-select {
+                min-height: 36px;
+                padding-left: 11px;
+                padding-right: 26px;
+                font-size: 11px;
+                background-position: right 9px center;
+            }
+
+            #historyModal .modal-close {
+                width: 36px;
+                height: 36px;
+            }
+        }

@@ -2321,7 +2321,7 @@ body { min-height: 100vh; }
 /* =============================================================
    LAYOUT (sidebar + main + header)
 ============================================================= */
-.app-layout { display: flex; min-height: 100vh; width: 100vw; position: relative; }
+.app-layout { display: flex; min-height: 100vh; min-height: 100dvh; width: 100vw; position: relative; }
 
 .app-sidebar {
   width: 248px;
@@ -2350,6 +2350,7 @@ body { min-height: 100vh; }
   margin-left: 248px;
   width: calc(100% - 248px);
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;

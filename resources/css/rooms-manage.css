@@ -1,0 +1,751 @@
+        /* Add Room fields — white focus border + black dropdown (consistent with login) */
+        #addRoomForm .input:focus,
+        #addRoomForm .select:focus {
+            border-color: #ffffff;
+            box-shadow: none;
+        }
+
+        #addRoomForm .select option {
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+
+        /* ===== Temperature chip — colored bg + matching text ===== */
+        .room-card .temp-chip {
+            display: flex !important;
+            border-radius: var(--r-md) !important;
+            padding: 7px 12px !important;
+            font-size: 11px !important;
+        }
+
+        .room-card .temp-chip.cool {
+            background: rgba(37, 99, 235, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(37, 99, 235, 0.4) !important;
+        }
+
+        .room-card .temp-chip.warm {
+            background: rgba(5, 150, 105, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(5, 150, 105, 0.4) !important;
+        }
+
+        .room-card .temp-chip.hot {
+            background: rgba(220, 38, 38, 0.15) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(220, 38, 38, 0.4) !important;
+        }
+
+        .room-card .temp-chip.idle {
+            background: var(--panel-2) !important;
+            color: var(--ink-3) !important;
+            border: 1px solid var(--line-soft) !important;
+        }
+
+        /* Suhu: sensor nyala = teks putih, mati = teks abu */
+        .room-card .temp-chip.cool,
+        .room-card .temp-chip.warm,
+        .room-card .temp-chip.hot {
+            color: #ffffff !important;
+        }
+
+        .room-card .temp-chip.idle {
+            color: #94a3b8 !important;
+        }
+
+        /* Keputusan text color follows action */
+        .keputusan-yellow {
+            color: var(--yellow) !important;
+        }
+
+        /* TURUNKAN */
+        .keputusan-cool {
+            color: var(--cyan) !important;
+        }
+
+        .keputusan-warm {
+            color: var(--mint) !important;
+        }
+
+        /* DIAM (stabil) */
+        .keputusan-hot {
+            color: var(--orange) !important;
+        }
+
+        .keputusan-idle {
+            color: var(--ink-3) !important;
+        }
+
+        .room-card {
+            position: relative;
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+            border-radius: var(--r-xl);
+            box-shadow: var(--inset-hi);
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: var(--t-base);
+            overflow: hidden;
+        }
+
+        .room-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 2px;
+            background: var(--card-accent, var(--ink-3));
+            opacity: 0.7;
+        }
+
+        .room-card[data-status="online"] {
+            --card-accent: var(--mint);
+        }
+
+        .room-card[data-status="offline"] {
+            --card-accent: var(--coral);
+        }
+
+        .room-card:hover {}
+
+        /* Status Online/Offline → teks saja, tanpa kotak */
+        .room-card .room-status-pill {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            justify-content: center !important;
+            text-align: center;
+        }
+
+        /* Online = putih, Offline = abu-abu */
+        .room-card .room-status-pill.pill-online {
+            color: #ffffff !important;
+        }
+
+        .room-card .room-status-pill.pill-offline {
+            color: #94a3b8 !important;
+        }
+
+        /* Tombol Control AC — solid biru (senada tombol Add) */
+        .room-card .btn.btn-primary {
+            background: #335fc2;
+            border-color: #335fc2;
+            color: #ffffff;
+            box-shadow: none;
+            transition: var(--t-base);
+            border-radius: 8px !important;
+        }
+
+        .room-card .btn.btn-primary:hover {
+            background: #2a4fa3;
+            border-color: #2a4fa3;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Tombol Delete Room — solid red (tidak transparan) */
+        .room-card .btn.btn-danger {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
+            box-shadow: none;
+            transition: var(--t-base);
+            border-radius: 8px !important;
+        }
+
+        .room-card .btn.btn-danger:hover {
+            background: #b91c1c;
+            border-color: #b91c1c;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Samakan ukuran tombol kartu (Control AC / Delete) dengan Overview di mobile */
+        @media (max-width: 768px) {
+            .room-card .btn.btn-primary.btn-sm,
+            .room-card .btn.btn-danger.btn-sm {
+                min-height: 40px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .room-card .btn.btn-primary.btn-sm,
+            .room-card .btn.btn-danger.btn-sm {
+                font-size: 11px;
+                padding: 7px 10px;
+                min-height: 34px;
+            }
+        }
+
+        .floor-section {
+            margin-bottom: 4px;
+        }
+
+        .floor-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .floor-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--ink-3);
+            white-space: nowrap;
+        }
+
+        .floor-divider {
+            flex: 1;
+            height: 1px;
+            background: var(--line-soft);
+        }
+
+        .floor-count {
+            font-size: 10px;
+            color: var(--ink-4);
+            white-space: nowrap;
+        }
+
+        /* Responsive search and filters */
+        @media (max-width: 768px) {
+            .flex.items-center.gap-2 {
+                gap: 6px;
+            }
+
+            .flex.items-center.gap-2>form {
+                flex: 1;
+                min-width: 0;
+                transition: flex var(--t-base);
+            }
+
+            .flex.items-center.gap-2>div {
+                display: inline-flex;
+                gap: 1px;
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+            }
+
+            .segmented {
+                display: inline-flex;
+                gap: 1px;
+            }
+
+            .segmented .seg {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+
+            .search-input input {
+                font-size: 11px;
+                padding: 6px 10px 6px 36px;
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 10px;
+                transform: translateY(1px);
+            }
+        }
+
+        /* Very small screens (< 480px) */
+        @media (max-width: 480px) {
+            .flex.items-center.gap-2 {
+                gap: 6px;
+            }
+
+            .flex.items-center.gap-2>form {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .flex.items-center.gap-2>form:focus-within {
+                flex: 1;
+            }
+
+            .flex.items-center.gap-2>div {
+                display: inline-flex;
+                gap: 4px;
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+            }
+
+            .segmented {
+                display: inline-flex;
+                gap: 2px;
+            }
+
+            .segmented .seg {
+                font-size: 10px;
+                padding: 5px 6px;
+                min-width: auto;
+            }
+
+            .search-input input {
+                font-size: 12px;
+                padding: 0 12px 0 34px;
+            }
+
+            .search-input input::placeholder {
+                color: var(--ink-3);
+                transition: color var(--t-base);
+            }
+
+            .search-input input:focus::placeholder {
+                color: transparent;
+            }
+
+            .search-input i {
+                font-size: 12px;
+                transition: opacity var(--t-base);
+            }
+
+            .search-input:focus-within i {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .flex.items-center.gap-2>button.btn-primary {
+                padding: 6px 12px;
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
+            .flex.items-center.gap-2>button.btn-primary span {
+                display: inline;
+            }
+
+            .flex.items-center.gap-2>button.btn-primary i {
+                margin-right: 4px;
+                font-size: 11px;
+            }
+        }
+
+        /* Tablet & desktop (≥ 481 px): unify search / segmented / Add Room height to 40 px */
+        @media (min-width: 481px) {
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input {
+                height: 40px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input input {
+                height: 40px;
+                box-sizing: border-box;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .segmented {
+                height: 40px;
+                box-sizing: border-box;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .segmented .seg {
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary {
+                height: 40px;
+                box-sizing: border-box;
+            }
+        }
+
+        /* Tablet (481–768 px): slightly more breathing room between segmented and Add Room */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex.gap-2 {
+                gap: 10px !important;
+            }
+        }
+
+        /* ===== Room grid: 2 cols (mobile) / 3 cols (tablet) / 5 cols (laptop) ===== */
+        .floor-section>.grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 12px !important;
+            justify-content: stretch;
+        }
+
+        /* Tablet (≥ 768px): 3 cols */
+        @media (min-width: 768px) {
+            .floor-section>.grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+        }
+
+        /* Laptop (≥ 1024px): 5 cols */
+        @media (min-width: 1024px) {
+            .floor-section>.grid {
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            }
+        }
+
+        /* Toolbar wraps to 2 rows on tiny phones so search field gets its full width */
+        @media (max-width: 480px) {
+            .app-content-inner>.flex.items-center.gap-2:first-child {
+                flex-wrap: wrap;
+                row-gap: 8px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>form {
+                flex: 1 1 100%;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex {
+                flex: 1 1 100%;
+                justify-content: flex-start;
+                gap: 6px;
+            }
+
+            /* Unify height across search / segmented / Add Room — 36 px */
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input {
+                height: 36px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input input {
+                height: 36px;
+                padding: 0 12px 0 34px;
+                font-size: 12px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child .search-input i {
+                left: 12px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented {
+                flex: 1 1 auto;
+                display: flex;
+                height: 36px;
+                padding: 2px;
+                box-sizing: border-box;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented .seg {
+                flex: 1 1 0;
+                min-width: 0;
+                text-align: center;
+                height: 100%;
+                padding: 0 6px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary {
+                flex-shrink: 0;
+                height: 36px;
+                min-height: 36px;
+                padding: 0 12px;
+                font-size: 11px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* Mobile (≤ 480px): keep "Add Room" label visible, match 36 px unified height */
+        @media (max-width: 480px) {
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary span {
+                display: inline !important;
+                font-size: 10px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary i {
+                margin-right: 4px;
+                font-size: 10px;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>button.btn-primary {
+                padding: 0 10px;
+                font-size: 10px;
+                white-space: nowrap;
+            }
+
+            .app-content-inner>.flex.items-center.gap-2:first-child>.flex>.segmented .seg {
+                font-size: 10px;
+                padding: 0 4px;
+            }
+        }
+
+        /* Header title wraps less awkwardly on small screens */
+        @media (max-width: 480px) {
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+                min-width: 0;
+                flex: 1;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+                flex-shrink: 0;
+            }
+
+            /* Shrink the Online pill to just the dot on tiny screens */
+            .main-header>.flex.items-center.gap-2 .btn-icon {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        /* Phones (≤ 480px): tighter card spacing — grid tetap 2 kolom */
+        @media (max-width: 480px) {
+            .floor-section>.grid {
+                gap: 10px !important;
+            }
+
+            .room-card {
+                padding: 11px;
+                gap: 8px;
+            }
+
+            .room-card h2 {
+                font-size: 13px;
+            }
+
+            .room-card .room-status-pill {
+                padding: 0 !important;
+                font-size: 12px !important;
+            }
+
+            .room-card .temp-chip {
+                padding: 6px 10px !important;
+                font-size: 10px !important;
+            }
+        }
+
+
+        /* Compact Add Room modal on tablets */
+        @media (min-width: 481px) and (max-width: 1024px) {
+            #modal.modal-backdrop {
+                padding: 12px;
+            }
+
+            #modal .modal {
+                max-width: 440px;
+                border-radius: var(--r-xl);
+            }
+
+            #modal .modal-header {
+                padding: 18px 20px 8px;
+                gap: 8px;
+            }
+
+            #modal .eyebrow {
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 12px;
+                line-height: 1.4;
+                margin-top: 5px;
+            }
+
+            #modal .modal-close {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+
+            #modal .modal-body {
+                padding: 10px 20px 10px;
+            }
+
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
+                margin-top: 14px !important;
+            }
+
+            #modal .field {
+                gap: 6px;
+            }
+
+            #modal .field-label {
+                font-size: 11px;
+                letter-spacing: 0.05em;
+            }
+
+            #modal .input {
+                min-height: 44px;
+                padding: 0 14px;
+                border-radius: var(--r-md);
+                font-size: 13px;
+            }
+
+            #modal .field-help {
+                font-size: 11px;
+                line-height: 1.4;
+            }
+
+            #modal .modal-footer {
+                padding: 10px 20px 16px;
+                gap: 10px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
+            }
+        }
+
+        /* Compact Add Room modal on mobile */
+        @media (max-width: 480px) {
+            #modal.modal-backdrop {
+                padding: 10px;
+            }
+
+            #modal .modal {
+                max-width: calc(100vw - 28px);
+                border-radius: var(--r-xl);
+            }
+
+            #modal .modal-header {
+                padding: 12px 14px 4px;
+                gap: 6px;
+            }
+
+            #modal .eyebrow {
+                font-size: 10px;
+                margin-bottom: 3px;
+            }
+
+            #modal .modal-header h2 {
+                font-size: 17px;
+                line-height: 1.15;
+            }
+
+            #modal .modal-header .sub {
+                font-size: 10px;
+                line-height: 1.3;
+                margin-top: 4px;
+            }
+
+            #modal .modal-close {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+
+            #modal .modal-body {
+                padding: 4px 14px 6px;
+            }
+
+            #modal .modal-body.space-y-3> :not([hidden])~ :not([hidden]) {
+                margin-top: 14px !important;
+            }
+
+            #modal .field {
+                gap: 6px;
+            }
+
+            #modal .field-label {
+                font-size: 10px;
+                letter-spacing: 0.05em;
+            }
+
+            #modal .input {
+                min-height: 34px;
+                padding: 0 10px;
+                border-radius: var(--r-md);
+                font-size: 11px;
+            }
+
+            #modal .field-help {
+                display: block;
+                font-size: 11px;
+                line-height: 1.35;
+            }
+
+            #modal .modal-footer {
+                padding: 6px 14px 12px;
+                gap: 7px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 34px;
+                padding: 0 12px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #modal .modal {
+                max-width: calc(100vw - 28px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #modal.modal-backdrop {
+                padding: 14px;
+            }
+
+            #modal .modal {
+                max-width: calc(100vw - 28px);
+                border-radius: var(--r-xl);
+            }
+
+            #modal .modal-header {
+                padding: 16px 18px 6px;
+            }
+
+            #modal .modal-body {
+                padding: 10px 18px 10px;
+            }
+
+            #modal .input {
+                min-height: 44px;
+                padding: 0 14px;
+                font-size: 13px;
+            }
+
+            #modal .modal-footer {
+                padding: 10px 18px 16px;
+            }
+
+            #modal .modal-footer .btn {
+                min-height: 44px;
+                padding: 0 18px;
+                font-size: 13px;
+            }
+        }

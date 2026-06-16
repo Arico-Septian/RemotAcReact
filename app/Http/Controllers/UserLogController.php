@@ -6,9 +6,68 @@ use App\Models\User;
 use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class UserLogController extends Controller
 {
+    /**
+     * Map a raw activity string to a display badge [label, class].
+     *
+     * @return array{0: string, 1: string}
+     */
+    private function activityBadge(string $activity): array
+    {
+        if (str_starts_with($activity, 'set_temp_')) {
+            return ['TEMP '.str_replace('set_temp_', '', $activity).'°C', 'act-amber'];
+        }
+        if (str_starts_with($activity, 'mode_')) {
+            return ['MODE '.strtoupper(str_replace('mode_', '', $activity)), 'act-cyan'];
+        }
+        if (str_starts_with($activity, 'fan_speed_')) {
+            return ['FAN '.strtoupper(str_replace('fan_speed_', '', $activity)), 'act-cyan'];
+        }
+        if (str_starts_with($activity, 'swing_')) {
+            return ['SWING '.strtoupper(str_replace('swing_', '', $activity)), 'act-lavender'];
+        }
+        if (str_starts_with($activity, 'set_timer')) {
+            $detail = substr($activity, 9);
+            $on = preg_match('/ON\s+(\d{2}:\d{2})/i', $detail, $mOn) ? $mOn[1] : null;
+            $off = preg_match('/OFF\s+(\d{2}:\d{2})/i', $detail, $mOff) ? $mOff[1] : null;
+            if ($on && $off) {
+                return ["Timer ON {$on} · OFF {$off}", 'act-amber'];
+            }
+            if ($on) {
+                return ["Timer ON {$on}", 'act-amber'];
+            }
+            if ($off) {
+                return ["Timer OFF {$off}", 'act-amber'];
+            }
+
+            return ['Set Timer', 'act-amber'];
+        }
+
+        return match ($activity) {
+            'login' => ['LOGIN', 'act-mint'],
+            'logout' => ['LOGOUT', 'act-slate'],
+            'on' => ['POWER ON', 'act-mint'],
+            'off' => ['POWER OFF', 'act-coral'],
+            'bulk_on' => ['ALL ON', 'act-mint'],
+            'bulk_off' => ['ALL OFF', 'act-coral'],
+            'set_timer' => ['SET TIMER', 'act-amber'],
+            'timer_on' => ['TIMER ON', 'act-mint'],
+            'timer_off' => ['TIMER OFF', 'act-amber'],
+            'control_ac' => ['CONTROL AC', 'act-lavender'],
+            'add_room' => ['ADD ROOM', 'act-cyan'],
+            'delete_room' => ['DELETE ROOM', 'act-coral'],
+            'add_ac' => ['ADD AC', 'act-cyan'],
+            'delete_ac' => ['DELETE AC', 'act-coral'],
+            'add_user' => ['ADD USER', 'act-lavender'],
+            'delete_user' => ['DELETE USER', 'act-coral'],
+            'update_role' => ['UPDATE ROLE', 'act-lavender'],
+            'change_password' => ['CHG PASSWORD', 'act-amber'],
+            default => [strtoupper($activity), 'act-lavender'],
+        };
+    }
     public function index(Request $request)
     {
         $authActs = ['login', 'logout', 'change_password'];
@@ -100,9 +159,7 @@ class UserLogController extends Controller
             $query->orderBy($sort, $order);
         }
 
-        $logs  = $query->paginate(25)->withQueryString();
-        $users = User::orderBy('name')->get(['id', 'name']);
-        $rooms = UserLog::whereNotNull('room')->distinct()->orderBy('room')->pluck('room');
+        $logs = $query->paginate(25)->withQueryString();
 
         // Stats — selalu dihitung dari seluruh data (tidak terpengaruh filter), kecuali date range
         $statsScope = UserLog::query();
@@ -131,7 +188,42 @@ class UserLogController extends Controller
             'destructive'   => (clone $statsScope)->whereIn('activity', $destructiveActs)->count(),
         ];
 
-        return view('logs.index', compact('logs', 'users', 'rooms', 'stats'));
+        $isEmpty = fn ($v) => $v === null || $v === '' || $v === '-' || $v === '—';
+
+        $items = $logs->getCollection()->map(function (UserLog $log) use ($isEmpty) {
+            [$label, $class] = $this->activityBadge((string) $log->activity);
+
+            return [
+                'id' => $log->id,
+                'user_name' => $log->user?->name ?? '—',
+                'user_avatar' => $log->user?->avatar_url,
+                'room' => $isEmpty($log->room) ? null : $log->room,
+                'ac' => $isEmpty($log->ac) ? null : $log->ac,
+                'badge_label' => $label,
+                'badge_class' => $class,
+                'time' => $log->created_at?->format('H:i'),
+                'date' => $log->created_at?->format('d M Y'),
+            ];
+        })->values();
+
+        return Inertia::render('ActivityLog', [
+            'logs' => $items,
+            'stats' => $stats,
+            'filters' => [
+                'search' => $request->query('search', ''),
+                'activity' => $request->query('activity', ''),
+                'range' => $request->query('range', ''),
+            ],
+            'pagination' => [
+                'current_page' => $logs->currentPage(),
+                'last_page' => $logs->lastPage(),
+                'from' => $logs->firstItem() ?? 0,
+                'to' => $logs->lastItem() ?? 0,
+                'total' => $logs->total(),
+                'prev_url' => $logs->previousPageUrl(),
+                'next_url' => $logs->nextPageUrl(),
+            ],
+        ]);
     }
 
 public function destroyAll(Request $request)

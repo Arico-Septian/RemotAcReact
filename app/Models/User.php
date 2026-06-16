@@ -35,7 +35,9 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): ?string
     {
-        return $this->avatar ? asset('storage/'.$this->avatar) : null;
+        // URL root-relative agar mengikuti origin halaman (host/port apa pun),
+        // tidak terikat APP_URL — mencegah broken image saat app dilayani di port lain.
+        return $this->avatar ? '/storage/'.ltrim($this->avatar, '/') : null;
     }
 
     public function isAdmin()

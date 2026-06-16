@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AcUnitsChanged;
 use App\Models\AcStatus;
 use App\Models\AcUnit;
 use App\Models\Room;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class AcUnitController extends Controller
 {
@@ -75,7 +77,30 @@ class AcUnitController extends Controller
             $room->decision = null;
         }
 
-        return view('ac.index', compact('room', 'acs'));
+        $formatTime = fn ($t) => $t ? Carbon::parse($t)->setTimezone('Asia/Jakarta')->format('H:i') : null;
+
+        $acsData = $acs->map(fn (AcUnit $ac) => [
+            'id' => $ac->id,
+            'ac_number' => $ac->ac_number,
+            'name' => $ac->name,
+            'brand' => $ac->brand,
+            'power' => ($ac->status?->power ?? 'OFF') === 'ON' ? 'ON' : 'OFF',
+            'set_temperature' => (int) ($ac->status?->set_temperature ?? 24),
+            'mode' => strtolower($ac->status?->mode ?? 'cool'),
+            'fan_speed' => strtolower($ac->status?->fan_speed ?? 'auto'),
+            'swing' => strtolower($ac->status?->swing ?? 'off'),
+            'timer_on' => $formatTime($ac->timer_on),
+            'timer_off' => $formatTime($ac->timer_off),
+        ])->values();
+
+        return Inertia::render('AcControl', [
+            'room' => [
+                'id' => $room->id,
+                'name' => $room->name,
+                'device_status' => $room->device_status,
+            ],
+            'acs' => $acsData,
+        ]);
     }
 
     public function store(Request $request, int|string $roomId)
@@ -131,6 +156,12 @@ class AcUnitController extends Controller
             'ac' => 'AC '.$ac->ac_number,
             'activity' => 'add_ac',
         ]);
+
+        try {
+            event(new AcUnitsChanged((int) $room->id, 'created'));
+        } catch (\Throwable $e) {
+            // broadcasting opsional
+        }
 
         $response = back()->with('new_ac_id', $ac->id);
 
@@ -206,6 +237,12 @@ class AcUnitController extends Controller
         $ac->delete();
 
         $mqttSynced = $this->clearDeletedAcMqtt($room, $roomTopic, (int) $acNumber);
+
+        try {
+            event(new AcUnitsChanged((int) $room_id, 'deleted'));
+        } catch (\Throwable $e) {
+            // broadcasting opsional
+        }
 
         return $mqttSynced
             ? redirect('/rooms/'.$room_id.'/ac')->with('success', 'AC unit berhasil dihapus')

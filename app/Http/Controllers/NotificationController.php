@@ -7,6 +7,7 @@ use App\Models\NotificationRead;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class NotificationController extends Controller
 {
@@ -20,13 +21,35 @@ class NotificationController extends Controller
         $notifications = Notification::forUserOrBroadcast($userId)
             ->with(['reads' => fn ($q) => $q->where('user_id', $userId)])
             ->orderByDesc('created_at')
-            ->paginate(20);
+            ->paginate(20)
+            ->withQueryString();
 
         $unreadCount = Notification::forUserOrBroadcast($userId)
             ->unreadForUser($userId)
             ->count();
 
-        return view('notifications.index', compact('notifications', 'unreadCount', 'userId'));
+        $items = $notifications->getCollection()->map(fn (Notification $n) => [
+            'id' => $n->id,
+            'title' => $n->title,
+            'message' => $n->message,
+            'link' => $n->link,
+            'is_unread' => $n->isUnreadForUser($userId),
+            'is_deletable' => (bool) $n->user_id,
+            'time_ago' => $n->created_at->diffForHumans(),
+            'time_full' => $n->created_at->format('d M Y H:i'),
+        ])->values();
+
+        return Inertia::render('Notifications', [
+            'notifications' => $items,
+            'unreadCount' => $unreadCount,
+            'total' => $notifications->total(),
+            'pagination' => [
+                'current_page' => $notifications->currentPage(),
+                'last_page' => $notifications->lastPage(),
+                'prev_url' => $notifications->previousPageUrl(),
+                'next_url' => $notifications->nextPageUrl(),
+            ],
+        ]);
     }
 
     /**

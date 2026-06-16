@@ -1,0 +1,189 @@
+        .raspi-card {
+            background: var(--panel-1);
+            border: 1px solid var(--line-soft);
+            border-radius: var(--r-lg);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .raspi-temp {
+            font-size: 72px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            line-height: 1;
+            transition: color 0.4s var(--ease);
+            display: inline-flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .raspi-unit {
+            font-size: 0.45em;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            opacity: 0.9;
+        }
+
+        .temp-cool {
+            color: var(--cyan);
+        }
+
+        .temp-warm {
+            color: var(--amber, var(--amber-d));
+        }
+
+        .temp-hot {
+            color: var(--coral);
+        }
+
+        .temp-muted {
+            color: var(--ink-3);
+        }
+
+        .raspi-label {
+            font-size: 12px;
+            color: var(--ink-3);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .raspi-status {
+            font-size: 12px;
+            color: var(--ink-3);
+            margin-top: 4px;
+        }
+
+        .raspi-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .raspi-indicator.online {
+            background: var(--cyan);
+            box-shadow: 0 0 6px var(--cyan);
+        }
+
+        .raspi-indicator.offline {
+            background: var(--ink-3);
+        }
+
+        /* Header — keep on one row */
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
+
+        /* Mobile M / L (≤ 480 px): compact card + smaller temp */
+        @media (max-width: 480px) {
+            .raspi-card {
+                padding: 22px 18px;
+            }
+
+            .raspi-temp {
+                font-size: 56px;
+                white-space: nowrap;
+            }
+
+            .raspi-label {
+                font-size: 11px;
+            }
+
+            .raspi-status {
+                font-size: 12px;
+            }
+
+            .main-header {
+                gap: 8px;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 8px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 6px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 16px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 11px;
+                line-height: 1.3;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .main-header .btn-icon {
+                width: 34px;
+                height: 34px;
+            }
+        }
+
+        /* Mobile S (≤ 480px): aggressive shrink */
+        @media (max-width: 480px) {
+            .raspi-card {
+                padding: 18px 14px;
+                gap: 6px;
+            }
+
+            .raspi-temp {
+                font-size: 44px;
+            }
+
+            .raspi-label {
+                font-size: 10px;
+            }
+
+            .raspi-status {
+                font-size: 11px;
+            }
+
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
+        }

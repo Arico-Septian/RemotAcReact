@@ -26,6 +26,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // memutus session lain saat user ganti password.
         $middleware->web(append: [
             \Illuminate\Session\Middleware\AuthenticateSession::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
+            \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

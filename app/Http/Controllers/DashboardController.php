@@ -7,6 +7,7 @@ use App\Models\RoomTemperature;
 use App\Models\UserLog;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -71,16 +72,27 @@ class DashboardController extends Controller
         $activeAc = $allAcUnits->filter(fn ($ac) => optional($ac->status)->power === 'ON')->count();
         $inactiveAc = $totalAc - $activeAc;
 
-        return view('dashboard.dashboard', compact(
-            'rooms',
-            'totalRooms',
-            'totalAc',
-            'activeAc',
-            'inactiveAc',
-            'onlineRooms',
-            'offlineRooms',
-            'recentActivities'
-        ));
+        $roomsData = $rooms->map(fn (Room $room) => [
+            'id' => $room->id,
+            'name' => $room->name,
+            'floor' => $room->floor,
+            'device_id' => $room->device_id,
+            'device_status' => $room->device_status,
+            'temperature' => $room->temperature !== null ? (float) $room->temperature : null,
+            'last_temperature' => $room->last_temperature !== null ? (float) $room->last_temperature : null,
+            'ac_units_count' => $room->acUnits->count(),
+        ])->values();
+
+        return Inertia::render('Dashboard', [
+            'rooms' => $roomsData,
+            'totalRooms' => $totalRooms,
+            'totalAc' => $totalAc,
+            'activeAc' => $activeAc,
+            'inactiveAc' => $inactiveAc,
+            'onlineRooms' => $onlineRooms,
+            'offlineRooms' => $offlineRooms,
+            'recentActivities' => $recentActivities->values(),
+        ]);
     }
 
     public function recentActivities()

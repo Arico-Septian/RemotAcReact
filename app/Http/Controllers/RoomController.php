@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RoomsChanged;
 use App\Models\AcUnit;
 use App\Models\Notification;
 use App\Models\Room;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
 class RoomController extends Controller
 {
@@ -29,6 +31,8 @@ class RoomController extends Controller
             ->get();
 
         $recentByRoom = RoomTemperature::recentByNormalizedRoom(perRoom: 2, maxAgeSeconds: 3600);
+        // Suhu terakhir tanpa filter umur — untuk fallback tampilan walau device offline.
+        $latestByRoom = RoomTemperature::latestByNormalizedRoom();
 
         $fuzzyService = new FuzzyMamdaniService;
 
@@ -54,15 +58,17 @@ class RoomController extends Controller
             $tempHistory = $recentByRoom->get($roomKey) ?? collect();
             $lastTempRecord = $tempHistory->first();
 
-            $room->last_temperature = optional($lastTempRecord)->temperature;
+            // last_temperature = pembacaan terakhir (umur berapa pun) supaya tetap tampil saat offline.
+            $latestRecord = $latestByRoom->get($roomKey);
+            $room->last_temperature = optional($latestRecord)->temperature;
             $room->temperature = $room->last_temperature;
 
             // Check if temperature data is stale (offline)
             $room->temperature_is_offline = ! $isOnline || $sensorStatus === 'offline';
-            if ($lastTempRecord && $lastTempRecord->created_at) {
-                $secondsSinceLastTemp = now()->diffInSeconds($lastTempRecord->created_at, true);
+            if ($latestRecord && $latestRecord->created_at) {
+                $secondsSinceLastTemp = now()->diffInSeconds($latestRecord->created_at, true);
                 $room->temperature_is_offline = $room->temperature_is_offline || $secondsSinceLastTemp > Room::TEMPERATURE_STALE_SECONDS;
-            } elseif (! $lastTempRecord) {
+            } else {
                 $room->temperature_is_offline = true;
             }
 
@@ -118,11 +124,31 @@ class RoomController extends Controller
             }
         }
 
-        $roomsByFloor = $rooms->groupBy(
-            fn ($room) => $room->floor ?: 'Lainnya'
-        );
+        $roomsData = $rooms->map(function (Room $room) {
+            $activeAcs = $room->acUnits->filter(fn ($ac) => $ac->status && $ac->status->power === 'ON')->count();
 
-        return view('rooms.index', compact('rooms', 'roomsByFloor'));
+            return [
+                'id' => $room->id,
+                'name' => $room->name,
+                'floor' => $room->floor ?: 'Lainnya',
+                'device_id' => $room->device_id,
+                'device_status' => $room->device_status,
+                'temperature' => $room->temperature !== null ? (float) $room->temperature : null,
+                'last_temperature' => $room->last_temperature !== null ? (float) $room->last_temperature : null,
+                'temperature_is_offline' => (bool) $room->temperature_is_offline,
+                'delta_t' => $room->delta_t ?? 0,
+                'fuzzy' => $room->fuzzy,
+                'decision' => $room->decision,
+                'ac_active_count' => $activeAcs,
+                'ac_idle_count' => $room->acUnits->count() - $activeAcs,
+                'ac_units_count' => $room->acUnits->count(),
+            ];
+        })->values();
+
+        return Inertia::render('RoomsManage', [
+            'rooms' => $roomsData,
+            'search' => $request->query('search', ''),
+        ]);
     }
 
     /* === CREATE ROOM === */
@@ -207,6 +233,12 @@ class RoomController extends Controller
             ? 'Room berhasil ditambahkan'
             : 'Room berhasil ditambahkan, tetapi konfigurasi MQTT gagal dikirim';
 
+        try {
+            event(new RoomsChanged('created', $room->name));
+        } catch (\Throwable $e) {
+            Log::warning('Broadcast RoomsChanged (created) gagal: '.$e->getMessage());
+        }
+
         return redirect('/rooms')->with('success', $message);
     }
 
@@ -279,6 +311,12 @@ class RoomController extends Controller
         $message = $mqttPublished
             ? 'Room berhasil dihapus'
             : 'Room berhasil dihapus, tetapi perintah clear ke MQTT gagal dikirim';
+
+        try {
+            event(new RoomsChanged('deleted', $room->name));
+        } catch (\Throwable $e) {
+            Log::warning('Broadcast RoomsChanged (deleted) gagal: '.$e->getMessage());
+        }
 
         return redirect('/rooms')->with('success', $message);
     }
@@ -367,9 +405,27 @@ class RoomController extends Controller
             }
         }
 
-        $roomsByFloor = $rooms->groupBy(fn ($r) => $r->floor ?: 'Lainnya');
+        $roomsData = $rooms->map(function (Room $room) {
+            $activeCount = $room->acUnits->filter(fn ($ac) => optional($ac->status)->power === 'ON')->count();
 
-        return view('rooms.overview', compact('rooms', 'roomsByFloor'));
+            return [
+                'id' => $room->id,
+                'name' => $room->name,
+                'floor' => $room->floor ?: 'Lainnya',
+                'device_id' => $room->device_id,
+                'device_status' => $room->device_status,
+                'temperature' => $room->temperature !== null ? (float) $room->temperature : null,
+                'last_temperature' => $room->last_temperature !== null ? (float) $room->last_temperature : null,
+                'temperature_is_offline' => (bool) $room->temperature_is_offline,
+                'ac_units_count' => $room->acUnits->count(),
+                'ac_active_count' => $activeCount,
+                'ac_idle_count' => $room->acUnits->count() - $activeCount,
+            ];
+        })->values();
+
+        return Inertia::render('RoomsOverview', [
+            'rooms' => $roomsData,
+        ]);
     }
 
     /* === DETAIL STATUS AC === */
@@ -412,9 +468,34 @@ class RoomController extends Controller
 
         $acs = AcUnit::with('status')
             ->where('room_id', $id)
+            ->orderBy('ac_number')
             ->get();
 
-        return view('rooms.status', compact('room', 'acs'));
+        $acsData = $acs->map(function (AcUnit $ac) {
+            $formatTime = fn ($t) => $t ? Carbon::parse($t)->setTimezone('Asia/Jakarta')->format('H:i') : null;
+
+            return [
+                'id' => $ac->id,
+                'ac_number' => $ac->ac_number,
+                'label' => $ac->name ?: $ac->brand,
+                'power' => strtoupper($ac->status?->power ?? 'OFF'),
+                'set_temperature' => $ac->status?->set_temperature ?? 24,
+                'mode' => strtoupper($ac->status?->mode ?? 'COOL'),
+                'fan_speed' => strtoupper($ac->status?->fan_speed ?? 'AUTO'),
+                'swing' => strtoupper($ac->status?->swing ?? 'OFF'),
+                'timer_on' => $formatTime($ac->timer_on),
+                'timer_off' => $formatTime($ac->timer_off),
+            ];
+        })->values();
+
+        return Inertia::render('RoomDetail', [
+            'room' => [
+                'id' => $room->id,
+                'name' => $room->name,
+                'device_status' => $room->device_status,
+            ],
+            'acs' => $acsData,
+        ]);
     }
 
     private function lastSeenFrom(mixed $value): ?Carbon

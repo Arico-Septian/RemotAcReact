@@ -1,0 +1,660 @@
+        .toolbar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Delete Activity — sama seperti Delete User */
+        .btn.btn-danger {
+            background: #dc2626;
+            border-color: #dc2626;
+            color: #ffffff;
+            box-shadow: none;
+            transition: var(--t-base);
+        }
+
+        .btn.btn-danger:hover {
+            background: #b91c1c;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Delete All Logs — enlarge trash icon so the box isn't empty */
+        .tbl-toolbar .btn.btn-danger i {
+            font-size: 18px !important;
+        }
+
+        /* Keep the box a fixed square so it doesn't grow with the icon */
+        .tbl-toolbar .btn.btn-danger {
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            padding: 0 !important;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        @media (max-width: 480px) {
+            .tbl-toolbar .btn.btn-danger {
+                width: 36px;
+                height: 36px;
+                min-height: 36px;
+            }
+        }
+
+        .toolbar-row .search-input {
+            flex: 1;
+            min-width: 240px;
+        }
+
+
+        .stat-card .stat-label-sm {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-3);
+        }
+
+        .stat-card .stat-num-lg {
+            font-family: var(--font-sans);
+            font-feature-settings: 'tnum' 1, 'lnum' 1, 'cv11' 1;
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em;
+            margin: 8px 0 6px;
+        }
+
+        .stat-card .stat-sub {
+            font-size: 11px;
+            color: var(--ink-3);
+        }
+
+        /* Lock badge ikon: cegah glyph FA dengan tinggi natural beda menarik badge jadi lebih besar */
+        .stat-card .stat-icon {
+            box-sizing: border-box;
+            flex-shrink: 0;
+            line-height: 1;
+            overflow: hidden;
+        }
+
+        .stat-card .stat-icon>i {
+            font-size: inherit;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1em;
+            height: 1em;
+        }
+
+        /* Angka utama selalu putih untuk hierarki yang kuat */
+        .stat-card .stat-num-lg {
+            color: var(--ink-0);
+        }
+
+        /* Label kecil di atas mengambil warna accent per kartu */
+        .stat-card.acc-cyan .stat-label-sm,
+        .stat-card.acc-mint .stat-label-sm,
+        .stat-card.acc-lavender .stat-label-sm,
+        .stat-card.acc-coral .stat-label-sm {
+            color: var(--ink-0);
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px 3px 10px;
+            border-radius: var(--r-full);
+            background: rgba(59, 111, 212, 0.12);
+            border: 1px solid rgba(59, 111, 212, 0.28);
+            font-size: 11px;
+            color: #6ea8ff;
+        }
+
+        .filter-tag button {
+            background: none;
+            border: none;
+            color: #6ea8ff;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            opacity: 0.7;
+        }
+
+        .filter-tag button:hover {
+            opacity: 1;
+        }
+
+        /* Toolbar responsiveness for very small screens */
+        @media (max-width: 768px) {
+            .tbl-toolbar {
+                gap: 6px;
+                padding: 8px 10px;
+            }
+
+            .tbl-toolbar label.search-input {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .tbl-toolbar>div {
+                display: inline-flex;
+                flex-wrap: nowrap;
+                gap: 1px;
+                align-items: center;
+                flex-shrink: 0;
+            }
+
+            .segmented {
+                display: inline-flex;
+                gap: 1px;
+            }
+
+            .segmented .seg {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+
+            .btn.btn-danger {
+                padding: 5px 8px;
+                font-size: 11px;
+                white-space: nowrap;
+            }
+
+            .search-input input {
+                font-size: 11px;
+                padding: 6px 10px 6px 36px;
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 10px;
+                transform: translateY(1px);
+            }
+        }
+
+        /* Very small screens (< 480px) — wrap toolbar to 2 rows */
+        @media (max-width: 480px) {
+            .tbl-toolbar {
+                padding: 8px;
+                gap: 8px;
+                flex-wrap: wrap;
+                row-gap: 8px;
+            }
+
+            .tbl-toolbar label.search-input {
+                flex: 1 1 100%;
+                min-width: 0;
+                width: 100%;
+            }
+
+            .tbl-toolbar>div {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                flex: 1 1 100%;
+                justify-content: flex-start;
+                flex-shrink: 0;
+            }
+
+            /* Unify height across search / segmented / btn — 36 px */
+            .tbl-toolbar .search-input {
+                height: 36px;
+            }
+
+            .tbl-toolbar .search-input input {
+                height: 36px;
+                padding: 0 12px 0 34px;
+                font-size: 12px;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .segmented {
+                flex: 1 1 auto;
+                display: flex;
+                height: 36px;
+                padding: 2px;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .segmented .seg {
+                flex: 1 1 0;
+                min-width: 0;
+                text-align: center;
+                height: 100%;
+                padding: 0 6px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+            }
+
+            .tbl-toolbar .btn {
+                flex-shrink: 0;
+                height: 36px;
+                min-height: 36px;
+                padding: 0 12px;
+                font-size: 11px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .btn.btn-danger i {
+                margin: 0 !important;
+                font-size: 15px;
+            }
+
+            .search-input input::placeholder {
+                color: var(--ink-3);
+            }
+
+            .search-input i {
+                font-size: 12px;
+                left: 12px;
+            }
+        }
+
+        .tbl tbody tr {
+            transition: none;
+        }
+
+        .tbl.tbl-log thead {
+            background: transparent;
+        }
+
+        .tbl.tbl-log th {
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            padding: 14px 18px;
+            background: transparent;
+            color: var(--ink-0);
+        }
+
+        .tbl.tbl-log td {
+            padding: 14px 18px;
+            vertical-align: middle;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 13px;
+        }
+
+        .tbl.tbl-log tbody tr:first-child td {
+            border-top: none;
+        }
+
+        .log-empty {
+            color: var(--ink-5, var(--ink-4));
+            opacity: 0.5;
+        }
+
+        .log-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        /* No-photo initials avatar → biru, teks putih */
+        .log-user span.avatar {
+            background: linear-gradient(135deg, #5a93ec, #335fc2) !important;
+            color: #ffffff !important;
+        }
+
+        .log-user .name {
+            color: var(--ink-0);
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .log-room {
+            color: var(--ink-1);
+            font-size: 14px;
+        }
+
+        .log-detail {
+            color: var(--ink-2);
+            font-size: 14px;
+            max-width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .log-time {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.4;
+            font-family: var(--font-mono);
+            white-space: nowrap;
+        }
+
+        .log-time .t {
+            color: var(--ink-1);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .log-time .d {
+            color: var(--ink-4);
+            font-size: 11px;
+        }
+
+        /* Badge aktivitas — kotak membulat 8px, teks putih (semua varian) */
+        .act-badge {
+            border-radius: 8px !important;
+            padding: 3px 10px !important;
+            color: #ffffff !important;
+        }
+
+
+        /* Pagination — tombol konsisten, rapi */
+        .pager {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .pager a,
+        .pager span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            height: 34px;
+            padding: 0 11px;
+            border-radius: var(--r-md);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-2);
+            background: var(--panel-2);
+            border: 1px solid var(--line-soft);
+            text-decoration: none;
+            transition: all var(--t-fast);
+        }
+
+        .pager a {
+            cursor: pointer;
+        }
+
+        .pager a:hover {
+            background: var(--panel-3);
+            color: var(--ink-0);
+            border-color: var(--line);
+        }
+
+        .pager .active {
+            background: rgba(59, 111, 212, 0.15);
+            color: #6ea8ff;
+            border-color: rgba(59, 111, 212, 0.30);
+            font-weight: 700;
+        }
+
+        /* Item nonaktif (panah disabled & "...") tanpa kotak tombol */
+        .pager .disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: not-allowed;
+            background: transparent;
+            border-color: transparent;
+        }
+
+        .pager i {
+            opacity: 0.7;
+        }
+
+        .pager a:hover i {
+            opacity: 1;
+        }
+
+        /* Mobile: footer tetap kiri-kanan (Showing kiri, pager kanan), tidak ditumpuk */
+        @media (max-width: 600px) {
+            .tbl-footer {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .tbl-footer>p {
+                margin: 0;
+                font-size: 11px;
+                flex: 1;
+                min-width: 0;
+                line-height: 1.35;
+            }
+
+            .pager {
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+                gap: 4px;
+            }
+
+            .pager a,
+            .pager span {
+                min-width: 30px;
+                height: 30px;
+                padding: 0 7px;
+                font-size: 12px;
+            }
+
+            /* Ringkas: sembunyikan nomor selain aktif & yang tepat setelahnya */
+            .pager a.text-mono {
+                display: none;
+            }
+
+            .pager .active+a.text-mono {
+                display: inline-flex;
+            }
+        }
+
+        /* Page sections spacing */
+        .app-content-inner>*+* {
+            margin-top: 32px;
+        }
+
+        /* Tablet & desktop (≥ 481 px): unify search / segmented / button height to 40 px */
+        @media (min-width: 481px) {
+            .tbl-toolbar .search-input {
+                height: 40px;
+            }
+
+            .tbl-toolbar .search-input input {
+                height: 40px;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .segmented {
+                height: 40px;
+                box-sizing: border-box;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .tbl-toolbar .segmented .seg {
+                height: 100%;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .tbl-toolbar .btn {
+                height: 40px;
+                min-height: 40px;
+                box-sizing: border-box;
+                padding: 0 14px;
+            }
+        }
+
+        /* Header keep on one row across breakpoints */
+        .main-header {
+            flex-wrap: nowrap;
+        }
+
+        .main-header>.flex.items-center.gap-3 {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .main-header>.flex.items-center.gap-2 {
+            flex-shrink: 0;
+        }
+
+        /* Stat cards — Tablet (≤ 768px) */
+        @media (max-width: 768px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px 16px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px;
+                letter-spacing: 0.08em;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 28px;
+                margin: 6px 0 4px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.4;
+            }
+
+            .stat-card .stat-icon {
+                width: 34px;
+                height: 34px;
+                border-radius: var(--r-md);
+                font-size: 14px;
+            }
+        }
+
+        /* Stat cards — Mobile M (≤ 480px) */
+        @media (max-width: 480px) {
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 8px;
+                letter-spacing: 0.05em;
+                white-space: nowrap;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 24px;
+                margin: 4px 0 2px;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px;
+                line-height: 1.3;
+            }
+
+            .stat-card .stat-icon {
+                width: 30px;
+                height: 30px;
+                border-radius: var(--r-md);
+                font-size: 12px;
+            }
+
+            .stat-card .accent-bar {
+                top: 12px;
+                bottom: 12px;
+            }
+        }
+
+        /* Mobile (≤ 480px): shrink header + extra-tight stat cards */
+        @media (max-width: 480px) {
+            .main-header {
+                gap: 6px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .main-header>.flex.items-center.gap-3 {
+                gap: 6px;
+            }
+
+            .main-header>.flex.items-center.gap-2 {
+                gap: 4px;
+            }
+
+            .main-header .app-header-title h1 {
+                font-size: 13px;
+                line-height: 1.2;
+            }
+
+            .main-header .app-header-title p {
+                font-size: 10px;
+                line-height: 1.2;
+            }
+
+            .main-header .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            /* Stat cards: keep 2-col, compact each card so labels/subs don't wrap awkwardly */
+            .grid.grid-cols-2.lg\:grid-cols-4 {
+                gap: 8px !important;
+            }
+
+            .stat-card {
+                padding: 10px 12px !important;
+            }
+
+            .stat-card .stat-label-sm {
+                font-size: 10px !important;
+                letter-spacing: 0.05em !important;
+                white-space: nowrap !important;
+            }
+
+            .stat-card .stat-num-lg {
+                font-size: 20px !important;
+                margin: 3px 0 2px !important;
+                line-height: 1.1 !important;
+            }
+
+            .stat-card .stat-sub {
+                font-size: 10px !important;
+                line-height: 1.3 !important;
+            }
+
+            .stat-card .stat-icon {
+                width: 26px !important;
+                height: 26px !important;
+                border-radius: var(--r-sm) !important;
+                font-size: 11px !important;
+            }
+
+            .stat-card .accent-bar {
+                top: 10px !important;
+                bottom: 10px !important;
+            }
+        }

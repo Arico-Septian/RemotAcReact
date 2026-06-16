@@ -46,13 +46,13 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/'],
+            'name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[A-Za-z][A-Za-z0-9_ ]{2,19}$/'],
             'password' => 'required|string',
         ], [
             'name.required'  => 'Username is required.',
             'name.min'       => 'Username must be at least 3 characters.',
             'name.max'       => 'Username may not exceed 20 characters.',
-            'name.regex'     => 'Username must be 3–20 characters, letters/numbers/underscore only, and start with a letter.',
+            'name.regex'     => 'Username must be 3–20 characters (letters, numbers, underscore, spaces) and start with a letter.',
             'password.required' => 'Password is required.',
         ]);
 

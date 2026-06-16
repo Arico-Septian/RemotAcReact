@@ -59,42 +59,12 @@ class MqttSubscribe extends Command
                         event(new DeviceStatusUpdated($deviceId, 'online'));
                     },
 
-                    /* === RASPI / SERVER CPU TEMP (via MQTT) === */
-                    'raspi/temperature' => function ($topic, $message, $retained = false, $matchedWildcards = []) {
-                        // Terima JSON {"suhu":48.3} / {"temp":48.3} / {"temperature":48.3}, atau angka polos "48.3".
-                        $data = json_decode($message, true);
-                        $temp = is_array($data)
-                            ? ($data['suhu'] ?? $data['temp'] ?? $data['temperature'] ?? null)
-                            : $message;
-
-                        if (! is_numeric($temp)) {
-                            $this->warn("RASPI TEMP tidak valid: [{$message}]");
-
-                            return;
-                        }
-
-                        $temp = (float) $temp;
-
-                        // lm-sensors kadang kirim millidegree (mis. 48000) -> konversi ke °C.
-                        if ($temp > 1000) {
-                            $temp = round($temp / 1000, 1);
-                        }
-
-                        if ($temp <= 0 || $temp > 150) {
-                            $this->warn("RASPI TEMP di luar rentang wajar ({$temp}°C), diabaikan");
-
-                            return;
-                        }
-
-                        // Simpan nilai + waktu terima. TTL panjang (30 mnt) supaya nilai terakhir
-                        // tetap bisa ditampilkan sebagai "last seen" walau Raspi sudah offline.
-                        // Status online/offline ditentukan endpoint /suhu-raspi dari umur data.
-                        Cache::put('raspi_temperature', $temp, 1800);
-                        Cache::put('raspi_temperature_at', now()->timestamp, 1800);
-                        event(new RaspiTemperatureUpdated($temp));
-
-                        $this->info("RASPI TEMP (MQTT): {$temp}°C");
-                    },
+                    /* === SERVER / RASPI CPU TEMP (via MQTT) ===
+                       Dua topik diproses sama: 'raspi/temperature' (legacy Raspi) &
+                       'server/temperature' (server x86 / Proxmox). Keduanya mengisi
+                       Cache 'raspi_temperature' + broadcast RaspiTemperatureUpdated. */
+                    'raspi/temperature' => fn ($topic, $message, $retained = false, $matchedWildcards = []) => $this->handleCpuTemperature($message, 'raspi'),
+                    'server/temperature' => fn ($topic, $message, $retained = false, $matchedWildcards = []) => $this->handleCpuTemperature($message, 'server'),
 
                     /* === PING === */
                     'device/+/ping' => function ($topic, $message = '', $retained = false, $matchedWildcards = []) use ($mqtt) {
@@ -551,6 +521,49 @@ class MqttSubscribe extends Command
                 sleep(5);
             }
         }
+    }
+
+    /**
+     * Proses suhu CPU dari MQTT lalu simpan ke Cache + broadcast ke dashboard.
+     * $source memisahkan sumber: 'raspi' (topik raspi/temperature) atau 'server'
+     * (topik server/temperature) → disimpan di cache "{source}_temperature".
+     */
+    private function handleCpuTemperature(string $message, string $source): void
+    {
+        $label = strtoupper($source);
+
+        // Terima JSON {"suhu":48.3} / {"temp":48.3} / {"temperature":48.3}, atau angka polos "48.3".
+        $data = json_decode($message, true);
+        $temp = \is_array($data)
+            ? ($data['suhu'] ?? $data['temp'] ?? $data['temperature'] ?? null)
+            : $message;
+
+        if (! \is_numeric($temp)) {
+            $this->warn("{$label} TEMP tidak valid: [{$message}]");
+
+            return;
+        }
+
+        $temp = (float) $temp;
+
+        // lm-sensors kadang kirim millidegree (mis. 48000) -> konversi ke °C.
+        if ($temp > 1000) {
+            $temp = round($temp / 1000, 1);
+        }
+
+        if ($temp <= 0 || $temp > 150) {
+            $this->warn("{$label} TEMP di luar rentang wajar ({$temp}°C), diabaikan");
+
+            return;
+        }
+
+        // Simpan nilai + waktu terima (TTL 30 mnt). Status online/offline ditentukan
+        // endpoint /suhu-{source} dari umur data.
+        Cache::put("{$source}_temperature", $temp, 1800);
+        Cache::put("{$source}_temperature_at", now()->timestamp, 1800);
+        event(new RaspiTemperatureUpdated($temp));
+
+        $this->info("{$label} TEMP (MQTT): {$temp}°C");
     }
 
     /* === HELPER: SET ONLINE === */

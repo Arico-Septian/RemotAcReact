@@ -28,7 +28,7 @@ Route::get('/login', function () {
         return redirect()->route('dashboard');
     }
 
-    return view('auth.login');
+    return \Inertia\Inertia::render('Login');
 })->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -255,6 +255,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
         // Dua pilihan: 1 Day (24 jam, per jam) & 1 Hour (1 jam, per menit).
         $range = $request->query('range', '1d');
         $rangeConfig = [
+            // 1 Day = 24 jam, per-1-jam (24 titik). 1 Hour = 60 menit, per-1-menit (60 titik).
             '1d' => ['hours' => 24, 'interval' => 60, 'slots' => 24, 'label' => 'H:00'],
             '1h' => ['hours' => 1,  'interval' => 1,  'slots' => 60, 'label' => 'H:i'],
         ];
@@ -483,15 +484,14 @@ Route::middleware(['auth', 'activity'])->group(function () {
         return Cache::get('test_key');
     });
 
-    Route::get('/suhu-raspi', function () {
-        $temp = Cache::get('raspi_temperature');
-        $at = Cache::get('raspi_temperature_at');
+    $cpuTempJson = function (string $source) {
+        $temp = Cache::get("{$source}_temperature");
+        $at = Cache::get("{$source}_temperature_at");
 
-        // Umur data (detik) sejak terakhir Raspi kirim suhu.
+        // Umur data (detik) sejak pengirim terakhir kirim suhu.
         $ageSeconds = $at !== null ? max(0, now()->timestamp - (int) $at) : null;
 
         // Online jika ada data & umurnya <= 180 detik (3x interval kirim 60s).
-        // Konsisten dengan Room::TEMPERATURE_STALE_SECONDS untuk sensor ruangan.
         $isOnline = $temp !== null && $ageSeconds !== null && $ageSeconds <= 180;
 
         return response()->json([
@@ -500,13 +500,14 @@ Route::middleware(['auth', 'activity'])->group(function () {
             'online' => $isOnline,
             'age' => $ageSeconds,
         ])->header('Cache-Control', 'no-store, no-cache, must-revalidate');
-    });
+    };
+
+    // /suhu-raspi (legacy, dari raspi/temperature) & /suhu-server (dari server/temperature)
+    Route::get('/suhu-raspi', fn () => $cpuTempJson('raspi'));
+    Route::get('/suhu-server', fn () => $cpuTempJson('server'));
 
     Route::get('/raspi-monitor', function () {
-        return response()->view('server.monitoring')
-            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
-            ->header('Pragma', 'no-cache')
-            ->header('Expires', '0');
+        return \Inertia\Inertia::render('ServerTemperature');
     })->name('monitoring');
 
 });
