@@ -204,21 +204,20 @@ class FuzzyMamdaniService
         // AC Tinggi
         $acTinggi = max($r6, $r8, $r9);
 
-        // DEFUZZIFIKASI (CENTROID)
-        $numerator = 0;
-        $denominator = 0;
+        // DEFUZZIFIKASI (WEIGHTED AVERAGE)
+        $zRendah = 30;
+        $zSedang = 60;
+        $zTinggi = 90;
 
-        for ($z = 0; $z <= 100; $z++) {
+        $numerator =
+            ($acRendah * $zRendah) +
+            ($acSedang * $zSedang) +
+            ($acTinggi * $zTinggi);
 
-            $mu = max(
-                min($acRendah, $this->muAcRendah($z)),
-                min($acSedang, $this->muAcSedang($z)),
-                min($acTinggi, $this->muAcTinggi($z))
-            );
-
-            $numerator += ($z * $mu);
-            $denominator += $mu;
-        }
+        $denominator =
+            $acRendah +
+            $acSedang +
+            $acTinggi;
 
         $crisp = $denominator != 0
             ? $numerator / $denominator

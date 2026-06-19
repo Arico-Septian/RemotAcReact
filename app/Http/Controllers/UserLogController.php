@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class UserLogController extends Controller
@@ -252,7 +253,11 @@ public function destroyAll(Request $request)
             'deleted_count' => $totalDeleted,
         ]);
 
-        event(new \App\Events\UserLogsCleared());
+        try {
+            event(new \App\Events\UserLogsCleared());
+        } catch (\Throwable $e) {
+            Log::warning('Broadcast UserLogsCleared gagal: '.$e->getMessage());
+        }
 
         if ($request->wantsJson()) {
             return response()->json(['success' => true, 'message' => 'Semua log berhasil dihapus']);

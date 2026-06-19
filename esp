@@ -28,7 +28,7 @@ const char* MQTT_PASS = "RadnextTUS01";
 #define DHT_PIN 4
 #define DHT_TYPE DHT11
 
-const unsigned long PING_INTERVAL = 15000;
+const unsigned long PING_INTERVAL = 60000;             // kirim ping/keepalive tiap 1 menit
 const unsigned long STATUS_INTERVAL = 10000;
 const unsigned long SENSOR_INTERVAL = 5000;            // irama baca DHT (deteksi perubahan cepat)
 const unsigned long SENSOR_HEARTBEAT_INTERVAL = 60000; // kirim suhu minimal tiap 1 menit walau tidak berubah

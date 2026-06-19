@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\UserLogCreated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class UserLog extends Model
 {
@@ -24,7 +25,12 @@ class UserLog extends Model
     protected static function booted(): void
     {
         static::created(function (UserLog $log) {
-            event(new UserLogCreated($log));
+            // Broadcasting opsional: jangan gagalkan request kalau Reverb mati.
+            try {
+                event(new UserLogCreated($log));
+            } catch (\Throwable $e) {
+                Log::warning('Broadcast UserLogCreated gagal: '.$e->getMessage());
+            }
         });
     }
 }

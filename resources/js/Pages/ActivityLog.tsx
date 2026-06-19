@@ -70,6 +70,7 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
     const { auth } = usePage<PageProps>().props;
     const isAdmin = auth.user?.role === 'admin';
     const [search, setSearch] = useState(filters.search);
+    const [deletingAll, setDeletingAll] = useState(false);
     const cat = quickCats.some((c) => c.value === filters.activity) ? filters.activity : '';
     const searchTimer = useRef<number | null>(null);
 
@@ -90,7 +91,8 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
     };
 
     const deleteAll = async () => {
-        if (!window.confirm('Delete ALL activity logs? This cannot be undone.')) return;
+        if (deletingAll || !window.confirm('Delete ALL activity logs? This cannot be undone.')) return;
+        setDeletingAll(true);
         try {
             await window.axios.delete('/logs/delete-all');
             router.reload();
@@ -98,6 +100,8 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
             const msg = err?.response?.data?.message ?? 'Failed to delete logs';
             if (window.smToast) window.smToast(msg, 'error');
             else window.alert(msg);
+        } finally {
+            setDeletingAll(false);
         }
     };
 
@@ -150,8 +154,8 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
                             ))}
                         </div>
                         {isAdmin && (
-                            <button type="button" onClick={deleteAll} className="btn btn-danger btn-sm" title="Delete All Logs">
-                                <i className="fa-solid fa-trash text-[15px]"></i>
+                            <button type="button" onClick={deleteAll} disabled={deletingAll} className="btn btn-danger btn-sm" title="Delete All Logs">
+                                <i className={`fa-solid ${deletingAll ? 'fa-spinner fa-spin' : 'fa-trash'} text-[15px]`}></i>
                             </button>
                         )}
                     </div>

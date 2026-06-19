@@ -103,7 +103,11 @@ class TimerController extends Controller
                 'activity' => $activityDetail,
             ]);
 
-            event(new AcTimerUpdated($ac->fresh()->load('room')));
+            try {
+                event(new AcTimerUpdated($ac->fresh()->load('room')));
+            } catch (\Throwable $e) {
+                Log::warning('Broadcast AcTimerUpdated gagal: '.$e->getMessage());
+            }
         }
 
         return back()->with('success', $isDeletingTimer ? 'Timer berhasil dihapus' : 'Timer berhasil disimpan');

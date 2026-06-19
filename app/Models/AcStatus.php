@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\AcStatusUpdated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class AcStatus extends Model
 {
@@ -30,7 +31,12 @@ class AcStatus extends Model
                 return;
             }
 
-            event(new AcStatusUpdated($status));
+            // Broadcasting opsional: jangan gagalkan request kalau Reverb mati.
+            try {
+                event(new AcStatusUpdated($status));
+            } catch (\Throwable $e) {
+                Log::warning('Broadcast AcStatusUpdated gagal: '.$e->getMessage());
+            }
         });
     }
 }

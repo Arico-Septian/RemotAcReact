@@ -62,6 +62,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
     const [stats, setStats] = useState(initialStats);
     const [modalOpen, setModalOpen] = useState(false);
     const [showPw, setShowPw] = useState(false);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
     const searchTimer = useRef<number | null>(null);
 
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
@@ -133,7 +134,8 @@ export default function Users({ users, stats: initialStats, filters, pagination 
     };
 
     const deleteUser = async (u: ManagedUser) => {
-        if (!window.confirm(`Delete user ${u.name}?`)) return;
+        if (deletingId || !window.confirm(`Delete user ${u.name}?`)) return;
+        setDeletingId(u.id);
         try {
             await window.axios.delete(`/users/${u.id}`);
             router.reload({ only: ['users', 'stats', 'pagination'] });
@@ -141,6 +143,8 @@ export default function Users({ users, stats: initialStats, filters, pagination 
             const msg = err?.response?.data?.error ?? 'Failed to delete user';
             if (window.smToast) window.smToast(msg, 'error');
             else window.alert(msg);
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -230,8 +234,8 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                     <td>
                                         <div className="actions-cell">
                                             {!u.is_self && (
-                                                <button onClick={() => deleteUser(u)} type="button" className="btn-icon danger" title="Delete user">
-                                                    <i className="fa-solid fa-trash text-[10px]"></i>
+                                                <button onClick={() => deleteUser(u)} type="button" disabled={deletingId === u.id} className="btn-icon danger" title="Delete user">
+                                                    <i className={`fa-solid ${deletingId === u.id ? 'fa-spinner fa-spin' : 'fa-trash'} text-[10px]`}></i>
                                                 </button>
                                             )}
                                         </div>
@@ -264,8 +268,8 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                     </span>
                                     <div className="user-card-actions">
                                         {!u.is_self && (
-                                            <button onClick={() => deleteUser(u)} type="button" className="btn-icon danger" title="Delete user">
-                                                <i className="fa-solid fa-trash text-[10px]"></i>
+                                            <button onClick={() => deleteUser(u)} type="button" disabled={deletingId === u.id} className="btn-icon danger" title="Delete user">
+                                                <i className={`fa-solid ${deletingId === u.id ? 'fa-spinner fa-spin' : 'fa-trash'} text-[10px]`}></i>
                                             </button>
                                         )}
                                     </div>

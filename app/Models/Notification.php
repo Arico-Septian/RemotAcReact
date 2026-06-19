@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\NotificationCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class Notification extends Model
 {
@@ -39,7 +40,12 @@ class Notification extends Model
     protected static function booted(): void
     {
         static::created(function (Notification $notification) {
-            event(new NotificationCreated($notification));
+            // Broadcasting opsional: jangan gagalkan request kalau Reverb mati.
+            try {
+                event(new NotificationCreated($notification));
+            } catch (\Throwable $e) {
+                Log::warning('Broadcast NotificationCreated gagal: '.$e->getMessage());
+            }
         });
     }
 
