@@ -144,11 +144,15 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     const isBusy = (id: number, field: string) => !!pending[`${id}:${field}`];
 
     // Fire a control POST; endpoints return back() so we ignore the (redirected) body.
-    const fire = (url: string, body?: Record<string, string>, revert?: () => void, lockKey?: string) => {
+    const fire = (url: string, body?: Record<string, string>, revert?: () => void, lockKey?: string, successMsg?: string, onSuccess?: () => void) => {
         const data = body ? new URLSearchParams(body).toString() : undefined;
         if (lockKey) setPending((p) => ({ ...p, [lockKey]: true }));
         window.axios
             .post(url, data, { headers: body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : undefined })
+            .then(() => {
+                if (successMsg) window.smToast?.(successMsg, 'success');
+                if (onSuccess) onSuccess();
+            })
             .catch((err: any) => {
                 if (revert) revert();
                 const msg = err?.response?.status ? `Failed (HTTP ${err.response.status})` : 'Command failed';
@@ -171,14 +175,22 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
         if (v === ac.set_temperature) return;
         const prev = ac.set_temperature;
         patch(ac.id, { set_temperature: v });
-        fire(`/ac/${ac.id}/temp/${v}`, undefined, () => patch(ac.id, { set_temperature: prev }), `${ac.id}:temp`);
+        fire(`/ac/${ac.id}/temp/${v}`, undefined, () => patch(ac.id, { set_temperature: prev }), `${ac.id}:temp`, `Suhu diatur ke ${v}°C`);
     };
+
+    const fieldLabel: Record<'mode' | 'fan_speed' | 'swing', string> = { mode: 'Mode', fan_speed: 'Fan speed', swing: 'Swing' };
 
     const setField = (ac: AcControlUnit, field: 'mode' | 'fan_speed' | 'swing', value: string, urlSeg: string) => {
         if (isBusy(ac.id, field)) return;
         const prev = ac[field];
         patch(ac.id, { [field]: value } as Partial<AcControlUnit>);
-        fire(`/ac/${ac.id}/${urlSeg}/${value}`, undefined, () => patch(ac.id, { [field]: prev } as Partial<AcControlUnit>), `${ac.id}:${field}`);
+        fire(
+            `/ac/${ac.id}/${urlSeg}/${value}`,
+            undefined,
+            () => patch(ac.id, { [field]: prev } as Partial<AcControlUnit>),
+            `${ac.id}:${field}`,
+            `${fieldLabel[field]} diubah ke ${cap(value)}`,
+        );
     };
 
     const confirmPower = () => {
@@ -188,23 +200,44 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
         if (isBusy(ac.id, 'power')) return;
         const newPower = ac.power === 'ON' ? 'OFF' : 'ON';
         patch(ac.id, { power: newPower });
-        fire(`/ac/${ac.id}/toggle`, { power: newPower }, () => patch(ac.id, { power: ac.power }), `${ac.id}:power`);
+        fire(`/ac/${ac.id}/toggle`, { power: newPower }, () => patch(ac.id, { power: ac.power }), `${ac.id}:power`, `AC ${newPower === 'ON' ? 'dinyalakan' : 'dimatikan'}`);
     };
 
     const saveTimer = (ac: AcControlUnit, on: string, off: string) => {
+        if (isBusy(ac.id, 'timer')) return;
+        const prevOn = ac.timer_on;
+        const prevOff = ac.timer_off;
         patch(ac.id, { timer_on: on || null, timer_off: off || null });
-        setTimerEditId(null);
-        fire(`/ac/${ac.id}/schedule`, { timer_on: on, timer_off: off });
+        fire(
+            `/ac/${ac.id}/schedule`,
+            { timer_on: on, timer_off: off },
+            () => patch(ac.id, { timer_on: prevOn, timer_off: prevOff }),
+            `${ac.id}:timer`,
+            'Timer berhasil disimpan',
+            () => setTimerEditId(null),
+        );
     };
 
     const deleteTimer = (ac: AcControlUnit) => {
-        patch(ac.id, { timer_on: null, timer_off: null });
-        fire(`/ac/${ac.id}/schedule`, { timer_on: '', timer_off: '' });
+        if (isBusy(ac.id, 'timer')) return;
+        // Jangan optimistic-clear dulu — kalau langsung di-null-kan, hasTimer jadi false
+        // dan tombol (beserta spinner-nya) langsung hilang sebelum request selesai.
+        fire(
+            `/ac/${ac.id}/schedule`,
+            { timer_on: '', timer_off: '' },
+            undefined,
+            `${ac.id}:timer`,
+            'Timer berhasil dihapus',
+            () => patch(ac.id, { timer_on: null, timer_off: null }),
+        );
     };
 
     const deleteAc = (ac: AcControlUnit) => {
         if (!window.confirm(`Delete AC ${ac.ac_number} · ${ac.name}?`)) return;
-        router.delete(`/ac/${ac.id}`, { preserveScroll: true });
+        router.delete(`/ac/${ac.id}`, {
+            preserveScroll: true,
+            onSuccess: () => window.smToast?.('AC unit berhasil dihapus', 'success'),
+        });
     };
 
     const submitAdd = (e: FormEvent) => {
@@ -214,6 +247,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
             onSuccess: () => {
                 setAddModal(false);
                 addForm.reset();
+                window.smToast?.('AC unit berhasil ditambahkan', 'success');
             },
         });
     };
@@ -479,9 +513,9 @@ interface PanelProps {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" className="timer-delete-btn mt-3" onClick={() => onDeleteTimer(ac)}>
-                                        <i className="fa-solid fa-trash"></i>
-                                        <span>Delete Timer</span>
+                                    <button type="button" className="timer-delete-btn mt-3" disabled={isBusy('timer')} onClick={() => onDeleteTimer(ac)}>
+                                        <i className={`fa-solid ${isBusy('timer') ? 'fa-spinner fa-spin' : 'fa-trash'}`}></i>
+                                        <span>{isBusy('timer') ? 'Deleting…' : 'Delete Timer'}</span>
                                     </button>
                                 </div>
                             ) : (
@@ -504,9 +538,9 @@ interface PanelProps {
                                         <input id={`timer-off-${ac.id}`} className="input text-mono" type="time" title="Timer OFF time" aria-label="Timer OFF time" value={timerOff} onChange={(e) => setTimerOff(e.target.value)} />
                                     </div>
                                 </div>
-                                <button type="submit" className="btn btn-primary btn-sm save-timer-btn" style={{ width: '100%' }}>
-                                    <i className="fa-solid fa-check text-[10px]"></i>
-                                    <span>Save Timer</span>
+                                <button type="submit" className="btn btn-primary btn-sm save-timer-btn" style={{ width: '100%' }} disabled={isBusy('timer')}>
+                                    <i className={`fa-solid ${isBusy('timer') ? 'fa-spinner fa-spin' : 'fa-check'} text-[10px]`}></i>
+                                    <span>{isBusy('timer') ? 'Saving…' : 'Save Timer'}</span>
                                 </button>
                             </form>
                         )}

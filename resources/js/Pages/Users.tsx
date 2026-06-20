@@ -130,7 +130,13 @@ export default function Users({ users, stats: initialStats, filters, pagination 
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
-        post('/users', { onSuccess: () => closeModal(), preserveScroll: true });
+        post('/users', {
+            onSuccess: () => {
+                closeModal();
+                window.smToast?.('User berhasil ditambahkan', 'success');
+            },
+            preserveScroll: true,
+        });
     };
 
     const deleteUser = async (u: ManagedUser) => {
@@ -139,6 +145,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
         try {
             await window.axios.delete(`/users/${u.id}`);
             router.reload({ only: ['users', 'stats', 'pagination'] });
+            window.smToast?.('User berhasil dihapus', 'success');
         } catch (err: any) {
             const msg = err?.response?.data?.error ?? 'Failed to delete user';
             if (window.smToast) window.smToast(msg, 'error');

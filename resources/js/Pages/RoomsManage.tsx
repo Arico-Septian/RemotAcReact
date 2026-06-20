@@ -189,14 +189,20 @@ export default function RoomsManage({ rooms }: RoomsManageProps) {
         e.preventDefault();
         // Server normalizes (lowercase/trim) and validates no-spaces; send as typed.
         post('/rooms', {
-            onSuccess: () => closeModal(),
+            onSuccess: () => {
+                closeModal();
+                window.smToast?.('Room berhasil ditambahkan', 'success');
+            },
             preserveScroll: true,
         });
     };
 
     const deleteRoom = (room: ManageRoom) => {
         if (window.confirm('Delete this room and all its AC units?')) {
-            router.delete(`/rooms/${room.id}`, { preserveScroll: true });
+            router.delete(`/rooms/${room.id}`, {
+                preserveScroll: true,
+                onSuccess: () => window.smToast?.('Room berhasil dihapus', 'success'),
+            });
         }
     };
 

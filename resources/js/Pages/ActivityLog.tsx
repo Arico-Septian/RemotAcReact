@@ -96,6 +96,7 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
         try {
             await window.axios.delete('/logs/delete-all');
             router.reload();
+            window.smToast?.('Semua log berhasil dihapus', 'success');
         } catch (err: any) {
             const msg = err?.response?.data?.message ?? 'Failed to delete logs';
             if (window.smToast) window.smToast(msg, 'error');

@@ -2,6 +2,7 @@ import { PropsWithChildren, ReactNode, useEffect, useState } from 'react';
 import { router, usePage } from '@inertiajs/react';
 import type { PageProps } from '@/types';
 import NotificationBell from '@/Components/NotificationBell';
+import ToastContainer from '@/Components/Toast';
 import '../../css/sidebar.css';
 
 interface AppLayoutProps {
@@ -50,6 +51,7 @@ export default function AppLayout({
 
     return (
         <div className="app-layout">
+            <ToastContainer />
             <div className="app-bg"></div>
             <div id="overlay" className={sidebarOpen ? 'active' : ''} onClick={() => setSidebarOpen(false)}></div>
 

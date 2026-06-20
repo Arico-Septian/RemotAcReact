@@ -22,7 +22,7 @@ interface Point {
     server: number | null;
 }
 
-const GAUGE_MIN = 20;
+const GAUGE_MIN = 0;
 const GAUGE_MAX = 90;
 const MAX_POINTS = 60;
 
@@ -196,8 +196,8 @@ function CpuTrendChart({ history }: { history: Point[] }) {
                 scales: {
                     x: { ticks: { color: '#64748b', font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { display: false }, border: { display: false } },
                     y: {
-                        suggestedMin: 30,
-                        suggestedMax: 90,
+                        min: 0,
+                        max: 90,
                         ticks: { color: '#94a3b8', font: { size: 10 }, padding: 8, callback: (v: any) => `${v}°` },
                         grid: { color: 'rgba(255,255,255,0.05)', drawTicks: false },
                         border: { display: false },

@@ -109,6 +109,7 @@ export default function Profile({ profileUser }: ProfileProps) {
                 setAvatarUrl(null);
                 setHasAvatar(false);
                 setPhotoModal(false);
+                window.smToast?.('Foto profil dihapus', 'success');
             },
         });
     };
