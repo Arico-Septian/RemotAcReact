@@ -44,7 +44,6 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [espOnline, setEspOnline] = useState(room.device_status === 'online');
     const [addModal, setAddModal] = useState(false);
-    const [powerConfirm, setPowerConfirm] = useState<AcControlUnit | null>(null);
     const [deleteConfirm, setDeleteConfirm] = useState<AcControlUnit | null>(null);
     const [deletingAcId, setDeletingAcId] = useState<number | null>(null);
     const [timerEditId, setTimerEditId] = useState<number | null>(null);
@@ -196,10 +195,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
         );
     };
 
-    const confirmPower = () => {
-        const ac = powerConfirm;
-        if (!ac) return;
-        setPowerConfirm(null);
+    const togglePower = (ac: AcControlUnit) => {
         if (isBusy(ac.id, 'power')) return;
         const newPower = ac.power === 'ON' ? 'OFF' : 'ON';
         patch(ac.id, { power: newPower });
@@ -336,33 +332,13 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
                     ac={selected}
                     canEditTimer={timerEditId === selected.id}
                     onSetTemp={setTemp}
-                    onTogglePower={() => setPowerConfirm(selected)}
+                    onTogglePower={() => togglePower(selected)}
                     onSetField={setField}
                     isBusy={(field: string) => isBusy(selected.id, field)}
                     onOpenTimer={() => setTimerEditId((id) => (id === selected.id ? null : selected.id))}
                     onSaveTimer={saveTimer}
                     onDeleteTimer={deleteTimer}
                 />
-            )}
-
-            {/* Power confirm modal */}
-            {powerConfirm && createPortal(
-                <div className="modal-backdrop is-open" onClick={(e) => e.target === e.currentTarget && setPowerConfirm(null)}>
-                    <div className="modal" style={{ maxWidth: 380 }}>
-                        <div className="modal-body text-center" style={{ paddingTop: 22 }}>
-                            <div className="confirm-icon info"><i className="fa-solid fa-power-off"></i></div>
-                            <h2 style={{ fontSize: 16, fontWeight: 600, color: 'var(--ink-0)', margin: '0 0 4px' }}>Confirm Power</h2>
-                            <p className="text-sm" style={{ color: 'var(--ink-2)', margin: 0 }}>
-                                Turn AC {powerConfirm.ac_number}{powerConfirm.name ? ` · ${powerConfirm.name}` : ''} {powerConfirm.power === 'ON' ? 'OFF' : 'ON'}?
-                            </p>
-                        </div>
-                        <div className="modal-footer" style={{ paddingTop: 6 }}>
-                            <button type="button" onClick={() => setPowerConfirm(null)} className="btn btn-ghost flex-1">Cancel</button>
-                            <button type="button" onClick={confirmPower} className="btn btn-primary flex-1">Continue</button>
-                        </div>
-                    </div>
-                </div>,
-                document.body,
             )}
 
             {/* Add AC modal */}

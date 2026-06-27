@@ -2901,6 +2901,14 @@ input[type="password"]::-ms-clear { display: none; }
   background: var(--panel-3);
   box-shadow: 0 0 0 3px var(--cyan-soft);
 }
+.modal .input:focus,
+.modal .field input:focus,
+.modal .field select:focus,
+.modal .field textarea:focus {
+  border-color: #ffffff;
+  background: var(--panel-3);
+  box-shadow: none;
+}
 .input-sm { padding: 8px 12px; font-size: 12.5px; }
 select.input, select.select {
   appearance: none;
