@@ -308,7 +308,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                 <p className="sub">Create a new account with the appropriate access role</p>
                             </div>
                         </div>
-                        <form onSubmit={submit}>
+                        <form id="addUserForm" onSubmit={submit}>
                             <div className="modal-body space-y-3">
                                 <div className="field">
                                     <label className="field-label">Username</label>

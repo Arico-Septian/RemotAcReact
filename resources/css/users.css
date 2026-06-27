@@ -47,6 +47,11 @@
             color: #ffffff;
         }
 
+        #addUserForm .select option:checked {
+            background: linear-gradient(#0a0a0c, #0a0a0c);
+            color: #ffffff;
+        }
+
         /* Delete user — solid dark red box, white icon */
         .btn-icon.danger {
             background: #dc2626;
