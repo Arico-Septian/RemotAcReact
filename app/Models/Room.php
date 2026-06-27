@@ -11,7 +11,7 @@ class Room extends Model
      * Used by the UI views and CheckDeviceStatus so notifications and
      * on-screen status always agree. Sized for a 60 s device ping (3x).
      */
-    const ONLINE_THRESHOLD_SECONDS = 180;
+    public const ONLINE_THRESHOLD_SECONDS = 180;
 
     /**
      * Seconds since the last RoomTemperature record after which the reading
@@ -19,7 +19,7 @@ class Room extends Model
      * the device threshold because the ESP only sends a temperature heartbeat
      * every 60 s when the value is stable (report-by-exception), so 180 s ≈ 3x.
      */
-    const TEMPERATURE_STALE_SECONDS = 180;
+    public const TEMPERATURE_STALE_SECONDS = 180;
 
     protected $fillable = [
         'name',
@@ -38,4 +38,13 @@ class Room extends Model
         return $this->hasMany(AcUnit::class);
     }
 
+    public static function onlineThresholdSeconds(): int
+    {
+        return AppSetting::sensorOfflineSeconds();
+    }
+
+    public static function temperatureStaleSeconds(): int
+    {
+        return AppSetting::sensorOfflineSeconds();
+    }
 }

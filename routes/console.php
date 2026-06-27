@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AppSetting;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ Schedule::command('logs:clean')
 
 Schedule::command('device:check-status')
     ->everyMinute()
+    ->when(fn (): bool => ((int) now()->format('i')) % AppSetting::deviceCheckIntervalMinutes() === 0)
     ->withoutOverlapping()
     ->runInBackground();
 
@@ -28,7 +30,7 @@ Schedule::command('fuzzy:run')
 Schedule::command('notification:cleanup')
     ->dailyAt('00:00');
 
-Schedule::command('temperature:cleanup --days=7')
+Schedule::command('temperature:cleanup')
     ->dailyAt('00:10');
 
 Schedule::call(function () {

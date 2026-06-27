@@ -104,6 +104,10 @@ export default function AppLayout({
                                         <i className="fa-solid fa-clock-rotate-left"></i>
                                         <span className="menu-text">Activity Log</span>
                                     </a>
+                                    <a href="/settings" className={`nav-link menu-link ${path.startsWith('/settings') ? 'active' : ''}`}>
+                                        <i className="fa-solid fa-gear"></i>
+                                        <span className="menu-text">Settings</span>
+                                    </a>
                                 </div>
                             </>
                         )}

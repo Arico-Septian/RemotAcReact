@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\AppSetting;
 use App\Models\RoomTemperature;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
@@ -11,11 +12,9 @@ use Illuminate\Console\Command;
 #[Description('Delete old room temperature records')]
 class CleanupRoomTemperatures extends Command
 {
-    private const RETENTION_DAYS = 7;
-
     public function handle(): int
     {
-        $days = max(1, (int) ($this->option('days') ?? self::RETENTION_DAYS));
+        $days = max(1, (int) ($this->option('days') ?? AppSetting::retentionDays(AppSetting::TEMPERATURE_RETENTION_DAYS)));
         $cutoff = now()->subDays($days);
 
         $deleted = RoomTemperature::where('created_at', '<', $cutoff)->delete();

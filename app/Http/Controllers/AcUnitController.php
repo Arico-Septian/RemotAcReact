@@ -10,6 +10,7 @@ use App\Models\RoomTemperature;
 use App\Models\UserLog;
 use App\Services\FuzzyMamdaniService;
 use App\Services\MqttService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +43,7 @@ class AcUnitController extends Controller
         $latestTempRecord = $tempHistory->first();
         $isFresh = $latestTempRecord
             && $latestTempRecord->created_at
-            && now()->diffInSeconds($latestTempRecord->created_at, true) <= Room::TEMPERATURE_STALE_SECONDS;
+            && now()->diffInSeconds($latestTempRecord->created_at, true) <= Room::temperatureStaleSeconds();
         $currentTemp = $isFresh ? $latestTempRecord->temperature : null;
 
         if ($currentTemp !== null) {
@@ -362,7 +363,7 @@ class AcUnitController extends Controller
         );
     }
 
-    private function calculateDeltaT(\Illuminate\Database\Eloquent\Collection $tempHistory): float
+    private function calculateDeltaT(Collection $tempHistory): float
     {
         if ($tempHistory->count() < 2) {
             return 0;
@@ -404,7 +405,7 @@ class AcUnitController extends Controller
 
         $isOnline = ($status === 'online' || $status === 'available')
             && $lastSeen
-            && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
+            && now()->diffInSeconds($lastSeen, true) <= Room::onlineThresholdSeconds();
 
         $room->device_status = $isOnline ? 'online' : 'offline';
     }
@@ -425,5 +426,4 @@ class AcUnitController extends Controller
             return null;
         }
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Notification;
 use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -17,8 +18,6 @@ class CheckDeviceStatus extends Command
     const STATUS_ONLINE = 'online';
 
     const STATUS_OFFLINE = 'offline';
-
-    const OFFLINE_THRESHOLD = Room::ONLINE_THRESHOLD_SECONDS;
 
     const STATUS_TTL = 300;
 
@@ -89,7 +88,7 @@ class CheckDeviceStatus extends Command
 
         // Check if offline
         $diff = $now->diffInSeconds($lastSeen, true);
-        $isOffline = $diff > self::OFFLINE_THRESHOLD;
+        $isOffline = $diff > Room::onlineThresholdSeconds();
         $currentStatus = Cache::get($statusKey);
 
         // OFFLINE
@@ -110,7 +109,7 @@ class CheckDeviceStatus extends Command
             // Fire persistent notification so admins see this even without a browser open
             $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
             if ($room) {
-                \App\Models\Notification::deviceOffline($room->name, $deviceId);
+                Notification::deviceOffline($room->name, $deviceId);
             }
         }
         // ONLINE
@@ -130,7 +129,7 @@ class CheckDeviceStatus extends Command
 
             $room = Room::whereRaw('LOWER(TRIM(device_id)) = ?', [$deviceId])->first();
             if ($room) {
-                \App\Models\Notification::deviceOnline($room->name, $deviceId);
+                Notification::deviceOnline($room->name, $deviceId);
             }
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\RoomTemperature;
 use App\Models\UserLog;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
@@ -19,7 +20,7 @@ class DashboardController extends Controller
             ->get();
         $latestTemperatures = RoomTemperature::latestByNormalizedRoom();
 
-        /** @var \Illuminate\Database\Eloquent\Collection<int, UserLog> $recentActivitiesRaw */
+        /** @var Collection<int, UserLog> $recentActivitiesRaw */
         $recentActivitiesRaw = UserLog::with('user')->orderByDesc('created_at')->limit(15)->get();
         $recentActivities = $recentActivitiesRaw->map(fn (UserLog $log) => $this->formatLog($log));
 
@@ -40,7 +41,7 @@ class DashboardController extends Controller
 
             $isOnline = ($status === 'online' || $status === 'available')
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
+                && now()->diffInSeconds($lastSeen, true) <= Room::onlineThresholdSeconds();
 
             $room->device_status = $isOnline ? 'online' : 'offline';
 
@@ -49,7 +50,7 @@ class DashboardController extends Controller
             $temperatureIsOffline = ! $isOnline || $sensorStatus === 'offline';
             if ($latestTemperature && $latestTemperature->created_at) {
                 $temperatureIsOffline = $temperatureIsOffline
-                    || now()->diffInSeconds($latestTemperature->created_at, true) > Room::TEMPERATURE_STALE_SECONDS;
+                    || now()->diffInSeconds($latestTemperature->created_at, true) > Room::temperatureStaleSeconds();
             } else {
                 $temperatureIsOffline = true;
             }
@@ -97,7 +98,7 @@ class DashboardController extends Controller
 
     public function recentActivities()
     {
-        /** @var \Illuminate\Database\Eloquent\Collection<int, UserLog> $logsRaw */
+        /** @var Collection<int, UserLog> $logsRaw */
         $logsRaw = UserLog::with('user')->orderByDesc('created_at')->limit(15)->get();
         $logs = $logsRaw->map(fn (UserLog $log) => $this->formatLog($log));
 
@@ -118,7 +119,7 @@ class DashboardController extends Controller
 
             $isOnline = ($status === 'online' || $status === 'available')
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
+                && now()->diffInSeconds($lastSeen, true) <= Room::onlineThresholdSeconds();
 
             $isOnline ? $onlineRooms++ : $offlineRooms++;
         }

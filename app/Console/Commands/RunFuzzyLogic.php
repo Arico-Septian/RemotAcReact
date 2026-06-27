@@ -33,7 +33,7 @@ class RunFuzzyLogic extends Command
         $fuzzyService = new FuzzyMamdaniService;
 
         // Pre-fetch semua temperature history sekaligus (hindari N+1)
-        $tempHistoryMap = RoomTemperature::recentByNormalizedRoom(perRoom: 2);
+        $tempHistoryMap = RoomTemperature::recentByNormalizedRoom(perRoom: 2, maxAgeSeconds: Room::temperatureStaleSeconds());
 
         foreach ($rooms as $room) {
             $cooldownKey = 'fuzzy_room_'.$room->id;
@@ -54,13 +54,13 @@ class RunFuzzyLogic extends Command
 
             $isDeviceOnline = $deviceStatus === 'online'
                 && $lastSeen
-                && now()->diffInSeconds($lastSeen, true) <= Room::ONLINE_THRESHOLD_SECONDS;
+                && now()->diffInSeconds($lastSeen, true) <= Room::onlineThresholdSeconds();
             $sensorStatus = Cache::get("room_temp_status_{$normalized}");
             $latestTemp = $tempHistory->first();
             $isTempAvailable = $latestTemp
                 && $sensorStatus !== 'offline'
                 && $latestTemp->created_at
-                && now()->diffInSeconds($latestTemp->created_at, true) <= Room::TEMPERATURE_STALE_SECONDS;
+                && now()->diffInSeconds($latestTemp->created_at, true) <= Room::temperatureStaleSeconds();
 
             if (! $isTempAvailable) {
                 Notification::fuzzyWarning($room->name, 'temperature_offline');

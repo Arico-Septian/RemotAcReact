@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TimerController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserLogController;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -28,7 +30,7 @@ Route::get('/login', function () {
         return redirect()->route('dashboard');
     }
 
-    return \Inertia\Inertia::render('Login');
+    return Inertia::render('Login');
 })->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -82,7 +84,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 if ($lastSeen) {
                     $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
-                    $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= Room::ONLINE_THRESHOLD_SECONDS;
+                    $isOnline = $status === 'online' && now()->diffInSeconds($lastSeenAt, true) <= Room::onlineThresholdSeconds();
                 }
 
                 return [
@@ -147,7 +149,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
         $lastSeenAt = $lastSeen instanceof Carbon ? $lastSeen : Carbon::parse($lastSeen);
 
         return in_array($status, ['online', 'available'], true)
-            && now()->diffInSeconds($lastSeenAt, true) <= Room::ONLINE_THRESHOLD_SECONDS;
+            && now()->diffInSeconds($lastSeenAt, true) <= Room::onlineThresholdSeconds();
     };
 
     $temperatureEndpoint = function () use ($roomDeviceIsOnline) {
@@ -164,7 +166,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 // Stale check: kalau record terakhir > 120s, anggap sensor mati → null
                 if ($record && $record->created_at) {
-                    $isOffline = $isOffline || now()->diffInSeconds($record->created_at, true) > 120;
+                    $isOffline = $isOffline || now()->diffInSeconds($record->created_at, true) > Room::temperatureStaleSeconds();
                 } else {
                     $isOffline = true;
                 }
@@ -359,7 +361,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
                     $lastRecord = $latestTemperatures->get($normalized);
                     $isOffline = ! $roomDeviceIsOnline($room) || Cache::get("room_temp_status_{$normalized}") === 'offline';
                     if ($lastRecord && $lastRecord->created_at) {
-                        $isOffline = $isOffline || now()->diffInSeconds($lastRecord->created_at, true) > 120;
+                        $isOffline = $isOffline || now()->diffInSeconds($lastRecord->created_at, true) > Room::temperatureStaleSeconds();
                     } else {
                         $isOffline = true;
                     }
@@ -456,6 +458,8 @@ Route::middleware(['auth', 'activity'])->group(function () {
         Route::get('/logs', [UserLogController::class, 'index']);
         Route::delete('/logs/delete-all', [UserLogController::class, 'destroyAll']);
 
+        Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
 
         Route::get('/users-online', function () {
             $total = User::count();
@@ -507,7 +511,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
     Route::get('/suhu-server', fn () => $cpuTempJson('server'));
 
     Route::get('/raspi-monitor', function () {
-        return \Inertia\Inertia::render('ServerTemperature');
+        return Inertia::render('ServerTemperature');
     })->name('monitoring');
 
 });
