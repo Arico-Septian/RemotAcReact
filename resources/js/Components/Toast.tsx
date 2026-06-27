@@ -65,12 +65,21 @@ export default function ToastContainer() {
                 maxWidth: 'calc(100vw - 32px)',
             }}
         >
+            <style>
+                {`
+                    @keyframes sm-toast-loading {
+                        from { transform: scaleX(1); }
+                        to { transform: scaleX(0); }
+                    }
+                `}
+            </style>
             {toasts.map((t) => {
                 const s = STYLES[t.type];
                 return (
                     <div
                         key={t.id}
                         style={{
+                            position: 'relative',
                             pointerEvents: 'auto',
                             display: 'flex',
                             alignItems: 'flex-start',
@@ -85,6 +94,7 @@ export default function ToastContainer() {
                             transform: t.leaving ? 'translateX(16px)' : 'translateX(0)',
                             opacity: t.leaving ? 0 : 1,
                             transition: `transform ${EXIT_MS}ms ease, opacity ${EXIT_MS}ms ease`,
+                            overflow: 'hidden',
                         }}
                     >
                         <span
@@ -104,6 +114,21 @@ export default function ToastContainer() {
                             <i className={`fa-solid ${s.icon}`}></i>
                         </span>
                         <span style={{ fontSize: 13, color: '#fff', lineHeight: 1.4, paddingTop: 2 }}>{t.message}</span>
+                        <span
+                            aria-hidden="true"
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                height: 3,
+                                background: s.accent,
+                                transformOrigin: 'left center',
+                                animation: `sm-toast-loading ${DURATION}ms linear forwards`,
+                                opacity: t.leaving ? 0 : 0.95,
+                                transition: `opacity ${EXIT_MS}ms ease`,
+                            }}
+                        />
                     </div>
                 );
             })}

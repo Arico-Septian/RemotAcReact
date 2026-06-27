@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import DeleteConfirmModal from '@/Components/DeleteConfirmModal';
 import type { AcControlUnit, PageProps } from '@/types';
 import '../../css/ac-control.css';
 
@@ -44,6 +45,8 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     const [espOnline, setEspOnline] = useState(room.device_status === 'online');
     const [addModal, setAddModal] = useState(false);
     const [powerConfirm, setPowerConfirm] = useState<AcControlUnit | null>(null);
+    const [deleteConfirm, setDeleteConfirm] = useState<AcControlUnit | null>(null);
+    const [deletingAcId, setDeletingAcId] = useState<number | null>(null);
     const [timerEditId, setTimerEditId] = useState<number | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -232,11 +235,21 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
         );
     };
 
-    const deleteAc = (ac: AcControlUnit) => {
-        if (!window.confirm(`Delete AC ${ac.ac_number} · ${ac.name}?`)) return;
-        router.delete(`/ac/${ac.id}`, {
+    const openDeleteAcModal = (ac: AcControlUnit) => {
+        if (deletingAcId) return;
+        setDeleteConfirm(ac);
+    };
+
+    const confirmDeleteAc = () => {
+        if (!deleteConfirm || deletingAcId) return;
+        setDeletingAcId(deleteConfirm.id);
+        router.delete(`/ac/${deleteConfirm.id}`, {
             preserveScroll: true,
-            onSuccess: () => window.smToast?.('AC unit berhasil dihapus', 'success'),
+            onSuccess: () => {
+                setDeleteConfirm(null);
+                window.smToast?.('AC unit berhasil dihapus', 'success');
+            },
+            onFinish: () => setDeletingAcId(null),
         });
     };
 
@@ -291,7 +304,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
                 {canManage && (
                     <div className="flex items-center gap-2">
                         {selected && (
-                            <button type="button" onClick={() => deleteAc(selected)} className="btn-icon danger" title="Delete AC">
+                            <button type="button" onClick={() => openDeleteAcModal(selected)} className="btn-icon danger" title="Delete AC" disabled={deletingAcId === selected.id}>
                                 <i className="fa-solid fa-trash text-[10px]"></i>
                             </button>
                         )}
@@ -396,6 +409,12 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
                 </div>,
                 document.body,
             )}
+            <DeleteConfirmModal
+                open={deleteConfirm !== null}
+                busy={deletingAcId !== null}
+                onCancel={() => !deletingAcId && setDeleteConfirm(null)}
+                onConfirm={confirmDeleteAc}
+            />
         </AppLayout>
     );
 }

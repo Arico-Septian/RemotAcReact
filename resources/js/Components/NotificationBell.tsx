@@ -14,6 +14,7 @@ interface NotificationItem {
 
 const severityIcon: Record<string, string> = {
     critical: 'fa-circle-exclamation',
+    error: 'fa-circle-exclamation',
     warning: 'fa-triangle-exclamation',
     success: 'fa-circle-check',
     info: 'fa-circle-info',

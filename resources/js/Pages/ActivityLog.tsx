@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import DeleteConfirmModal from '@/Components/DeleteConfirmModal';
 import Pagination from '@/Components/Pagination';
 import type { ActivityLogRow, PageProps } from '@/types';
 import '../../css/activity-log.css';
@@ -71,6 +72,7 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
     const isAdmin = auth.user?.role === 'admin';
     const [search, setSearch] = useState(filters.search);
     const [deletingAll, setDeletingAll] = useState(false);
+    const [confirmDeleteLogs, setConfirmDeleteLogs] = useState(false);
     const cat = quickCats.some((c) => c.value === filters.activity) ? filters.activity : '';
     const searchTimer = useRef<number | null>(null);
 
@@ -91,10 +93,16 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
     };
 
     const deleteAll = async () => {
-        if (deletingAll || !window.confirm('Delete ALL activity logs? This cannot be undone.')) return;
+        if (deletingAll) return;
+        setConfirmDeleteLogs(true);
+    };
+
+    const confirmDeleteAll = async () => {
+        if (deletingAll) return;
         setDeletingAll(true);
         try {
             await window.axios.delete('/logs/delete-all');
+            setConfirmDeleteLogs(false);
             router.reload();
             window.smToast?.('Semua log berhasil dihapus', 'success');
         } catch (err: any) {
@@ -247,6 +255,12 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
 
                 <Pagination pagination={pagination} label="aktivitas" />
             </div>
+            <DeleteConfirmModal
+                open={confirmDeleteLogs}
+                busy={deletingAll}
+                onCancel={() => !deletingAll && setConfirmDeleteLogs(false)}
+                onConfirm={confirmDeleteAll}
+            />
         </AppLayout>
     );
 }

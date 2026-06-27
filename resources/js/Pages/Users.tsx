@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Head, router, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import DeleteConfirmModal from '@/Components/DeleteConfirmModal';
 import Pagination from '@/Components/Pagination';
 import type { ManagedUser } from '@/types';
 import '../../css/users.css';
@@ -63,6 +64,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
     const [modalOpen, setModalOpen] = useState(false);
     const [showPw, setShowPw] = useState(false);
     const [deletingId, setDeletingId] = useState<number | null>(null);
+    const [confirmUser, setConfirmUser] = useState<ManagedUser | null>(null);
     const searchTimer = useRef<number | null>(null);
 
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
@@ -139,11 +141,17 @@ export default function Users({ users, stats: initialStats, filters, pagination 
         });
     };
 
-    const deleteUser = async (u: ManagedUser) => {
-        if (deletingId || !window.confirm(`Delete user ${u.name}?`)) return;
-        setDeletingId(u.id);
+    const deleteUser = (u: ManagedUser) => {
+        if (deletingId) return;
+        setConfirmUser(u);
+    };
+
+    const confirmDeleteUser = async () => {
+        if (deletingId || !confirmUser) return;
+        setDeletingId(confirmUser.id);
         try {
-            await window.axios.delete(`/users/${u.id}`);
+            await window.axios.delete(`/users/${confirmUser.id}`);
+            setConfirmUser(null);
             router.reload({ only: ['users', 'stats', 'pagination'] });
             window.smToast?.('User berhasil dihapus', 'success');
         } catch (err: any) {
@@ -242,7 +250,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                         <div className="actions-cell">
                                             {!u.is_self && (
                                                 <button onClick={() => deleteUser(u)} type="button" disabled={deletingId === u.id} className="btn-icon danger" title="Delete user">
-                                                    <i className={`fa-solid ${deletingId === u.id ? 'fa-spinner fa-spin' : 'fa-trash'} text-[10px]`}></i>
+                                                    <i className="fa-solid fa-trash text-[10px]"></i>
                                                 </button>
                                             )}
                                         </div>
@@ -276,7 +284,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                     <div className="user-card-actions">
                                         {!u.is_self && (
                                             <button onClick={() => deleteUser(u)} type="button" disabled={deletingId === u.id} className="btn-icon danger" title="Delete user">
-                                                <i className={`fa-solid ${deletingId === u.id ? 'fa-spinner fa-spin' : 'fa-trash'} text-[10px]`}></i>
+                                                <i className="fa-solid fa-trash text-[10px]"></i>
                                             </button>
                                         )}
                                     </div>
@@ -345,6 +353,12 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                 </div>,
                 document.body,
             )}
+            <DeleteConfirmModal
+                open={confirmUser !== null}
+                busy={deletingId !== null}
+                onCancel={() => !deletingId && setConfirmUser(null)}
+                onConfirm={confirmDeleteUser}
+            />
         </AppLayout>
     );
 }

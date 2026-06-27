@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
+import DeleteConfirmModal from '@/Components/DeleteConfirmModal';
 import type { ManageRoom, PageProps } from '@/types';
 import '../../css/rooms-manage.css';
 
@@ -140,6 +141,8 @@ export default function RoomsManage({ rooms }: RoomsManageProps) {
     const [search, setSearch] = useState('');
     const [status, setStatus] = useState<StatusFilter>('all');
     const [modalOpen, setModalOpen] = useState(false);
+    const [confirmRoom, setConfirmRoom] = useState<ManageRoom | null>(null);
+    const [deletingRoomId, setDeletingRoomId] = useState<number | null>(null);
 
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         name: '',
@@ -198,12 +201,21 @@ export default function RoomsManage({ rooms }: RoomsManageProps) {
     };
 
     const deleteRoom = (room: ManageRoom) => {
-        if (window.confirm('Delete this room and all its AC units?')) {
-            router.delete(`/rooms/${room.id}`, {
-                preserveScroll: true,
-                onSuccess: () => window.smToast?.('Room berhasil dihapus', 'success'),
-            });
-        }
+        if (deletingRoomId) return;
+        setConfirmRoom(room);
+    };
+
+    const confirmDeleteRoom = () => {
+        if (!confirmRoom || deletingRoomId) return;
+        setDeletingRoomId(confirmRoom.id);
+        router.delete(`/rooms/${confirmRoom.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setConfirmRoom(null);
+                window.smToast?.('Room berhasil dihapus', 'success');
+            },
+            onFinish: () => setDeletingRoomId(null),
+        });
     };
 
     return (
@@ -311,6 +323,12 @@ export default function RoomsManage({ rooms }: RoomsManageProps) {
                 </div>,
                 document.body,
             )}
+            <DeleteConfirmModal
+                open={confirmRoom !== null}
+                busy={deletingRoomId !== null}
+                onCancel={() => !deletingRoomId && setConfirmRoom(null)}
+                onConfirm={confirmDeleteRoom}
+            />
         </AppLayout>
     );
 }

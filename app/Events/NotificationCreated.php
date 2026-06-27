@@ -28,7 +28,7 @@ class NotificationCreated implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        return new Channel('device-status');
+        return new Channel('notifications');
     }
 
     public function broadcastAs(): string

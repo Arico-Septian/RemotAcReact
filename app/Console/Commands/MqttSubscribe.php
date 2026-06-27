@@ -583,15 +583,21 @@ class MqttSubscribe extends Command
             Cache::put('seen_device_ids', $seen, 3600);
         }
 
-        $updated = Room::whereRaw(
+        $room = Room::whereRaw(
             'LOWER(TRIM(device_id)) = ?',
             [strtolower(trim($deviceId))]
-        )->update([
-            'device_status' => 'online',
-            'last_seen' => $now,
-        ]);
+        )->first();
 
-        $this->info("PING {$deviceId} -> DB updated rows: {$updated}");
+        if ($room) {
+            $room->update([
+                'device_status' => 'online',
+                'last_seen' => $now,
+            ]);
+
+            Notification::deviceOnline($room->name, $deviceId);
+        }
+
+        $this->info('PING '.$deviceId.' -> DB updated rows: '.($room ? 1 : 0));
     }
 
     private function skipRetainedMessage(bool $retained, string $label, string $topic): bool
