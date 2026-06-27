@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\NotificationCreated;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -49,12 +50,12 @@ class Notification extends Model
         });
     }
 
-    public function scopeUnread(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeUnread(Builder $query): Builder
     {
         return $query->whereNull('read_at');
     }
 
-    public function scopeUnreadForUser(\Illuminate\Database\Eloquent\Builder $query, int $userId): \Illuminate\Database\Eloquent\Builder
+    public function scopeUnreadForUser(Builder $query, int $userId): Builder
     {
         return $query->where(function ($q) use ($userId) {
             // Personal unread
@@ -67,7 +68,7 @@ class Notification extends Model
         });
     }
 
-    public function scopeForUserOrBroadcast(\Illuminate\Database\Eloquent\Builder $query, ?int $userId): \Illuminate\Database\Eloquent\Builder
+    public function scopeForUserOrBroadcast(Builder $query, ?int $userId): Builder
     {
         return $query->where(function ($q) use ($userId) {
             $q->whereNull('user_id');
@@ -122,9 +123,11 @@ class Notification extends Model
 
         Cache::put($stateKey, 'offline', now()->addDays(self::STATE_TTL_DAYS));
 
-        return self::notify('device_offline', "ESP {$roomName} offline", [
+        $room = 'Ruangan '.ucwords($roomName);
+
+        return self::notify('device_offline', "{$room} offline", [
             'severity' => 'error',
-            'message' => "Device {$deviceId} di ruangan ".ucwords($roomName).' tidak terhubung. Cek koneksi WiFi atau power.',
+            'message' => "{$room} tidak terhubung. Cek koneksi WiFi atau power.",
             'meta' => ['room' => $roomName, 'device_id' => $deviceId],
         ]);
     }
@@ -145,9 +148,11 @@ class Notification extends Model
             return null;
         }
 
-        return self::notify('device_online', "ESP {$roomName} online", [
+        $room = 'Ruangan '.ucwords($roomName);
+
+        return self::notify('device_online', "{$room} online", [
             'severity' => 'info',
-            'message' => "Device {$deviceId} di ruangan ".ucwords($roomName).' terhubung kembali.',
+            'message' => "{$room} terhubung kembali.",
             'meta' => ['room' => $roomName, 'device_id' => $deviceId],
         ]);
     }
