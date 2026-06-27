@@ -19,10 +19,12 @@ const DURATION = 3500;
 const EXIT_MS = 220;
 
 const STYLES: Record<ToastType, { icon: string; accent: string; bg: string }> = {
-    success: { icon: 'fa-circle-check', accent: '#5a93ec', bg: 'rgba(90,147,236,0.14)' },
+    success: { icon: 'fa-circle-check', accent: '#22c55e', bg: 'rgba(34,197,94,0.14)' },
     error: { icon: 'fa-circle-exclamation', accent: '#fb7185', bg: 'rgba(251,113,133,0.14)' },
     info: { icon: 'fa-circle-info', accent: '#5a93ec', bg: 'rgba(90,147,236,0.14)' },
 };
+
+const PROGRESS_COLOR = '#9ca3af';
 
 export default function ToastContainer() {
     const [toasts, setToasts] = useState<ToastItem[]>([]);
@@ -84,13 +86,13 @@ export default function ToastContainer() {
                             display: 'flex',
                             alignItems: 'flex-start',
                             gap: 10,
-                            minWidth: 240,
-                            maxWidth: 340,
-                            padding: '12px 14px',
+                            minWidth: 280,
+                            maxWidth: 380,
+                            padding: '15px 18px',
                             borderRadius: 12,
-                            background: '#11141c',
+                            background: '#fff',
                             border: `1px solid ${s.accent}55`,
-                            boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
+                            boxShadow: '0 10px 26px rgba(20, 33, 61, 0.16)',
                             transform: t.leaving ? 'translateX(16px)' : 'translateX(0)',
                             opacity: t.leaving ? 0 : 1,
                             transition: `transform ${EXIT_MS}ms ease, opacity ${EXIT_MS}ms ease`,
@@ -99,8 +101,8 @@ export default function ToastContainer() {
                     >
                         <span
                             style={{
-                                width: 26,
-                                height: 26,
+                                width: 30,
+                                height: 30,
                                 borderRadius: 8,
                                 background: s.bg,
                                 color: s.accent,
@@ -108,12 +110,12 @@ export default function ToastContainer() {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexShrink: 0,
-                                fontSize: 13,
+                                fontSize: 14,
                             }}
                         >
                             <i className={`fa-solid ${s.icon}`}></i>
                         </span>
-                        <span style={{ fontSize: 13, color: '#fff', lineHeight: 1.4, paddingTop: 2 }}>{t.message}</span>
+                        <span style={{ fontSize: 14, color: '#2f3642', lineHeight: 1.4, paddingTop: 3, fontWeight: 600 }}>{t.message}</span>
                         <span
                             aria-hidden="true"
                             style={{
@@ -121,8 +123,8 @@ export default function ToastContainer() {
                                 left: 0,
                                 right: 0,
                                 bottom: 0,
-                                height: 3,
-                                background: s.accent,
+                                height: 4,
+                                background: PROGRESS_COLOR,
                                 transformOrigin: 'left center',
                                 animation: `sm-toast-loading ${DURATION}ms linear forwards`,
                                 opacity: t.leaving ? 0 : 0.95,

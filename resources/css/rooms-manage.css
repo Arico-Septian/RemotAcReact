@@ -1,4 +1,10 @@
         /* Add Room fields — white focus border + black dropdown (consistent with login) */
+        .app-content-inner>.flex.items-center.gap-2:first-child .segmented .seg.active {
+            background: #ffffff;
+            color: #111827;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+        }
+
         #addRoomForm .input:focus,
         #addRoomForm .select:focus {
             border-color: #ffffff;

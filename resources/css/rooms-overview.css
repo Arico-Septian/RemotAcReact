@@ -48,6 +48,12 @@
             transform: none;
         }
 
+        .flex.flex-row.items-center.gap-2>.segmented .seg.active {
+            background: #ffffff;
+            color: #111827;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+        }
+
         .room-card[data-status="online"] {
             --card-accent: var(--mint);
         }
