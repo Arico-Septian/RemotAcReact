@@ -651,6 +651,16 @@
     }
 
     /* 2026 modern sidebar footer with vibrant accents */
+    .sidebar-settings-link {
+        padding: 18px 12px 10px;
+        border-bottom: 1px solid rgb(var(--cyan-d-rgb) / 0.12);
+    }
+
+    .sidebar-settings-link .nav-link {
+        padding: 10px 12px;
+        border-radius: var(--r-lg);
+    }
+
     .sidebar-footer {
         border-top: 1px solid rgb(var(--cyan-d-rgb) / 0.12) !important;
         position: relative;
