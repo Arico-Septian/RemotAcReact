@@ -4,19 +4,22 @@ namespace App\Services;
 
 use App\Models\AcStatus;
 use App\Models\AcUnit;
+use App\Models\AppSetting;
 use App\Models\Room;
+use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\ConnectionSettings;
 use PhpMqtt\Client\MqttClient;
 
 class MqttService
 {
     private $mqtt;
+
     private bool $isSubscriber;
 
     public function __construct(?string $clientIdSuffix = null)
     {
-        $server = env('MQTT_HOST', 'broker.hivemq.com');
-        $port = (int) env('MQTT_PORT', 1883);
+        $server = AppSetting::mqttHost();
+        $port = AppSetting::mqttPort();
 
         // Subscriber pakai client ID tetap supaya reconnect menggantikan koneksi lama.
         // Publisher pakai client ID unik per-instance — kalau pakai ID sama, dua
@@ -27,11 +30,11 @@ class MqttService
             ? 'laravel_subscriber'
             : 'laravel_pub_'.bin2hex(random_bytes(4));
 
-        $useTls = (int) env('MQTT_PORT', 1883) === 8883;
+        $useTls = $port === 8883;
 
         $connectionSettings = (new ConnectionSettings)
-            ->setUsername(env('MQTT_USERNAME'))
-            ->setPassword(env('MQTT_PASSWORD'))
+            ->setUsername(AppSetting::mqttUsername())
+            ->setPassword(AppSetting::mqttPassword())
             ->setUseTls($useTls)
             ->setTlsSelfSignedAllowed(true)
             ->setTlsVerifyPeer(false)
@@ -65,7 +68,7 @@ class MqttService
             try {
                 $this->mqtt->loopOnce(microtime(true), true);
             } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('MQTT loop after publish failed', [
+                Log::warning('MQTT loop after publish failed', [
                     'topic' => $topic,
                     'error' => $e->getMessage(),
                 ]);
@@ -147,7 +150,7 @@ class MqttService
             );
         }
 
-        \Illuminate\Support\Facades\Log::info("CONFIG + STATUS DIKIRIM KE {$deviceId}");
+        Log::info("CONFIG + STATUS DIKIRIM KE {$deviceId}");
     }
 
     public function subscribeMultiple(array $topics, int $idleTimeoutSeconds = 180)

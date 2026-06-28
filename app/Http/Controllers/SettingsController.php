@@ -17,16 +17,20 @@ class SettingsController extends Controller
         return Inertia::render('Settings', [
             'retentionSettings' => AppSetting::retentionSettings(),
             'monitoringSettings' => AppSetting::monitoringSettings(),
+            'mqttSettings' => AppSetting::mqttSettings(),
         ]);
     }
 
     public function update(Request $request): RedirectResponse
     {
         $definitions = AppSetting::settingDefinitions();
+        $settingKeys = collect($request->keys())
+            ->filter(fn (string $key): bool => array_key_exists($key, $definitions))
+            ->values();
 
-        $rules = collect($definitions)
-            ->mapWithKeys(fn (array $definition, string $key) => [
-                $key => ['required', 'integer', 'min:'.$definition['min'], 'max:'.$definition['max']],
+        $rules = $settingKeys
+            ->mapWithKeys(fn (string $key): array => [
+                $key => $definitions[$key]['rules'] ?? ['required', 'integer', 'min:'.$definitions[$key]['min'], 'max:'.$definitions[$key]['max']],
             ])
             ->all();
 
@@ -39,13 +43,21 @@ class SettingsController extends Controller
             );
         }
 
+        $settingsGroup = $request->string('_settings_group')->toString();
+        $logLabel = match ($settingsGroup) {
+            'mqtt' => 'MQTT broker settings',
+            'retention' => 'Database cleanup retention',
+            'monitoring' => 'Device monitoring settings',
+            default => 'System settings',
+        };
+
         UserLog::create([
             'user_id' => Auth::id(),
             'room' => 'System',
-            'ac' => 'Database cleanup retention',
+            'ac' => $logLabel,
             'activity' => 'update_settings',
         ]);
 
-        return back()->with('success', 'Settings berhasil disimpan');
+        return back()->with('success', $logLabel.' berhasil disimpan');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\AppSetting;
 use App\Models\Room;
 use App\Services\MqttService;
 use Illuminate\Console\Attributes\Description;
@@ -89,13 +90,13 @@ class MqttCleanupRetained extends Command
 
     private function mqttClient(): MqttClient
     {
-        $server = env('MQTT_HOST', 'broker.hivemq.com');
-        $port = (int) env('MQTT_PORT', 1883);
+        $server = AppSetting::mqttHost();
+        $port = AppSetting::mqttPort();
         $useTls = $port === 8883;
 
         $settings = (new ConnectionSettings)
-            ->setUsername(env('MQTT_USERNAME'))
-            ->setPassword(env('MQTT_PASSWORD'))
+            ->setUsername(AppSetting::mqttUsername())
+            ->setPassword(AppSetting::mqttPassword())
             ->setUseTls($useTls)
             ->setTlsSelfSignedAllowed(true)
             ->setTlsVerifyPeer(false)
