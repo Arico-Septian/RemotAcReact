@@ -86,9 +86,6 @@ export default function Settings({ retentionSettings, monitoringSettings }: Sett
                         <button type="button" className="step-btn" onClick={() => adjust(setting, 1)} aria-label={`Increase ${setting.label}`}>
                             <i className="fa-solid fa-plus"></i>
                         </button>
-                        <button type="button" className="reset-btn" onClick={() => setData(setting.key, String(setting.default))}>
-                            Default
-                        </button>
                     </div>
 
                     <div className="retention-meta">
@@ -132,12 +129,6 @@ export default function Settings({ retentionSettings, monitoringSettings }: Sett
                     {renderSettings(monitoringSettings)}
                 </section>
 
-                {recentlySuccessful && (
-                    <div className="settings-success">
-                        <i className="fa-solid fa-circle-check"></i>
-                        <span>Settings saved.</span>
-                    </div>
-                )}
             </form>
         </AppLayout>
     );

@@ -60,20 +60,20 @@ class AppSetting extends Model
     public static function monitoringDefinitions(): array
     {
         return [
-            self::SENSOR_OFFLINE_MINUTES => [
-                'label' => 'Sensor Offline Timeout',
-                'description' => 'Device dan sensor suhu dianggap offline jika tidak mengirim data selama durasi ini.',
-                'default' => 3,
-                'min' => 1,
-                'max' => 30,
-                'unit' => 'minutes',
-            ],
             self::DEVICE_CHECK_INTERVAL_MINUTES => [
                 'label' => 'Device Check Interval',
                 'description' => 'Seberapa sering sistem memeriksa status online/offline device.',
                 'default' => 1,
                 'min' => 1,
                 'max' => 60,
+                'unit' => 'minutes',
+            ],
+            self::SENSOR_OFFLINE_MINUTES => [
+                'label' => 'Sensor Offline Timeout',
+                'description' => 'Device dan sensor suhu dianggap offline jika tidak mengirim data selama durasi ini.',
+                'default' => 3,
+                'min' => 1,
+                'max' => 30,
                 'unit' => 'minutes',
             ],
         ];

@@ -1,8 +1,9 @@
         .settings-panel {
-            background: #0a0a0c;
+            background: #020408;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--r-xl);
+            border-radius: 24px;
             overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
         }
 
         .settings-head {
@@ -10,8 +11,9 @@
             align-items: center;
             justify-content: space-between;
             gap: 16px;
-            padding: 20px 22px;
+            padding: 24px 28px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
         }
 
         .settings-eyebrow {
@@ -29,14 +31,17 @@
         .settings-head h2 {
             margin: 0;
             color: var(--ink-0);
-            font-size: 18px;
-            font-weight: 750;
+            font-size: 20px;
+            font-weight: 800;
             letter-spacing: 0;
             line-height: 1.2;
         }
 
         .settings-save {
-            min-height: 40px;
+            min-height: 44px;
+            padding: 0 18px;
+            border-radius: 999px;
+            font-weight: 700;
             white-space: nowrap;
         }
 
@@ -67,8 +72,9 @@
             grid-template-columns: minmax(0, 1fr) auto;
             gap: 14px 18px;
             align-items: center;
-            padding: 18px 22px;
+            padding: 20px 24px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            background: #0a0a0d;
         }
 
         .retention-row:last-child {
@@ -90,14 +96,14 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #67e8f9;
-            background: rgba(34, 211, 238, 0.10);
-            border: 1px solid rgba(34, 211, 238, 0.22);
+            color: #6ea8ff;
+            background: rgba(110, 168, 255, 0.08);
+            border: 1px solid rgba(110, 168, 255, 0.16);
         }
 
         .retention-title {
             margin: 0;
-            color: var(--ink-0);
+            color: #ffffff;
             font-size: 14px;
             font-weight: 750;
             line-height: 1.25;
@@ -142,28 +148,41 @@
         }
 
         .days-input-wrap {
-            height: 36px;
-            min-width: 104px;
+            height: 42px;
+            min-width: 120px;
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 0 10px;
-            border-radius: var(--r-md);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            gap: 10px;
+            padding: 0 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
             background: rgba(255, 255, 255, 0.04);
         }
 
         .days-input {
-            width: 44px;
+            width: 56px;
             padding: 0;
             border: 0;
             outline: 0;
             background: transparent;
             color: #ffffff;
-            font-size: 14px;
-            font-weight: 750;
+            font-size: 16px;
+            font-weight: 800;
             text-align: right;
             font-variant-numeric: tabular-nums;
+        }
+
+        .days-input::-webkit-outer-spin-button,
+        .days-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+
+        .days-input {
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+            appearance: textfield;
         }
 
         .days-input-wrap span {
@@ -209,12 +228,12 @@
             align-items: center;
             gap: 8px;
             margin: 0 22px 18px;
-            padding: 10px 12px;
-            border-radius: var(--r-md);
+            padding: 12px 14px;
+            border-radius: 18px;
             color: #34d399;
-            background: rgba(52, 211, 153, 0.10);
-            border: 1px solid rgba(52, 211, 153, 0.28);
-            font-size: 12px;
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.24);
+            font-size: 13px;
             font-weight: 750;
         }
 

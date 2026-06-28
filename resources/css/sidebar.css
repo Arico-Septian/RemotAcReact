@@ -1,15 +1,3 @@
-    /* Hide all visual scrollbars (scroll wheel/touch tetap berfungsi) */
-    * {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    *::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
-    }
-
     /* Wallpaper — overlay agar tekstur gambar samar terlihat di celah panel */
     html,
     body {
@@ -317,6 +305,36 @@
         scroll-behavior: smooth;
         padding-bottom: 24px;
         min-height: 0;
+        -ms-overflow-style: none;
+    }
+
+    @supports (scrollbar-width: none) {
+        .page-body {
+            scrollbar-width: none;
+        }
+    }
+
+    .page-body::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    .app-main .app-content {
+        overflow-y: auto !important;
+        -ms-overflow-style: none !important;
+    }
+
+    @supports (scrollbar-width: none) {
+        .app-main .app-content {
+            scrollbar-width: none !important;
+        }
+    }
+
+    .app-main .app-content::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
     }
 
     /* Mobile sidebar */
