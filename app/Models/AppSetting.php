@@ -15,6 +15,8 @@ class AppSetting extends Model
 
     public const SENSOR_OFFLINE_SECONDS = 'sensor_offline_seconds';
 
+    public const SENSOR_OFFLINE_MINUTES = 'sensor_offline_minutes';
+
     public const DEVICE_CHECK_INTERVAL_MINUTES = 'device_check_interval_minutes';
 
     protected $fillable = [
@@ -33,7 +35,7 @@ class AppSetting extends Model
                 'description' => 'System alerts, device online/offline messages, and app notifications.',
                 'default' => 3,
                 'min' => 1,
-                'max' => 30,
+                'max' => 60,
             ],
             self::TEMPERATURE_RETENTION_DAYS => [
                 'label' => 'Room Temperature',
@@ -58,13 +60,13 @@ class AppSetting extends Model
     public static function monitoringDefinitions(): array
     {
         return [
-            self::SENSOR_OFFLINE_SECONDS => [
+            self::SENSOR_OFFLINE_MINUTES => [
                 'label' => 'Sensor Offline Timeout',
                 'description' => 'Device dan sensor suhu dianggap offline jika tidak mengirim data selama durasi ini.',
-                'default' => 180,
-                'min' => 30,
-                'max' => 1800,
-                'unit' => 'seconds',
+                'default' => 3,
+                'min' => 1,
+                'max' => 30,
+                'unit' => 'minutes',
             ],
             self::DEVICE_CHECK_INTERVAL_MINUTES => [
                 'label' => 'Device Check Interval',
@@ -98,6 +100,14 @@ class AppSetting extends Model
 
         try {
             $value = self::query()->where('key', $key)->value('value');
+
+            if ($value === null && $key === self::SENSOR_OFFLINE_MINUTES) {
+                $legacySeconds = self::query()->where('key', self::SENSOR_OFFLINE_SECONDS)->value('value');
+
+                if (is_numeric($legacySeconds)) {
+                    $value = (string) ceil(((int) $legacySeconds) / 60);
+                }
+            }
         } catch (QueryException) {
             return $definition['default'];
         }
@@ -116,7 +126,7 @@ class AppSetting extends Model
 
     public static function sensorOfflineSeconds(): int
     {
-        return self::settingValue(self::SENSOR_OFFLINE_SECONDS);
+        return self::settingValue(self::SENSOR_OFFLINE_MINUTES) * 60;
     }
 
     public static function deviceCheckIntervalMinutes(): int

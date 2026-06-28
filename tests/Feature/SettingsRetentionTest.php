@@ -21,7 +21,7 @@ class SettingsRetentionTest extends TestCase
             AppSetting::NOTIFICATION_RETENTION_DAYS => 5,
             AppSetting::TEMPERATURE_RETENTION_DAYS => 14,
             AppSetting::ACTIVITY_LOG_RETENTION_DAYS => 21,
-            AppSetting::SENSOR_OFFLINE_SECONDS => 240,
+            AppSetting::SENSOR_OFFLINE_MINUTES => 4,
             AppSetting::DEVICE_CHECK_INTERVAL_MINUTES => 5,
         ]);
 
@@ -40,8 +40,8 @@ class SettingsRetentionTest extends TestCase
             'value' => '21',
         ]);
         $this->assertDatabaseHas('app_settings', [
-            'key' => AppSetting::SENSOR_OFFLINE_SECONDS,
-            'value' => '240',
+            'key' => AppSetting::SENSOR_OFFLINE_MINUTES,
+            'value' => '4',
         ]);
         $this->assertDatabaseHas('app_settings', [
             'key' => AppSetting::DEVICE_CHECK_INTERVAL_MINUTES,
@@ -89,15 +89,15 @@ class SettingsRetentionTest extends TestCase
     public function test_device_status_checker_uses_saved_sensor_offline_timeout(): void
     {
         AppSetting::query()->create([
-            'key' => AppSetting::SENSOR_OFFLINE_SECONDS,
-            'value' => '30',
+            'key' => AppSetting::SENSOR_OFFLINE_MINUTES,
+            'value' => '1',
         ]);
 
         $room = Room::query()->create([
             'name' => 'lab_test',
             'device_id' => 'esp_test',
             'device_status' => 'online',
-            'last_seen' => now()->subSeconds(45),
+            'last_seen' => now()->subSeconds(75),
         ]);
 
         $this->artisan('device:check-status')->assertSuccessful();
