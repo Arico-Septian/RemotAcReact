@@ -50,7 +50,6 @@ class UserLogController extends Controller
 
         return match ($activity) {
             'login' => ['LOGIN', 'act-mint'],
-            'login_failed' => ['LOGIN FAILED', 'act-coral'],
             'logout' => ['LOGOUT', 'act-slate'],
             'on' => ['POWER ON', 'act-mint'],
             'off' => ['POWER OFF', 'act-coral'],
@@ -75,7 +74,7 @@ class UserLogController extends Controller
 
     public function index(Request $request)
     {
-        $authActs = ['login', 'login_failed', 'logout', 'change_password'];
+        $authActs = ['login', 'logout', 'change_password'];
         $acActs = ['on', 'off', 'bulk_on', 'bulk_off', 'timer_on', 'timer_off', 'set_timer_delete', 'control_ac'];
         $acLikes = ['set_temp_%', 'mode_%', 'fan_speed_%', 'swing_%', 'set_timer:%'];
         $userActs = ['add_user', 'delete_user', 'update_role'];

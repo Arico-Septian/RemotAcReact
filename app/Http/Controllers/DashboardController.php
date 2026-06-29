@@ -212,9 +212,6 @@ class DashboardController extends Controller
         if ($a === 'login') {
             return ['description' => 'Login ke sistem', 'icon' => 'fa-solid fa-right-to-bracket', 'tone' => 'mint'];
         }
-        if ($a === 'login_failed') {
-            return ['description' => 'Login gagal', 'icon' => 'fa-solid fa-triangle-exclamation', 'tone' => 'coral'];
-        }
         if ($a === 'logout') {
             return ['description' => 'Logout dari sistem', 'icon' => 'fa-solid fa-right-from-bracket', 'tone' => 'slate'];
         }

@@ -9,7 +9,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -85,8 +84,6 @@ class AuthController extends Controller
         $passwordOk = Hash::check($credentials['password'], $hashToCheck);
 
         if (! $user || ! $passwordOk) {
-            $this->recordFailedLogin($request, $user);
-
             RateLimiter::hit($keyName, self::LOCKOUT_SECONDS);
             RateLimiter::hit($keyIp, self::LOCKOUT_SECONDS);
             throw ValidationException::withMessages([
@@ -118,20 +115,6 @@ class AuthController extends Controller
         }
 
         return redirect()->route('dashboard');
-    }
-
-    private function recordFailedLogin(Request $request, ?User $user): void
-    {
-        try {
-            UserLog::create([
-                'user_id' => $user?->id,
-                'room' => '-',
-                'ac' => Str::limit('Username: '.$request->string('name')->toString().' | IP: '.$request->ip(), 255, ''),
-                'activity' => 'login_failed',
-            ]);
-        } catch (\Throwable) {
-            // Audit logging must never change the login response.
-        }
     }
 
     private function isPageUrl(string $url): bool
