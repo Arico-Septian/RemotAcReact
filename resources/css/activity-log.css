@@ -36,6 +36,12 @@
             overflow: hidden;
         }
 
+        .tbl-toolbar .segmented .seg.active {
+            background: #ffffff;
+            color: #111827;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+        }
+
         @media (max-width: 480px) {
             .tbl-toolbar .btn.btn-danger {
                 width: 36px;
