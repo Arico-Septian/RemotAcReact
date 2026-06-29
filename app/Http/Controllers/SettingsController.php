@@ -53,7 +53,7 @@ class SettingsController extends Controller
 
         UserLog::create([
             'user_id' => Auth::id(),
-            'room' => 'System',
+            'room' => '-',
             'ac' => $logLabel,
             'activity' => 'update_settings',
         ]);
