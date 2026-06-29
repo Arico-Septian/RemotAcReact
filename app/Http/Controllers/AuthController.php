@@ -9,14 +9,17 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     // Bucket per username+IP: lindungi 1 akun dari brute-force terarah
     private const MAX_PER_NAME = 5;
+
     // Bucket per IP saja: lindungi dari enumerasi banyak username dari 1 IP
     private const MAX_PER_IP = 20;
+
     // Window lockout (detik) — berlaku untuk kedua bucket
     private const LOCKOUT_SECONDS = 900;
 
@@ -46,13 +49,13 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->validate([
-            'name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[A-Za-z][A-Za-z0-9_ ]{2,19}$/'],
+            'name' => ['required', 'string', 'min:3', 'max:20', 'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/'],
             'password' => 'required|string',
         ], [
-            'name.required'  => 'Username is required.',
-            'name.min'       => 'Username must be at least 3 characters.',
-            'name.max'       => 'Username may not exceed 20 characters.',
-            'name.regex'     => 'Username must be 3–20 characters (letters, numbers, underscore, spaces) and start with a letter.',
+            'name.required' => 'Username is required.',
+            'name.min' => 'Username must be at least 3 characters.',
+            'name.max' => 'Username may not exceed 20 characters.',
+            'name.regex' => 'Username must be 3–20 characters, start with a letter, and only contain letters, numbers, or underscore.',
             'password.required' => 'Password is required.',
         ]);
 
@@ -82,6 +85,8 @@ class AuthController extends Controller
         $passwordOk = Hash::check($credentials['password'], $hashToCheck);
 
         if (! $user || ! $passwordOk) {
+            $this->recordFailedLogin($request, $user);
+
             RateLimiter::hit($keyName, self::LOCKOUT_SECONDS);
             RateLimiter::hit($keyIp, self::LOCKOUT_SECONDS);
             throw ValidationException::withMessages([
@@ -113,6 +118,20 @@ class AuthController extends Controller
         }
 
         return redirect()->route('dashboard');
+    }
+
+    private function recordFailedLogin(Request $request, ?User $user): void
+    {
+        try {
+            UserLog::create([
+                'user_id' => $user?->id,
+                'room' => '-',
+                'ac' => Str::limit('Username: '.$request->string('name')->toString().' | IP: '.$request->ip(), 255, ''),
+                'activity' => 'login_failed',
+            ]);
+        } catch (\Throwable) {
+            // Audit logging must never change the login response.
+        }
     }
 
     private function isPageUrl(string $url): bool

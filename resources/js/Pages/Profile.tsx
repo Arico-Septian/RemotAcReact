@@ -12,6 +12,7 @@ const pwdRules = [
     { key: 'len', label: 'At least 8 characters', test: (v: string) => v.length >= 8 },
     { key: 'case', label: 'One uppercase & one lowercase letter', test: (v: string) => /[a-z]/.test(v) && /[A-Z]/.test(v) },
     { key: 'num', label: 'At least one number', test: (v: string) => /\d/.test(v) },
+    { key: 'symbol', label: 'At least one symbol', test: (v: string) => /[^A-Za-z0-9]/.test(v) },
 ];
 
 function PwToggle({ shown, onClick }: { shown: boolean; onClick: () => void }) {

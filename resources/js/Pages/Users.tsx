@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Head, router, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
@@ -51,12 +51,6 @@ function StatCard({ accent, label, value, sub, icon }: { accent: string; label: 
         </div>
     );
 }
-
-const pwdRules = [
-    { key: 'len', label: 'At least 8 characters', test: (v: string) => v.length >= 8 },
-    { key: 'case', label: 'One uppercase & one lowercase letter', test: (v: string) => /[a-z]/.test(v) && /[A-Z]/.test(v) },
-    { key: 'num', label: 'At least one number', test: (v: string) => /\d/.test(v) },
-];
 
 export default function Users({ users, stats: initialStats, filters, pagination }: UsersProps) {
     const [search, setSearch] = useState(filters.search);
@@ -169,8 +163,6 @@ export default function Users({ users, stats: initialStats, filters, pagination 
         { value: 'operator', label: 'Operator' },
         { value: 'user', label: 'User' },
     ];
-
-    const pwdState = useMemo(() => pwdRules.map((r) => ({ ...r, ok: r.test(data.password) })), [data.password]);
 
     return (
         <AppLayout title="User Management" subtitle="Manage system users & roles">
@@ -312,28 +304,22 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                             <div className="modal-body space-y-3">
                                 <div className="field">
                                     <label className="field-label">Username</label>
-                                    <input className="input" type="text" placeholder="e.g. john_doe" autoComplete="off" value={data.name} onChange={(e) => setData('name', e.target.value)} required />
+                                    <input className="input" type="text" placeholder="e.g. john_doe" autoComplete="off" minLength={3} maxLength={20} pattern="[A-Za-z][A-Za-z0-9_]{2,19}" title="3-20 characters, start with a letter, use letters, numbers, or underscore." value={data.name} onChange={(e) => setData('name', e.target.value)} required />
                                     <p className="field-hint" style={errors.name ? { fontSize: 11, color: 'var(--coral)', marginTop: 4 } : { fontSize: 11, color: '#94a3b8', marginTop: 4 }}>
-                                        {errors.name ?? '3–20 characters, start with a letter.'}
+                                        {errors.name ?? '3-20 karakter, diawali huruf, tanpa spasi.'}
                                     </p>
                                 </div>
                                 <div className="field">
                                     <label className="field-label">Password</label>
                                     <div className="pwd-field">
-                                        <input className="input" type={showPw ? 'text' : 'password'} placeholder="min. 8 characters" value={data.password} onChange={(e) => setData('password', e.target.value)} required />
+                                        <input className="input" type={showPw ? 'text' : 'password'} placeholder="min. 8 characters" minLength={8} value={data.password} onChange={(e) => setData('password', e.target.value)} required />
                                         <button type="button" className="pwd-eye" onClick={() => setShowPw((v) => !v)} aria-label="Toggle password">
                                             <i className={`fa-solid ${showPw ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                                         </button>
                                     </div>
-                                    <ul className="pwd-checklist">
-                                        {pwdState.map((r) => (
-                                            <li key={r.key} className={r.ok ? 'ok' : ''}>
-                                                <i className={`fa-${r.ok ? 'solid fa-circle-check' : 'regular fa-circle'}`}></i>
-                                                <span>{r.label}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    {errors.password && <p className="field-hint" style={{ fontSize: 11, color: 'var(--coral)', marginTop: 4 }}>{errors.password}</p>}
+                                    <p className="field-hint" style={errors.password ? { fontSize: 11, color: 'var(--coral)', marginTop: 4 } : { fontSize: 11, color: '#94a3b8', marginTop: 4 }}>
+                                        {errors.password ?? 'Minimal 8 karakter, gunakan huruf besar, angka, dan simbol.'}
+                                    </p>
                                 </div>
                                 <div className="field">
                                     <label className="field-label">Role</label>

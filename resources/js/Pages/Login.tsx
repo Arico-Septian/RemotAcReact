@@ -118,7 +118,7 @@ export default function Login() {
                                     <div>
                                         <label className="field-lbl" htmlFor="username">
                                             <span>Username</span>
-                                            <span className="hint">3 – 20 characters</span>
+                                            <span className="hint">3-20 chars, no spaces</span>
                                         </label>
                                         <div className="input-wrap">
                                             <span className="input-ic"><i className="fa-regular fa-user"></i></span>
@@ -131,6 +131,8 @@ export default function Login() {
                                                 autoComplete="username"
                                                 minLength={3}
                                                 maxLength={20}
+                                                pattern="[A-Za-z][A-Za-z0-9_]{2,19}"
+                                                title="3-20 characters, start with a letter, use letters, numbers, or underscore."
                                                 placeholder="Enter your username"
                                                 value={data.name}
                                                 onChange={(e) => setData('name', e.target.value)}

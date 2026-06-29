@@ -102,23 +102,24 @@ class UserController extends Controller
                 'string',
                 'min:3',
                 'max:20',
-                'regex:/^[A-Za-z][A-Za-z0-9_ ]{2,19}$/',
+                'regex:/^[A-Za-z][A-Za-z0-9_]{2,19}$/',
                 function ($attribute, $value, $fail) {
                     if (User::whereRaw('LOWER(name) = ?', [strtolower($value)])->exists()) {
                         $fail('Username is already taken.');
                     }
                 },
             ],
-            'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()],
+            'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
             'role' => 'required|in:admin,operator,user',
         ], [
             'name.min' => 'Username must be at least 3 characters.',
             'name.max' => 'Username must be at most 20 characters.',
-            'name.regex' => 'Username must be 3–20 characters (letters, numbers, underscore, spaces) and start with a letter.',
+            'name.regex' => 'Username must be 3–20 characters, start with a letter, and only contain letters, numbers, or underscore.',
             'password.min' => 'Password must be at least 8 characters.',
             'password.letters' => 'Password must contain letters.',
             'password.mixed' => 'Password must contain both uppercase and lowercase letters.',
             'password.numbers' => 'Password must contain at least 1 number.',
+            'password.symbols' => 'Password must contain at least 1 symbol.',
         ]);
 
         $user = User::create([
@@ -305,7 +306,7 @@ class UserController extends Controller
             'current_password' => ['required', 'string'],
             'password' => [
                 'required', 'string', 'confirmed', 'different:current_password',
-                Password::min(8)->letters()->mixedCase()->numbers(),
+                Password::min(8)->letters()->mixedCase()->numbers()->symbols(),
             ],
         ], [
             'current_password.required' => 'Current password is required.',
@@ -314,6 +315,7 @@ class UserController extends Controller
             'password.letters' => 'New password must contain letters.',
             'password.mixed' => 'New password must contain both uppercase and lowercase letters.',
             'password.numbers' => 'New password must contain at least 1 number.',
+            'password.symbols' => 'New password must contain at least 1 symbol.',
             'password.confirmed' => 'Password confirmation does not match.',
             'password.different' => 'New password must be different from the current password.',
         ]);
