@@ -154,11 +154,12 @@ export default function TemperatureChart() {
                 backgroundColor: (ctx: any) => {
                     const { chart } = ctx;
                     const { ctx: c, chartArea } = chart;
-                    if (!chartArea) return hexToRgba(LINE_COLOR, 0.12);
+                    if (!chartArea) return hexToRgba(LINE_COLOR, 0.35);
                     // Fill biru dengan gradien pudar ke bawah.
                     const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                    g.addColorStop(0, hexToRgba(LINE_COLOR, 0.28));
-                    g.addColorStop(0.6, hexToRgba(LINE_COLOR, 0.1));
+                    g.addColorStop(0, hexToRgba(LINE_COLOR, 0.78));
+                    g.addColorStop(0.52, hexToRgba(LINE_COLOR, 0.38));
+                    g.addColorStop(0.82, hexToRgba(LINE_COLOR, 0.14));
                     g.addColorStop(1, hexToRgba(LINE_COLOR, 0));
                     return g;
                 },

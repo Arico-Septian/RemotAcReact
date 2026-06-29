@@ -160,11 +160,12 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
                         backgroundColor: (ctx: any) => {
                             const { chart } = ctx;
                             const { ctx: c, chartArea } = chart;
-                            if (!chartArea) return 'rgba(90,147,236,0.12)';
+                            if (!chartArea) return 'rgba(90,147,236,0.35)';
                             // Fill biru dengan gradien pudar ke bawah.
                             const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                            g.addColorStop(0, 'rgba(90,147,236,0.30)');
-                            g.addColorStop(0.6, 'rgba(90,147,236,0.10)');
+                            g.addColorStop(0, 'rgba(90,147,236,0.78)');
+                            g.addColorStop(0.52, 'rgba(90,147,236,0.38)');
+                            g.addColorStop(0.82, 'rgba(90,147,236,0.14)');
                             g.addColorStop(1, 'rgba(90,147,236,0)');
                             return g;
                         },
