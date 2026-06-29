@@ -164,7 +164,7 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
                         </div>
                         {isAdmin && (
                             <button type="button" onClick={deleteAll} disabled={deletingAll} className="btn btn-danger btn-sm" title="Delete All Logs">
-                                <i className={`fa-solid ${deletingAll ? 'fa-spinner fa-spin' : 'fa-trash'} text-[15px]`}></i>
+                                <i className="fa-solid fa-trash text-[15px]"></i>
                             </button>
                         )}
                     </div>
