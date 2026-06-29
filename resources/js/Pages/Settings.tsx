@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import type { PageProps } from '@/types';
@@ -22,11 +22,8 @@ interface SettingsProps {
     mqttSettings: Setting[];
 }
 
-type SettingsGroup = 'mqtt' | 'retention' | 'monitoring';
-
 export default function Settings({ retentionSettings, monitoringSettings, mqttSettings }: SettingsProps) {
     const { flash } = usePage<PageProps>().props;
-    const [savingGroup, setSavingGroup] = useState<SettingsGroup | null>(null);
     const allSettings = useMemo(
         () => [...retentionSettings, ...monitoringSettings, ...mqttSettings],
         [retentionSettings, monitoringSettings, mqttSettings],
@@ -37,7 +34,7 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
         [allSettings],
     );
 
-    const { data, setData, put, processing, errors, transform } = useForm<Record<string, string>>(initialData);
+    const { data, setData, put, processing, errors } = useForm<Record<string, string>>(initialData);
 
     useEffect(() => {
         if (! flash.success) {
@@ -51,27 +48,16 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
         return () => window.clearTimeout(toastTimer);
     }, [flash.success]);
 
-    const submitSettings = (settings: Setting[], group: SettingsGroup) => {
-        const payload = Object.fromEntries(settings.map((setting) => [setting.key, data[setting.key] ?? String(setting.value)]));
-
-        setSavingGroup(group);
-        transform(() => ({
-            ...payload,
-            _settings_group: group,
-        }));
+    const submit = () => {
         put('/settings', {
             preserveScroll: true,
-            onFinish: () => {
-                setSavingGroup(null);
-                transform((values) => values);
-            },
         });
     };
 
-    const renderSaveButton = (settings: Setting[], group: SettingsGroup, label: string) => (
-        <button type="button" className="btn btn-primary settings-save" disabled={processing} onClick={() => submitSettings(settings, group)}>
+    const renderSaveButton = () => (
+        <button type="button" className="btn btn-primary settings-save" disabled={processing} onClick={submit}>
             <i className="fa-solid fa-floppy-disk"></i>
-            <span>{savingGroup === group ? 'Saving...' : label}</span>
+            <span>{processing ? 'Saving...' : 'Save All Settings'}</span>
         </button>
     );
 
@@ -163,6 +149,10 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
             <Head title="Settings" />
 
             <form className="settings-form" onSubmit={(e) => e.preventDefault()}>
+                <div className="settings-form-actions">
+                    {renderSaveButton()}
+                </div>
+
                 <div className="settings-grid">
                     <div className="settings-panel settings-panel--column">
                         <div className="settings-head settings-head--compact">
@@ -175,10 +165,6 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
                         <section className="settings-section">
                             {renderSettings(mqttSettings)}
                         </section>
-
-                        <div className="settings-panel-actions">
-                            {renderSaveButton(mqttSettings, 'mqtt', 'Save MQTT')}
-                        </div>
                     </div>
 
                     <div className="settings-panel settings-panel--column">
@@ -192,10 +178,6 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
                         <section className="settings-section">
                             {renderSettings(retentionSettings)}
                         </section>
-
-                        <div className="settings-panel-actions">
-                            {renderSaveButton(retentionSettings, 'retention', 'Save Retention')}
-                        </div>
                     </div>
 
                     <div className="settings-panel settings-panel--column">
@@ -209,10 +191,6 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
                         <section className="settings-section">
                             {renderSettings(monitoringSettings)}
                         </section>
-
-                        <div className="settings-panel-actions">
-                            {renderSaveButton(monitoringSettings, 'monitoring', 'Save Monitoring')}
-                        </div>
                     </div>
                 </div>
             </form>

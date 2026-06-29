@@ -48,7 +48,7 @@ class SettingsController extends Controller
             'mqtt' => 'MQTT broker settings',
             'retention' => 'Database cleanup retention',
             'monitoring' => 'Device monitoring settings',
-            default => 'System settings',
+            default => 'Settings',
         };
 
         UserLog::create([
