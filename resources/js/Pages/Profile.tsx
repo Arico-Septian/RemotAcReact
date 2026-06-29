@@ -1,4 +1,4 @@
-import { FormEvent, useMemo, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { Head, router, useForm } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import type { ProfileUser } from '@/types';
@@ -7,13 +7,6 @@ import '../../css/profile.css';
 interface ProfileProps {
     profileUser: ProfileUser;
 }
-
-const pwdRules = [
-    { key: 'len', label: 'At least 8 characters', test: (v: string) => v.length >= 8 },
-    { key: 'case', label: 'One uppercase & one lowercase letter', test: (v: string) => /[a-z]/.test(v) && /[A-Z]/.test(v) },
-    { key: 'num', label: 'At least one number', test: (v: string) => /\d/.test(v) },
-    { key: 'symbol', label: 'At least one symbol', test: (v: string) => /[^A-Za-z0-9]/.test(v) },
-];
 
 function PwToggle({ shown, onClick }: { shown: boolean; onClick: () => void }) {
     return (
@@ -40,7 +33,6 @@ export default function Profile({ profileUser }: ProfileProps) {
         password_confirmation: '',
     });
 
-    const pwdState = useMemo(() => pwdRules.map((r) => ({ ...r, ok: r.test(data.password) })), [data.password]);
     const mismatch = data.password.length > 0 && data.password_confirmation.length > 0 && data.password !== data.password_confirmation;
 
     const initial = (profileUser.name || '?').charAt(0).toUpperCase();
@@ -183,14 +175,9 @@ export default function Profile({ profileUser }: ProfileProps) {
                                 <input className="profile-input" type={show.next ? 'text' : 'password'} placeholder="Min. 8 characters" required minLength={8} autoComplete="new-password" value={data.password} onChange={(e) => setData('password', e.target.value)} />
                                 <PwToggle shown={show.next} onClick={() => setShow((s) => ({ ...s, next: !s.next }))} />
                             </div>
-                            <ul className="pwd-checklist">
-                                {pwdState.map((r) => (
-                                    <li key={r.key} className={r.ok ? 'ok' : ''}>
-                                        <i className={`fa-${r.ok ? 'solid fa-circle-check' : 'regular fa-circle'}`}></i>
-                                        <span>{r.label}</span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <p className="profile-password-hint">
+                                Minimal 8 karakter, gunakan huruf besar, angka, dan simbol.
+                            </p>
                         </div>
                         <div className="profile-field">
                             <label className="profile-field-label">Confirm new password</label>
