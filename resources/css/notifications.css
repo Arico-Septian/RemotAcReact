@@ -7,6 +7,27 @@
             transition: var(--t-fast);
         }
 
+        .notification-mark-all {
+            min-height: 36px;
+            padding: 0 2px;
+            background: transparent !important;
+            border: none !important;
+            color: #ffffff !important;
+            box-shadow: none !important;
+        }
+
+        .notification-mark-all:hover:not(:disabled) {
+            background: transparent !important;
+            border: none !important;
+            opacity: 0.78;
+            transform: none !important;
+        }
+
+        .notification-mark-all:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
         .nlist-item:hover {
             background: var(--panel-1);
         }

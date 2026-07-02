@@ -21,6 +21,7 @@ interface NotificationsProps {
 export default function Notifications({ notifications: initial, unreadCount: initialUnread, total, pagination }: NotificationsProps) {
     const [items, setItems] = useState<NotificationListItem[]>(initial);
     const [unread, setUnread] = useState(initialUnread);
+    const [markingAll, setMarkingAll] = useState(false);
 
     const markRead = async (id: number) => {
         try {
@@ -38,6 +39,22 @@ export default function Notifications({ notifications: initial, unreadCount: ini
         router.visit(link);
     };
 
+    const markAllRead = async () => {
+        if (unread <= 0 || markingAll) return;
+
+        setMarkingAll(true);
+        try {
+            await window.axios.post('/notifications/read-all');
+            setUnread(0);
+            setItems((prev) => prev.map((n) => ({ ...n, is_unread: false })));
+            window.smToast?.('Semua notifikasi ditandai dibaca', 'success');
+        } catch {
+            window.smToast?.('Gagal menandai semua notifikasi', 'error');
+        } finally {
+            setMarkingAll(false);
+        }
+    };
+
     const remove = async (id: number) => {
         if (!window.confirm('Delete this notification?')) return;
         try {
@@ -51,7 +68,18 @@ export default function Notifications({ notifications: initial, unreadCount: ini
     };
 
     return (
-        <AppLayout title="Notifications" subtitle={`${unread} unread of ${total} total`}>
+        <AppLayout
+            title="Notifications"
+            subtitle={`${unread} unread of ${total} total`}
+            headerActions={
+                unread > 0 ? (
+                    <button type="button" className="btn btn-sm notification-mark-all" onClick={markAllRead} disabled={markingAll}>
+                        <i className="fa-solid fa-check-double"></i>
+                        <span>{markingAll ? 'Marking...' : 'Mark all read'}</span>
+                    </button>
+                ) : null
+            }
+        >
             <Head title="Notifications" />
 
             <div className="tbl-wrap">
@@ -70,9 +98,6 @@ export default function Notifications({ notifications: initial, unreadCount: ini
                         >
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
-                                    {n.is_unread && (
-                                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5a93ec', boxShadow: '0 0 8px #5a93ec' }}></span>
-                                    )}
                                     <p className="text-sm font-semibold" style={{ color: 'var(--ink-0)', margin: 0 }}>
                                         {n.title}
                                     </p>
