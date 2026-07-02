@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\NotificationRead;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,15 +17,17 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
-        $userId = Auth::id();
+        $user = $request->user();
+        abort_unless($user, 401);
+        $userId = $user->id;
 
-        $notifications = Notification::forUserOrBroadcast($userId)
+        $notifications = Notification::visibleToUser($user)
             ->with(['reads' => fn ($q) => $q->where('user_id', $userId)])
             ->orderByDesc('created_at')
             ->paginate(20)
             ->withQueryString();
 
-        $unreadCount = Notification::forUserOrBroadcast($userId)
+        $unreadCount = Notification::visibleToUser($user)
             ->unreadForUser($userId)
             ->count();
 
@@ -57,27 +60,29 @@ class NotificationController extends Controller
      */
     public function recent(Request $request)
     {
-        $userId = Auth::id();
+        $user = $request->user();
+        abort_unless($user, 401);
+        $userId = $user->id;
 
-        /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\Notification> $notifications */
-        $notifications = Notification::forUserOrBroadcast($userId)
+        /** @var Collection<int, Notification> $notifications */
+        $notifications = Notification::visibleToUser($user)
             ->with(['reads' => fn ($q) => $q->where('user_id', $userId)])
             ->orderByDesc('created_at')
             ->limit(8)
             ->get();
         $items = $notifications->map(fn (Notification $n) => [
-                'id' => $n->id,
-                'type' => $n->type,
-                'severity' => $n->severity,
-                'title' => $n->title,
-                'message' => $n->message,
-                'link' => $n->link,
-                'is_unread' => $n->isUnreadForUser($userId),
-                'time_ago' => $n->time_ago,
-                'created_at' => $n->created_at->toIso8601String(),
-            ]);
+            'id' => $n->id,
+            'type' => $n->type,
+            'severity' => $n->severity,
+            'title' => $n->title,
+            'message' => $n->message,
+            'link' => $n->link,
+            'is_unread' => $n->isUnreadForUser($userId),
+            'time_ago' => $n->time_ago,
+            'created_at' => $n->created_at->toIso8601String(),
+        ]);
 
-        $unreadCount = Notification::forUserOrBroadcast($userId)
+        $unreadCount = Notification::visibleToUser($user)
             ->unreadForUser($userId)
             ->count();
 
@@ -92,9 +97,11 @@ class NotificationController extends Controller
      */
     public function unreadCount()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
+        abort_unless($user, 401);
+        $userId = $user->id;
 
-        $count = Notification::forUserOrBroadcast($userId)
+        $count = Notification::visibleToUser($user)
             ->unreadForUser($userId)
             ->count();
 
@@ -106,9 +113,11 @@ class NotificationController extends Controller
      */
     public function markRead(int|string $id)
     {
-        $userId = Auth::id();
+        $user = Auth::user();
+        abort_unless($user, 401);
+        $userId = $user->id;
 
-        $n = Notification::forUserOrBroadcast($userId)->findOrFail($id);
+        $n = Notification::visibleToUser($user)->findOrFail($id);
 
         if ($n->user_id === null) {
             // Broadcast — upsert agar aman dari race condition double-click
@@ -128,9 +137,11 @@ class NotificationController extends Controller
      */
     public function markAllRead()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
+        abort_unless($user, 401);
+        $userId = $user->id;
 
-        DB::transaction(function () use ($userId) {
+        DB::transaction(function () use ($user, $userId) {
             // Personal notifications: stamp read_at
             Notification::where('user_id', $userId)
                 ->whereNull('read_at')
@@ -138,6 +149,7 @@ class NotificationController extends Controller
 
             // Broadcast notifications: insert pivot rows for those not yet read
             $broadcastIds = Notification::whereNull('user_id')
+                ->where('created_at', '>=', $user->created_at)
                 ->whereNotExists(function ($q) use ($userId) {
                     $q->from('notification_reads')
                         ->whereColumn('notification_reads.notification_id', 'notifications.id')

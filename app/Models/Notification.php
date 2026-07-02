@@ -78,6 +78,17 @@ class Notification extends Model
         });
     }
 
+    public function scopeVisibleToUser(Builder $query, User $user): Builder
+    {
+        return $query->where(function ($q) use ($user) {
+            $q->where('user_id', $user->id)
+                ->orWhere(function ($qq) use ($user) {
+                    $qq->whereNull('user_id')
+                        ->where('created_at', '>=', $user->created_at);
+                });
+        });
+    }
+
     public function isUnread(): bool
     {
         return $this->read_at === null;
