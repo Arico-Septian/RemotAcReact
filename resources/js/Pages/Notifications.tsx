@@ -109,8 +109,6 @@ export default function Notifications({ notifications: initial, unreadCount: ini
                                 )}
                                 <div className="flex items-center gap-3 mt-2 text-mono" style={{ fontSize: 11, color: 'var(--ink-4)' }}>
                                     <span><i className="fa-regular fa-clock text-[9px]"></i> {n.time_ago}</span>
-                                    <span>·</span>
-                                    <span>{n.time_full}</span>
                                     {n.link && (
                                         <>
                                             <span>·</span>
@@ -121,17 +119,20 @@ export default function Notifications({ notifications: initial, unreadCount: ini
                                     )}
                                 </div>
                             </div>
-                            <div className="nlist-actions">
-                                {n.is_unread && (
-                                    <button onClick={() => markRead(n.id)} className="btn-icon" title="Tandai dibaca">
-                                        <i className="fa-solid fa-check text-[11px]"></i>
-                                    </button>
-                                )}
-                                {n.is_deletable && (
-                                    <button onClick={() => remove(n.id)} className="btn-icon danger" title="Delete">
-                                        <i className="fa-solid fa-trash text-[11px]"></i>
-                                    </button>
-                                )}
+                            <div className="notification-side">
+                                <span className="notification-time-full">{n.time_full}</span>
+                                <div className="nlist-actions">
+                                    {n.is_unread && (
+                                        <button onClick={() => markRead(n.id)} className="btn-icon" title="Tandai dibaca">
+                                            <i className="fa-solid fa-check text-[11px]"></i>
+                                        </button>
+                                    )}
+                                    {n.is_deletable && (
+                                        <button onClick={() => remove(n.id)} className="btn-icon danger" title="Delete">
+                                            <i className="fa-solid fa-trash text-[11px]"></i>
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))
