@@ -1,6 +1,4 @@
-#include <WiFi.h>
-#include "esp_wifi.h"
-#include <WiFiClientSecure.h>
+#include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <DHT.h>
@@ -23,8 +21,10 @@ const int MQTT_PORT = 1883;
 const char* MQTT_USER = "Radnext";
 const char* MQTT_PASS = "RadnextTUS01";
 
-#define DEVICE_ID "esp32_01"
+// Samakan DEVICE_ID ini dengan kolom device_id pada room di aplikasi.
+#define DEVICE_ID "esp8266_01"
 
+// NodeMCU/Wemos: D2 = GPIO4. D0/GPIO16 sering gagal membaca DHT di ESP8266.
 #define DHT_PIN 4
 #define DHT_TYPE DHT11
 
@@ -43,6 +43,10 @@ const int MAX_PUBLISH_FAILURES = 3;
 WiFiClient espClient;
 PubSubClient client(espClient);
 DHT dht(DHT_PIN, DHT_TYPE);
+
+WiFiEventHandler wifiConnectedHandler;
+WiFiEventHandler wifiGotIpHandler;
+WiFiEventHandler wifiDisconnectedHandler;
 
 static bool PRINT_RAW_MQTT = false;
 static bool PRINT_BANNER = true;
@@ -108,22 +112,15 @@ void sendIR(ACDevice& ac);
 void publishStatus(ACDevice& ac);
 
 int pinForAcId(int id) {
+  // ESP8266 GPIO aman untuk IR LED pada board NodeMCU/Wemos:
+  // D5=GPIO14, D6=GPIO12, D7=GPIO13, D1=GPIO5, D0=GPIO16.
+  // D8/GPIO15 sengaja tidak dipakai default karena sensitif saat boot.
   switch (id) {
     case 1: return 14;
-    case 2: return 27;
-    case 3: return 26;
-    case 4: return 25;
-    case 5: return 33;
-    case 6: return 32;
-    case 7: return 23;
-    case 8: return 22;
-    case 9: return 21;
-    case 10: return 19;
-    case 11: return 18;
-    case 12: return 15;
-    case 13: return 13;
-    case 14: return 12;
-    case 15: return 5;
+    case 2: return 12;
+    case 3: return 13;
+    case 4: return 5;
+    case 5: return 16;
     default: return -1;
   }
 }
@@ -848,7 +845,7 @@ void scanWiFi() {
       WiFi.RSSI(i),
       WiFi.channel(i),
       WiFi.BSSIDstr(i).c_str(),
-      WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "OPEN" : "ENC");
+      WiFi.encryptionType(i) == ENC_TYPE_NONE ? "OPEN" : "ENC");
   }
 
   Serial.println();
@@ -869,11 +866,9 @@ void connectWiFi() {
   WiFi.disconnect(true);
   delay(200);
   WiFi.mode(WIFI_STA);
-  WiFi.setSleep(false);
+  WiFi.setSleepMode(WIFI_NONE_SLEEP);
   WiFi.setAutoReconnect(true);
   WiFi.persistent(false);
-
-  esp_wifi_set_country_code("ID", true);
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
@@ -905,8 +900,8 @@ void reconnect() {
       }
     }
 
-    uint64_t chipid = ESP.getEfuseMac();
-    String cid = "ESP32_" + String(DEVICE_ID) + "_" + String((uint32_t)(chipid >> 32), HEX);
+    uint32_t chipid = ESP.getChipId();
+    String cid = "ESP8266_" + String(DEVICE_ID) + "_" + String(chipid, HEX);
 
     logLine("MQTT", "🔌", "connect -> %s:%d as %s",
             MQTT_HOST, MQTT_PORT, cid.c_str());
@@ -966,6 +961,21 @@ void setup() {
   dht.begin();
 
   // WiFi event listener — log reason code saat disconnect
+  wifiConnectedHandler = WiFi.onStationModeConnected([](const WiFiEventStationModeConnected& event) {
+    logLine("WiFi", "OK", "associated to AP: %s", event.ssid.c_str());
+  });
+
+  wifiGotIpHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP& event) {
+    logLine("WiFi", "IP", "got IP: %s", event.ip.toString().c_str());
+  });
+
+  wifiDisconnectedHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected& event) {
+    uint8_t reason = event.reason;
+    logLine("WiFi", "OFF", "disconnected | reason=%d (%s)",
+            reason, wifiDisconnectReason(reason));
+  });
+
+#if 0
   WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
     if (event == ARDUINO_EVENT_WIFI_STA_DISCONNECTED) {
       uint8_t reason = info.wifi_sta_disconnected.reason;
@@ -978,9 +988,11 @@ void setup() {
     }
   });
 
+#endif
+
   Serial.println();
   Serial.println("===============================================");
-  Serial.println(" SmartAC ESP32 Boot");
+  Serial.println(" SmartAC ESP8266 Boot");
   Serial.print(" Device : ");
   Serial.println(DEVICE_ID);
   Serial.print(" DHT    : ");

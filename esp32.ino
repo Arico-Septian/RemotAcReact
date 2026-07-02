@@ -1,0 +1,1032 @@
+#include <WiFi.h>
+#include "esp_wifi.h"
+#include <WiFiClientSecure.h>
+#include <PubSubClient.h>
+#include <ArduinoJson.h>
+#include <DHT.h>
+#include <IRremoteESP8266.h>
+#include <IRsend.h>
+#include <ir_Gree.h>
+#include <ir_Daikin.h>
+#include <ir_Panasonic.h>
+#include <ir_LG.h>
+#include <ir_Mitsubishi.h>
+#include <ir_Sharp.h>
+#include <ir_Toshiba.h>
+#include <vector>
+
+const char* WIFI_SSID = "TUGASAKHIR_2.4G";
+const char* WIFI_PASSWORD = "kopisusu";
+
+const char* MQTT_HOST = "202.154.5.158";
+const int MQTT_PORT = 1883;
+const char* MQTT_USER = "Radnext";
+const char* MQTT_PASS = "RadnextTUS01";
+
+#define DEVICE_ID "esp32_01"
+
+// DHT dipindah ke GPIO16 agar tidak memakai pin boot/strapping ESP32.
+#define DHT_PIN 16
+#define DHT_TYPE DHT11
+
+const unsigned long PING_INTERVAL = 60000;             // kirim ping/keepalive tiap 1 menit
+const unsigned long STATUS_INTERVAL = 10000;
+const unsigned long SENSOR_INTERVAL = 5000;            // irama baca DHT (deteksi perubahan cepat)
+const unsigned long SENSOR_HEARTBEAT_INTERVAL = 60000; // kirim suhu minimal tiap 1 menit walau tidak berubah
+const float TEMP_DELTA_SEND = 1.0;                     // kirim langsung kalau suhu berubah >= 1 C
+const unsigned long CONFIG_TIMEOUT = 10000;
+const float TEMP_DELTA_LOG = 1.0;
+const unsigned long DHT_LOG_MIN_MS = 30000;
+const unsigned long PING_OK_LOG_EVERY_MS = 600000;
+
+const int MAX_PUBLISH_FAILURES = 3;
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+DHT dht(DHT_PIN, DHT_TYPE);
+
+static bool PRINT_RAW_MQTT = false;
+static bool PRINT_BANNER = true;
+static float lastTempLogged = NAN;
+static float lastTempSent = NAN;
+static unsigned long lastDhtLogMs = 0;
+static bool lastPingOkLogged = true;
+static unsigned long lastPingLogMs = 0;
+static unsigned long lastMqttFailLogMs = 0;
+static bool forceDhtSend = true;
+static bool pingEverOk = false;
+static bool lastDhtOk = true;
+static unsigned long lastDhtStatusPublishMs = 0;
+
+String currentRoom = "";
+bool configReceived = false;
+unsigned long startWait = 0;
+unsigned long lastStatusPublish = 0;
+unsigned long lastSensorPublish = 0;
+unsigned long lastSensorRead = 0;
+
+int consecutivePublishFails = 0;
+
+enum ACBrand {
+  BRAND_GREE,
+  BRAND_DAIKIN,
+  BRAND_PANASONIC,
+  BRAND_LG,
+  BRAND_MITSUBISHI,
+  BRAND_SHARP,
+  BRAND_TOSHIBA
+};
+
+String brandName(ACBrand brand) {
+  switch (brand) {
+    case BRAND_GREE: return "GREE";
+    case BRAND_DAIKIN: return "DAIKIN";
+    case BRAND_PANASONIC: return "PANASONIC";
+    case BRAND_LG: return "LG";
+    case BRAND_MITSUBISHI: return "MITSUBISHI";
+    case BRAND_SHARP: return "SHARP";
+    case BRAND_TOSHIBA: return "TOSHIBA";
+    default: return "UNKNOWN";
+  }
+}
+
+ACBrand brandFromString(String s) {
+  s.toUpperCase();
+  if (s == "DAIKIN") return BRAND_DAIKIN;
+  if (s == "PANASONIC") return BRAND_PANASONIC;
+  if (s == "LG") return BRAND_LG;
+  if (s == "MITSUBISHI") return BRAND_MITSUBISHI;
+  if (s == "SHARP") return BRAND_SHARP;
+  if (s == "TOSHIBA") return BRAND_TOSHIBA;
+  return BRAND_GREE;
+}
+
+struct ACDevice;
+void applyMode(ACDevice& ac);
+void applyFanSpeed(ACDevice& ac);
+void applySwing(ACDevice& ac);
+void sendIR(ACDevice& ac);
+void publishStatus(ACDevice& ac);
+
+int pinForAcId(int id) {
+  // Mapping IR ESP32. GPIO12 dan GPIO15 dihindari karena sensitif saat boot.
+  // Untuk 15 output IR + 1 DHT, GPIO4 dipakai sebagai cadangan AC 15.
+  switch (id) {
+    case 1: return 14;
+    case 2: return 27;
+    case 3: return 26;
+    case 4: return 25;
+    case 5: return 33;
+    case 6: return 32;
+    case 7: return 23;
+    case 8: return 22;
+    case 9: return 21;
+    case 10: return 19;
+    case 11: return 18;
+    case 12: return 17;
+    case 13: return 13;
+    case 14: return 5;
+    case 15: return 4;
+    default: return -1;
+  }
+}
+
+struct ACDevice {
+  int id;
+  ACBrand brand;
+  bool power;
+  int setTemp;
+  String mode;
+  String fanSpeed;
+  String swing;
+  uint8_t irPin;
+  bool stateSynced;
+
+  IRGreeAC gree;
+  IRDaikinESP daikin;
+  IRPanasonicAc panasonic;
+  IRLgAc lg;
+  IRMitsubishiAC mitsubishi;
+  IRSharpAc sharp;
+  IRToshibaAC toshiba;
+
+  ACDevice(int _id, ACBrand _brand, uint8_t _pin)
+    : id(_id), brand(_brand),
+      power(false), setTemp(24),
+      mode("AUTO"), fanSpeed("AUTO"), swing("OFF"),
+      irPin(_pin), stateSynced(false),
+      gree(_pin), daikin(_pin), panasonic(_pin), lg(_pin),
+      mitsubishi(_pin), sharp(_pin), toshiba(_pin) {
+    gree.begin();
+    daikin.begin();
+    panasonic.begin();
+    lg.begin();
+    mitsubishi.begin();
+    sharp.begin();
+    toshiba.begin();
+  }
+};
+
+std::vector<ACDevice> acList;
+
+String nowClock() {
+  unsigned long s = millis() / 1000;
+  int hh = (s / 3600) % 24;
+  int mm = (s / 60) % 60;
+  int ss = s % 60;
+  char buf[12];
+  sprintf(buf, "%02d:%02d:%02d", hh, mm, ss);
+  return String(buf);
+}
+
+void printSep(const char* text) {
+  int cols = 0;
+
+  for (int i = 0; text[i] != '\0';) {
+    uint8_t c = (uint8_t)text[i];
+
+    if (c < 0x80) {
+      cols += 1;
+      i += 1;
+    } else if ((c & 0xF8) == 0xF0) {
+      cols += 2;
+      i += 4;
+    } else if ((c & 0xF0) == 0xE0) {
+      cols += 2;
+      i += 3;
+    } else if ((c & 0xE0) == 0xC0) {
+      cols += 1;
+      i += 2;
+    } else {
+      cols += 1;
+      i += 1;
+    }
+  }
+
+  for (int k = 0; k < cols; k++) Serial.print("─");
+  Serial.println();
+}
+
+void logLine(const char* tag, const char* icon, const char* fmt, ...) {
+  static String lastTag = "";
+
+  char msg[256];
+
+  va_list args;
+  va_start(args, fmt);
+  vsnprintf(msg, sizeof(msg), fmt, args);
+  va_end(args);
+
+  char full[320];
+  snprintf(full, sizeof(full),
+           "[%s] %s %-5s %s",
+           nowClock().c_str(), icon, tag, msg);
+
+  Serial.println(full);
+
+  if (lastTag != "" && lastTag != tag) {
+    printSep(full);
+  }
+
+  lastTag = tag;
+}
+
+void printBannerOnce() {
+  if (!PRINT_BANNER) return;
+  PRINT_BANNER = false;
+
+  const char* top = "┌───────────────────────────────────────────────┐";
+  const char* bot = "└───────────────────────────────────────────────┘";
+
+  const char* mqttState = client.connected() ? "OK" : "DOWN";
+  int rssi = (WiFi.status() == WL_CONNECTED) ? WiFi.RSSI() : 0;
+
+  Serial.println();
+  Serial.println(top);
+  Serial.printf("│ SmartAC %-10s │ WiFi:%4ddBm │ MQTT:%-4s │\n", DEVICE_ID, rssi, mqttState);
+  Serial.println(bot);
+}
+
+void addAC(int id, ACBrand brand = BRAND_GREE) {
+  for (auto& ac : acList)
+    if (ac.id == id) return;
+
+  int pin = pinForAcId(id);
+  if (pin == -1) {
+    logLine("AC", "❌", "ID %d tidak punya mapping pin", id);
+    return;
+  }
+
+  acList.push_back(ACDevice(id, brand, pin));
+  logLine("AC", "➕", "room=%s | id=%d | brand=%s | pin=%d",
+          currentRoom.c_str(), id, brandName(brand).c_str(), pin);
+}
+
+void applyMode(ACDevice& ac) {
+  switch (ac.brand) {
+    case BRAND_GREE:
+      if (ac.mode == "COOL") ac.gree.setMode(kGreeCool);
+      else if (ac.mode == "HEAT") ac.gree.setMode(kGreeHeat);
+      else if (ac.mode == "DRY") ac.gree.setMode(kGreeDry);
+      else if (ac.mode == "FAN") ac.gree.setMode(kGreeFan);
+      else ac.gree.setMode(kGreeAuto);
+      break;
+    case BRAND_DAIKIN:
+      if (ac.mode == "COOL") ac.daikin.setMode(kDaikinCool);
+      else if (ac.mode == "HEAT") ac.daikin.setMode(kDaikinHeat);
+      else if (ac.mode == "DRY") ac.daikin.setMode(kDaikinDry);
+      else if (ac.mode == "FAN") ac.daikin.setMode(kDaikinFan);
+      else ac.daikin.setMode(kDaikinAuto);
+      break;
+    case BRAND_PANASONIC:
+      if (ac.mode == "COOL") ac.panasonic.setMode(kPanasonicAcCool);
+      else if (ac.mode == "HEAT") ac.panasonic.setMode(kPanasonicAcHeat);
+      else if (ac.mode == "DRY") ac.panasonic.setMode(kPanasonicAcDry);
+      else if (ac.mode == "FAN") ac.panasonic.setMode(kPanasonicAcFan);
+      else ac.panasonic.setMode(kPanasonicAcAuto);
+      break;
+    case BRAND_LG:
+      if (ac.mode == "COOL") ac.lg.setMode(kLgAcCool);
+      else if (ac.mode == "HEAT") ac.lg.setMode(kLgAcHeat);
+      else if (ac.mode == "DRY") ac.lg.setMode(kLgAcDry);
+      else if (ac.mode == "FAN") ac.lg.setMode(kLgAcFan);
+      else ac.lg.setMode(kLgAcAuto);
+      break;
+    case BRAND_MITSUBISHI:
+      if (ac.mode == "COOL") ac.mitsubishi.setMode(kMitsubishiAcCool);
+      else if (ac.mode == "HEAT") ac.mitsubishi.setMode(kMitsubishiAcHeat);
+      else if (ac.mode == "DRY") ac.mitsubishi.setMode(kMitsubishiAcDry);
+      else if (ac.mode == "FAN") ac.mitsubishi.setMode(kMitsubishiAcFan);
+      else ac.mitsubishi.setMode(kMitsubishiAcAuto);
+      break;
+    case BRAND_SHARP:
+      if (ac.mode == "COOL") ac.sharp.setMode(kSharpAcCool);
+      else if (ac.mode == "HEAT") ac.sharp.setMode(kSharpAcHeat);
+      else if (ac.mode == "DRY") ac.sharp.setMode(kSharpAcDry);
+      else if (ac.mode == "FAN") ac.sharp.setMode(kSharpAcFan);
+      else ac.sharp.setMode(kSharpAcAuto);
+      break;
+    case BRAND_TOSHIBA:
+      if (ac.mode == "COOL") ac.toshiba.setMode(kToshibaAcCool);
+      else if (ac.mode == "HEAT") ac.toshiba.setMode(kToshibaAcHeat);
+      else if (ac.mode == "DRY") ac.toshiba.setMode(kToshibaAcDry);
+      else if (ac.mode == "FAN") ac.toshiba.setMode(kToshibaAcFan);
+      else ac.toshiba.setMode(kToshibaAcAuto);
+      break;
+  }
+}
+
+void applyFanSpeed(ACDevice& ac) {
+  switch (ac.brand) {
+    case BRAND_GREE:
+      if (ac.fanSpeed == "LOW") ac.gree.setFan(kGreeFanMin);
+      else if (ac.fanSpeed == "MEDIUM") ac.gree.setFan(kGreeFanMed);
+      else if (ac.fanSpeed == "HIGH") ac.gree.setFan(kGreeFanMax);
+      else ac.gree.setFan(kGreeFanAuto);
+      break;
+    case BRAND_DAIKIN:
+      if (ac.fanSpeed == "LOW") ac.daikin.setFan(kDaikinFanMin);
+      else if (ac.fanSpeed == "MEDIUM") ac.daikin.setFan(kDaikinFanMed);
+      else if (ac.fanSpeed == "HIGH") ac.daikin.setFan(kDaikinFanMax);
+      else ac.daikin.setFan(kDaikinFanAuto);
+      break;
+    case BRAND_PANASONIC:
+      if (ac.fanSpeed == "LOW") ac.panasonic.setFan(kPanasonicAcFanLow);
+      else if (ac.fanSpeed == "MEDIUM") ac.panasonic.setFan(kPanasonicAcFanMed);
+      else if (ac.fanSpeed == "HIGH") ac.panasonic.setFan(kPanasonicAcFanHigh);
+      else ac.panasonic.setFan(kPanasonicAcFanAuto);
+      break;
+    case BRAND_LG:
+      if (ac.fanSpeed == "LOW") ac.lg.setFan(kLgAcFanLow);
+      else if (ac.fanSpeed == "MEDIUM") ac.lg.setFan(kLgAcFanMedium);
+      else if (ac.fanSpeed == "HIGH") ac.lg.setFan(kLgAcFanHigh);
+      else ac.lg.setFan(kLgAcFanAuto);
+      break;
+    case BRAND_MITSUBISHI:
+      if (ac.fanSpeed == "LOW") ac.mitsubishi.setFan(1);
+      else if (ac.fanSpeed == "MEDIUM") ac.mitsubishi.setFan(3);
+      else if (ac.fanSpeed == "HIGH") ac.mitsubishi.setFan(kMitsubishiAcFanRealMax);
+      else ac.mitsubishi.setFan(kMitsubishiAcFanAuto);
+      break;
+    case BRAND_SHARP:
+      if (ac.fanSpeed == "LOW") ac.sharp.setFan(kSharpAcFanMin);
+      else if (ac.fanSpeed == "MEDIUM") ac.sharp.setFan(kSharpAcFanMed);
+      else if (ac.fanSpeed == "HIGH") ac.sharp.setFan(kSharpAcFanHigh);
+      else ac.sharp.setFan(kSharpAcFanAuto);
+      break;
+    case BRAND_TOSHIBA:
+      if (ac.fanSpeed == "LOW") ac.toshiba.setFan(kToshibaAcFanMin);
+      else if (ac.fanSpeed == "MEDIUM") ac.toshiba.setFan(kToshibaAcFanMed);
+      else if (ac.fanSpeed == "HIGH") ac.toshiba.setFan(kToshibaAcFanMax);
+      else ac.toshiba.setFan(kToshibaAcFanAuto);
+      break;
+  }
+}
+
+void applySwing(ACDevice& ac) {
+  switch (ac.brand) {
+    case BRAND_GREE:
+      if (ac.swing == "FULL") ac.gree.setSwingVertical(true, kGreeSwingAuto);
+      else if (ac.swing == "HALF") ac.gree.setSwingVertical(false, kGreeSwingMiddle);
+      else if (ac.swing == "DOWN") ac.gree.setSwingVertical(false, kGreeSwingDown);
+      else ac.gree.setSwingVertical(false, kGreeSwingLastPos);
+      break;
+    case BRAND_DAIKIN:
+      // IRDaikinESP hanya support on/off — HALF & DOWN fallback ke off
+      ac.daikin.setSwingVertical(ac.swing == "FULL");
+      break;
+    case BRAND_PANASONIC:
+      if (ac.swing == "FULL") ac.panasonic.setSwingVertical(kPanasonicAcSwingVAuto);
+      else if (ac.swing == "HALF") ac.panasonic.setSwingVertical(kPanasonicAcSwingVMiddle);
+      else if (ac.swing == "DOWN") ac.panasonic.setSwingVertical(kPanasonicAcSwingVLow);
+      else ac.panasonic.setSwingVertical(kPanasonicAcSwingVMiddle);
+      break;
+    case BRAND_LG:
+      if (ac.swing == "FULL") ac.lg.setSwingV(kLgAcSwingVSwing);
+      else if (ac.swing == "HALF") ac.lg.setSwingV(kLgAcSwingVMiddle);
+      else if (ac.swing == "DOWN") ac.lg.setSwingV(kLgAcSwingVLow);
+      else ac.lg.setSwingV(kLgAcSwingVOff);
+      break;
+    case BRAND_MITSUBISHI:
+      if (ac.swing == "FULL") ac.mitsubishi.setVane(kMitsubishiAcVaneSwing);
+      else if (ac.swing == "HALF") ac.mitsubishi.setVane(kMitsubishiAcVaneMiddle);
+      else if (ac.swing == "DOWN") ac.mitsubishi.setVane(kMitsubishiAcVaneLow);
+      else ac.mitsubishi.setVane(kMitsubishiAcVaneAuto);
+      break;
+    case BRAND_SHARP:
+      if (ac.swing == "FULL") ac.sharp.setSwingV(kSharpAcSwingVToggle);
+      else if (ac.swing == "HALF") ac.sharp.setSwingV(kSharpAcSwingVMid);
+      else if (ac.swing == "DOWN") ac.sharp.setSwingV(kSharpAcSwingVLow);
+      else ac.sharp.setSwingV(kSharpAcSwingVOff);
+      break;
+    case BRAND_TOSHIBA:
+      // Toshiba hanya support on/off — HALF & DOWN fallback ke off
+      ac.toshiba.setSwing(ac.swing == "FULL" ? kToshibaAcSwingOn : kToshibaAcSwingOff);
+      break;
+  }
+}
+
+void sendIR(ACDevice& ac) {
+  applyMode(ac);
+  applyFanSpeed(ac);
+  applySwing(ac);
+  logLine("IR", "🎛️", "room=%s | AC#%d | %s",
+          currentRoom.c_str(), ac.id, ac.power ? "ON" : "OFF");
+  if (ac.power) {
+    logLine("IR", "🧊", "temp=%d | mode=%s | fan=%s | swing=%s",
+            ac.setTemp, ac.mode.c_str(), ac.fanSpeed.c_str(), ac.swing.c_str());
+  }
+
+  switch (ac.brand) {
+    case BRAND_GREE:
+      ac.gree.setPower(ac.power);
+      ac.gree.setTemp(ac.setTemp);
+      ac.gree.send();
+      break;
+    case BRAND_DAIKIN:
+      ac.daikin.setPower(ac.power);
+      ac.daikin.setTemp(ac.setTemp);
+      ac.daikin.send();
+      break;
+    case BRAND_PANASONIC:
+      ac.panasonic.setPower(ac.power);
+      ac.panasonic.setTemp(ac.setTemp);
+      ac.panasonic.send();
+      break;
+    case BRAND_LG:
+      ac.lg.setPower(ac.power);
+      ac.lg.setTemp(ac.setTemp);
+      ac.lg.send();
+      break;
+    case BRAND_MITSUBISHI:
+      ac.mitsubishi.setPower(ac.power);
+      ac.mitsubishi.setTemp(ac.setTemp);
+      ac.mitsubishi.send();
+      break;
+    case BRAND_SHARP:
+      ac.sharp.setPower(ac.power);
+      ac.sharp.setTemp(ac.setTemp);
+      ac.sharp.send();
+      break;
+    case BRAND_TOSHIBA:
+      ac.toshiba.setPower(ac.power);
+      ac.toshiba.setTemp(ac.setTemp);
+      ac.toshiba.send();
+      break;
+  }
+  delay(300);
+}
+
+bool safePublish(const char* topic, const char* payload, bool retain) {
+  if (!client.connected()) {
+    consecutivePublishFails++;
+    return false;
+  }
+
+  bool ok = client.publish(topic, payload, retain);
+
+  if (ok) {
+    consecutivePublishFails = 0;
+  } else {
+    consecutivePublishFails++;
+    logLine("MQTT", "❌", "publish FAIL (%d/%d) topic=%s",
+            consecutivePublishFails, MAX_PUBLISH_FAILURES, topic);
+  }
+
+  if (consecutivePublishFails >= MAX_PUBLISH_FAILURES) {
+    logLine("MQTT", "⚠️", "too many publish failures -> reconnect");
+    client.disconnect();
+    consecutivePublishFails = 0;
+  }
+
+  return ok;
+}
+
+void publishStatus(ACDevice& ac) {
+  StaticJsonDocument<256> doc;
+  doc["room"] = currentRoom;
+  doc["ac_id"] = ac.id;
+  doc["brand"] = brandName(ac.brand);
+  doc["power"] = ac.power ? "ON" : "OFF";
+  doc["temp"] = ac.setTemp;
+  doc["ac_temp"] = ac.setTemp;
+  doc["mode"] = ac.mode;
+  doc["fan_speed"] = ac.fanSpeed;
+  doc["swing"] = ac.swing;
+
+  char buf[256];
+  serializeJson(doc, buf, sizeof(buf));
+
+  char topic[160];
+  snprintf(topic, sizeof(topic), "room/%s/ac/%d/status", currentRoom.c_str(), ac.id);
+  safePublish(topic, buf, true);
+}
+
+void publishAllStatus() {
+  if (acList.empty() || currentRoom == "") return;
+  if (millis() - lastStatusPublish < STATUS_INTERVAL) return;
+  lastStatusPublish = millis();
+
+  for (auto& ac : acList) {
+    publishStatus(ac);
+  }
+}
+
+void publishSensorStatus(const char* status, bool retain = true) {
+  if (currentRoom == "") return;
+
+  StaticJsonDocument<192> doc;
+  doc["device_id"] = DEVICE_ID;
+  doc["room"] = currentRoom;
+  doc["sensor_status"] = status;
+  doc["ts_ms"] = (uint32_t)millis();
+
+  char buf[192];
+  serializeJson(doc, buf, sizeof(buf));
+
+  // Konsisten dengan publishDHT: status sensor hanya ke room/{room}/sensor.
+  char topicRoom[120];
+  sprintf(topicRoom, "room/%s/sensor", currentRoom.c_str());
+  safePublish(topicRoom, buf, retain);
+}
+
+void publishDHT(bool forceSend = false, bool forceLog = false) {
+  if (currentRoom == "") return;
+
+  // Baca DHT tiap SENSOR_INTERVAL (deteksi perubahan cepat) — belum tentu dikirim.
+  if (!forceSend && (millis() - lastSensorRead < SENSOR_INTERVAL)) return;
+  lastSensorRead = millis();
+
+  float temp = dht.readTemperature();
+  if (isnan(temp)) {
+    if (lastDhtOk || forceSend || millis() - lastDhtStatusPublishMs >= DHT_LOG_MIN_MS) {
+      publishSensorStatus("offline", true);
+      lastDhtStatusPublishMs = millis();
+    }
+    lastDhtOk = false;
+    logLine("DHT", "❌", "read failed");
+    return;
+  }
+
+  lastDhtOk = true;
+
+  // Report-by-exception: kirim hanya kalau suhu berubah >= TEMP_DELTA_SEND,
+  // atau sudah lewat heartbeat (60s), atau dipaksa (forceSend). Hemat broker & DB.
+  bool changed = isnan(lastTempSent) || (fabs(temp - lastTempSent) >= TEMP_DELTA_SEND);
+  bool heartbeatDue = (millis() - lastSensorPublish) >= SENSOR_HEARTBEAT_INTERVAL;
+  if (!forceSend && !changed && !heartbeatDue) return;
+
+  lastSensorPublish = millis();
+  lastTempSent = temp;
+
+  StaticJsonDocument<256> doc;
+  doc["device_id"] = DEVICE_ID;
+  doc["room"] = currentRoom;
+  doc["sensor_status"] = "online";
+  doc["suhu"] = temp;
+  doc["ts_ms"] = (uint32_t)millis();
+
+  char buf[256];
+  serializeJson(doc, buf, sizeof(buf));
+
+  // Kirim suhu HANYA ke room/{room}/sensor. Topic + payload sudah berisi nama room
+  // (dan device_id), jadi Laravel tetap tahu ini suhu room mana — cukup 1 topic.
+  String safeRoom = currentRoom;
+  safeRoom.toLowerCase();
+  safeRoom.replace(" ", "_");
+  char topicRoom[120];
+  sprintf(topicRoom, "room/%s/sensor", safeRoom.c_str());
+  bool ok1 = safePublish(topicRoom, buf, true);
+
+  bool changed1C = isnan(lastTempLogged) || (fabs(temp - lastTempLogged) >= 1.0f);
+  bool shouldLog = forceLog || changed1C || !ok1;
+
+  if (shouldLog) {
+    logLine("DHT", "🌡️", "%.1f°C -> %s %s", temp, topicRoom, ok1 ? "✅" : "❌");
+    lastTempLogged = temp;
+  }
+}
+
+void publishPing() {
+  static unsigned long lastPing = 0;
+  if (millis() - lastPing < PING_INTERVAL) return;
+  lastPing = millis();
+
+  StaticJsonDocument<128> doc;
+  doc["device_id"] = DEVICE_ID;
+  doc["ts_ms"] = (uint32_t)millis();
+
+  char buf[128];
+  serializeJson(doc, buf, sizeof(buf));
+
+  char topic[80];
+  sprintf(topic, "device/%s/ping", DEVICE_ID);
+
+  bool ok = safePublish(topic, buf, false);
+  if (ok && !pingEverOk) {
+    pingEverOk = true;
+  }
+
+  bool shouldLogPing =
+    (ok != lastPingOkLogged) || (!ok) || (millis() - lastPingLogMs) >= PING_OK_LOG_EVERY_MS;
+
+  if (shouldLogPing) {
+    logLine("PING", ok ? "❤️" : "💔", "%s %s",
+            topic, ok ? "✅" : "❌");
+    lastPingOkLogged = ok;
+    lastPingLogMs = millis();
+  }
+}
+
+void publishOnline() {
+  char topic[60];
+  sprintf(topic, "device/%s/online", DEVICE_ID);
+
+  char payload[80];
+  sprintf(payload, "{\"device_id\":\"%s\"}", DEVICE_ID);
+
+  bool ok = safePublish(topic, payload, false);
+
+  logLine("MQTT", "🟢", "online -> %s %s",
+          topic,
+          ok ? "✅" : "❌");
+}
+
+void callback(char* topic, uint8_t* payload, unsigned int length) {
+  char msg[512];
+  if (length >= sizeof(msg)) {
+    logLine("MQTT", "❌", "payload terlalu besar");
+    return;
+  }
+  memcpy(msg, payload, length);
+  msg[length] = '\0';
+
+  if (PRINT_RAW_MQTT) {
+    logLine("MQTT", "⬅️", "%s | %s", topic, msg);
+  } else {
+    logLine("MQTT", "⬅️", "%s", topic);
+  }
+
+  StaticJsonDocument<512> doc;
+  if (deserializeJson(doc, msg)) {
+    logLine("MQTT", "❌", "JSON parse error");
+    return;
+  }
+
+  String t = String(topic);
+
+  String configTopic = "device/" + String(DEVICE_ID) + "/config";
+  if (t == configTopic) {
+    if (!doc.containsKey("room")) {
+      logLine("CFG", "❌", "field room tidak ada");
+      return;
+    }
+
+    if (currentRoom != "") {
+      char oldSub[160];
+      snprintf(oldSub, sizeof(oldSub), "room/%s/ac/+/control", currentRoom.c_str());
+      client.unsubscribe(oldSub);
+    }
+
+    acList.clear();
+    String prevRoom = currentRoom;
+    currentRoom = doc["room"].as<String>();
+    currentRoom.toLowerCase();
+    currentRoom.replace(" ", "_");
+    logLine("CFG", "🧩", "room=%s", currentRoom.c_str());
+
+    if (doc.containsKey("acs")) {
+      for (JsonObject ac : doc["acs"].as<JsonArray>()) {
+        int id = ac["id"];
+        addAC(id, brandFromString(ac["brand"].as<String>()));
+      }
+    }
+
+    char sub[160];
+    snprintf(sub, sizeof(sub), "room/%s/ac/+/control", currentRoom.c_str());
+    client.subscribe(sub);
+    logLine("SUB", "📡", "%s", sub);
+
+    configReceived = true;
+
+    bool roomChanged = (prevRoom != currentRoom);
+
+    if (roomChanged) {
+      publishDHT(true, true);
+    } else {
+      publishDHT(true, false);
+    }
+    return;
+  }
+
+  // === CLEAR ===
+  String clearTopic = "device/" + String(DEVICE_ID) + "/clear";
+  if (t == clearTopic) {
+    String oldRoom = currentRoom;
+
+    if (currentRoom != "") {
+      char oldSub[160];
+      snprintf(oldSub, sizeof(oldSub), "room/%s/ac/+/control", currentRoom.c_str());
+      client.unsubscribe(oldSub);
+    }
+    char deviceSensorTopic[80];
+    sprintf(deviceSensorTopic, "device/%s/sensor", DEVICE_ID);
+    safePublish(deviceSensorTopic, "", true);
+
+    if (oldRoom != "") {
+      char roomSensorTopic[120];
+      sprintf(roomSensorTopic, "room/%s/sensor", oldRoom.c_str());
+      safePublish(roomSensorTopic, "", true);
+    }
+
+    currentRoom = "";
+    configReceived = false;
+    acList.clear();
+
+    forceDhtSend = true;
+
+    logLine("CLR", "🧹", "ESP tidak terdaftar");
+    return;
+  }
+
+  if (currentRoom == "") return;
+
+  char roomParsed[120];
+  int acId = 0;
+  if (sscanf(topic, "room/%119[^/]/ac/%d/control", roomParsed, &acId) != 2) return;
+
+  String topicRoom = String(roomParsed);
+  topicRoom.toLowerCase();
+  if (topicRoom != currentRoom) return;
+
+  for (auto& ac : acList) {
+    if (ac.id != acId) continue;
+
+    static unsigned long lastIR = 0;
+    if (millis() - lastIR < 500) continue;
+    lastIR = millis();
+
+    if (!ac.stateSynced) {
+      ac.stateSynced = true;
+      String incomingPower = doc["power"] | "?";
+      if (doc.containsKey("power")) {
+        ac.power = (doc["power"].as<String>() == "ON");
+      }
+      if (doc.containsKey("mode")) {
+        ac.mode = doc["mode"].as<String>();
+        ac.mode.toUpperCase();
+      }
+      if (doc.containsKey("temp")) {
+        ac.setTemp = constrain(doc["temp"].as<int>(), 16, 30);
+      }
+      if (doc.containsKey("fan_speed")) {
+        ac.fanSpeed = doc["fan_speed"].as<String>();
+        ac.fanSpeed.toUpperCase();
+      }
+      if (doc.containsKey("swing")) {
+        ac.swing = doc["swing"].as<String>();
+        ac.swing.toUpperCase();
+      }
+      logLine("IR", "⏭️", "skip first-sync | AC#%d incoming=%s (ignored)",
+              ac.id, incomingPower.c_str());
+      break;
+    }
+
+    bool needSend = false;
+
+    if (doc.containsKey("power")) {
+      ac.power = (doc["power"].as<String>() == "ON");
+      needSend = true;
+    }
+    if (doc.containsKey("mode")) {
+      ac.mode = doc["mode"].as<String>();
+      ac.mode.toUpperCase();
+      if (ac.power) needSend = true;
+    }
+    if (doc.containsKey("temp")) {
+      ac.setTemp = constrain(doc["temp"].as<int>(), 16, 30);
+      if (ac.power) needSend = true;
+    }
+    if (doc.containsKey("fan_speed")) {
+      ac.fanSpeed = doc["fan_speed"].as<String>();
+      ac.fanSpeed.toUpperCase();
+      if (ac.power) needSend = true;
+    }
+    if (doc.containsKey("swing")) {
+      ac.swing = doc["swing"].as<String>();
+      ac.swing.toUpperCase();
+      if (ac.power) needSend = true;
+    }
+
+    if (needSend) {
+      sendIR(ac);
+      publishStatus(ac);
+      client.loop();
+    }
+    break;
+  }
+}
+
+// ============== WiFi diagnostics ==============
+const char* wifiDisconnectReason(uint8_t reason) {
+  switch (reason) {
+    case 2: return "AUTH_EXPIRE (password salah/expired)";
+    case 3: return "AUTH_LEAVE";
+    case 4: return "ASSOC_EXPIRE";
+    case 5: return "ASSOC_TOOMANY (router penuh)";
+    case 6: return "NOT_AUTHED";
+    case 7: return "NOT_ASSOCED";
+    case 8: return "ASSOC_LEAVE";
+    case 15: return "4WAY_HANDSHAKE_TIMEOUT (WPA mismatch / RSSI lemah)";
+    case 200: return "BEACON_TIMEOUT";
+    case 201: return "NO_AP_FOUND (SSID tidak ditemukan — router 5GHz only?)";
+    case 202: return "AUTH_FAIL (password salah)";
+    case 203: return "ASSOC_FAIL (router menolak)";
+    case 204: return "HANDSHAKE_TIMEOUT";
+    default: return "UNKNOWN";
+  }
+}
+
+void scanWiFi() {
+  logLine("SCAN", "🔍", "scan WiFi sekitar...");
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  delay(200);
+
+  int n = WiFi.scanNetworks();
+  if (n <= 0) {
+    logLine("SCAN", "❌", "tidak ada WiFi terdeteksi");
+    return;
+  }
+
+  logLine("SCAN", "📡", "ditemukan %d jaringan:", n);
+  bool foundTarget = false;
+  for (int i = 0; i < n; i++) {
+    bool isTarget = (WiFi.SSID(i) == WIFI_SSID);
+    if (isTarget) foundTarget = true;
+    Serial.printf(
+      "  %s %-30s | RSSI=%4ddBm | CH=%2d | BSSID=%s | %s\n",
+      isTarget ? "→" : " ",
+      WiFi.SSID(i).c_str(),
+      WiFi.RSSI(i),
+      WiFi.channel(i),
+      WiFi.BSSIDstr(i).c_str(),
+      WiFi.encryptionType(i) == WIFI_AUTH_OPEN ? "OPEN" : "ENC");
+  }
+
+  Serial.println();
+
+  if (!foundTarget) {
+    logLine("SCAN", "❌", "SSID '%s' TIDAK DITEMUKAN — kemungkinan besar router 5GHz only", WIFI_SSID);
+    logLine("SCAN", "💡", "fix: aktifkan band 2.4GHz di admin router, atau buat SSID terpisah");
+  } else {
+    logLine("SCAN", "✅", "SSID '%s' terdeteksi", WIFI_SSID);
+  }
+}
+
+// ============== WiFi connect ==============
+void connectWiFi() {
+  if (WiFi.status() == WL_CONNECTED) return;
+
+  logLine("WiFi", "📶", "connect -> %s", WIFI_SSID);
+  WiFi.disconnect(true);
+  delay(200);
+  WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);
+  WiFi.setAutoReconnect(true);
+  WiFi.persistent(false);
+
+  esp_wifi_set_country_code("ID", true);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  int retry = 0;
+  while (WiFi.status() != WL_CONNECTED && retry < 30) {
+    delay(500);
+    retry++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED) {
+    logLine("WiFi", "✅", "IP=%s | RSSI=%ddBm | CH=%d",
+            WiFi.localIP().toString().c_str(),
+            WiFi.RSSI(),
+            WiFi.channel());
+  } else {
+    logLine("WiFi", "❌", "FAIL (timeout setelah 15 detik)");
+    scanWiFi();  // scan otomatis kalau gagal, tampilkan diagnose
+  }
+}
+
+// ============== MQTT reconnect ==============
+void reconnect() {
+  while (!client.connected()) {
+    if (WiFi.status() != WL_CONNECTED) {
+      connectWiFi();
+      if (WiFi.status() != WL_CONNECTED) {
+        delay(2000);
+        continue;
+      }
+    }
+
+    uint64_t chipid = ESP.getEfuseMac();
+    String cid = "ESP32_" + String(DEVICE_ID) + "_" + String((uint32_t)(chipid >> 32), HEX);
+
+    logLine("MQTT", "🔌", "connect -> %s:%d as %s",
+            MQTT_HOST, MQTT_PORT, cid.c_str());
+
+    // LWT
+    char lwtTopic[60];
+    sprintf(lwtTopic, "device/%s/status", DEVICE_ID);
+
+    if (client.connect(cid.c_str(), MQTT_USER, MQTT_PASS,
+                       lwtTopic, 1, true, "offline")) {
+
+      logLine("MQTT", "✅", "CONNECTED (port:%d)", MQTT_PORT);
+      consecutivePublishFails = 0;
+
+      char stTopic[60];
+      sprintf(stTopic, "device/%s/status", DEVICE_ID);
+      client.publish(stTopic, "online", true);
+
+      publishOnline();
+      client.loop();
+
+      // Hapus retained device/{id}/sensor lama — firmware ini cuma pakai room/{room}/sensor.
+      char devSensorTopic[80];
+      sprintf(devSensorTopic, "device/%s/sensor", DEVICE_ID);
+      client.publish(devSensorTopic, "", true);
+
+      char subConfig[80];
+      sprintf(subConfig, "device/%s/config", DEVICE_ID);
+
+      char subClear[80];
+      sprintf(subClear, "device/%s/clear", DEVICE_ID);
+
+      client.subscribe(subConfig);
+      client.subscribe(subClear);
+      logLine("SUB", "📡", "%s", subConfig);
+      logLine("SUB", "📡", "%s", subClear);
+
+      if (currentRoom != "") {
+        char subCtrl[160];
+        snprintf(subCtrl, sizeof(subCtrl), "room/%s/ac/+/control", currentRoom.c_str());
+        client.subscribe(subCtrl);
+        logLine("SUB", "📡", "re-sub -> %s", subCtrl);
+      }
+
+      startWait = millis();
+
+    } else {
+      logLine("MQTT", "❌", "FAIL state=%d, retry 5s", client.state());
+      delay(5000);
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(500);
+  dht.begin();
+
+  // WiFi event listener — log reason code saat disconnect
+  WiFi.onEvent([](WiFiEvent_t event, WiFiEventInfo_t info) {
+    if (event == ARDUINO_EVENT_WIFI_STA_DISCONNECTED) {
+      uint8_t reason = info.wifi_sta_disconnected.reason;
+      logLine("WiFi", "🔌", "disconnected | reason=%d (%s)",
+              reason, wifiDisconnectReason(reason));
+    } else if (event == ARDUINO_EVENT_WIFI_STA_CONNECTED) {
+      logLine("WiFi", "🔗", "associated to AP");
+    } else if (event == ARDUINO_EVENT_WIFI_STA_GOT_IP) {
+      logLine("WiFi", "🌐", "got IP");
+    }
+  });
+
+  Serial.println();
+  Serial.println("===============================================");
+  Serial.println(" SmartAC ESP32 Boot");
+  Serial.print(" Device : ");
+  Serial.println(DEVICE_ID);
+  Serial.print(" DHT    : ");
+  Serial.println(DHT_TYPE == DHT11 ? "DHT11" : "DHTxx");
+  Serial.println("===============================================");
+
+  connectWiFi();
+
+  // Port 1883 = tanpa TLS, jadi tidak perlu setInsecure().
+  client.setBufferSize(2048);
+  client.setKeepAlive(20);
+  client.setSocketTimeout(8);
+  client.setServer(MQTT_HOST, MQTT_PORT);
+  client.setCallback(callback);
+}
+
+void loop() {
+  printBannerOnce();
+  if (WiFi.status() != WL_CONNECTED) {
+    connectWiFi();
+  }
+
+  if (!client.connected()) {
+    if (millis() - lastMqttFailLogMs > 5000) {
+      logLine("MQTT", "⚠️", "disconnected, reconnecting...");
+      lastMqttFailLogMs = millis();
+    }
+    reconnect();
+  }
+
+  client.loop();
+
+  publishPing();
+  publishDHT();
+
+  if (!configReceived) {
+    if (millis() - startWait > CONFIG_TIMEOUT) {
+      logLine("CFG", "⏳", "timeout, minta ulang config");
+      publishOnline();
+      startWait = millis();
+    }
+    return;
+  }
+
+  publishAllStatus();
+}
