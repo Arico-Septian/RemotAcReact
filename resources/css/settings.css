@@ -67,7 +67,7 @@
         .settings-form-actions {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 18px;
+            margin-top: 18px;
         }
 
         .settings-form-actions .settings-save {
@@ -370,7 +370,7 @@
             }
 
             .settings-form-actions {
-                margin-bottom: 14px;
+                margin-top: 14px;
             }
 
             .retention-row {

@@ -149,10 +149,6 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
             <Head title="Settings" />
 
             <form className="settings-form" onSubmit={(e) => e.preventDefault()}>
-                <div className="settings-form-actions">
-                    {renderSaveButton()}
-                </div>
-
                 <div className="settings-grid">
                     <div className="settings-panel settings-panel--column">
                         <div className="settings-head settings-head--compact">
@@ -192,6 +188,10 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
                             {renderSettings(monitoringSettings)}
                         </section>
                     </div>
+                </div>
+
+                <div className="settings-form-actions">
+                    {renderSaveButton()}
                 </div>
             </form>
         </AppLayout>

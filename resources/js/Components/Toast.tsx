@@ -57,11 +57,11 @@ export default function ToastContainer() {
         <div
             style={{
                 position: 'fixed',
-                bottom: 16,
+                top: 80,
                 right: 16,
                 zIndex: 10050,
                 display: 'flex',
-                flexDirection: 'column-reverse',
+                flexDirection: 'column',
                 gap: 10,
                 pointerEvents: 'none',
                 maxWidth: 'calc(100vw - 32px)',
