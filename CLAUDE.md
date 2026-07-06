@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SmartAC — a Laravel 13 IoT dashboard for remotely controlling air conditioners in multiple rooms via ESP32 devices over MQTT. Real-time status is pushed to the browser through Laravel Reverb (WebSockets).
+SmartAC — a Laravel 13 IoT dashboard for remotely controlling air conditioners in multiple rooms via ESP32 devices over MQTT. Real-time status is pushed to the browser through Laravel Reverb (WebSockets). The frontend is Inertia.js + React + TypeScript (not Blade).
 
 ## Common Commands
 
@@ -34,18 +34,31 @@ php artisan fuzzy:run              # runs Mamdani fuzzy logic for AC adjustment
 php artisan logs:clean             # deletes old user logs
 php artisan notification:cleanup   # prunes old notifications
 php artisan temperature:cleanup --days=7  # prunes old temperature records
+php artisan device:list-active     # lists devices currently considered online
+php artisan mqtt:cleanup-retained  # clears stale retained MQTT messages
 ```
 
-The scheduler is defined in `routes/console.php` (Laravel 13 pattern). Every minute: `device:check-status`, `ac:run-timer`, `fuzzy:run`. Daily: `logs:clean` at 07:00, `notification:cleanup` at 00:00, `temperature:cleanup` at 00:10. Run `php artisan schedule:run` manually to execute once.
+The scheduler is defined in `routes/console.php` (Laravel 13 pattern). Every minute: `ac:run-timer`, `fuzzy:run`, and `device:check-status` (the last is gated by a `when()` clause so it only actually runs every `AppSetting::deviceCheckIntervalMinutes()` minutes, default 1). Daily: `logs:clean` at 07:00, `notification:cleanup` at 00:00, `temperature:cleanup` at 00:10; expired cache rows are purged at 00:20. Run `php artisan schedule:run` manually to execute once.
 
 ## Architecture
 
+### Runtime-configurable settings (`AppSetting`)
+
+Several values that look like they'd be constants are actually rows in the `app_settings` table, editable at runtime by an admin via `GET/PUT /settings` (`SettingsController`, `resources/js/Pages/Settings.tsx`) — **not** `.env`:
+
+- **MQTT connection** — host/port/username/password (`AppSetting::mqttHost()`, `mqttPort()`, `mqttUsername()`, `mqttPassword()`). `MqttService` reads these exclusively; the `MQTT_*` vars in `.env`/`.env.example` are unused leftovers. TLS auto-enables only when the configured port is `8883`.
+- **Sensor/device offline timeout** — `AppSetting::sensorOfflineSeconds()` (minutes × 60, default 3 min = 180 s). Both `Room::onlineThresholdSeconds()` and `Room::temperatureStaleSeconds()` delegate to this single setting, so device liveness and temperature staleness always move together. The `Room::ONLINE_THRESHOLD_SECONDS` / `TEMPERATURE_STALE_SECONDS` class constants (180) are legacy defaults, not what's actually read at runtime.
+- **Device check interval** — `AppSetting::deviceCheckIntervalMinutes()` (default 1) — gates how often the `device:check-status` cron actually executes (see scheduler above).
+- **Retention windows** — notification/temperature/activity-log retention days, consumed by `logs:clean`, `notification:cleanup`, `temperature:cleanup`.
+
+When touching device-online, temperature-staleness, or MQTT-connection logic, check `AppSetting` first rather than assuming a hardcoded value.
+
 ### IoT Communication Flow
 
-1. **ESP32 devices** publish to MQTT topics. The broker host/port/credentials come from `.env` (`MQTT_HOST`, `MQTT_PORT`, `MQTT_USERNAME`, `MQTT_PASSWORD`); TLS is auto-enabled only when `MQTT_PORT=8883` (see `MqttService`). The ESP32 firmware (`esp`) must point at the same broker.
+1. **ESP32 devices** publish to MQTT topics. Broker connection details come from `AppSetting` (see above), not `.env`. The ESP32 firmware (`esp`) must point at the same broker.
 2. **`php artisan mqtt:subscribe`** (`MqttSubscribe` command) listens in an infinite loop and updates `Cache` + DB on each message.
 3. **Cache** is the authoritative real-time source for device status (`device_{id}_last_seen`, `device_status_{id}`). DB values are a fallback.
-4. **Laravel Reverb** broadcasts events to WebSocket channels so the browser refreshes without polling. Eight events: `DeviceStatusUpdated`, `RoomTemperatureUpdated`, `AcStatusUpdated`, `AcTimerUpdated`, `NotificationCreated`, `UserLogCreated`, `UserLogsCleared`, `RaspiTemperatureUpdated`.
+4. **Laravel Reverb** broadcasts events to WebSocket channels so the browser refreshes without polling. Events: `DeviceStatusUpdated`, `RoomTemperatureUpdated`, `AcStatusUpdated`, `AcTimerUpdated`, `NotificationCreated`, `UserLogCreated`, `UserLogsCleared`, `RaspiTemperatureUpdated`, plus `RoomsChanged`, `AcUnitsChanged`, `UsersChanged` (these last three drive Inertia partial reloads — see Frontend below).
 5. **Browser** also polls `/device-status`, `/temperature`, and `/notifications/recent` endpoints on a timer for resilience.
 
 ### MQTT Topic Scheme
@@ -59,9 +72,9 @@ The scheduler is defined in `routes/console.php` (Laravel 13 pattern). Every min
 | Server → Device | `device/{id}/config` | Sends room + AC list on reconnect |
 | Server → Device | `room/{room}/ac/{n}/control` | AC control command (retained QoS 1) |
 
-Room names in topics are always `strtolower(trim())`. A device is considered **online** when `last_seen` is within **`Room::ONLINE_THRESHOLD_SECONDS` (180 seconds)** — sized for the 60 s device ping (3x). This constant is the source of truth for **device** liveness — used by every UI view (DashboardController, RoomController, AcUnitController, `/device-status`), by `RunFuzzyLogic`, and by `CheckDeviceStatus` (as `OFFLINE_THRESHOLD`), so on-screen status and offline notifications always agree. `CheckDeviceStatus` does one pass per scheduled run, so device status is re-evaluated every **60 seconds**.
+Room names in topics are always `strtolower(trim())`. A device is considered **online** when `last_seen` is within `Room::onlineThresholdSeconds()` (see `AppSetting` above; default 180 s) — sized for the 60 s device ping (3x). This is the source of truth for **device** liveness — used by every UI view (DashboardController, RoomController, AcUnitController, `/device-status`), by `RunFuzzyLogic`, and by `CheckDeviceStatus`, so on-screen status and offline notifications always agree.
 
-**Temperature staleness** is governed by a separate constant, `Room::TEMPERATURE_STALE_SECONDS` (**180 s**): a room's latest `RoomTemperature` older than this is treated as offline/null. The ESP32 sends temperature **report-by-exception** — immediately when the reading changes ≥1 °C, otherwise a heartbeat every **60 s** — so 180 s ≈ 3× the slowest send rate. ESP32 firmware (`esp`) pings every **60 s** (`PING_INTERVAL`) and reads the DHT every 5 s (`SENSOR_INTERVAL`) but only publishes on change or on the 60 s heartbeat (`SENSOR_HEARTBEAT_INTERVAL`).
+**Temperature staleness** uses the same underlying setting via `Room::temperatureStaleSeconds()`: a room's latest `RoomTemperature` older than this is treated as offline/null. The ESP32 sends temperature **report-by-exception** — immediately when the reading changes ≥1 °C, otherwise a heartbeat every **60 s** — so the default 180 s ≈ 3× the slowest send rate. ESP32 firmware (`esp`) pings every **60 s** (`PING_INTERVAL`) and reads the DHT every 5 s (`SENSOR_INTERVAL`) but only publishes on change or on the 60 s heartbeat (`SENSOR_HEARTBEAT_INTERVAL`).
 
 ### Role System
 
@@ -69,7 +82,7 @@ Three roles enforced by `RoleMiddleware` via `role:admin,operator` or `role:admi
 
 - **user** — read-only: dashboard, temperature, notifications
 - **operator** — room/AC CRUD and control
-- **admin** — everything above + user management, activity logs export
+- **admin** — everything above + user management, activity logs export, `/settings`
 
 Auth middleware stack on protected routes: `auth` → `activity` (`UpdateLastActivity` middleware, throttled to update at most once every 60 seconds).
 
@@ -80,6 +93,7 @@ Auth middleware stack on protected routes: `auth` → `activity` (`UpdateLastAct
 - `AcStatus` — one-to-one with AcUnit; stores `power`, `mode`, `set_temperature`, `fan_speed`, `swing`
 - `RoomTemperature` — append-only time-series; use `RoomTemperature::normalizeRoomName()` and `latestByNormalizedRoom()` for lookups
 - `Notification` — broadcast (null `user_id`) or per-user; static helpers `Notification::deviceOffline()`, `Notification::deviceOnline()`, `Notification::fuzzyAction()`, `Notification::fuzzyWarning()`, `Notification::fuzzyRecovery()` — all deduplicate via Cache key per-room (state TTL 30 days)
+- `AppSetting` — key/value store backing the runtime-configurable settings described above; always go through its static accessors, never read `app_settings` rows directly
 
 ### AC Control Flow
 
@@ -95,19 +109,23 @@ Auth middleware stack on protected routes: `auth` → `activity` (`UpdateLastAct
 
 ### Frontend
 
-Blade templates in `resources/views/`. Sidebar and bottom-nav are Blade components (`components/sidebar`, `components/bottom-nav`). No separate SPA — Alpine.js / vanilla JS handles live updates by polling JSON API endpoints.
+Inertia.js v3 + React 19 + TypeScript — **not** Blade. `resources/views/app.blade.php` is the only Blade file left (the Inertia root shell). Pages live in `resources/js/Pages/*.tsx` (one per route, e.g. `Dashboard.tsx`, `RoomDetail.tsx`, `AcControl.tsx`), shared UI in `resources/js/Components/`, and `resources/js/Layouts/AppLayout.tsx` wraps authenticated pages. `HandleInertiaRequests` middleware shares `auth.user` and flash messages as default props on every response.
+
+Live updates are wired per-page, not through a shared hook: pages call `window.Echo.channel(...).listen('.EventName', handler)` directly (Echo is configured once in `resources/js/bootstrap.js` for the Reverb broadcaster). Two patterns are used depending on the event:
+- Fine-grained events (`RoomTemperatureUpdated`, `DeviceStatusUpdated`, etc.) update local component state directly from the payload.
+- Coarse "something changed" events (`RoomsChanged`, `AcUnitsChanged`, `UsersChanged`) trigger an Inertia partial reload, e.g. `router.reload({ only: ['rooms'] })`, re-fetching just that prop from the controller.
 
 ## Key Endpoints
 
 Read-only endpoints (authenticated, available to all roles):
-- `GET /device-status` — room device online/offline status (180 s online threshold, `Room::ONLINE_THRESHOLD_SECONDS`)
+- `GET /device-status` — room device online/offline status (`Room::onlineThresholdSeconds()`, default 180 s)
 - `GET /temperature` or `/temperatures` — latest room temperatures
-- `GET /temperature/history/{id}` — 24-hour temperature data grouped by hour
-- `GET /temperature/trend` — temperature chart with configurable range (1h/3h/6h/24h)
+- `GET /temperature/history/{id}` — history for one room, grouped by `range` query param
+- `GET /temperature/trend` — cross-room average temperature chart, `range` query param (`1h`/`1d`), cached 10 s
 - `GET /notifications/recent` — recent notifications
 - `GET /notifications/unread-count` — unread notification count
 - `GET /api/ac-status` — AC unit status with room relationships
-- `GET /users-online` — real-time online/offline user counts
+- `GET /users-online` — real-time online/offline user counts (admin only)
 
 AC control endpoints (`role:admin,operator`, rate-limited 30 req/min):
 - `GET /ac/{id}/on`, `/ac/{id}/off`, `POST /ac/{id}/toggle` — power control
@@ -117,7 +135,9 @@ AC control endpoints (`role:admin,operator`, rate-limited 30 req/min):
 - `POST /rooms/{id}/ac/fuzzy/apply` — manually trigger fuzzy logic for a room
 - `POST /notifications/read-all` — mark all notifications read
 
-All endpoints return JSON for API calls, Blade views for page requests. All control actions are logged to `UserLog`.
+Admin-only (`role:admin`): `/users` CRUD, `/logs` (activity log) + bulk delete, `GET/PUT /settings` (retention/monitoring/MQTT config described above).
+
+Page routes return Inertia responses (`Inertia::render(...)`); the JSON-only endpoints above return plain `response()->json(...)`/Eloquent collections. All control actions are logged to `UserLog`.
 
 ## Queue System
 
@@ -125,4 +145,4 @@ The queue driver is `sync` — jobs are processed immediately inline, no backgro
 
 ## Testing
 
-Tests live in `tests/` (Feature and Unit). Use `composer run test` to run all tests, or `php artisan test --filter=ClassName` for a specific class. The CI environment clears config cache before tests to ensure fresh state.
+There is currently no `tests/` directory in this repo, though `phpunit.xml` still points at `tests/Unit` and `tests/Feature` and `composer run test` / `php artisan test --filter=ClassName` will work once tests are added. Don't assume test coverage exists for a given piece of code — check `tests/` first.
