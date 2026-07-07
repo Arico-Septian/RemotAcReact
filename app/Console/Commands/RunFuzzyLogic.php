@@ -102,6 +102,8 @@ class RunFuzzyLogic extends Command
 
             $fuzzyResult = $fuzzyService->calculate($currentTemp, $deltaT);
 
+            $this->printFuzzyDebug($room, $currentTemp, $deltaT, $fuzzyResult);
+
             $currentSetpoint = (int) round(
                 $activeAcUnits
                     ->map(fn ($ac) => $ac->status?->set_temperature ?? 24)
@@ -147,6 +149,50 @@ class RunFuzzyLogic extends Command
         $this->info("Fuzzy logic applied to {$processed} room(s), {$skipped} skipped (cooldown)");
 
         return self::SUCCESS;
+    }
+
+    private function printFuzzyDebug(Room $room, float $suhu, float $deltaT, array $fuzzyResult): void
+    {
+        $separator = str_repeat('=', 40);
+
+        $this->newLine();
+        $this->comment("Room: {$room->name}");
+        $this->newLine();
+        $this->line('Input');
+        $this->newLine();
+        $this->line("Suhu : {$suhu}°C");
+        $this->newLine();
+        $this->line("ΔT : {$deltaT}");
+        $this->newLine();
+        $this->line($separator);
+        $this->newLine();
+        $this->line('Membership Suhu');
+        $this->newLine();
+        $this->line('Dingin : '.$fuzzyResult['membership_suhu']['dingin']);
+        $this->newLine();
+        $this->line('Normal : '.$fuzzyResult['membership_suhu']['normal']);
+        $this->newLine();
+        $this->line('Panas : '.$fuzzyResult['membership_suhu']['panas']);
+        $this->newLine();
+        $this->line('Membership ΔT');
+        $this->newLine();
+        $this->line('Turun : '.$fuzzyResult['membership_delta_t']['turun']);
+        $this->newLine();
+        $this->line('Stabil : '.$fuzzyResult['membership_delta_t']['stabil']);
+        $this->newLine();
+        $this->line('Naik : '.$fuzzyResult['membership_delta_t']['naik']);
+        $this->newLine();
+        $this->line($separator);
+        $this->newLine();
+        $this->line('Rule Aktif');
+        $this->newLine();
+
+        foreach ($fuzzyResult['rules'] as $rule => $value) {
+            if ($value > 0) {
+                $this->line("{$rule} = {$value}");
+                $this->newLine();
+            }
+        }
     }
 
     private function lastSeenFrom(mixed $value): ?Carbon
