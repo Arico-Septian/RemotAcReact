@@ -205,9 +205,9 @@ class FuzzyMamdaniService
         $acTinggi = max($r6, $r8, $r9);
 
         // DEFUZZIFIKASI (WEIGHTED AVERAGE)
-        $zRendah = 30;
-        $zSedang = 60;
-        $zTinggi = 90;
+        $zRendah = 20;
+        $zSedang = 50;
+        $zTinggi = 80;
 
         $numerator =
             ($acRendah * $zRendah) +
@@ -223,18 +223,12 @@ class FuzzyMamdaniService
             ? $numerator / $denominator
             : 0;
 
-        $muR = $this->muAcRendah($crisp);
-        $muS = $this->muAcSedang($crisp);
-        $muT = $this->muAcTinggi($crisp);
-
-        $status = 'AC Rendah';
-
-        $maxMu = max($muR, $muS, $muT);
-
-        if ($maxMu == $muT) {
-            $status = 'AC Tinggi';
-        } elseif ($maxMu == $muS) {
+        if ($crisp <= 40) {
+            $status = 'AC Rendah';
+        } elseif ($crisp <= 70) {
             $status = 'AC Sedang';
+        } else {
+            $status = 'AC Tinggi';
         }
 
         return [

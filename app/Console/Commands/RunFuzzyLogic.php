@@ -96,7 +96,7 @@ class RunFuzzyLogic extends Command
                 $timeDiffSeconds = max(1, $latestTemp->created_at->diffInSeconds($tempHistory[1]->created_at));
 
                 if ($timeDiffSeconds <= 300 && $previousTemp !== null) {
-                    $deltaT = ($currentTemp - $previousTemp) / ($timeDiffSeconds / 60);
+                    $deltaT = $currentTemp - $previousTemp;
                 }
             }
 
