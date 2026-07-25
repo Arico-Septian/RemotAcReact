@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -308,9 +309,18 @@ Route::middleware(['auth', 'activity'])->group(function () {
 
                 // SQL expression untuk slot key — match dengan $slotKeyFor di PHP
                 // Group by langsung di DB, jadi PHP cuma terima ~24 row hasil agregasi (bukan ribuan row mentah)
-                $slotExpr = $interval >= 60
-                    ? "DATE_FORMAT(created_at, '%Y-%m-%d %H')"
-                    : "CONCAT(DATE_FORMAT(created_at, '%Y-%m-%d %H:'), LPAD(FLOOR(MINUTE(created_at) / {$interval}) * {$interval}, 2, '0'))";
+                // DATE_FORMAT/LPAD/CONCAT hanya ada di MySQL — pakai strftime/printf setara di SQLite.
+                $isSqlite = DB::connection()->getDriverName() === 'sqlite';
+
+                if ($interval >= 60) {
+                    $slotExpr = $isSqlite
+                        ? "strftime('%Y-%m-%d %H', created_at)"
+                        : "DATE_FORMAT(created_at, '%Y-%m-%d %H')";
+                } else {
+                    $slotExpr = $isSqlite
+                        ? "strftime('%Y-%m-%d %H:', created_at) || printf('%02d', (CAST(strftime('%M', created_at) AS INTEGER) / {$interval}) * {$interval})"
+                        : "CONCAT(DATE_FORMAT(created_at, '%Y-%m-%d %H:'), LPAD(FLOOR(MINUTE(created_at) / {$interval}) * {$interval}, 2, '0'))";
+                }
 
                 // Generate slots
                 $slots = collect();
