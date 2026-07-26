@@ -176,7 +176,7 @@ export default function Profile({ profileUser }: ProfileProps) {
                                 <PwToggle shown={show.next} onClick={() => setShow((s) => ({ ...s, next: !s.next }))} />
                             </div>
                             <p className="profile-password-hint">
-                                Minimal 8 karakter, gunakan huruf besar, angka, dan simbol.
+                                Minimal 8 karakter, gunakan huruf besar dan angka.
                             </p>
                         </div>
                         <div className="profile-field">
