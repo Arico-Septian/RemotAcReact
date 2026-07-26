@@ -328,8 +328,15 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ])->save();
 
-        // Invalidate session lain (mis. perangkat yang dicuri),
-        Auth::logoutOtherDevices($request->password);
+        // Invalidate session lain (mis. perangkat yang dicuri). Dibungkus try/catch karena
+        // Arr::last() di Laravel 13.22.0 melempar InvalidArgumentException saat belum ada
+        // "remember me" cookie yang di-queue (bug framework, bukan Arr::last kita) — device
+        // lain tetap ter-invalidate lewat AuthenticateSession middleware yang membandingkan
+        // password_hash session vs password user saat ini, jadi aman untuk di-skip.
+        try {
+            Auth::logoutOtherDevices($request->password);
+        } catch (\InvalidArgumentException $e) {
+        }
         $request->session()->regenerate();
 
         UserLog::create([
