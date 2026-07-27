@@ -43,8 +43,8 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
         if (xAxisCanvasRef.current) xAxisCanvasRef.current.style.transform = `translateX(${-vp.scrollLeft}px)`;
     };
 
-    const load = async (r: Range) => {
-        setState('loading');
+    const load = async (r: Range, opts: { silent?: boolean } = {}) => {
+        if (!opts.silent) setState('loading');
         try {
             const { data } = await window.axios.get<HistoryPoint[]>(`/temperature/history/${roomId}?range=${r}`);
             if (!Array.isArray(data) || data.length === 0) {
@@ -55,8 +55,11 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
             setPoints(data);
             setState('ready');
         } catch {
-            setPoints([]);
-            setState('empty');
+            // Silent background refresh: keep last good chart instead of wiping it on a hiccup.
+            if (!opts.silent) {
+                setPoints([]);
+                setState('empty');
+            }
         }
     };
 
@@ -226,6 +229,8 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
 
     useEffect(() => {
         load(range);
+        const id = window.setInterval(() => load(range, { silent: true }), 30000);
+        return () => window.clearInterval(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [range]);
 
