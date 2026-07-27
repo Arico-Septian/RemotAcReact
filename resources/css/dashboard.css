@@ -1537,22 +1537,27 @@
             top: 0;
             bottom: 28px;
             overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
+            scrollbar-width: auto;
+            scrollbar-color: rgba(148, 163, 184, 0.9) rgba(255, 255, 255, 0.08);
         }
 
         .tc-plot-vp::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
         }
 
         .tc-plot-vp::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.55);
+            background: rgba(148, 163, 184, 0.9);
             border-radius: 8px;
         }
 
+        .tc-plot-vp::-webkit-scrollbar-thumb:hover {
+            background: rgba(200, 210, 224, 0.95);
+        }
+
         .tc-plot-vp::-webkit-scrollbar-track {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
         }
 
         .tc-plot-inner {
