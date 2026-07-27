@@ -1537,14 +1537,22 @@
             top: 0;
             bottom: 28px;
             overflow-y: auto;
-            /* Scrollbar disembunyikan (scroll tetap jalan via swipe/drag/wheel) */
-            scrollbar-width: none;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
         }
 
         .tc-plot-vp::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
+            width: 8px;
+            height: 8px;
+        }
+
+        .tc-plot-vp::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.55);
+            border-radius: 8px;
+        }
+
+        .tc-plot-vp::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         .tc-plot-inner {

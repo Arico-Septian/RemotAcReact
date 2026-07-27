@@ -318,6 +318,7 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
                         </div>
                         {/* Plot: scroll atas-bawah (suhu) & kiri-kanan (jam) */}
                         <div
+                            id="historyChartScroller"
                             ref={plotVpRef}
                             onScroll={syncAxes}
                             style={{ position: 'absolute', left: 34, right: 0, top: 0, bottom: 28, overflowX: 'auto', overflowY: 'auto' }}
