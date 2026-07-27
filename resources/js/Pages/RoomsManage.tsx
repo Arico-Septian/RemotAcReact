@@ -134,10 +134,11 @@ function RoomCard({ room, canManage, onDelete }: RoomCardProps) {
     );
 }
 
-export default function RoomsManage({ rooms }: RoomsManageProps) {
+export default function RoomsManage({ rooms: initialRooms }: RoomsManageProps) {
     const { auth } = usePage<PageProps>().props;
     const canManage = auth.user?.role === 'admin' || auth.user?.role === 'operator';
 
+    const [rooms, setRooms] = useState<ManageRoom[]>(initialRooms);
     const [search, setSearch] = useState('');
     const [status, setStatus] = useState<StatusFilter>('all');
     const [modalOpen, setModalOpen] = useState(false);
@@ -149,6 +150,44 @@ export default function RoomsManage({ rooms }: RoomsManageProps) {
         device_id: '',
         floor: '',
     });
+
+    // Sinkronkan daftar room dari props saat Inertia memuat ulang (real-time room add/delete).
+    useEffect(() => {
+        setRooms(initialRooms);
+    }, [initialRooms]);
+
+    // Live status (5s) + temperature updates
+    useEffect(() => {
+        const refresh = async () => {
+            try {
+                const [statusRes, tempRes] = await Promise.all([
+                    window.axios.get('/device-status'),
+                    window.axios.get('/temperature'),
+                ]);
+                const statusMap = new Map<number, boolean>();
+                (statusRes.data ?? []).forEach((d: any) => statusMap.set(Number(d.room_id), d.is_online === true || d.status === 'online'));
+                const tempMap = new Map<number, { temp: number | null; offline: boolean }>();
+                (tempRes.data ?? []).forEach((t: any) => tempMap.set(Number(t.id), { temp: t.temperature, offline: t.is_offline === true }));
+
+                setRooms((prev) =>
+                    prev.map((r) => {
+                        const online = statusMap.get(r.id);
+                        const t = tempMap.get(r.id);
+                        return {
+                            ...r,
+                            device_status: online === undefined ? r.device_status : online ? 'online' : 'offline',
+                            temperature: t ? t.temp : r.temperature,
+                            temperature_is_offline: t ? t.offline : r.temperature_is_offline,
+                        };
+                    }),
+                );
+            } catch {
+                /* keep last good state */
+            }
+        };
+        const id = window.setInterval(refresh, 5000);
+        return () => window.clearInterval(id);
+    }, []);
 
     // Real-time sync: muat ulang daftar room saat user lain menambah/menghapus room.
     useEffect(() => {
