@@ -30,6 +30,15 @@ const SWINGS: [string, string, string][] = [
     ['down', 'fa-arrow-down', 'Down'],
 ];
 
+// Maps AcControlUnit field names to the pending-lock key used by isBusy/fire.
+const FIELD_PENDING_KEY: Record<string, string> = {
+    power: 'power',
+    set_temperature: 'temp',
+    mode: 'mode',
+    fan_speed: 'fan_speed',
+    swing: 'swing',
+};
+
 const swingLabel = (s: string) => ({ off: 'Still', full: 'Full', half: '½', down: 'Down' }[s] ?? s);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const tempCategory = (t: number) => (t <= 20 ? 'cool' : t <= 25 ? 'warm' : 'hot');
@@ -83,7 +92,22 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
                         swing: (item.swing || 'off').toLowerCase(),
                     });
                 });
-                if (byId.size) setAcs((prev) => prev.map((a) => (byId.has(a.id) ? { ...a, ...byId.get(a.id) } : a)));
+                if (byId.size) {
+                    setAcs((prev) => prev.map((a) => {
+                        const server = byId.get(a.id);
+                        if (!server) return a;
+                        // Skip fields with an optimistic update in flight so a stale/out-of-order
+                        // GET response can't clobber the value the user just set.
+                        const merged: Partial<AcControlUnit> = {};
+                        (Object.keys(server) as (keyof AcControlUnit)[]).forEach((key) => {
+                            const pendingKey = FIELD_PENDING_KEY[key as string] ?? (key as string);
+                            if (!pendingRef.current[`${a.id}:${pendingKey}`]) {
+                                (merged as Record<string, unknown>)[key as string] = server[key];
+                            }
+                        });
+                        return { ...a, ...merged };
+                    }));
+                }
 
                 const dev = (devRes.data ?? []).find((d: any) => Number(d.room_id) === room.id);
                 if (dev) setEspOnline(dev.is_online === true || dev.status === 'online');
@@ -144,11 +168,17 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     // Kunci tombol per-AC-per-kontrol selama request berjalan (loading + anti-spam).
     const [pending, setPending] = useState<Record<string, boolean>>({});
     const isBusy = (id: number, field: string) => !!pending[`${id}:${field}`];
+    // Mirrors `pending` synchronously for the refresh() closure below, which is only
+    // re-created when room.id changes and would otherwise see a stale `pending` value.
+    const pendingRef = useRef<Record<string, boolean>>({});
 
     // Fire a control POST; endpoints return back() so we ignore the (redirected) body.
     const fire = (url: string, body?: Record<string, string>, revert?: () => void, lockKey?: string, successMsg?: string, onSuccess?: () => void) => {
         const data = body ? new URLSearchParams(body).toString() : undefined;
-        if (lockKey) setPending((p) => ({ ...p, [lockKey]: true }));
+        if (lockKey) {
+            pendingRef.current[lockKey] = true;
+            setPending((p) => ({ ...p, [lockKey]: true }));
+        }
         window.axios
             .post(url, data, { headers: body ? { 'Content-Type': 'application/x-www-form-urlencoded' } : undefined })
             .then(() => {
@@ -162,6 +192,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
             })
             .finally(() => {
                 if (lockKey) {
+                    delete pendingRef.current[lockKey];
                     setPending((p) => {
                         const n = { ...p };
                         delete n[lockKey];
