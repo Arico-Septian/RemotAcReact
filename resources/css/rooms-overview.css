@@ -575,7 +575,7 @@
             bottom: 26px;
             overflow: auto;
             scrollbar-width: thin;
-            scrollbar-color: rgba(148, 163, 184, 0.55) transparent;
+            scrollbar-color: rgba(0, 0, 0, 0.85) rgba(255, 255, 255, 0.06);
         }
 
         #historyChartScroller::-webkit-scrollbar {
@@ -584,16 +584,21 @@
         }
 
         #historyChartScroller::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.55);
+            background: rgba(0, 0, 0, 0.85);
             border-radius: 8px;
         }
 
+        #historyChartScroller::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 1);
+        }
+
         #historyChartScroller::-webkit-scrollbar-track {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
         }
 
         #historyChartScroller::-webkit-scrollbar-corner {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.06);
         }
 
         #historyChartInner {
