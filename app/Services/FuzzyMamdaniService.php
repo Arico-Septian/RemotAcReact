@@ -4,30 +4,29 @@ namespace App\Services;
 
 class FuzzyMamdaniService
 {
-    private const TEMP_COLD = 22;
-    private const TEMP_HOT  = 30;
+    private const TEMP_COLD   = 22;
+    private const TEMP_NORMAL = 23;
+    private const TEMP_HOT    = 24;
 
     private int $cold;
+    private int $normal;
     private int $hot;
-    private int $mid;
 
     public function __construct()
     {
         $this->cold = self::TEMP_COLD;
-        $this->hot  = self::TEMP_HOT;
-        $this->mid  = (int) round(($this->cold + $this->hot) / 2);
+        $this->normal = self::TEMP_NORMAL;
+        $this->hot = self::TEMP_HOT;
     }
 
     // Dingin
     public function muSuhuDingin(float $x): float
     {
-        if ($x <= $this->cold) {
+        if ($x <= $this->cold)
             return 1;
-        }
 
-        if ($x > $this->cold && $x < $this->mid) {
-            return ($this->mid - $x) / ($this->mid - $this->cold);
-        }
+        if ($x > $this->cold && $x < $this->normal)
+            return ($this->normal - $x) / ($this->normal - $this->cold);
 
         return 0;
     }
@@ -35,17 +34,14 @@ class FuzzyMamdaniService
     // Normal
     public function muSuhuNormal(float $x): float
     {
-        if ($x <= $this->cold || $x >= $this->hot) {
+        if ($x <= $this->cold || $x >= $this->hot)
             return 0;
-        }
 
-        if ($x > $this->cold && $x < $this->mid) {
-            return ($x - $this->cold) / ($this->mid - $this->cold);
-        }
+        if ($x > $this->cold && $x < $this->normal)
+            return ($x - $this->cold) / ($this->normal - $this->cold);
 
-        if ($x >= $this->mid && $x < $this->hot) {
-            return ($this->hot - $x) / ($this->hot - $this->mid);
-        }
+        if ($x >= $this->normal && $x < $this->hot)
+            return ($this->hot - $x) / ($this->hot - $this->normal);
 
         return 0;
     }
@@ -53,13 +49,11 @@ class FuzzyMamdaniService
     // Panas
     public function muSuhuPanas(float $x): float
     {
-        if ($x <= $this->mid) {
+        if ($x <= $this->normal)
             return 0;
-        }
 
-        if ($x > $this->mid && $x < $this->hot) {
-            return ($x - $this->mid) / ($this->hot - $this->mid);
-        }
+        if ($x > $this->normal && $x < $this->hot)
+            return ($x - $this->normal) / ($this->hot - $this->normal);
 
         return 1;
     }
