@@ -109,7 +109,7 @@ class UserController extends Controller
                     }
                 },
             ],
-            'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()->symbols()],
+            'password' => ['required', 'string', Password::min(8)->letters()->mixedCase()->numbers()],
             'role' => 'required|in:admin,operator,user',
         ], [
             'name.min' => 'Username must be at least 3 characters.',
@@ -119,7 +119,6 @@ class UserController extends Controller
             'password.letters' => 'Password must contain letters.',
             'password.mixed' => 'Password must contain both uppercase and lowercase letters.',
             'password.numbers' => 'Password must contain at least 1 number.',
-            'password.symbols' => 'Password must contain at least 1 symbol.',
         ]);
 
         $user = User::create([

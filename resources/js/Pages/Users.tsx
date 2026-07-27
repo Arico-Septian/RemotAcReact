@@ -318,7 +318,7 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                         </button>
                                     </div>
                                     <p className="field-hint" style={errors.password ? { fontSize: 11, color: 'var(--coral)', marginTop: 4 } : { fontSize: 11, color: '#94a3b8', marginTop: 4 }}>
-                                        {errors.password ?? 'Minimal 8 karakter, gunakan huruf besar, angka, dan simbol.'}
+                                        {errors.password ?? 'Minimal 8 karakter, gunakan huruf besar dan angka.'}
                                     </p>
                                 </div>
                                 <div className="field">
