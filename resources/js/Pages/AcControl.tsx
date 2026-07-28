@@ -168,6 +168,9 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     // Kunci tombol per-AC-per-kontrol selama request berjalan (loading + anti-spam).
     const [pending, setPending] = useState<Record<string, boolean>>({});
     const isBusy = (id: number, field: string) => !!pending[`${id}:${field}`];
+    // True kalau AC ini punya kontrol lain yang masih diproses (mis. power off) —
+    // dipakai buat kunci semua tombol lain sampai request itu selesai.
+    const isAnyBusy = (id: number) => Object.keys(pending).some((k) => pending[k] && k.startsWith(`${id}:`));
     // Mirrors `pending` synchronously for the refresh() closure below, which is only
     // re-created when room.id changes and would otherwise see a stale `pending` value.
     const pendingRef = useRef<Record<string, boolean>>({});
@@ -203,7 +206,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     };
 
     const setTemp = (ac: AcControlUnit, value: number) => {
-        if (isBusy(ac.id, 'temp')) return;
+        if (isAnyBusy(ac.id)) return;
         const v = Math.max(16, Math.min(30, value));
         if (v === ac.set_temperature) return;
         const prev = ac.set_temperature;
@@ -214,7 +217,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     const fieldLabel: Record<'mode' | 'fan_speed' | 'swing', string> = { mode: 'Mode', fan_speed: 'Fan speed', swing: 'Swing' };
 
     const setField = (ac: AcControlUnit, field: 'mode' | 'fan_speed' | 'swing', value: string, urlSeg: string) => {
-        if (isBusy(ac.id, field)) return;
+        if (isAnyBusy(ac.id)) return;
         const prev = ac[field];
         patch(ac.id, { [field]: value } as Partial<AcControlUnit>);
         fire(
@@ -227,14 +230,14 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     };
 
     const togglePower = (ac: AcControlUnit) => {
-        if (isBusy(ac.id, 'power')) return;
+        if (isAnyBusy(ac.id)) return;
         const newPower = ac.power === 'ON' ? 'OFF' : 'ON';
         patch(ac.id, { power: newPower });
         fire(`/ac/${ac.id}/toggle`, { power: newPower }, () => patch(ac.id, { power: ac.power }), `${ac.id}:power`, `AC ${newPower === 'ON' ? 'dinyalakan' : 'dimatikan'}`);
     };
 
     const saveTimer = (ac: AcControlUnit, on: string, off: string) => {
-        if (isBusy(ac.id, 'timer')) return;
+        if (isAnyBusy(ac.id)) return;
         const prevOn = ac.timer_on;
         const prevOff = ac.timer_off;
         patch(ac.id, { timer_on: on || null, timer_off: off || null });
@@ -249,7 +252,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
     };
 
     const deleteTimer = (ac: AcControlUnit) => {
-        if (isBusy(ac.id, 'timer')) return;
+        if (isAnyBusy(ac.id)) return;
         // Jangan optimistic-clear dulu — kalau langsung di-null-kan, hasTimer jadi false
         // dan tombol (beserta spinner-nya) langsung hilang sebelum request selesai.
         fire(
@@ -366,6 +369,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
                     onTogglePower={() => togglePower(selected)}
                     onSetField={setField}
                     isBusy={(field: string) => isBusy(selected.id, field)}
+                    anyBusy={isAnyBusy(selected.id)}
                     onOpenTimer={() => setTimerEditId((id) => (id === selected.id ? null : selected.id))}
                     onSaveTimer={saveTimer}
                     onDeleteTimer={deleteTimer}
@@ -433,12 +437,13 @@ interface PanelProps {
     onTogglePower: () => void;
     onSetField: (ac: AcControlUnit, field: 'mode' | 'fan_speed' | 'swing', value: string, urlSeg: string) => void;
         isBusy: (field: string) => boolean;
+        anyBusy: boolean;
         onOpenTimer: () => void;
         onSaveTimer: (ac: AcControlUnit, on: string, off: string) => void;
         onDeleteTimer: (ac: AcControlUnit) => void;
     }
 
-        function AcPanel({ ac, canEditTimer, onSetTemp, onTogglePower, onSetField, isBusy, onOpenTimer, onSaveTimer, onDeleteTimer }: PanelProps) {
+        function AcPanel({ ac, canEditTimer, onSetTemp, onTogglePower, onSetField, isBusy, anyBusy, onOpenTimer, onSaveTimer, onDeleteTimer }: PanelProps) {
         const on = ac.power === 'ON';
         const cat = tempCategory(ac.set_temperature);
         const [timerOn, setTimerOn] = useState(ac.timer_on ?? '');
@@ -455,7 +460,7 @@ interface PanelProps {
         return (
             <div className="grid grid-cols-4 gap-2">
                 {items.map(([val, icon, lbl]) => (
-                    <button key={val} type="button" disabled={busy} className={`mode-btn-h ${current === val ? 'active' : ''}`} data-mode={val} onClick={() => onSetField(ac, field, val, urlSeg)}>
+                    <button key={val} type="button" disabled={anyBusy} className={`mode-btn-h ${current === val ? 'active' : ''}`} data-mode={val} onClick={() => onSetField(ac, field, val, urlSeg)}>
                         <i className={`fa-solid ${busy && current === val ? 'fa-spinner fa-spin' : icon}`}></i>
                         <span>{lbl}</span>
                     </button>
@@ -481,13 +486,13 @@ interface PanelProps {
                         </div>
                     </div>
                     <div className="ctrl-row">
-                        <button type="button" className="ctrl-btn" disabled={isBusy('temp')} onClick={() => onSetTemp(ac, ac.set_temperature - 1)} title="Lower temperature" aria-label="Lower temperature">
+                        <button type="button" className="ctrl-btn" disabled={anyBusy} onClick={() => onSetTemp(ac, ac.set_temperature - 1)} title="Lower temperature" aria-label="Lower temperature">
                             <i className={`fa-solid ${isBusy('temp') ? 'fa-spinner fa-spin' : 'fa-minus'}`}></i>
                         </button>
-                        <button type="button" className={`power-btn ${on ? 'on' : ''}`} disabled={isBusy('power')} onClick={onTogglePower} title="Toggle power" aria-label="Toggle power">
+                        <button type="button" className={`power-btn ${on ? 'on' : ''}`} disabled={anyBusy} onClick={onTogglePower} title="Toggle power" aria-label="Toggle power">
                             <i className={`fa-solid ${isBusy('power') ? 'fa-spinner fa-spin' : 'fa-power-off'}`}></i>
                         </button>
-                        <button type="button" className="ctrl-btn" disabled={isBusy('temp')} onClick={() => onSetTemp(ac, ac.set_temperature + 1)} title="Raise temperature" aria-label="Raise temperature">
+                        <button type="button" className="ctrl-btn" disabled={anyBusy} onClick={() => onSetTemp(ac, ac.set_temperature + 1)} title="Raise temperature" aria-label="Raise temperature">
                             <i className={`fa-solid ${isBusy('temp') ? 'fa-spinner fa-spin' : 'fa-plus'}`}></i>
                         </button>
                     </div>
@@ -514,7 +519,7 @@ interface PanelProps {
                     <div className="panel">
                         <div className="flex items-center justify-between mb-3">
                             <p className="eyebrow" style={{ color: 'var(--amber)', margin: 0 }}><i className="fa-solid fa-clock"></i> Set Timer</p>
-                            <button type="button" onClick={onOpenTimer} className="btn btn-soft btn-xs">
+                            <button type="button" disabled={anyBusy} onClick={onOpenTimer} className="btn btn-soft btn-xs">
                                 <i className="fa-solid fa-pen text-[9px]"></i>
                                 <span>Edit</span>
                             </button>
@@ -539,7 +544,7 @@ interface PanelProps {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" className="timer-delete-btn mt-3" disabled={isBusy('timer')} onClick={() => onDeleteTimer(ac)}>
+                                    <button type="button" className="timer-delete-btn mt-3" disabled={anyBusy} onClick={() => onDeleteTimer(ac)}>
                                         <i className={`fa-solid ${isBusy('timer') ? 'fa-spinner fa-spin' : 'fa-trash'}`}></i>
                                         <span>{isBusy('timer') ? 'Deleting…' : 'Delete Timer'}</span>
                                     </button>
@@ -564,7 +569,7 @@ interface PanelProps {
                                         <input id={`timer-off-${ac.id}`} className="input text-mono" type="time" title="Timer OFF time" aria-label="Timer OFF time" value={timerOff} onChange={(e) => setTimerOff(e.target.value)} />
                                     </div>
                                 </div>
-                                <button type="submit" className="btn btn-primary btn-sm save-timer-btn" style={{ width: '100%' }} disabled={isBusy('timer')}>
+                                <button type="submit" className="btn btn-primary btn-sm save-timer-btn" style={{ width: '100%' }} disabled={anyBusy}>
                                     <i className={`fa-solid ${isBusy('timer') ? 'fa-spinner fa-spin' : 'fa-check'} text-[10px]`}></i>
                                     <span>{isBusy('timer') ? 'Saving…' : 'Save Timer'}</span>
                                 </button>
