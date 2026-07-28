@@ -58,8 +58,11 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
         try {
             const { data } = await window.axios.get<HistoryPoint[]>(`/temperature/history/${roomId}?range=${r}`);
             if (!Array.isArray(data) || data.length === 0) {
-                setPoints([]);
-                setState('empty');
+                // Silent background refresh: keep last good chart instead of wiping it on a hiccup.
+                if (!opts.silent) {
+                    setPoints([]);
+                    setState('empty');
+                }
                 return;
             }
             setPoints(data);

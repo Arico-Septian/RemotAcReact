@@ -57,16 +57,27 @@ export default function TemperatureChart() {
     const [loading, setLoading] = useState(true);
     const [pointCount, setPointCount] = useState(0);
 
+    // Sekali chart berhasil tampil dengan data, refresh berikutnya yang hiccup (data kosong/error
+    // sesaat) tidak boleh langsung menyembunyikan chart — biarkan tampilan terakhir yang valid,
+    // supaya chart tidak "berkedip" hilang-muncul tiap 30 detik gara-gara glitch sesaat.
+    const hasShownDataRef = useRef(false);
+
     const load = async (r: Range) => {
         try {
             const { data } = await window.axios.get<TrendPayload>(`/temperature/trend?range=${r}`);
             const hasData = data.datasets.some((ds) => ds.data.some((v) => v !== null));
-            setEmpty(!hasData);
-            setInfo(`${data.rooms_online} online · ${data.rooms_offline} offline`);
-            setPointCount(data.labels.length);
-            renderChart(data);
+            if (hasData) {
+                hasShownDataRef.current = true;
+                setEmpty(false);
+                setInfo(`${data.rooms_online} online · ${data.rooms_offline} offline`);
+                setPointCount(data.labels.length);
+                renderChart(data);
+            } else if (!hasShownDataRef.current) {
+                setEmpty(true);
+                setInfo(`${data.rooms_online} online · ${data.rooms_offline} offline`);
+            }
         } catch {
-            setEmpty(true);
+            if (!hasShownDataRef.current) setEmpty(true);
         } finally {
             setLoading(false);
         }
