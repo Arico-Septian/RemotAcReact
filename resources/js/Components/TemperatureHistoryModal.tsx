@@ -160,8 +160,17 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
         };
 
         if (chartRef.current) {
-            chartRef.current.destroy();
-            chartRef.current = null;
+            // Update in-place (bukan destroy+recreate) supaya refresh berkala tidak kelihatan
+            // kedip — 'none' matikan animasi transisi biar data baru langsung tampil.
+            chartRef.current.data.labels = labels;
+            chartRef.current.data.datasets[0].data = values;
+            chartRef.current.update('none');
+            requestAnimationFrame(() => {
+                const vp = plotVpRef.current;
+                if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
+                syncAxes();
+            });
+            return;
         }
 
         chartRef.current = new Chart(canvas, {

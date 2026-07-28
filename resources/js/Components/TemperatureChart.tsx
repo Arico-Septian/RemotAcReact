@@ -196,7 +196,9 @@ export default function TemperatureChart() {
         if (chartRef.current) {
             chartRef.current.data.labels = payload.labels;
             chartRef.current.data.datasets = datasets;
-            chartRef.current.update();
+            // 'none' = skip animasi transisi pada refresh berkala, supaya chart tidak sempat
+            // "collapse" sesaat lalu terbentuk lagi (kelihatan seperti kedip tiap 30 detik).
+            chartRef.current.update('none');
             return;
         }
 
