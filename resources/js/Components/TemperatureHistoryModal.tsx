@@ -189,10 +189,11 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
             chartRef.current.data.labels = labels;
             chartRef.current.data.datasets[0].data = values;
             chartRef.current.update('none');
-            followCurrentValue(currentTemp);
             requestAnimationFrame(() => {
+                chartRef.current?.resize();
                 const vp = plotVpRef.current;
                 if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
+                followCurrentValue(currentTemp);
                 syncAxes();
             });
             return;
@@ -271,11 +272,17 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
             },
         });
 
-        followCurrentValue(currentTemp);
+        // Double RAF: chart & container baru saja dipasang (modal baru dibuka) — tunggu 1 siklus
+        // paint ekstra supaya layout (lebar tc-plot-inner / minWidth) sudah pasti settle sebelum
+        // ukur scrollWidth, kalau tidak scroll-ke-kanan pertama kali bisa meleset ke 0.
         requestAnimationFrame(() => {
-            const vp = plotVpRef.current;
-            if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
-            syncAxes();
+            requestAnimationFrame(() => {
+                chartRef.current?.resize();
+                const vp = plotVpRef.current;
+                if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
+                followCurrentValue(currentTemp);
+                syncAxes();
+            });
         });
     };
 
