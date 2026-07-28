@@ -3,10 +3,10 @@ import { createInertiaApp, type ResolvedComponent } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 
-const appName = import.meta.env.VITE_APP_NAME || 'SmartAC';
+const appName = 'Radnext';
 
 createInertiaApp({
-    title: (title) => (title ? `${title} — ${appName}` : appName),
+    title: (title) => (title ? `${appName} — ${title}` : appName),
     resolve: (name) =>
         resolvePageComponent<{ default: ResolvedComponent }>(
             `./Pages/${name}.tsx`,
