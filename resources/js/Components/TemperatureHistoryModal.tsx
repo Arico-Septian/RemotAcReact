@@ -255,7 +255,7 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
 
     useEffect(() => {
         load(range);
-        const id = window.setInterval(() => load(range, { silent: true }), 30000);
+        const id = window.setInterval(() => load(range, { silent: true }), 60000);
         return () => window.clearInterval(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [range]);

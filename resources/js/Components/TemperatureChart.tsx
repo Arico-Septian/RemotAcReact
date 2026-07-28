@@ -255,7 +255,7 @@ export default function TemperatureChart() {
 
     useEffect(() => {
         load(range);
-        const id = window.setInterval(() => load(range), 30000);
+        const id = window.setInterval(() => load(range), 60000);
         return () => window.clearInterval(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [range]);
