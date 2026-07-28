@@ -33,6 +33,8 @@ export default function TemperatureChart() {
     const yAxisCanvasRef = useRef<HTMLCanvasElement>(null);
     const plotVpRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<any>(null);
+    // Auto-scroll ke data terbaru (kanan) selama user belum geser manual menjauh dari ujung kanan.
+    const followRightRef = useRef(true);
 
     // Sinkronkan sumbu beku dengan scroll plot: Y ikut geser vertikal, X ikut geser horizontal.
     const syncAxes = () => {
@@ -40,6 +42,14 @@ export default function TemperatureChart() {
         if (!vp) return;
         if (yAxisCanvasRef.current) yAxisCanvasRef.current.style.transform = `translateY(${-vp.scrollTop}px)`;
         if (xAxisCanvasRef.current) xAxisCanvasRef.current.style.transform = `translateX(${-vp.scrollLeft}px)`;
+    };
+
+    // Update status "nempel kanan" tiap kali user scroll manual.
+    const onPlotScroll = () => {
+        syncAxes();
+        const vp = plotVpRef.current;
+        if (!vp) return;
+        followRightRef.current = vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 24;
     };
     const [range, setRange] = useState<Range>('1d');
     const [info, setInfo] = useState<string>('');
@@ -250,6 +260,8 @@ export default function TemperatureChart() {
     useEffect(() => {
         const id = requestAnimationFrame(() => {
             chartRef.current?.resize();
+            const vp = plotVpRef.current;
+            if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
             syncAxes();
         });
         return () => cancelAnimationFrame(id);
@@ -275,6 +287,7 @@ export default function TemperatureChart() {
                                     chartRef.current.destroy();
                                     chartRef.current = null;
                                 }
+                                followRightRef.current = true;
                                 setRange(e.target.value as Range);
                             }}
                             title="Select time range"
@@ -300,7 +313,7 @@ export default function TemperatureChart() {
                 <div
                     ref={plotVpRef}
                     className="tc-plot-vp"
-                    onScroll={syncAxes}
+                    onScroll={onPlotScroll}
                     style={{ display: empty ? 'none' : undefined, overflowX: 'auto' }}
                 >
                     <div className="tc-plot-inner" style={{ width: '100%', minWidth: pointCount ? pointCount * 50 : undefined }}>

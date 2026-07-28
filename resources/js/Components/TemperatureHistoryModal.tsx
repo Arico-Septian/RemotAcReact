@@ -28,6 +28,8 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
     const yAxisCanvasRef = useRef<HTMLCanvasElement>(null);
     const plotVpRef = useRef<HTMLDivElement>(null);
     const chartRef = useRef<any>(null);
+    // Auto-scroll ke data terbaru (kanan) selama user belum geser manual menjauh dari ujung kanan.
+    const followRightRef = useRef(true);
     const [range, setRange] = useState<Range>(() => {
         const saved = localStorage.getItem('historyRange');
         return saved === '1h' ? '1h' : 'today';
@@ -41,6 +43,14 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
         if (!vp) return;
         if (yAxisCanvasRef.current) yAxisCanvasRef.current.style.transform = `translateY(${-vp.scrollTop}px)`;
         if (xAxisCanvasRef.current) xAxisCanvasRef.current.style.transform = `translateX(${-vp.scrollLeft}px)`;
+    };
+
+    // Update status "nempel kanan" tiap kali user scroll manual.
+    const onPlotScroll = () => {
+        syncAxes();
+        const vp = plotVpRef.current;
+        if (!vp) return;
+        followRightRef.current = vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 24;
     };
 
     const load = async (r: Range, opts: { silent?: boolean } = {}) => {
@@ -224,7 +234,11 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
             },
         });
 
-        requestAnimationFrame(syncAxes);
+        requestAnimationFrame(() => {
+            const vp = plotVpRef.current;
+            if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
+            syncAxes();
+        });
     };
 
     useEffect(() => {
@@ -281,6 +295,7 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
                             onChange={(e) => {
                                 const r = e.target.value as Range;
                                 localStorage.setItem('historyRange', r);
+                                followRightRef.current = true;
                                 setRange(r);
                             }}
                             title="Select history range"
@@ -320,7 +335,7 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
                         <div
                             id="historyChartScroller"
                             ref={plotVpRef}
-                            onScroll={syncAxes}
+                            onScroll={onPlotScroll}
                             style={{ position: 'absolute', left: 34, right: 0, top: 0, bottom: 28, overflowX: 'auto', overflowY: 'auto' }}
                         >
                             <div style={{ position: 'relative', height: 340, width: '100%', minWidth: points.length ? points.length * 50 : undefined }}>
