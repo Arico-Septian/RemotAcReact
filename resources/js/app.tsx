@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client';
 const appName = 'Radnext';
 
 createInertiaApp({
-    title: (title) => (title ? `${appName} — ${title}` : appName),
+    title: (title) => (title ? `${appName} ${title}` : appName),
     resolve: (name) =>
         resolvePageComponent<{ default: ResolvedComponent }>(
             `./Pages/${name}.tsx`,
