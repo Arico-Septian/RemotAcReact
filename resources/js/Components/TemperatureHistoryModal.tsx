@@ -30,6 +30,10 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
     const chartRef = useRef<any>(null);
     // Auto-scroll ke data terbaru (kanan) selama user belum geser manual menjauh dari ujung kanan.
     const followRightRef = useRef(true);
+    // Auto-scroll vertikal supaya suhu saat ini selalu kelihatan di tengah, selama user
+    // belum geser manual (dideteksi dengan bandingkan scrollTop terakhir yang kita set sendiri).
+    const followValueRef = useRef(true);
+    const lastAutoScrollTopRef = useRef(0);
     const [range, setRange] = useState<Range>(() => {
         const saved = localStorage.getItem('historyRange');
         return saved === '1h' ? '1h' : 'today';
@@ -45,12 +49,26 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
         if (xAxisCanvasRef.current) xAxisCanvasRef.current.style.transform = `translateX(${-vp.scrollLeft}px)`;
     };
 
-    // Update status "nempel kanan" tiap kali user scroll manual.
+    // Update status "nempel kanan"/"ikut suhu saat ini" tiap kali user scroll manual.
     const onPlotScroll = () => {
         syncAxes();
         const vp = plotVpRef.current;
         if (!vp) return;
         followRightRef.current = vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 24;
+        followValueRef.current = Math.abs(vp.scrollTop - lastAutoScrollTopRef.current) < 4;
+    };
+
+    // Hitung & terapkan posisi scroll vertikal supaya nilai suhu saat ini ada di tengah viewport.
+    const followCurrentValue = (currentTemp: number | null) => {
+        const vp = plotVpRef.current;
+        const chart = chartRef.current;
+        if (!vp || !chart || !followValueRef.current || currentTemp === null) return;
+        const yScale = chart.scales?.y;
+        if (!yScale) return;
+        const pixelY = yScale.getPixelForValue(currentTemp);
+        const target = Math.max(0, Math.min(vp.scrollHeight - vp.clientHeight, pixelY - vp.clientHeight / 2));
+        vp.scrollTop = target;
+        lastAutoScrollTopRef.current = target;
     };
 
     const load = async (r: Range, opts: { silent?: boolean } = {}) => {
@@ -159,12 +177,19 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
             },
         };
 
+        const lastNonNull = (arr: (number | null)[]) => {
+            for (let i = arr.length - 1; i >= 0; i--) if (arr[i] !== null) return arr[i] as number;
+            return null;
+        };
+        const currentTemp = lastNonNull(values);
+
         if (chartRef.current) {
             // Update in-place (bukan destroy+recreate) supaya refresh berkala tidak kelihatan
             // kedip — 'none' matikan animasi transisi biar data baru langsung tampil.
             chartRef.current.data.labels = labels;
             chartRef.current.data.datasets[0].data = values;
             chartRef.current.update('none');
+            followCurrentValue(currentTemp);
             requestAnimationFrame(() => {
                 const vp = plotVpRef.current;
                 if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
@@ -246,6 +271,7 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
             },
         });
 
+        followCurrentValue(currentTemp);
         requestAnimationFrame(() => {
             const vp = plotVpRef.current;
             if (vp && followRightRef.current) vp.scrollLeft = vp.scrollWidth;
@@ -308,6 +334,7 @@ export default function TemperatureHistoryModal({ roomId, roomName, onClose }: P
                                 const r = e.target.value as Range;
                                 localStorage.setItem('historyRange', r);
                                 followRightRef.current = true;
+                                followValueRef.current = true;
                                 setRange(r);
                             }}
                             title="Select history range"

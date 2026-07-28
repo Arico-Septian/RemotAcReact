@@ -35,6 +35,10 @@ export default function TemperatureChart() {
     const chartRef = useRef<any>(null);
     // Auto-scroll ke data terbaru (kanan) selama user belum geser manual menjauh dari ujung kanan.
     const followRightRef = useRef(true);
+    // Auto-scroll vertikal supaya suhu saat ini selalu kelihatan di tengah, selama user
+    // belum geser manual (dideteksi dengan bandingkan scrollTop terakhir yang kita set sendiri).
+    const followValueRef = useRef(true);
+    const lastAutoScrollTopRef = useRef(0);
 
     // Sinkronkan sumbu beku dengan scroll plot: Y ikut geser vertikal, X ikut geser horizontal.
     const syncAxes = () => {
@@ -44,12 +48,26 @@ export default function TemperatureChart() {
         if (xAxisCanvasRef.current) xAxisCanvasRef.current.style.transform = `translateX(${-vp.scrollLeft}px)`;
     };
 
-    // Update status "nempel kanan" tiap kali user scroll manual.
+    // Update status "nempel kanan"/"ikut suhu saat ini" tiap kali user scroll manual.
     const onPlotScroll = () => {
         syncAxes();
         const vp = plotVpRef.current;
         if (!vp) return;
         followRightRef.current = vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 24;
+        followValueRef.current = Math.abs(vp.scrollTop - lastAutoScrollTopRef.current) < 4;
+    };
+
+    // Hitung & terapkan posisi scroll vertikal supaya nilai suhu saat ini ada di tengah viewport.
+    const followCurrentValue = (currentTemp: number | null) => {
+        const vp = plotVpRef.current;
+        const chart = chartRef.current;
+        if (!vp || !chart || !followValueRef.current || currentTemp === null) return;
+        const yScale = chart.scales?.y;
+        if (!yScale) return;
+        const pixelY = yScale.getPixelForValue(currentTemp);
+        const target = Math.max(0, Math.min(vp.scrollHeight - vp.clientHeight, pixelY - vp.clientHeight / 2));
+        vp.scrollTop = target;
+        lastAutoScrollTopRef.current = target;
     };
     const [range, setRange] = useState<Range>('1d');
     const [info, setInfo] = useState<string>('');
@@ -193,12 +211,19 @@ export default function TemperatureChart() {
             };
         });
 
+        const lastNonNull = (arr: (number | null)[]) => {
+            for (let i = arr.length - 1; i >= 0; i--) if (arr[i] !== null) return arr[i] as number;
+            return null;
+        };
+        const currentTemp = payload.datasets[0]?.current_temp ?? lastNonNull(payload.datasets[0]?.data ?? []);
+
         if (chartRef.current) {
             chartRef.current.data.labels = payload.labels;
             chartRef.current.data.datasets = datasets;
             // 'none' = skip animasi transisi pada refresh berkala, supaya chart tidak sempat
             // "collapse" sesaat lalu terbentuk lagi (kelihatan seperti kedip tiap 30 detik).
             chartRef.current.update('none');
+            followCurrentValue(currentTemp);
             return;
         }
 
@@ -251,6 +276,7 @@ export default function TemperatureChart() {
                 },
             },
         });
+        followCurrentValue(currentTemp);
     };
 
     useEffect(() => {
@@ -301,6 +327,7 @@ export default function TemperatureChart() {
                                     chartRef.current = null;
                                 }
                                 followRightRef.current = true;
+                                followValueRef.current = true;
                                 setRange(e.target.value as Range);
                             }}
                             title="Select time range"
