@@ -108,12 +108,13 @@ class MqttSubscribe extends Command
                             Cache::forget("device_unknown_{$deviceId}");
                             Cache::forget("device_{$deviceId}_config_sent");
 
-                            AcStatus::whereHas('acUnit.room', function ($q) use ($deviceId) {
-                                $q->where('device_id', $deviceId);
-                            })->get()->each(function (AcStatus $s) {
-                                $s->power = 'OFF';
-                                $s->save();
-                            });
+                            // Jangan paksa AcStatus.power jadi OFF di sini — ESP tidak pernah
+                            // mengirim perintah IR apa pun saat cuma disconnect/restart (LWT),
+                            // jadi status AC fisik sebenarnya tidak berubah. Biarkan dashboard
+                            // tetap tampilkan state terakhir yang diketahui; badge "device offline"
+                            // (di bawah) sudah cukup buat kasih tahu perangkat tidak terjangkau.
+                            // Status power yang benar akan otomatis terkoreksi begitu ESP
+                            // reconnect dan publish ulang statusnya (lihat handler room/+/ac/+/status).
                             Room::where('device_id', $deviceId)->update([
                                 'device_status' => 'offline',
                             ]);
