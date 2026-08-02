@@ -989,6 +989,10 @@
         color: #000000 !important;
     }
 
+    :root[data-theme="light"] .retention-title {
+        color: #000000 !important;
+    }
+
     :root[data-theme="light"] .ring-chip {
         border: 1px solid rgba(15, 23, 42, 0.18) !important;
         color: #1e293b !important;
