@@ -151,7 +151,7 @@ export default function NotificationBell() {
                         <span style={{ fontWeight: 700, color: 'var(--ink-0, #fff)' }}>Notifications</span>
                         <button
                             onClick={markAllRead}
-                            style={{ background: 'none', border: 'none', color: '#fff', fontSize: 12, cursor: 'pointer' }}
+                            style={{ background: 'none', border: 'none', color: '#5a93ec', fontSize: 12, cursor: 'pointer' }}
                         >
                             Mark all read
                         </button>
@@ -198,7 +198,7 @@ export default function NotificationBell() {
                             textAlign: 'center',
                             fontSize: 12,
                             fontWeight: 600,
-                            color: '#fff',
+                            color: '#5a93ec',
                             textDecoration: 'none',
                             borderTop: '1px solid var(--line-soft, rgba(255,255,255,0.08))',
                         }}
