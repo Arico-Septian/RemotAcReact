@@ -144,6 +144,16 @@ function GaugeCard({ label, state }: { label: string; state: State }) {
     );
 }
 
+function trendChartColors() {
+    const light = document.documentElement.getAttribute('data-theme') === 'light';
+    return {
+        legend: light ? '#1e293b' : '#94a3b8',
+        tickX: light ? '#475569' : '#64748b',
+        tickY: light ? '#475569' : '#94a3b8',
+        grid: light ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,0.05)',
+    };
+}
+
 function CpuTrendChart({ history }: { history: Point[] }) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const chartRef = useRef<any>(null);
@@ -151,6 +161,7 @@ function CpuTrendChart({ history }: { history: Point[] }) {
     useEffect(() => {
         const Chart = window.Chart;
         if (!canvasRef.current || !Chart) return;
+        const c = trendChartColors();
 
         const ds = (label: string, color: string) => ({
             label,
@@ -182,7 +193,7 @@ function CpuTrendChart({ history }: { history: Point[] }) {
                 animation: { duration: 250 },
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: { display: true, labels: { color: '#94a3b8', usePointStyle: true, pointStyle: 'circle', boxWidth: 8, padding: 16 } },
+                    legend: { display: true, labels: { color: c.legend, usePointStyle: true, pointStyle: 'circle', boxWidth: 8, padding: 16 } },
                     tooltip: {
                         displayColors: true,
                         backgroundColor: 'rgba(22,26,36,0.97)',
@@ -194,19 +205,32 @@ function CpuTrendChart({ history }: { history: Point[] }) {
                     },
                 },
                 scales: {
-                    x: { ticks: { color: '#64748b', font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { display: false }, border: { display: false } },
+                    x: { ticks: { color: c.tickX, font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { display: false }, border: { display: false } },
                     y: {
                         min: 0,
                         max: 90,
-                        ticks: { color: '#94a3b8', font: { size: 10 }, padding: 8, callback: (v: any) => `${v}°` },
-                        grid: { color: 'rgba(255,255,255,0.05)', drawTicks: false },
+                        ticks: { color: c.tickY, font: { size: 10 }, padding: 8, callback: (v: any) => `${v}°` },
+                        grid: { color: c.grid, drawTicks: false },
                         border: { display: false },
                     },
                 },
             },
         });
 
+        const observer = new MutationObserver(() => {
+            const ch = chartRef.current;
+            if (!ch) return;
+            const colors = trendChartColors();
+            ch.options.plugins.legend.labels.color = colors.legend;
+            ch.options.scales.x.ticks.color = colors.tickX;
+            ch.options.scales.y.ticks.color = colors.tickY;
+            ch.options.scales.y.grid.color = colors.grid;
+            ch.update('none');
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
         return () => {
+            observer.disconnect();
             chartRef.current?.destroy();
             chartRef.current = null;
         };
