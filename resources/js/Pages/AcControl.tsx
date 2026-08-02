@@ -304,7 +304,7 @@ export default function AcControl({ room, acs: initialAcs }: AcControlProps) {
             subtitle="AC control panel"
             hideHeaderUser
             headerActions={
-                <span className={`pill ${espOnline ? 'pill-online' : 'pill-error'}`} style={{ justifyContent: 'center', background: 'transparent', border: 'none', boxShadow: 'none', padding: 0, fontSize: 12 }}>
+                <span className={`pill ${espOnline ? 'pill-online' : 'pill-offline'}`} style={{ justifyContent: 'center', background: 'transparent', border: 'none', boxShadow: 'none', padding: 0, fontSize: 12 }}>
                     <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: '0.02em', marginRight: 5 }}>ESP</span>
                     <span style={{ fontSize: 12, fontWeight: 600 }}>{espOnline ? 'Online' : 'Offline'}</span>
                 </span>
