@@ -3,6 +3,7 @@ import { router, usePage } from '@inertiajs/react';
 import type { PageProps } from '@/types';
 import NotificationBell from '@/Components/NotificationBell';
 import ToastContainer from '@/Components/Toast';
+import { applyTheme, getStoredTheme, type Theme } from '@/theme';
 import '../../css/sidebar.css';
 
 interface AppLayoutProps {
@@ -30,6 +31,13 @@ export default function AppLayout({
     const user = auth.user;
     const path = typeof window !== 'undefined' ? window.location.pathname : (url ?? '');
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [theme, setTheme] = useState<Theme>(() => getStoredTheme());
+
+    const toggleTheme = () => {
+        const next: Theme = theme === 'dark' ? 'light' : 'dark';
+        setTheme(next);
+        applyTheme(next);
+    };
 
     const role = user?.role ?? 'user';
     const isAdminOp = role === 'admin' || role === 'operator';
@@ -151,6 +159,15 @@ export default function AppLayout({
                         </div>
                         <div className="flex items-center gap-2">
                             {headerActions}
+                            <button
+                                type="button"
+                                className="btn-icon theme-toggle-btn"
+                                onClick={toggleTheme}
+                                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                                aria-label="Toggle light/dark mode"
+                            >
+                                <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                            </button>
                             {!hideHeaderUser && <NotificationBell />}
                             {!hideHeaderUser && user && (
                                 <a
