@@ -2663,7 +2663,7 @@ body { min-height: 100vh; }
   position: absolute;
   left: 0; top: 16px; bottom: 16px;
   width: 2px; border-radius: 2px;
-  background: #5a93ec;
+  background: var(--accent, #5a93ec);
 }
 .stat-card .stat-label {
   font-size: 11px; color: var(--ink-3);
@@ -2683,9 +2683,9 @@ body { min-height: 100vh; }
   border-radius: 11px;
   display: inline-flex; align-items: center; justify-content: center;
   font-size: 15px;
-  background: #0a0a0c;
-  color: #5a93ec;
-  border: 1.6px solid rgba(90, 147, 236, 0.7);
+  background: var(--icon-bg, #0a0a0c);
+  color: var(--icon-color, #5a93ec);
+  border: 1.6px solid var(--icon-color, rgba(90, 147, 236, 0.7));
   box-sizing: border-box;
 }
 
@@ -2696,6 +2696,14 @@ body { min-height: 100vh; }
 .acc-amber    { --accent: var(--amber);    --icon-bg: var(--amber-soft);    --icon-color: var(--amber); }
 .acc-coral    { --accent: var(--coral);    --icon-bg: var(--coral-soft);    --icon-color: var(--coral); }
 .acc-slate    { --accent: var(--ink-3);    --icon-bg: rgba(255,255,255,.06);--icon-color: var(--ink-2); }
+
+/* Warna accent di atas dituning untuk kontras di background gelap — terlalu pucat
+   di atas putih, jadi mode terang pakai shade yang lebih gelap/pekat. */
+:root[data-theme="light"] .acc-cyan     { --accent: #0e7490; --icon-color: #0e7490; }
+:root[data-theme="light"] .acc-mint     { --accent: #047857; --icon-color: #047857; }
+:root[data-theme="light"] .acc-lavender { --accent: #6d28d9; --icon-color: #6d28d9; }
+:root[data-theme="light"] .acc-amber    { --accent: #b45309; --icon-color: #b45309; }
+:root[data-theme="light"] .acc-coral    { --accent: #be123c; --icon-color: #be123c; }
 
 /* =============================================================
    BUTTONS
