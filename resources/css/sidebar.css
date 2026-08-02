@@ -1028,6 +1028,33 @@
         color: #1d4ed8 !important;
     }
 
+    /* Badge "Online"/"Offline" di daftar Server Rooms — warna pucat pudar di atas putih */
+    :root[data-theme="light"] .dashboard-room-status.online {
+        background: rgba(16, 185, 129, 0.12) !important;
+        color: #047857 !important;
+    }
+
+    :root[data-theme="light"] .dashboard-room-status.offline {
+        background: rgba(244, 63, 94, 0.12) !important;
+        color: #be123c !important;
+    }
+
+    /* Badge "Online"/"Offline" di halaman Room Status & Manage Rooms — teks putih/abu-abu
+       tidak kelihatan di atas background pucat waktu mode terang */
+    :root[data-theme="light"] .pill-online,
+    :root[data-theme="light"] .room-status-pill.pill-online {
+        background: rgba(16, 185, 129, 0.12) !important;
+        color: #047857 !important;
+        border-color: rgba(16, 185, 129, 0.30) !important;
+    }
+
+    :root[data-theme="light"] .pill-offline,
+    :root[data-theme="light"] .room-status-pill.pill-offline {
+        background: rgba(15, 23, 42, 0.06) !important;
+        color: #334155 !important;
+        border-color: rgba(15, 23, 42, 0.16) !important;
+    }
+
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
        --icon-bg/--icon-color/--accent (di-set per .acc-* class), termasuk override
        mode terangnya — tidak perlu diulang di sini. */
