@@ -10,6 +10,19 @@
             --coral: #fb7185;
             --coral-rgb: 251 113 133;
             --amber: #fbbf24;
+            --r-sm: 8px;
+            --r-md: 10px;
+            --r-lg: 12px;
+            --r-xl: 16px;
+            --r-2xl: 20px;
+            --r-3xl: 28px;
+        }
+
+        /* Login selalu gelap — abaikan data-theme (light/dark) global.
+           Variabel di-set di body (bukan :root) supaya menang atas
+           :root[data-theme="light"] tanpa perlu !important, karena
+           deklarasi lokal pada elemen selalu mengalahkan warisan. */
+        body {
             --ink-0: #ffffff;
             --ink-1: #ffffff;
             --ink-2: #ffffff;
@@ -17,12 +30,6 @@
             --ink-4: #ffffff;
             --line: rgba(255, 255, 255, .08);
             --line-soft: rgba(255, 255, 255, .05);
-            --r-sm: 8px;
-            --r-md: 10px;
-            --r-lg: 12px;
-            --r-xl: 16px;
-            --r-2xl: 20px;
-            --r-3xl: 28px;
         }
         *::before,
         *::after {
