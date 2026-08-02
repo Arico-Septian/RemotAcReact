@@ -172,11 +172,11 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(90, 147, 236, 0.12);
+            border: 1.6px solid rgba(90, 147, 236, 0.7);
             border-radius: 10px;
             box-sizing: border-box;
-            color: #ffffff;
+            color: #5a93ec;
             font-size: 18px;
         }
 

@@ -1020,10 +1020,11 @@
         color: #0f172a !important;
     }
 
-    /* Ikon judul panel "Recent Activity" — biru, border putih tidak kelihatan di terang */
+    /* Ikon judul panel "Recent Activity" — samakan persis gaya .stat-icon mode terang */
     :root[data-theme="light"] .activity-title-icon {
-        border-color: rgba(90, 147, 236, 0.45) !important;
-        color: #5a93ec !important;
+        background: rgba(29, 78, 216, 0.10) !important;
+        border-color: rgba(29, 78, 216, 0.45) !important;
+        color: #1d4ed8 !important;
     }
 
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
