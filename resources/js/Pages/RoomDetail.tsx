@@ -131,7 +131,7 @@ export default function RoomDetail({ room, acs: initialAcs }: RoomDetailProps) {
     }, []);
 
     return (
-        <AppLayout title={room.name} subtitle="AC status snapshot">
+        <AppLayout title={room.name} subtitle="AC status">
             <Head title={`${room.name} — AC Status`} />
 
             {acs.length > 0 ? (
