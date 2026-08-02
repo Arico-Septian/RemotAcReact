@@ -214,7 +214,7 @@ export default function Profile({ profileUser }: ProfileProps) {
                 <div style={{ position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(7,16,31,0.72)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }} onClick={(e) => e.target === e.currentTarget && setPreview(null)}>
                     <div style={{ maxWidth: 360, width: '100%', background: 'var(--panel-1)', border: '1px solid var(--line)', borderRadius: 20, padding: 22 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-                            <span style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(59,111,212,0.15)', border: '1px solid rgba(59,111,212,0.30)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#6ea8ff' }}>
+                            <span style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(90,147,236,0.15)', border: '1px solid rgba(90,147,236,0.40)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#5a93ec' }}>
                                 <i className="fa-solid fa-camera"></i>
                             </span>
                             <div>
@@ -245,7 +245,7 @@ export default function Profile({ profileUser }: ProfileProps) {
                             {avatarUrl ? (
                                 <img src={avatarUrl} alt={profileUser.name} style={{ width: 200, height: 200, borderRadius: 20, objectFit: 'cover', border: '1px solid var(--line)' }} />
                             ) : (
-                                <div style={{ width: 200, height: 200, borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 72, fontWeight: 800, color: '#fff', background: 'var(--panel-3)' }}>{initial}</div>
+                                <div style={{ width: 200, height: 200, borderRadius: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 72, fontWeight: 800, color: '#fff', background: 'linear-gradient(135deg, #5a93ec, #335fc2)' }}>{initial}</div>
                             )}
                         </div>
                         <p style={{ margin: '0 0 16px', fontSize: 16, fontWeight: 700, color: 'var(--ink-0)' }}>{profileUser.name}</p>

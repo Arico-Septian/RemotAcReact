@@ -143,7 +143,7 @@
             font-size: 40px;
             font-weight: 800;
             color: #fff;
-            background: var(--panel-3);
+            background: linear-gradient(135deg, #5a93ec, #335fc2);
             box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.5);
         }
 
