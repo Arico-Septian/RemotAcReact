@@ -40,6 +40,16 @@
         backdrop-filter: none !important;
     }
 
+    /* Sidebar sudah solid opaque di kedua tema — blur di belakangnya tidak
+       pernah kelihatan tapi tetap dihitung ulang browser tiap konten di
+       belakangnya berubah (terasa "kedip"/lag saat ganti tema di halaman
+       dengan tabel panjang: Manage Room, User, Log). Matikan saja. */
+    .app-sidebar,
+    .sidebar {
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
     /* ac-panel adalah wrapper — harus transparan */
     .ac-panel {
         background: transparent !important;
