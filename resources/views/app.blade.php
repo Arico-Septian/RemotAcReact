@@ -19,7 +19,7 @@
             }
         })();
     </script>
-    <link href="/css/app.css" rel="stylesheet">
+    <link href="/css/app.css?v={{ file_exists(public_path('css/app.css')) ? filemtime(public_path('css/app.css')) : 1 }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="/js/chart.umd.js"></script>
     @viteReactRefresh
