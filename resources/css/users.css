@@ -34,22 +34,64 @@
             box-shadow: none;
         }
 
+        /* Role dropdown — custom (bukan native <select>) supaya konsisten
+           di kedua tema; opsi native <select> tidak bisa diwarnai penuh
+           lintas browser. */
+        .role-select {
+            position: relative;
+        }
+
+        .role-select-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .role-select-btn i {
+            font-size: 11px;
+            color: var(--ink-3);
+            flex-shrink: 0;
+        }
+
+        .role-select-list {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+            z-index: 50;
+            overflow: hidden;
+        }
+
+        .role-select-option {
+            padding: 10px 14px;
+            font-size: 13.5px;
+            color: var(--ink-0);
+            cursor: pointer;
+            transition: background .12s;
+        }
+
+        .role-select-option:hover {
+            background: var(--panel-3);
+        }
+
+        .role-select-option.active {
+            background: rgba(90, 147, 236, 0.15);
+            color: #5a93ec;
+            font-weight: 600;
+        }
+
         /* All Add User fields — white focus border (consistent with login) */
         #addUserForm .input:focus,
         #addUserForm .select:focus {
             border-color: #ffffff;
             box-shadow: none;
-        }
-
-        /* Role dropdown options — black instead of navy */
-        #addUserForm .select option {
-            background-color: #0a0a0c;
-            color: #ffffff;
-        }
-
-        #addUserForm .select option:checked {
-            background: linear-gradient(#0a0a0c, #0a0a0c);
-            color: #ffffff;
         }
 
         /* Delete user — solid dark red box, white icon */

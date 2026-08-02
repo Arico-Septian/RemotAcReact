@@ -59,7 +59,9 @@ export default function Users({ users, stats: initialStats, filters, pagination 
     const [showPw, setShowPw] = useState(false);
     const [deletingId, setDeletingId] = useState<number | null>(null);
     const [confirmUser, setConfirmUser] = useState<ManagedUser | null>(null);
+    const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
     const searchTimer = useRef<number | null>(null);
+    const roleDropdownRef = useRef<HTMLDivElement>(null);
 
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         name: '',
@@ -117,9 +119,19 @@ export default function Users({ users, stats: initialStats, filters, pagination 
         };
     }, []);
 
+    // Tutup dropdown role saat klik di luar
+    useEffect(() => {
+        const onClickOutside = (e: MouseEvent) => {
+            if (roleDropdownRef.current && !roleDropdownRef.current.contains(e.target as Node)) setRoleDropdownOpen(false);
+        };
+        document.addEventListener('mousedown', onClickOutside);
+        return () => document.removeEventListener('mousedown', onClickOutside);
+    }, []);
+
     const closeModal = () => {
         setModalOpen(false);
         setShowPw(false);
+        setRoleDropdownOpen(false);
         reset();
         clearErrors();
     };
@@ -323,11 +335,31 @@ export default function Users({ users, stats: initialStats, filters, pagination 
                                 </div>
                                 <div className="field">
                                     <label className="field-label">Role</label>
-                                    <select className="input select" aria-label="User role" title="User role" value={data.role} onChange={(e) => setData('role', e.target.value as RoleFilter)}>
-                                        <option value="admin">Admin</option>
-                                        <option value="operator">Operator</option>
-                                        <option value="user">User</option>
-                                    </select>
+                                    <div className="role-select" ref={roleDropdownRef}>
+                                        <button
+                                            type="button"
+                                            className="input select role-select-btn"
+                                            aria-label="User role"
+                                            title="User role"
+                                            onClick={() => setRoleDropdownOpen((v) => !v)}
+                                        >
+                                            <span style={{ textTransform: 'capitalize' }}>{data.role}</span>
+                                            <i className="fa-solid fa-chevron-down"></i>
+                                        </button>
+                                        {roleDropdownOpen && (
+                                            <div className="role-select-list">
+                                                {(['admin', 'operator', 'user'] as const).map((r) => (
+                                                    <div
+                                                        key={r}
+                                                        className={`role-select-option ${data.role === r ? 'active' : ''}`}
+                                                        onClick={() => { setData('role', r); setRoleDropdownOpen(false); }}
+                                                    >
+                                                        {r.charAt(0).toUpperCase() + r.slice(1)}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                             <div className="modal-footer">
