@@ -929,7 +929,7 @@
     :root[data-theme="light"] .nav-section-label,
     :root[data-theme="light"] .nav-link i,
     :root[data-theme="light"] #espStatusPill.pill-online {
-        color: #334155 !important;
+        color: #000000 !important;
     }
 
     :root[data-theme="light"] .nav-link:hover {
