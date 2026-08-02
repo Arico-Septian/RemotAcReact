@@ -918,8 +918,7 @@
     :root[data-theme="light"] .step-btn,
     :root[data-theme="light"] .reset-btn,
     :root[data-theme="light"] .days-input-wrap,
-    :root[data-theme="light"] .setting-input-wrap,
-    :root[data-theme="light"] .theme-switch {
+    :root[data-theme="light"] .setting-input-wrap {
         background: rgba(15, 23, 42, 0.03) !important;
         border-color: rgba(15, 23, 42, 0.14) !important;
         color: #0f172a !important;

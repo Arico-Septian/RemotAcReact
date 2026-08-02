@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import type { PageProps } from '@/types';
-import { applyTheme, getStoredTheme, type Theme } from '@/theme';
 import '../../css/settings.css';
 
 interface Setting {
@@ -36,14 +35,6 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
     );
 
     const { data, setData, put, processing, errors } = useForm<Record<string, string>>(initialData);
-
-    const [theme, setTheme] = useState<Theme>(() => getStoredTheme());
-
-    const toggleTheme = () => {
-        const next: Theme = theme === 'dark' ? 'light' : 'dark';
-        setTheme(next);
-        applyTheme(next);
-    };
 
     useEffect(() => {
         if (! flash.success) {
@@ -159,46 +150,6 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
 
             <form className="settings-form" onSubmit={(e) => e.preventDefault()}>
                 <div className="settings-grid">
-                    <div className="settings-panel settings-panel--column">
-                        <div className="settings-head settings-head--compact">
-                            <div>
-                                <p className="settings-eyebrow"><i className="fa-solid fa-palette"></i> Appearance</p>
-                                <h2>Theme</h2>
-                            </div>
-                        </div>
-
-                        <section className="settings-section">
-                            <div className="settings-list">
-                                <div className="retention-row">
-                                    <div className="retention-main">
-                                        <span className="retention-icon">
-                                            <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
-                                        </span>
-                                        <div>
-                                            <p className="retention-title">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</p>
-                                            <p className="retention-desc">Ganti tampilan aplikasi antara mode terang dan gelap.</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="retention-control">
-                                        <button
-                                            type="button"
-                                            className={`theme-switch${theme === 'light' ? ' theme-switch--light' : ''}`}
-                                            role="switch"
-                                            aria-checked={theme === 'light'}
-                                            aria-label="Toggle light/dark mode"
-                                            onClick={toggleTheme}
-                                        >
-                                            <span className="theme-switch-thumb">
-                                                <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
-                                            </span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
                     <div className="settings-panel settings-panel--column">
                         <div className="settings-head settings-head--compact">
                             <div>
