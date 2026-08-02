@@ -157,7 +157,7 @@ export default function NotificationBell() {
                         </button>
                     </div>
 
-                    <div style={{ maxHeight: 360, overflowY: 'auto' }}>
+                    <div className="notif-list" style={{ maxHeight: 360, overflowY: 'auto' }}>
                         {items.length === 0 ? (
                             <div style={{ padding: 24, textAlign: 'center', color: 'var(--ink-4, #64748b)', fontSize: 13 }}>
                                 No notifications
