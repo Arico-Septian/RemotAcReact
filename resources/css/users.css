@@ -73,8 +73,8 @@
         }
 
         .role-select-option.active {
-            background: rgba(90, 147, 236, 0.15);
-            color: #5a93ec;
+            background: var(--panel-3);
+            color: var(--ink-0);
             font-weight: 600;
         }
 
