@@ -97,7 +97,7 @@ class AppSetting extends Model
                 'label' => 'MQTT Host',
                 'description' => 'Hostname atau alamat IP broker MQTT.',
                 'default' => 'broker.hivemq.com',
-                'type' => 'text',
+                'type' => 'password',
                 'rules' => ['required', 'string', 'max:255'],
             ],
             self::MQTT_PORT => [

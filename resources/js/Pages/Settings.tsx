@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import AppLayout from '@/Layouts/AppLayout';
 import type { PageProps } from '@/types';
@@ -35,6 +35,14 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
     );
 
     const { data, setData, put, processing, errors } = useForm<Record<string, string>>(initialData);
+    const [revealed, setRevealed] = useState<Set<string>>(new Set());
+    const toggleReveal = (key: string) => {
+        setRevealed((prev) => {
+            const next = new Set(prev);
+            next.has(key) ? next.delete(key) : next.add(key);
+            return next;
+        });
+    };
 
     useEffect(() => {
         if (! flash.success) {
@@ -99,12 +107,23 @@ export default function Settings({ retentionSettings, monitoringSettings, mqttSe
                                 <label className="setting-input-wrap">
                                     <input
                                         className="setting-input"
-                                        type={setting.type === 'password' ? 'password' : 'text'}
+                                        type={setting.type === 'password' && !revealed.has(setting.key) ? 'password' : 'text'}
                                         aria-label={setting.label}
                                         value={data[setting.key] ?? String(setting.value)}
                                         onChange={(e) => setData(setting.key, e.target.value)}
                                         autoComplete="off"
                                     />
+                                    {setting.type === 'password' && (
+                                        <button
+                                            type="button"
+                                            className="setting-eye"
+                                            onClick={() => toggleReveal(setting.key)}
+                                            title="Show/hide"
+                                            aria-label={`Show/hide ${setting.label}`}
+                                        >
+                                            <i className={`fa-solid ${revealed.has(setting.key) ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                                        </button>
+                                    )}
                                 </label>
                             ) : (
                                 <>

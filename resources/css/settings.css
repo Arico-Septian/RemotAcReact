@@ -213,6 +213,24 @@
             font-variant-numeric: tabular-nums;
         }
 
+        .setting-eye {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: var(--ink-3);
+            cursor: pointer;
+            padding: 4px;
+            margin-left: 6px;
+            font-size: 14px;
+        }
+
+        .setting-eye:hover {
+            color: var(--ink-0);
+        }
+
         .setting-input {
             width: 100%;
             min-width: 0;
