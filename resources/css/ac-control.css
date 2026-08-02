@@ -692,6 +692,20 @@
             font-size: 13px;
         }
 
+        :root[data-theme="light"] .timer-card.is-on,
+        :root[data-theme="light"] .timer-card.is-off {
+            background: #ffffff;
+            border-color: rgba(15, 23, 42, 0.10);
+        }
+
+        :root[data-theme="light"] .timer-card.is-on .t-label {
+            color: #047857;
+        }
+
+        :root[data-theme="light"] .timer-card.is-off .t-label {
+            color: #dc2626;
+        }
+
         .timer-empty {
             text-align: center;
             padding: 18px 12px;
