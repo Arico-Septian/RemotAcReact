@@ -328,12 +328,12 @@
         }
 
         .log-room {
-            color: var(--ink-1);
+            color: var(--ink-0);
             font-size: 14px;
         }
 
         .log-detail {
-            color: var(--ink-2);
+            color: var(--ink-0);
             font-size: 14px;
             max-width: 260px;
             white-space: nowrap;
