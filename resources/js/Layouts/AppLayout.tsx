@@ -162,12 +162,16 @@ export default function AppLayout({
                             {!hideHeaderUser && <NotificationBell />}
                             <button
                                 type="button"
-                                className="btn-icon theme-toggle-btn"
+                                className={`theme-toggle-switch${theme === 'light' ? ' theme-toggle-switch--light' : ''}`}
+                                role="switch"
+                                aria-checked={theme === 'light'}
                                 onClick={toggleTheme}
                                 title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                                 aria-label="Toggle light/dark mode"
                             >
-                                <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                                <span className="theme-toggle-switch-thumb">
+                                    <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                                </span>
                             </button>
                             {!hideHeaderUser && user && (
                                 <a
