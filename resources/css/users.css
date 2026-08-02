@@ -223,6 +223,18 @@
             border: none;
         }
 
+        :root[data-theme="light"] .badge-role.admin {
+            color: #7c3aed;
+        }
+
+        :root[data-theme="light"] .badge-role.operator {
+            color: #b45309;
+        }
+
+        :root[data-theme="light"] .badge-role.user {
+            color: #047857;
+        }
+
         .user-avatar-sm {
             width: 34px;
             height: 34px;
