@@ -34,7 +34,9 @@ export default function Login() {
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
-        post('/login');
+        post('/login', {
+            onSuccess: () => window.location.reload(),
+        });
     };
 
     const firstError = Object.values(errors)[0] as string | undefined;

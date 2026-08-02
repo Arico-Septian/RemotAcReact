@@ -48,7 +48,7 @@ export default function AppLayout({
         { href: '/raspi-monitor', icon: 'fa-temperature-half', label: 'Server Temperature', match: (p) => p.startsWith('/raspi-monitor') },
     ];
 
-    const logout = () => router.post('/logout');
+    const logout = () => router.post('/logout', {}, { onSuccess: () => window.location.reload() });
 
     const NavLink = ({ item }: { item: NavItem }) => (
         <a href={item.href} className={`nav-link menu-link ${item.match(path) ? 'active' : ''}`}>
