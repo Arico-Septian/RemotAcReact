@@ -990,3 +990,58 @@
     :root[data-theme="light"] .ac-panel .panel:not(.ac-ring-panel) {
         border: 1px solid rgba(15, 23, 42, 0.10) !important;
     }
+
+    /* Dashboard: dropdown "1 Day"/"1 Hour" & tombol "View all" — pill hitam jadi terang */
+    :root[data-theme="light"] .trend-filter,
+    :root[data-theme="light"] .dashboard-rooms-action {
+        background: #f1f4f9 !important;
+        border: 1px solid rgba(15, 23, 42, 0.14) !important;
+        color: #0f172a !important;
+    }
+
+    :root[data-theme="light"] .trend-filter:hover,
+    :root[data-theme="light"] .dashboard-rooms-action:hover {
+        background: #e6eaf2 !important;
+        border-color: rgba(15, 23, 42, 0.24) !important;
+    }
+
+    :root[data-theme="light"] .trend-filter-select {
+        color: #0f172a !important;
+    }
+
+    :root[data-theme="light"] .trend-filter-select option {
+        background: #ffffff !important;
+        color: #0f172a !important;
+    }
+
+    /* Ikon judul panel "Server Rooms" / "Recent Activity" — border putih tidak kelihatan di terang */
+    :root[data-theme="light"] .activity-title-icon {
+        border-color: rgba(15, 23, 42, 0.35) !important;
+        color: #1e293b !important;
+    }
+
+    /* Kotak ikon stat card (Rooms/AC Units/AC Active/AC Idle) — beri warna sesuai accent, bukan hitam */
+    :root[data-theme="light"] .stat-card .stat-icon {
+        border-radius: var(--r-md);
+        background: rgba(15, 23, 42, 0.06) !important;
+    }
+
+    :root[data-theme="light"] .stat-card.acc-cyan .stat-icon {
+        background: rgba(6, 182, 212, 0.14) !important;
+        color: #0e7490 !important;
+    }
+
+    :root[data-theme="light"] .stat-card.acc-mint .stat-icon {
+        background: rgba(16, 185, 129, 0.14) !important;
+        color: #047857 !important;
+    }
+
+    :root[data-theme="light"] .stat-card.acc-lavender .stat-icon {
+        background: rgba(139, 92, 246, 0.14) !important;
+        color: #6d28d9 !important;
+    }
+
+    :root[data-theme="light"] .stat-card.acc-coral .stat-icon {
+        background: rgba(244, 63, 94, 0.14) !important;
+        color: #be123c !important;
+    }
