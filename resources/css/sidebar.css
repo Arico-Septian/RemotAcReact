@@ -1080,6 +1080,12 @@
         color: #000000 !important;
     }
 
+    :root[data-theme="light"] .history-range-select,
+    :root[data-theme="light"] .trend-filter-select {
+        color: #000000 !important;
+        border-color: rgba(15, 23, 42, 0.20) !important;
+    }
+
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
        --icon-bg/--icon-color/--accent (di-set per .acc-* class), termasuk override
        mode terangnya — tidak perlu diulang di sini. */
