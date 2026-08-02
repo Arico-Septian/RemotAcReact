@@ -134,6 +134,20 @@
             --icon-color: #5a93ec;
         }
 
+        :root[data-theme="light"] .ac-card-head__icon {
+            color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        :root[data-theme="light"] .ic-power,
+        :root[data-theme="light"] .ic-temp,
+        :root[data-theme="light"] .ic-mode,
+        :root[data-theme="light"] .ic-fan,
+        :root[data-theme="light"] .ic-swing,
+        :root[data-theme="light"] .ic-timer {
+            --icon-color: #1d4ed8;
+        }
+
         @media (max-width: 768px) {
             .ac-card {
                 padding: 12px;
