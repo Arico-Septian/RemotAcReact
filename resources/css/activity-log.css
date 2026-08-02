@@ -367,6 +367,32 @@
             color: #ffffff !important;
         }
 
+        /* Mode terang: background soft-nya jadi terlalu pucat untuk teks putih,
+           jadi tiap varian dapat warna teks gelap sendiri agar tetap kebaca. */
+        :root[data-theme="light"] .act-mint {
+            color: #047857 !important;
+        }
+
+        :root[data-theme="light"] .act-coral {
+            color: #dc2626 !important;
+        }
+
+        :root[data-theme="light"] .act-amber {
+            color: #b45309 !important;
+        }
+
+        :root[data-theme="light"] .act-lavender {
+            color: #7c3aed !important;
+        }
+
+        :root[data-theme="light"] .act-cyan {
+            color: #1d4ed8 !important;
+        }
+
+        :root[data-theme="light"] .act-slate {
+            color: #334155 !important;
+        }
+
 
         /* Pagination — tombol konsisten, rapi */
         .pager {
