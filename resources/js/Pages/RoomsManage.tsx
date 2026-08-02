@@ -99,7 +99,7 @@ function RoomCard({ room, canManage, onDelete }: RoomCardProps) {
 
             <div className="grid grid-cols-2 gap-2">
                 <div style={{ background: 'var(--panel-1)', border: '1px solid var(--line-soft)', borderRadius: 'var(--r-md)', padding: '8px 6px', textAlign: 'center' }}>
-                    <p className="text-mono text-base font-bold" style={{ color: '#fff', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
+                    <p className="text-mono text-base font-bold" style={{ color: 'var(--ink-0)', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
                         {room.ac_active_count}
                     </p>
                     <p className="label-tag mt-1" style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginTop: 4 }}>
@@ -107,7 +107,7 @@ function RoomCard({ room, canManage, onDelete }: RoomCardProps) {
                     </p>
                 </div>
                 <div style={{ background: 'var(--panel-1)', border: '1px solid var(--line-soft)', borderRadius: 'var(--r-md)', padding: '8px 6px', textAlign: 'center' }}>
-                    <p className="text-mono text-base font-bold" style={{ color: '#fff', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
+                    <p className="text-mono text-base font-bold" style={{ color: 'var(--ink-0)', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
                         {room.ac_idle_count}
                     </p>
                     <p className="label-tag mt-1" style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginTop: 4 }}>
@@ -300,7 +300,7 @@ export default function RoomsManage({ rooms: initialRooms }: RoomsManageProps) {
                     {byFloor.map(([floorName, floorRooms]) => (
                         <section className="floor-section" key={floorName}>
                             <div className="floor-section-header">
-                                <i className="fa-solid fa-layer-group text-[10px]" style={{ color: '#fff' }}></i>
+                                <i className="fa-solid fa-layer-group text-[10px]" style={{ color: 'var(--ink-3)' }}></i>
                                 <span className="floor-label">{cap(floorName)}</span>
                                 <div className="floor-divider"></div>
                                 <span className="floor-count">{floorRooms.length} rooms</span>

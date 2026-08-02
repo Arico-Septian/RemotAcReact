@@ -57,7 +57,7 @@ function RoomCard({ room, onHistory }: RoomCardProps) {
 
             <div className="ac-mini">
                 <div>
-                    <p className="num" style={{ color: '#fff', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
+                    <p className="num" style={{ color: 'var(--ink-0)', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
                         {room.ac_active_count}
                     </p>
                     <p className="lbl" style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginTop: 4 }}>
@@ -65,7 +65,7 @@ function RoomCard({ room, onHistory }: RoomCardProps) {
                     </p>
                 </div>
                 <div>
-                    <p className="num" style={{ color: '#fff', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
+                    <p className="num" style={{ color: 'var(--ink-0)', fontFamily: 'var(--font-mono)', fontSize: 16, fontWeight: 700, lineHeight: 1, margin: 0 }}>
                         {room.ac_idle_count}
                     </p>
                     <p className="lbl" style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--ink-3)', marginTop: 4 }}>
@@ -208,7 +208,7 @@ export default function RoomsOverview({ rooms: initialRooms }: RoomsOverviewProp
                     {byFloor.map(([floorName, floorRooms]) => (
                         <div className="floor-section" key={floorName}>
                             <div className="floor-section-header">
-                                <i className="fa-solid fa-layer-group text-[10px]" style={{ color: '#fff' }}></i>
+                                <i className="fa-solid fa-layer-group text-[10px]" style={{ color: 'var(--ink-3)' }}></i>
                                 <span className="floor-label">{cap(floorName)}</span>
                                 <div className="floor-divider"></div>
                                 <span className="floor-count">{floorRooms.length} rooms</span>
