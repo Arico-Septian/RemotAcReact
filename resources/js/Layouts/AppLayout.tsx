@@ -160,19 +160,21 @@ export default function AppLayout({
                         <div className="flex items-center gap-2">
                             {headerActions}
                             {!hideHeaderUser && <NotificationBell />}
-                            <button
-                                type="button"
-                                className={`theme-toggle-switch${theme === 'light' ? ' theme-toggle-switch--light' : ''}`}
-                                role="switch"
-                                aria-checked={theme === 'light'}
-                                onClick={toggleTheme}
-                                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                                aria-label="Toggle light/dark mode"
-                            >
-                                <span className="theme-toggle-switch-thumb">
-                                    <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
-                                </span>
-                            </button>
+                            {!hideHeaderUser && (
+                                <button
+                                    type="button"
+                                    className={`theme-toggle-switch${theme === 'light' ? ' theme-toggle-switch--light' : ''}`}
+                                    role="switch"
+                                    aria-checked={theme === 'light'}
+                                    onClick={toggleTheme}
+                                    title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                                    aria-label="Toggle light/dark mode"
+                                >
+                                    <span className="theme-toggle-switch-thumb">
+                                        <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
+                                    </span>
+                                </button>
+                            )}
                             {!hideHeaderUser && user && (
                                 <a
                                     href="/profile"

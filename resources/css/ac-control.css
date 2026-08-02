@@ -199,12 +199,12 @@
 
         .temp-ring.ring-off .ring-label,
         .temp-ring.ring-off .ring-summary {
-            color: var(--ink-4);
+            color: rgba(255, 255, 255, 0.35);
         }
 
         .temp-ring.ring-off .temp-value,
         .temp-ring.ring-off .unit {
-            color: var(--ink-3);
+            color: rgba(255, 255, 255, 0.45);
         }
 
         /* #1 Responsive temperature ring */
@@ -248,7 +248,7 @@
             font-size: 10px;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: var(--ink-3);
+            color: rgba(255, 255, 255, 0.55);
             font-weight: 700;
             margin: 0;
         }
@@ -257,7 +257,7 @@
             font-family: var(--font-sans);
             font-size: 64px;
             font-weight: 700;
-            color: var(--ink-0);
+            color: #ffffff;
             letter-spacing: -0.04em;
             line-height: 1;
             display: inline-flex;
@@ -266,7 +266,7 @@
 
         .ring-temp .unit {
             font-size: 18px;
-            color: var(--ink-2);
+            color: rgba(255, 255, 255, 0.65);
             margin-left: 2px;
             margin-top: 6px;
             font-weight: 600;
@@ -274,7 +274,7 @@
 
         .ring-summary {
             font-size: 12px;
-            color: var(--ink-2);
+            color: rgba(255, 255, 255, 0.7);
             margin: 2px 0 0;
             letter-spacing: 0.02em;
         }
