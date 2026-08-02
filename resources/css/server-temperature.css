@@ -45,15 +45,15 @@
 
         .raspi-label {
             font-size: 12px;
-            color: var(--ink-3);
+            color: var(--ink-0);
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .raspi-status {
             font-size: 12px;
-            color: var(--ink-3);
+            color: var(--ink-1);
             margin-top: 4px;
         }
 

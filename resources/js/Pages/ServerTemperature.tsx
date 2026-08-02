@@ -121,9 +121,9 @@ function Gauge({ value }: { value: number | null }) {
             >
                 <div style={{ fontSize: 44, fontWeight: 800, lineHeight: 1, color, letterSpacing: '-0.02em' }}>
                     {value === null ? '--' : fmtTemp(value)}
-                    <span style={{ fontSize: 18, fontWeight: 700, marginLeft: 2, color: 'var(--ink-3)' }}>°C</span>
+                    <span style={{ fontSize: 18, fontWeight: 700, marginLeft: 2, color: 'var(--ink-1)' }}>°C</span>
                 </div>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 4, letterSpacing: '0.04em' }}>
+                <div style={{ fontSize: 11, color: 'var(--ink-2)', marginTop: 4, letterSpacing: '0.04em' }}>
                     {GAUGE_MIN}° – {GAUGE_MAX}°
                 </div>
             </div>
