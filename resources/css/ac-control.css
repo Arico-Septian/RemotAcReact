@@ -50,7 +50,7 @@
             border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: var(--r-md);
             cursor: pointer;
-            color: var(--ink-0);
+            color: #ffffff;
             font-size: 13px;
             font-weight: 600;
             transition: var(--t-base);
@@ -64,7 +64,7 @@
         }
 
         .selector i {
-            color: var(--ink-3);
+            color: rgba(255, 255, 255, 0.55);
             font-size: 10px;
         }
 
@@ -94,7 +94,7 @@
         #dropdownAC>div {
             padding: 10px 14px;
             font-size: 13px;
-            color: var(--ink-1);
+            color: rgba(255, 255, 255, 0.85);
             cursor: pointer;
             transition: var(--t-fast);
             display: flex;
@@ -108,7 +108,7 @@
         }
 
         #dropdownAC>div .num {
-            color: var(--ink-3);
+            color: rgba(255, 255, 255, 0.5);
             font-family: var(--font-mono);
             font-size: 11px;
         }
