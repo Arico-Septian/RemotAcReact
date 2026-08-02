@@ -32,7 +32,7 @@
             align-items: center;
             gap: 8px;
             margin: 0 0 7px;
-            color: #7dd3fc;
+            color: #5a93ec;
             font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.12em;
@@ -122,9 +122,9 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            color: #6ea8ff;
-            background: rgba(110, 168, 255, 0.08);
-            border: 1px solid rgba(110, 168, 255, 0.16);
+            color: #5a93ec;
+            background: rgba(90, 147, 236, 0.12);
+            border: 1.6px solid rgba(90, 147, 236, 0.7);
         }
 
         .retention-title {
