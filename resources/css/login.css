@@ -18,19 +18,6 @@
             --r-3xl: 28px;
         }
 
-        /* Login selalu gelap — abaikan data-theme (light/dark) global.
-           Variabel di-set di body (bukan :root) supaya menang atas
-           :root[data-theme="light"] tanpa perlu !important, karena
-           deklarasi lokal pada elemen selalu mengalahkan warisan. */
-        body {
-            --ink-0: #ffffff;
-            --ink-1: #ffffff;
-            --ink-2: #ffffff;
-            --ink-3: #ffffff;
-            --ink-4: #ffffff;
-            --line: rgba(255, 255, 255, .08);
-            --line-soft: rgba(255, 255, 255, .05);
-        }
         *::before,
         *::after {
             box-sizing: border-box;
@@ -57,6 +44,32 @@
                     rgba(4, 7, 20, .86) 100%),
                 url('/images/wallpaper.jpeg') center/cover no-repeat fixed;
             background-blend-mode: multiply;
+        }
+
+        /* Login selalu gelap — abaikan data-theme (light/dark) global.
+           Di-scope ke .page (elemen React Login sendiri), BUKAN body/html,
+           karena Inertia tidak me-reload <body> antar halaman — variabel
+           yang di-set di body akan "bocor" dan menetap saat pindah ke
+           halaman lain setelah login/logout. .page ikut ter-unmount saat
+           pindah halaman, jadi override-nya otomatis hilang juga. */
+        .page {
+            --ink-0: #ffffff;
+            --ink-1: #ffffff;
+            --ink-2: #ffffff;
+            --ink-3: #ffffff;
+            --ink-4: #ffffff;
+            --line: rgba(255, 255, 255, .08);
+            --line-soft: rgba(255, 255, 255, .05);
+            background:
+                radial-gradient(800px 400px at 50% -20%, rgba(78, 215, 255, .08), transparent 60%),
+                radial-gradient(600px 350px at 85% 110%, rgba(139, 162, 255, .04), transparent 65%),
+                linear-gradient(135deg,
+                    rgba(4, 7, 16, .86) 0%, rgba(6, 11, 28, .84) 25%,
+                    rgba(7, 14, 34, .83) 50%, rgba(5, 10, 26, .84) 75%,
+                    rgba(4, 7, 20, .86) 100%),
+                url('/images/wallpaper.jpeg') center/cover no-repeat fixed !important;
+            background-blend-mode: multiply;
+            color: var(--ink-0);
         }
 
         /* ── Layout ── */
