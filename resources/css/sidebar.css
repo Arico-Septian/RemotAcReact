@@ -1055,9 +1055,11 @@
         color: #64748b !important;
     }
 
-    /* Filter "All/Online/Offline" — pilihan yang aktif teksnya hitam pekat di mode terang */
+    /* Filter "All/Online/Offline" — kotak pilihan yang aktif jadi hitam, teks putih */
     :root[data-theme="light"] .segmented .seg.active {
-        color: #000000 !important;
+        background: #000000 !important;
+        color: #ffffff !important;
+        box-shadow: none !important;
     }
 
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
