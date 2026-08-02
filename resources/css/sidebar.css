@@ -959,7 +959,7 @@
     }
 
     :root[data-theme="light"] .sidebar-footer {
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.02) 0%, rgba(15, 23, 42, 0.05) 100%) !important;
+        background: transparent !important;
         border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
     }
 
