@@ -199,6 +199,16 @@
         }
     }
 
+    /* Sembunyikan scrollbar list notifikasi (tetap bisa di-scroll) */
+    .notif-list {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .notif-list::-webkit-scrollbar {
+        display: none;
+    }
+
     /* Sidebar — hitam solid */
     .app-sidebar,
     .sidebar {
