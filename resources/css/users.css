@@ -247,8 +247,9 @@
             align-items: center;
             gap: 8px;
             font-size: 12px;
+            font-weight: 600;
             line-height: 1;
-            color: var(--ink-2);
+            color: var(--ink-0);
             justify-content: center;
             vertical-align: middle;
         }
