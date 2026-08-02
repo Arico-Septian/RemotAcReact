@@ -297,8 +297,8 @@ export default function ServerTemperature() {
                             <i className="fa-solid fa-chart-line" style={{ marginRight: 6 }}></i>
                             Tren Suhu CPU (real-time)
                         </p>
-                        <span style={{ fontSize: 11, color: 'var(--ink-4)' }}>
-                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink-0)' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                                 <i style={{ width: 16, height: 3, borderRadius: 2, background: '#22d3ee', display: 'inline-block' }}></i> ≤55° normal
                                 <i style={{ width: 16, height: 3, borderRadius: 2, background: '#fbbf24', display: 'inline-block', marginLeft: 10 }}></i> 55–70° hangat
                                 <i style={{ width: 16, height: 3, borderRadius: 2, background: '#fb7185', display: 'inline-block', marginLeft: 10 }}></i> &gt;70° panas
