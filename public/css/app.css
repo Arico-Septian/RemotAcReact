@@ -2661,7 +2661,7 @@ body { min-height: 100vh; }
 .stat-card:hover {}
 .stat-card .accent-bar {
   position: absolute;
-  left: 0; top: 8px; bottom: 8px;
+  left: 0; top: 0; bottom: 0;
   width: 10px; border-radius: 4px;
   background: var(--accent, #5a93ec);
 }
