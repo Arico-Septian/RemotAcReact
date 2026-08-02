@@ -1039,20 +1039,20 @@
         color: #be123c !important;
     }
 
-    /* Badge "Online"/"Offline" di halaman Room Status & Manage Rooms — teks putih/abu-abu
-       tidak kelihatan di atas background pucat waktu mode terang */
+    /* Status "Online"/"Offline" di halaman Room Status & Manage Rooms — teks polos saja,
+       tanpa kotak/pill: hijau saat online, abu-abu saat offline. */
     :root[data-theme="light"] .pill-online,
     :root[data-theme="light"] .room-status-pill.pill-online {
-        background: rgba(16, 185, 129, 0.12) !important;
+        background: transparent !important;
+        border-color: transparent !important;
         color: #047857 !important;
-        border-color: rgba(16, 185, 129, 0.30) !important;
     }
 
     :root[data-theme="light"] .pill-offline,
     :root[data-theme="light"] .room-status-pill.pill-offline {
-        background: rgba(15, 23, 42, 0.06) !important;
-        color: #334155 !important;
-        border-color: rgba(15, 23, 42, 0.16) !important;
+        background: transparent !important;
+        border-color: transparent !important;
+        color: #64748b !important;
     }
 
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
