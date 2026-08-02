@@ -109,9 +109,9 @@
         }
 
         .ac-card .ac-stat.timer-empty .value {
-            color: var(--ink-3);
-            font-weight: 500;
-            letter-spacing: 0;
+            color: var(--ink-0);
+            font-weight: 700;
+            letter-spacing: .02em;
         }
 
         .ac-card .ac-stat .timer-times {
