@@ -98,7 +98,7 @@
 
         .tbl-toolbar .segmented .seg.active {
             background: #ffffff;
-            color: #111827;
+            color: #000000;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
         }
 
@@ -558,7 +558,7 @@
             border-radius: var(--r-md);
             font-size: 13px;
             font-weight: 600;
-            color: var(--ink-2);
+            color: var(--ink-0);
             background: var(--panel-2);
             border: 1px solid var(--line-soft);
             text-decoration: none;

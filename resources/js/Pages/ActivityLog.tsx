@@ -191,7 +191,7 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
                                                     <span className="truncate" style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink-0)' }}>{log.user_name}</span>
                                                     <span className={`act-badge ${log.badge_class}`} style={{ flexShrink: 0 }}>{log.badge_label}</span>
                                                 </div>
-                                                <span className="text-mono" style={{ fontSize: 12, color: 'var(--ink-2)', whiteSpace: 'nowrap', flexShrink: 0, fontWeight: 600 }}>{log.time}</span>
+                                                <span className="text-mono" style={{ fontSize: 12, color: 'var(--ink-0)', whiteSpace: 'nowrap', flexShrink: 0, fontWeight: 600 }}>{log.time}</span>
                                             </div>
                                             <div className="flex items-center justify-between gap-2" style={{ marginTop: 5 }}>
                                                 <span className="truncate" style={{ fontSize: 12, color: 'var(--ink-3)' }}>{roomAc || '—'}</span>
