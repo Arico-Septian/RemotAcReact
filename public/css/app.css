@@ -2689,21 +2689,31 @@ body { min-height: 100vh; }
   box-sizing: border-box;
 }
 
-/* Accent presets for stat-cards (apply via class) */
-.acc-cyan     { --accent: var(--cyan);     --icon-bg: var(--cyan-soft);     --icon-color: var(--cyan); }
-.acc-mint     { --accent: var(--mint);     --icon-bg: var(--mint-soft);     --icon-color: var(--mint); }
-.acc-lavender { --accent: var(--lavender); --icon-bg: var(--lavender-soft); --icon-color: var(--lavender); }
-.acc-amber    { --accent: var(--amber);    --icon-bg: var(--amber-soft);    --icon-color: var(--amber); }
-.acc-coral    { --accent: var(--coral);    --icon-bg: var(--coral-soft);    --icon-color: var(--coral); }
-.acc-slate    { --accent: var(--ink-3);    --icon-bg: rgba(255,255,255,.06);--icon-color: var(--ink-2); }
+/* Accent presets for stat-cards (apply via class) — satu warna biru seragam
+   untuk semua kategori (bukan beda-beda per accent). */
+.acc-cyan,
+.acc-mint,
+.acc-lavender,
+.acc-amber,
+.acc-coral,
+.acc-slate {
+  --accent: #5a93ec;
+  --icon-bg: rgba(90, 147, 236, 0.12);
+  --icon-color: #5a93ec;
+}
 
-/* Warna accent di atas dituning untuk kontras di background gelap — terlalu pucat
+/* Biru di atas dituning untuk kontras di background gelap — terlalu pucat
    di atas putih, jadi mode terang pakai shade yang lebih gelap/pekat. */
-:root[data-theme="light"] .acc-cyan     { --accent: #0e7490; --icon-color: #0e7490; }
-:root[data-theme="light"] .acc-mint     { --accent: #047857; --icon-color: #047857; }
-:root[data-theme="light"] .acc-lavender { --accent: #6d28d9; --icon-color: #6d28d9; }
-:root[data-theme="light"] .acc-amber    { --accent: #b45309; --icon-color: #b45309; }
-:root[data-theme="light"] .acc-coral    { --accent: #be123c; --icon-color: #be123c; }
+:root[data-theme="light"] .acc-cyan,
+:root[data-theme="light"] .acc-mint,
+:root[data-theme="light"] .acc-lavender,
+:root[data-theme="light"] .acc-amber,
+:root[data-theme="light"] .acc-coral,
+:root[data-theme="light"] .acc-slate {
+  --accent: #1d4ed8;
+  --icon-bg: rgba(29, 78, 216, 0.10);
+  --icon-color: #1d4ed8;
+}
 
 /* =============================================================
    BUTTONS
