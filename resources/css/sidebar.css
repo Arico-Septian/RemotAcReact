@@ -50,6 +50,21 @@
         backdrop-filter: none !important;
     }
 
+    /* Transisi halus saat toggle mode terang/gelap — hanya warna, bukan
+       backdrop-filter (mahal, sudah dimatikan di atas). */
+    .app-sidebar,
+    .sidebar,
+    .brand,
+    .nav-link,
+    .nav-link i,
+    .nav-section-label,
+    .sidebar-footer,
+    .logout-btn,
+    .profile-full,
+    #espStatusPill {
+        transition: background-color .25s ease, border-color .25s ease, color .25s ease !important;
+    }
+
     /* ac-panel adalah wrapper — harus transparan */
     .ac-panel {
         background: transparent !important;
