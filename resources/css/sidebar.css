@@ -923,9 +923,15 @@
 
     :root[data-theme="light"] .dashboard-room-row,
     :root[data-theme="light"] .activity-item,
-    :root[data-theme="light"] .ac-card,
-    :root[data-theme="light"] .retention-row {
+    :root[data-theme="light"] .ac-card {
         background: #f8fafc !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    /* Baris setting — putih polos sama seperti header panel di atasnya,
+       biar tidak ada "sambungan" warna yang beda-beda. */
+    :root[data-theme="light"] .retention-row {
+        background: #ffffff !important;
         border: 1px solid rgba(15, 23, 42, 0.08) !important;
     }
 
