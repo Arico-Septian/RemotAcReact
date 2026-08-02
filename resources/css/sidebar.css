@@ -814,3 +814,127 @@
             font-size: 10px !important;
         }
     }
+
+    /* ============================================================
+       LIGHT MODE — diaktifkan lewat [data-theme="light"] di <html>
+       ============================================================ */
+    :root[data-theme="light"] {
+        --bg-1: #eef1f6;
+        --panel-1: #ffffff;
+        --panel-2: #f1f4f9;
+        --panel-3: #e6eaf2;
+        --line-soft: rgba(15, 23, 42, 0.08);
+        --line: rgba(15, 23, 42, 0.14);
+        --ink-0: #0f172a;
+        --ink-1: #1e293b;
+        --ink-2: #334155;
+        --ink-3: #475569;
+        --ink-4: #64748b;
+    }
+
+    :root[data-theme="light"] body {
+        background:
+            linear-gradient(rgba(238, 241, 246, 0.88), rgba(238, 241, 246, 0.88)),
+            url('/images/wallpaper.jpeg') center/cover no-repeat fixed !important;
+    }
+
+    :root[data-theme="light"] .panel,
+    :root[data-theme="light"] .stat-card,
+    :root[data-theme="light"] .card,
+    :root[data-theme="light"] .dashboard-rooms-panel,
+    :root[data-theme="light"] .dashboard-activity-panel,
+    :root[data-theme="light"] .temp-chart-panel,
+    :root[data-theme="light"] .settings-panel {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.09) !important;
+        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06) !important;
+    }
+
+    :root[data-theme="light"] .dashboard-room-row,
+    :root[data-theme="light"] .activity-item,
+    :root[data-theme="light"] .ac-card,
+    :root[data-theme="light"] .retention-row {
+        background: #f8fafc !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    :root[data-theme="light"] .main-header {
+        background: #ffffff !important;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    :root[data-theme="light"] .app-sidebar,
+    :root[data-theme="light"] .sidebar {
+        background: #ffffff !important;
+        border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    :root[data-theme="light"] .brand {
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    :root[data-theme="light"] .nav-section-label,
+    :root[data-theme="light"] .nav-link i,
+    :root[data-theme="light"] #espStatusPill.pill-online {
+        color: #334155 !important;
+    }
+
+    :root[data-theme="light"] .nav-link:hover {
+        background: rgba(51, 95, 194, 0.08) !important;
+        color: #0f172a !important;
+    }
+
+    :root[data-theme="light"] .nav-link.active {
+        background: linear-gradient(90deg, rgba(51, 95, 194, 0.12) 0%, rgba(51, 95, 194, 0.04) 100%) !important;
+    }
+
+    :root[data-theme="light"] .sidebar-footer {
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.02) 0%, rgba(15, 23, 42, 0.05) 100%) !important;
+        border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+    }
+
+    :root[data-theme="light"] #notifBellBtn,
+    :root[data-theme="light"] .main-header .btn-icon {
+        background: rgba(51, 95, 194, 0.06) !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        color: #1e293b !important;
+    }
+
+    :root[data-theme="light"] #notifBellBtn {
+        background: transparent !important;
+        border: none !important;
+        color: #1e293b !important;
+    }
+
+    :root[data-theme="light"] #notifBellBtn i {
+        color: #1e293b !important;
+    }
+
+    :root[data-theme="light"] #notifBadge,
+    :root[data-theme="light"] .notif-badge {
+        border: 2px solid #ffffff !important;
+    }
+
+    :root[data-theme="light"] .step-btn,
+    :root[data-theme="light"] .reset-btn,
+    :root[data-theme="light"] .days-input-wrap,
+    :root[data-theme="light"] .setting-input-wrap,
+    :root[data-theme="light"] .theme-switch {
+        background: rgba(15, 23, 42, 0.03) !important;
+        border-color: rgba(15, 23, 42, 0.14) !important;
+        color: #0f172a !important;
+    }
+
+    :root[data-theme="light"] .days-input,
+    :root[data-theme="light"] .setting-input {
+        color: #0f172a !important;
+    }
+
+    :root[data-theme="light"] .ring-chip {
+        border: 1px solid rgba(15, 23, 42, 0.18) !important;
+        color: #1e293b !important;
+    }
+
+    :root[data-theme="light"] .ac-panel .panel:not(.ac-ring-panel) {
+        border: 1px solid rgba(15, 23, 42, 0.10) !important;
+    }
