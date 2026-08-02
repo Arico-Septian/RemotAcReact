@@ -941,6 +941,12 @@
         background: linear-gradient(90deg, rgba(51, 95, 194, 0.12) 0%, rgba(51, 95, 194, 0.04) 100%) !important;
     }
 
+    /* Halaman yang lagi dibuka: ikon & teks tetap biru (bukan hitam) di mode terang. */
+    :root[data-theme="light"] .nav-link.active i,
+    :root[data-theme="light"] .nav-link.active .menu-text {
+        color: #5a93ec !important;
+    }
+
     :root[data-theme="light"] .sidebar-footer {
         background: linear-gradient(180deg, rgba(15, 23, 42, 0.02) 0%, rgba(15, 23, 42, 0.05) 100%) !important;
         border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
