@@ -378,7 +378,7 @@
         }
 
         :root[data-theme="light"] .act-amber {
-            color: #b45309 !important;
+            color: #000000 !important;
         }
 
         :root[data-theme="light"] .act-lavender {
