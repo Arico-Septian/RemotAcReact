@@ -1062,6 +1062,12 @@
         box-shadow: none !important;
     }
 
+    /* Garis pembatas antar baris di card detail AC (Power/Temp/Mode/dst) — putih transparan
+       tidak kelihatan di atas card putih waktu mode terang */
+    :root[data-theme="light"] .ac-card>.ac-stat+.ac-stat {
+        border-top: 1px solid rgba(15, 23, 42, 0.12) !important;
+    }
+
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
        --icon-bg/--icon-color/--accent (di-set per .acc-* class), termasuk override
        mode terangnya — tidak perlu diulang di sini. */
