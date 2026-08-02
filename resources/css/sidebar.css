@@ -1082,6 +1082,7 @@
 
     :root[data-theme="light"] .history-range-select,
     :root[data-theme="light"] .trend-filter-select {
+        background-color: #ffffff !important;
         color: #000000 !important;
         border-color: rgba(15, 23, 42, 0.20) !important;
     }
