@@ -173,7 +173,7 @@ export default function NotificationBell() {
                                         padding: '12px 14px',
                                         borderBottom: '1px solid var(--line-soft, rgba(255,255,255,0.06))',
                                         textDecoration: 'none',
-                                        background: n.is_unread ? 'rgba(255,255,255,0.08)' : 'transparent',
+                                        background: n.is_unread ? 'rgba(90,147,236,0.12)' : 'transparent',
                                     }}
                                 >
                                     <i
