@@ -147,6 +147,28 @@
             box-shadow: 0 8px 22px -10px rgba(0, 0, 0, 0.5);
         }
 
+        :root[data-theme="light"] .profile-av-img {
+            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+        }
+
+        .profile-modal-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(90, 147, 236, 0.15);
+            border: 1px solid rgba(90, 147, 236, 0.40);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #5a93ec;
+        }
+
+        :root[data-theme="light"] .profile-modal-icon {
+            background: rgba(29, 78, 216, 0.10);
+            border-color: #1d4ed8;
+            color: #1d4ed8;
+        }
+
         .profile-av-cam {
             position: absolute;
             right: -6px;

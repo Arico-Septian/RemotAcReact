@@ -127,6 +127,14 @@
             border: 1.6px solid rgba(90, 147, 236, 0.7);
         }
 
+        /* Biru di atas terlalu pucat di background putih — mode terang pakai
+           shade lebih gelap, sama seperti icon kartu statistik di dashboard. */
+        :root[data-theme="light"] .retention-icon {
+            color: #1d4ed8;
+            background: rgba(29, 78, 216, 0.10);
+            border-color: #1d4ed8;
+        }
+
         .retention-title {
             margin: 0;
             color: #ffffff;
