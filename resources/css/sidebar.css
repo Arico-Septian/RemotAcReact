@@ -1020,10 +1020,10 @@
         color: #0f172a !important;
     }
 
-    /* Ikon judul panel "Server Rooms" / "Recent Activity" — border putih tidak kelihatan di terang */
+    /* Ikon judul panel "Recent Activity" — biru, border putih tidak kelihatan di terang */
     :root[data-theme="light"] .activity-title-icon {
-        border-color: rgba(15, 23, 42, 0.35) !important;
-        color: #1e293b !important;
+        border-color: rgba(90, 147, 236, 0.45) !important;
+        color: #5a93ec !important;
     }
 
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
