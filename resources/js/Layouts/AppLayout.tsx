@@ -159,6 +159,7 @@ export default function AppLayout({
                         </div>
                         <div className="flex items-center gap-2">
                             {headerActions}
+                            {!hideHeaderUser && <NotificationBell />}
                             <button
                                 type="button"
                                 className="btn-icon theme-toggle-btn"
@@ -168,7 +169,6 @@ export default function AppLayout({
                             >
                                 <i className={`fa-solid ${theme === 'dark' ? 'fa-moon' : 'fa-sun'}`}></i>
                             </button>
-                            {!hideHeaderUser && <NotificationBell />}
                             {!hideHeaderUser && user && (
                                 <a
                                     href="/profile"
