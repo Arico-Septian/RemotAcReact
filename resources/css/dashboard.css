@@ -364,15 +364,33 @@
             color: #ffffff;
         }
 
-        /* Tone variants — disamakan semua jadi biru (konsisten dengan ikon status) */
-        .activity-item.tone-cyan,
-        .activity-item.tone-mint,
-        .activity-item.tone-lavender,
-        .activity-item.tone-coral,
-        .activity-item.tone-amber,
-        .activity-item.tone-sky,
+        /* Tone variants — sets --tone per item */
+        .activity-item.tone-cyan {
+            --tone: #22d3ee;
+        }
+
+        .activity-item.tone-mint {
+            --tone: #34d399;
+        }
+
+        .activity-item.tone-lavender {
+            --tone: #a78bfa;
+        }
+
+        .activity-item.tone-coral {
+            --tone: #fb7185;
+        }
+
+        .activity-item.tone-amber {
+            --tone: #fbbf24;
+        }
+
+        .activity-item.tone-sky {
+            --tone: #38bdf8;
+        }
+
         .activity-item.tone-slate {
-            --tone: #5a93ec;
+            --tone: #94a3b8;
         }
 
         .activity-body {

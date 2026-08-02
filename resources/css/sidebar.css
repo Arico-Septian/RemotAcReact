@@ -872,6 +872,7 @@
        LIGHT MODE — diaktifkan lewat [data-theme="light"] di <html>
        ============================================================ */
     :root[data-theme="light"] {
+        --bg-0: #ffffff;
         --bg-1: #eef1f6;
         --panel-1: #ffffff;
         --panel-2: #f1f4f9;
