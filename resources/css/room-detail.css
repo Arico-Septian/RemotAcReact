@@ -103,7 +103,7 @@
         }
 
         .ac-card .ac-stat .value {
-            color: var(--icon-color, var(--ink-0));
+            color: var(--ink-0);
             font-weight: 700;
             letter-spacing: .02em;
         }
@@ -125,28 +125,13 @@
             color: var(--amber);
         }
 
-        .ic-power {
-            --icon-color: var(--mint);
-        }
-
-        .ic-temp {
-            --icon-color: #6ea8ff;
-        }
-
-        .ic-mode {
-            --icon-color: var(--lavender);
-        }
-
-        .ic-fan {
-            --icon-color: #6ea8ff;
-        }
-
-        .ic-swing {
-            --icon-color: var(--lavender);
-        }
-
+        .ic-power,
+        .ic-temp,
+        .ic-mode,
+        .ic-fan,
+        .ic-swing,
         .ic-timer {
-            --icon-color: var(--amber);
+            --icon-color: #5a93ec;
         }
 
         @media (max-width: 768px) {
