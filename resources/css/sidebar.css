@@ -1055,6 +1055,11 @@
         color: #64748b !important;
     }
 
+    /* Filter "All/Online/Offline" — pilihan yang aktif teksnya hitam pekat di mode terang */
+    :root[data-theme="light"] .segmented .seg.active {
+        color: #000000 !important;
+    }
+
     /* .stat-icon & .accent-bar warnanya diatur di public/css/app.css lewat variabel
        --icon-bg/--icon-color/--accent (di-set per .acc-* class), termasuk override
        mode terangnya — tidak perlu diulang di sini. */
