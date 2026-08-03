@@ -13,8 +13,8 @@ type StatusFilter = 'all' | 'online' | 'offline';
 
 function tempClass(temp: number | null, offline: boolean): string {
     if (offline || temp === null) return 'idle';
-    if (temp > 30) return 'hot';
-    if (temp > 25) return 'warm';
+    if (temp > 24) return 'hot';
+    if (temp > 22) return 'warm';
     return 'cool';
 }
 
