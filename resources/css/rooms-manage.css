@@ -59,9 +59,27 @@
             color: #94a3b8 !important;
         }
 
+        /* Mode terang: teks putih tenggelam di atas background pudar — pakai
+           versi gelap dari warna yang sama. */
+        :root[data-theme="light"] .room-card .temp-chip.cool {
+            color: #1d4ed8 !important;
+        }
+
+        :root[data-theme="light"] .room-card .temp-chip.warm {
+            color: #047857 !important;
+        }
+
+        :root[data-theme="light"] .room-card .temp-chip.hot {
+            color: #dc2626 !important;
+        }
+
+        :root[data-theme="light"] .keputusan-yellow {
+            color: #b45309 !important;
+        }
+
         /* Keputusan text color follows action */
         .keputusan-yellow {
-            color: var(--yellow) !important;
+            color: var(--amber) !important;
         }
 
         /* TURUNKAN */

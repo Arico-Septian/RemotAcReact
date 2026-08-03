@@ -185,6 +185,20 @@
             color: #94a3b8 !important;
         }
 
+        /* Mode terang: teks putih tenggelam di atas background pudar — pakai
+           versi gelap dari warna yang sama. */
+        :root[data-theme="light"] .room-card .temp-chip.cool {
+            color: #1d4ed8 !important;
+        }
+
+        :root[data-theme="light"] .room-card .temp-chip.warm {
+            color: #047857 !important;
+        }
+
+        :root[data-theme="light"] .room-card .temp-chip.hot {
+            color: #dc2626 !important;
+        }
+
         /* Toolbar responsiveness for small screens */
         @media (max-width: 768px) {
             .flex.flex-row.items-center {
