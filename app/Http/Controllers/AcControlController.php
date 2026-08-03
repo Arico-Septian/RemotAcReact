@@ -81,20 +81,33 @@ class AcControlController extends Controller
         return $swing;
     }
 
-    private function sendFullState(AcUnit $ac, Room $room, AcStatus $status): bool
+    /**
+     * Publish AC state to the device. `$includePower` should only be true for
+     * actual power on/off requests — mode/temp/fan/swing changes must NOT
+     * include the power field, otherwise the firmware treats it as an
+     * explicit power command (see esp32.ino/esp8266.ino control handler) and
+     * can re-toggle power on a device whose DB `power` column has drifted
+     * from the physical unit's real state.
+     */
+    private function sendFullState(AcUnit $ac, Room $room, AcStatus $status, bool $includePower = true): bool
     {
         try {
             $this->mqtt ??= new MqttService;
 
+            $payload = [
+                'mode' => $status->mode ?? 'COOL',
+                'temp' => $this->normalizeTemperature($status->set_temperature ?? 24),
+                'fan_speed' => $status->fan_speed ?? 'AUTO',
+                'swing' => $status->swing ?? 'OFF',
+            ];
+
+            if ($includePower) {
+                $payload = ['power' => $status->power ?? 'OFF'] + $payload;
+            }
+
             $this->mqtt->publish(
                 'room/'.MqttService::roomToTopic($room->name)."/ac/{$ac->ac_number}/control",
-                json_encode([
-                    'power' => $status->power ?? 'OFF',
-                    'mode' => $status->mode ?? 'COOL',
-                    'temp' => $this->normalizeTemperature($status->set_temperature ?? 24),
-                    'fan_speed' => $status->fan_speed ?? 'AUTO',
-                    'swing' => $status->swing ?? 'OFF',
-                ]),
+                json_encode($payload),
                 1,
                 true
             );
@@ -166,7 +179,7 @@ class AcControlController extends Controller
         $status->set_temperature = $value;
         $status->save();
 
-        $sent = $this->sendFullState($ac, $room, $status);
+        $sent = $this->sendFullState($ac, $room, $status, includePower: false);
 
         UserLog::create([
             'user_id' => Auth::id(),
@@ -193,7 +206,7 @@ class AcControlController extends Controller
         $status->set_temperature = $targetTemp;
         $status->save();
 
-        return $this->sendFullState($ac, $room, $status);
+        return $this->sendFullState($ac, $room, $status, includePower: false);
     }
 
     public function setMode(int|string $id, mixed $mode)
@@ -207,7 +220,7 @@ class AcControlController extends Controller
         $status->mode = $mode;
         $status->save();
 
-        $sent = $this->sendFullState($ac, $room, $status);
+        $sent = $this->sendFullState($ac, $room, $status, includePower: false);
 
         UserLog::create([
             'user_id' => Auth::id(),
@@ -230,7 +243,7 @@ class AcControlController extends Controller
         $status->fan_speed = $speed;
         $status->save();
 
-        $sent = $this->sendFullState($ac, $room, $status);
+        $sent = $this->sendFullState($ac, $room, $status, includePower: false);
 
         UserLog::create([
             'user_id' => Auth::id(),
@@ -253,7 +266,7 @@ class AcControlController extends Controller
         $status->swing = $swing;
         $status->save();
 
-        $sent = $this->sendFullState($ac, $room, $status);
+        $sent = $this->sendFullState($ac, $room, $status, includePower: false);
 
         UserLog::create([
             'user_id' => Auth::id(),
