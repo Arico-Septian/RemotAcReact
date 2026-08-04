@@ -21,18 +21,16 @@ const int MQTT_PORT = 8883;
 const char* MQTT_USER = "Arico";
 const char* MQTT_PASS = "Arico170903";
 
-// Samakan DEVICE_ID ini dengan kolom device_id pada room di aplikasi.
 #define DEVICE_ID "esp8266_01"
 
-// NodeMCU/Wemos: D2 = GPIO4. D0/GPIO16 sering gagal membaca DHT di ESP8266.
 #define DHT_PIN 4
 #define DHT_TYPE DHT11
 
-const unsigned long PING_INTERVAL = 60000;             // kirim ping/keepalive tiap 1 menit
+const unsigned long PING_INTERVAL = 60000;
 const unsigned long STATUS_INTERVAL = 10000;
-const unsigned long SENSOR_INTERVAL = 5000;            // irama baca DHT (deteksi perubahan cepat)
-const unsigned long SENSOR_HEARTBEAT_INTERVAL = 60000; // kirim suhu minimal tiap 1 menit walau tidak berubah
-const float TEMP_DELTA_SEND = 1.0;                     // kirim langsung kalau suhu berubah >= 1 C
+const unsigned long SENSOR_INTERVAL = 5000;
+const unsigned long SENSOR_HEARTBEAT_INTERVAL = 60000;
+const float TEMP_DELTA_SEND = 1.0;
 const unsigned long CONFIG_TIMEOUT = 10000;
 const float TEMP_DELTA_LOG = 1.0;
 const unsigned long DHT_LOG_MIN_MS = 30000;
@@ -112,9 +110,6 @@ void sendIR(ACDevice& ac);
 void publishStatus(ACDevice& ac);
 
 int pinForAcId(int id) {
-  // ESP8266 GPIO aman untuk IR LED pada board NodeMCU/Wemos:
-  // D5=GPIO14, D6=GPIO12, D7=GPIO13, D1=GPIO5, D0=GPIO16.
-  // D8/GPIO15 sengaja tidak dipakai default karena sensitif saat boot.
   switch (id) {
     case 1: return 14;
     case 2: return 12;
@@ -366,7 +361,6 @@ void applySwing(ACDevice& ac) {
       else ac.gree.setSwingVertical(false, kGreeSwingLastPos);
       break;
     case BRAND_DAIKIN:
-      // IRDaikinESP hanya support on/off — HALF & DOWN fallback ke off
       ac.daikin.setSwingVertical(ac.swing == "FULL");
       break;
     case BRAND_PANASONIC:
@@ -394,7 +388,6 @@ void applySwing(ACDevice& ac) {
       else ac.sharp.setSwingV(kSharpAcSwingVOff);
       break;
     case BRAND_TOSHIBA:
-      // Toshiba hanya support on/off — HALF & DOWN fallback ke off
       ac.toshiba.setSwing(ac.swing == "FULL" ? kToshibaAcSwingOn : kToshibaAcSwingOff);
       break;
   }
@@ -502,11 +495,6 @@ void publishAllStatus() {
   lastStatusPublish = millis();
 
   for (auto& ac : acList) {
-    // Jangan lapor status AC yang belum stateSynced — server akan segera
-    // menyusul kirim control retained berisi state asli dari database
-    // (lihat MqttService::resendConfig), tapi kalau belum sempat diproses,
-    // publish di sini bisa keburu lapor power=false default dan menimpa
-    // data yang benar di server.
     if (!ac.stateSynced) continue;
     publishStatus(ac);
   }
@@ -524,7 +512,6 @@ void publishSensorStatus(const char* status, bool retain = true) {
   char buf[192];
   serializeJson(doc, buf, sizeof(buf));
 
-  // Konsisten dengan publishDHT: status sensor hanya ke room/{room}/sensor.
   char topicRoom[120];
   sprintf(topicRoom, "room/%s/sensor", currentRoom.c_str());
   safePublish(topicRoom, buf, retain);
@@ -533,12 +520,9 @@ void publishSensorStatus(const char* status, bool retain = true) {
 void publishDHT(bool forceSend = false, bool forceLog = false) {
   if (currentRoom == "") return;
 
-  // Baca DHT tiap SENSOR_INTERVAL (deteksi perubahan cepat) — belum tentu dikirim.
   if (!forceSend && (millis() - lastSensorRead < SENSOR_INTERVAL)) return;
   lastSensorRead = millis();
 
-  // DHT11 sering gagal baca sesaat (timing 1-wire keganggu WiFi) — coba ulang
-  // beberapa kali sebelum benar-benar declare offline, biar tidak gampang kedip.
   float temp = dht.readTemperature();
   for (uint8_t attempt = 0; isnan(temp) && attempt < 2; attempt++) {
     delay(50);
@@ -555,13 +539,9 @@ void publishDHT(bool forceSend = false, bool forceLog = false) {
     return;
   }
 
-  // Baru saja pulih dari gagal baca — paksa publish "online" seketika, jangan
-  // nunggu heartbeat 60s berikutnya (itu yang bikin status kelihatan lama "mati").
   bool justRecovered = !lastDhtOk;
   lastDhtOk = true;
 
-  // Report-by-exception: kirim hanya kalau suhu berubah >= TEMP_DELTA_SEND,
-  // atau sudah lewat heartbeat (60s), atau dipaksa (forceSend/justRecovered). Hemat broker & DB.
   bool changed = isnan(lastTempSent) || (fabs(temp - lastTempSent) >= TEMP_DELTA_SEND);
   bool heartbeatDue = (millis() - lastSensorPublish) >= SENSOR_HEARTBEAT_INTERVAL;
   if (!forceSend && !justRecovered && !changed && !heartbeatDue) return;
@@ -579,8 +559,6 @@ void publishDHT(bool forceSend = false, bool forceLog = false) {
   char buf[256];
   serializeJson(doc, buf, sizeof(buf));
 
-  // Kirim suhu HANYA ke room/{room}/sensor. Topic + payload sudah berisi nama room
-  // (dan device_id), jadi Laravel tetap tahu ini suhu room mana — cukup 1 topic.
   String safeRoom = currentRoom;
   safeRoom.toLowerCase();
   safeRoom.replace(" ", "_");
@@ -678,11 +656,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       client.unsubscribe(oldSub);
     }
 
-    // Simpan state AC yang sudah ada SEBELUM di-clear. Config ini juga terkirim
-    // ulang saat reconnect MQTT biasa (bukan cuma reboot fisik) — tanpa ini,
-    // acList dibangun ulang dari nol dengan power=false default (lihat
-    // konstruktor ACDevice), lalu publishAllStatus() langsung melaporkan "OFF"
-    // ke server walau AC fisik tidak pernah disentuh.
     struct SavedAcState {
       int id;
       bool power;
@@ -712,8 +685,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
     bool roomChanged = (prevRoom != currentRoom);
 
-    // Room sama (reconnect biasa) -> kembalikan power/mode/suhu/fan/swing yang
-    // sudah diketahui, jangan biarkan tetap di default konstruktor.
     if (!roomChanged) {
       for (auto& ac : acList) {
         for (auto& s : savedStates) {
@@ -744,7 +715,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     return;
   }
 
-  // === CLEAR ===
   String clearTopic = "device/" + String(DEVICE_ID) + "/clear";
   if (t == clearTopic) {
     String oldRoom = currentRoom;
@@ -852,7 +822,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   }
 }
 
-// ============== WiFi diagnostics ==============
 const char* wifiDisconnectReason(uint8_t reason) {
   switch (reason) {
     case 2: return "AUTH_EXPIRE (password salah/expired)";
@@ -909,7 +878,6 @@ void scanWiFi() {
   }
 }
 
-// ============== WiFi connect ==============
 void connectWiFi() {
   if (WiFi.status() == WL_CONNECTED) return;
 
@@ -936,11 +904,10 @@ void connectWiFi() {
             WiFi.channel());
   } else {
     logLine("WiFi", "❌", "FAIL (timeout setelah 15 detik)");
-    scanWiFi();  // scan otomatis kalau gagal, tampilkan diagnose
+    scanWiFi();
   }
 }
 
-// ============== MQTT reconnect ==============
 void reconnect() {
   while (!client.connected()) {
     if (WiFi.status() != WL_CONNECTED) {
@@ -974,7 +941,6 @@ void reconnect() {
       publishOnline();
       client.loop();
 
-      // Hapus retained device/{id}/sensor lama — firmware ini cuma pakai room/{room}/sensor.
       char devSensorTopic[80];
       sprintf(devSensorTopic, "device/%s/sensor", DEVICE_ID);
       client.publish(devSensorTopic, "", true);
@@ -991,11 +957,6 @@ void reconnect() {
       logLine("SUB", "📡", "%s", subClear);
 
       if (currentRoom != "") {
-        // Reset stateSynced sebelum re-subscribe — kalau ini reconnect WiFi/MQTT biasa
-        // (bukan reboot total), acList masih ada di RAM dengan stateSynced=true dari
-        // sebelumnya. Tanpa reset ini, retained message yang dikirim ulang broker saat
-        // subscribe bakal diproses sebagai perintah asli (sendIR beneran terpanggil),
-        // bukan cuma sinkronisasi diam-diam seperti seharusnya.
         for (auto& ac : acList) {
           ac.stateSynced = false;
         }
@@ -1020,7 +981,6 @@ void setup() {
   delay(500);
   dht.begin();
 
-  // WiFi event listener — log reason code saat disconnect
   wifiConnectedHandler = WiFi.onStationModeConnected([](const WiFiEventStationModeConnected& event) {
     logLine("WiFi", "OK", "associated to AP: %s", event.ssid.c_str());
   });
