@@ -117,6 +117,10 @@ class RunAcTimer extends Command
 
                         // Kirim perintah ke MQTT
                         $mqtt->publish($topic, json_encode([
+                            // Lihat AcControlController::sendFullState — 'ts' mencegah
+                            // perintah timer yang sama dieksekusi ulang ke AC fisik
+                            // kalau broker mengirim ulang / me-replay pesan retained.
+                            "ts"    => (int)(microtime(true) * 1000),
                             "power" => $expectedStatus,
                             "mode"  => $status->mode ?? 'COOL',
                             "temp"  => (int)($status->set_temperature ?? 24),

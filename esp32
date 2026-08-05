@@ -146,6 +146,10 @@ struct ACDevice {
   String swing;
   uint8_t irPin;
   bool stateSynced;
+  // ts perintah terakhir yang BENAR-BENAR dieksekusi ke AC fisik. Dipakai
+  // menolak pesan yang sama kalau broker mengirimnya ulang (replay retained
+  // saat subscribe, atau redelivery QoS1 waktu koneksi goyah).
+  unsigned long long lastCmdTs;
 
   IRGreeAC gree;
   IRDaikinESP daikin;
@@ -159,7 +163,7 @@ struct ACDevice {
     : id(_id), brand(_brand),
       power(false), setTemp(24),
       mode("AUTO"), fanSpeed("AUTO"), swing("OFF"),
-      irPin(_pin), stateSynced(false),
+      irPin(_pin), stateSynced(false), lastCmdTs(0),
       gree(_pin), daikin(_pin), panasonic(_pin), lg(_pin),
       mitsubishi(_pin), sharp(_pin), toshiba(_pin) {
     gree.begin();
@@ -679,10 +683,11 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       String mode;
       String fanSpeed;
       String swing;
+      unsigned long long lastCmdTs;
     };
     std::vector<SavedAcState> savedStates;
     for (auto& ac : acList) {
-      savedStates.push_back({ac.id, ac.power, ac.setTemp, ac.mode, ac.fanSpeed, ac.swing});
+      savedStates.push_back({ac.id, ac.power, ac.setTemp, ac.mode, ac.fanSpeed, ac.swing, ac.lastCmdTs});
     }
 
     acList.clear();
@@ -710,6 +715,9 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
             ac.mode = s.mode;
             ac.fanSpeed = s.fanSpeed;
             ac.swing = s.swing;
+            // Wajib ikut dipertahankan — kalau di-reset, perintah lama yang
+            // di-replay broker akan lolos dianggap perintah baru.
+            ac.lastCmdTs = s.lastCmdTs;
             break;
           }
         }
@@ -774,63 +782,62 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   for (auto& ac : acList) {
     if (ac.id != acId) continue;
 
-    static unsigned long lastIR = 0;
-    if (millis() - lastIR < 500) continue;
-    lastIR = millis();
+    // Server menandai pesan state-sync (dari resendConfig) dengan "sync":true.
+    // Perintah asli dari user/timer selalu punya "ts" unik.
+    bool isSync = doc["sync"] | false;
+    unsigned long long ts = doc["ts"] | 0ULL;
 
-    if (!ac.stateSynced || millis() < resyncGuardUntil) {
-      ac.stateSynced = true;
-      String incomingPower = doc["power"] | "?";
-      if (doc.containsKey("power")) {
-        ac.power = (doc["power"].as<String>() == "ON");
-      }
-      if (doc.containsKey("mode")) {
-        ac.mode = doc["mode"].as<String>();
-        ac.mode.toUpperCase();
-      }
-      if (doc.containsKey("temp")) {
-        ac.setTemp = constrain(doc["temp"].as<int>(), 16, 30);
-      }
-      if (doc.containsKey("fan_speed")) {
-        ac.fanSpeed = doc["fan_speed"].as<String>();
-        ac.fanSpeed.toUpperCase();
-      }
-      if (doc.containsKey("swing")) {
-        ac.swing = doc["swing"].as<String>();
-        ac.swing.toUpperCase();
-      }
-      logLine("IR", "⏭️", "skip sync-guard | AC#%d incoming=%s (ignored)",
-              ac.id, incomingPower.c_str());
-      break;
-    }
+    // stateOnly = samakan state lokal saja, JANGAN kirim IR ke AC fisik.
+    // Ini pertahanan berlapis supaya sinyal ke AC hanya dikirim oleh perintah
+    // yang benar-benar baru dan benar-benar dari user/timer:
+    //   isSync                    -> pesan sinkronisasi state dari server
+    //   !ac.stateSynced           -> pesan pertama sejak (re)connect/boot
+    //   millis() < resyncGuardUntil -> masih dalam jendela resync config
+    //   ts == 0                   -> tanpa penanda perintah (pesan lama/tak dipercaya)
+    //   ts <= ac.lastCmdTs        -> perintah ini SUDAH pernah dieksekusi
+    //                                (replay retained / redelivery QoS1)
+    bool stateOnly = isSync
+                  || !ac.stateSynced
+                  || millis() < resyncGuardUntil
+                  || ts == 0
+                  || ts <= ac.lastCmdTs;
 
-    bool needSend = false;
+    bool hasPower = doc.containsKey("power");
+    bool hasSetting = doc.containsKey("mode") || doc.containsKey("temp")
+                   || doc.containsKey("fan_speed") || doc.containsKey("swing");
 
-    if (doc.containsKey("power")) {
+    if (hasPower) {
       ac.power = (doc["power"].as<String>() == "ON");
-      needSend = true;
     }
     if (doc.containsKey("mode")) {
       ac.mode = doc["mode"].as<String>();
       ac.mode.toUpperCase();
-      if (ac.power) needSend = true;
     }
     if (doc.containsKey("temp")) {
       ac.setTemp = constrain(doc["temp"].as<int>(), 16, 30);
-      if (ac.power) needSend = true;
     }
     if (doc.containsKey("fan_speed")) {
       ac.fanSpeed = doc["fan_speed"].as<String>();
       ac.fanSpeed.toUpperCase();
-      if (ac.power) needSend = true;
     }
     if (doc.containsKey("swing")) {
       ac.swing = doc["swing"].as<String>();
       ac.swing.toUpperCase();
-      if (ac.power) needSend = true;
     }
 
-    if (needSend) {
+    if (stateOnly) {
+      ac.stateSynced = true;
+      if (ts > ac.lastCmdTs) ac.lastCmdTs = ts;
+      logLine("IR", "⏭️", "sync-only | AC#%d power=%s (tidak kirim IR)",
+              ac.id, ac.power ? "ON" : "OFF");
+      break;
+    }
+
+    ac.lastCmdTs = ts;
+
+    // Perintah power selalu dikirim. Perubahan mode/suhu/fan/swing hanya perlu
+    // dikirim kalau AC memang sedang nyala.
+    if (hasPower || (hasSetting && ac.power)) {
       sendIR(ac);
       publishStatus(ac);
       client.loop();

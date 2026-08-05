@@ -95,6 +95,12 @@ class AcControlController extends Controller
             $this->mqtt ??= new MqttService;
 
             $payload = [
+                // 'ts' = penanda unik per perintah. Pesan control retained + QoS1,
+                // jadi broker bisa mengirim ulang pesan yang sama (redelivery atau
+                // replay retained saat ESP subscribe). ESP menolak ts yang sudah
+                // pernah dieksekusi, sehingga satu perintah tidak pernah dijalankan
+                // dua kali ke AC fisik.
+                'ts' => (int) (microtime(true) * 1000),
                 'mode' => $status->mode ?? 'COOL',
                 'temp' => $this->normalizeTemperature($status->set_temperature ?? 24),
                 'fan_speed' => $status->fan_speed ?? 'AUTO',

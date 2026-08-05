@@ -139,6 +139,14 @@ class MqttService
             $this->publish(
                 $topic,
                 json_encode([
+                    // PENTING: 'sync' menandai ini state-sync, BUKAN perintah user.
+                    // Tanpa flag ini pesan di bawah identik dengan perintah asli,
+                    // sehingga ESP bisa mengirim sinyal IR (mis. power OFF) ke AC
+                    // fisik padahal tidak ada yang menekan tombol apa pun.
+                    // Pesan ini retained + QoS1, jadi bisa di-replay broker kapan
+                    // saja saat ESP subscribe/reconnect — flag ini yang membuat
+                    // replay tidak pernah berbahaya.
+                    'sync' => true,
                     'power' => $status->power,
                     'mode' => $status->mode,
                     'temp' => (int) ($status->set_temperature ?? 24),
