@@ -64,6 +64,14 @@ unsigned long lastStatusPublish = 0;
 unsigned long lastSensorPublish = 0;
 unsigned long lastSensorRead = 0;
 
+// Jendela aman setelah config resync (reconnect/ping periodik) — semua pesan
+// kontrol yang masuk dalam rentang ini dianggap bagian dari proses
+// sinkronisasi (cuma update state lokal, TIDAK kirim IR), bukan cuma pesan
+// pertama saja. Ini menutup race condition kalau pesan control lama (sisa)
+// dan pesan control baru (dari resendConfig) sempat datang berurutan.
+const unsigned long RESYNC_GUARD_MS = 3000;
+unsigned long resyncGuardUntil = 0;
+
 int consecutivePublishFails = 0;
 
 enum ACBrand {
@@ -503,11 +511,6 @@ void publishAllStatus() {
   lastStatusPublish = millis();
 
   for (auto& ac : acList) {
-    // Jangan lapor status AC yang belum stateSynced — server akan segera
-    // menyusul kirim control retained berisi state asli dari database
-    // (lihat MqttService::resendConfig), tapi kalau belum sempat diproses,
-    // publish di sini bisa keburu lapor power=false default dan menimpa
-    // data yang benar di server.
     if (!ac.stateSynced) continue;
     publishStatus(ac);
   }
@@ -669,11 +672,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       client.unsubscribe(oldSub);
     }
 
-    // Simpan state AC yang sudah ada SEBELUM di-clear. Config ini juga terkirim
-    // ulang saat reconnect MQTT biasa (bukan cuma reboot fisik) — tanpa ini,
-    // acList dibangun ulang dari nol dengan power=false default (lihat
-    // konstruktor ACDevice), lalu publishAllStatus() langsung melaporkan "OFF"
-    // ke server walau AC fisik tidak pernah disentuh.
     struct SavedAcState {
       int id;
       bool power;
@@ -703,8 +701,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
     bool roomChanged = (prevRoom != currentRoom);
 
-    // Room sama (reconnect biasa) -> kembalikan power/mode/suhu/fan/swing yang
-    // sudah diketahui, jangan biarkan tetap di default konstruktor.
     if (!roomChanged) {
       for (auto& ac : acList) {
         for (auto& s : savedStates) {
@@ -725,6 +721,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     client.subscribe(sub);
     logLine("SUB", "📡", "%s", sub);
 
+    resyncGuardUntil = millis() + RESYNC_GUARD_MS;
     configReceived = true;
 
     if (roomChanged) {
@@ -735,7 +732,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     return;
   }
 
-  // === CLEAR ===
   String clearTopic = "device/" + String(DEVICE_ID) + "/clear";
   if (t == clearTopic) {
     String oldRoom = currentRoom;
@@ -782,7 +778,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (millis() - lastIR < 500) continue;
     lastIR = millis();
 
-    if (!ac.stateSynced) {
+    if (!ac.stateSynced || millis() < resyncGuardUntil) {
       ac.stateSynced = true;
       String incomingPower = doc["power"] | "?";
       if (doc.containsKey("power")) {
@@ -803,7 +799,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
         ac.swing = doc["swing"].as<String>();
         ac.swing.toUpperCase();
       }
-      logLine("IR", "⏭️", "skip first-sync | AC#%d incoming=%s (ignored)",
+      logLine("IR", "⏭️", "skip sync-guard | AC#%d incoming=%s (ignored)",
               ac.id, incomingPower.c_str());
       break;
     }
