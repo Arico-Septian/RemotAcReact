@@ -794,16 +794,22 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     // Pertahanan berlapis supaya sinyal ke AC hanya dikirim perintah asli:
     //   isSync                      -> pesan sinkronisasi state dari server
     //   !ac.stateSynced             -> pesan pertama sejak (re)connect/boot
-    //   millis() < resyncGuardUntil -> masih dalam jendela resync config
+    //   inResyncGuard               -> masih dalam jendela resync config
     //   ts>0 && ts <= lastCmdTs     -> perintah ini SUDAH pernah dieksekusi
     //                                  (replay retained / redelivery QoS1)
     //
     // CATATAN: ts yang hilang/0 sengaja TIDAK memblokir perintah. Kalau server
     // belum terupdate (atau ts gagal di-parse), tombol harus tetap berfungsi —
     // pengaman utama dari sinyal liar adalah flag "sync" di atas, bukan ts.
+    // Pakai selisih ber-tanda, BUKAN `millis() < resyncGuardUntil`. millis()
+    // kembali ke 0 tiap ~49 hari; perbandingan langsung akan membuat jendela
+    // ini terkunci aktif selama ~49 hari (semua tombol mati) kalau config
+    // kebetulan datang menjelang rollover. Pola selisih tetap benar saat wrap.
+    bool inResyncGuard = (int32_t)(resyncGuardUntil - millis()) > 0;
+
     bool stateOnly = isSync
                   || !ac.stateSynced
-                  || millis() < resyncGuardUntil
+                  || inResyncGuard
                   || (ts > 0 && ts <= ac.lastCmdTs);
 
     bool hasPower = doc.containsKey("power");
