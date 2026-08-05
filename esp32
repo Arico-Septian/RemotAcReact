@@ -149,7 +149,10 @@ struct ACDevice {
   // ts perintah terakhir yang BENAR-BENAR dieksekusi ke AC fisik. Dipakai
   // menolak pesan yang sama kalau broker mengirimnya ulang (replay retained
   // saat subscribe, atau redelivery QoS1 waktu koneksi goyah).
-  unsigned long long lastCmdTs;
+  // Pakai double, BUKAN integer: ts = milidetik epoch (~1.8e12) yang melebihi
+  // batas 32-bit, dan dukungan 64-bit ArduinoJson tidak selalu aktif. Double
+  // menyimpan bilangan bulat secara persis sampai 9e15, jadi selalu aman.
+  double lastCmdTs;
 
   IRGreeAC gree;
   IRDaikinESP daikin;
@@ -683,7 +686,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       String mode;
       String fanSpeed;
       String swing;
-      unsigned long long lastCmdTs;
+      double lastCmdTs;
     };
     std::vector<SavedAcState> savedStates;
     for (auto& ac : acList) {
@@ -783,24 +786,25 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (ac.id != acId) continue;
 
     // Server menandai pesan state-sync (dari resendConfig) dengan "sync":true.
-    // Perintah asli dari user/timer selalu punya "ts" unik.
+    // Perintah asli dari user/timer membawa "ts" unik.
     bool isSync = doc["sync"] | false;
-    unsigned long long ts = doc["ts"] | 0ULL;
+    double ts = doc["ts"] | 0.0;
 
     // stateOnly = samakan state lokal saja, JANGAN kirim IR ke AC fisik.
-    // Ini pertahanan berlapis supaya sinyal ke AC hanya dikirim oleh perintah
-    // yang benar-benar baru dan benar-benar dari user/timer:
-    //   isSync                    -> pesan sinkronisasi state dari server
-    //   !ac.stateSynced           -> pesan pertama sejak (re)connect/boot
+    // Pertahanan berlapis supaya sinyal ke AC hanya dikirim perintah asli:
+    //   isSync                      -> pesan sinkronisasi state dari server
+    //   !ac.stateSynced             -> pesan pertama sejak (re)connect/boot
     //   millis() < resyncGuardUntil -> masih dalam jendela resync config
-    //   ts == 0                   -> tanpa penanda perintah (pesan lama/tak dipercaya)
-    //   ts <= ac.lastCmdTs        -> perintah ini SUDAH pernah dieksekusi
-    //                                (replay retained / redelivery QoS1)
+    //   ts>0 && ts <= lastCmdTs     -> perintah ini SUDAH pernah dieksekusi
+    //                                  (replay retained / redelivery QoS1)
+    //
+    // CATATAN: ts yang hilang/0 sengaja TIDAK memblokir perintah. Kalau server
+    // belum terupdate (atau ts gagal di-parse), tombol harus tetap berfungsi —
+    // pengaman utama dari sinyal liar adalah flag "sync" di atas, bukan ts.
     bool stateOnly = isSync
                   || !ac.stateSynced
                   || millis() < resyncGuardUntil
-                  || ts == 0
-                  || ts <= ac.lastCmdTs;
+                  || (ts > 0 && ts <= ac.lastCmdTs);
 
     bool hasPower = doc.containsKey("power");
     bool hasSetting = doc.containsKey("mode") || doc.containsKey("temp")
