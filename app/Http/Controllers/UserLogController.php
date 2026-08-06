@@ -141,9 +141,13 @@ class UserLogController extends Controller
             };
         }
 
-        // Date preset (range=today|7d|30d) overrides date_from/date_to
+        // Date preset (range=24h|today|7d|30d) overrides date_from/date_to.
+        // '24h' is a rolling 24-hour window, distinct from 'today' which is the
+        // current calendar day — at 01:00 'today' would return only one hour.
         $range = $request->input('range');
-        if ($range === 'today') {
+        if ($range === '24h') {
+            $query->where('created_at', '>=', now()->subDay());
+        } elseif ($range === 'today') {
             $query->whereDate('created_at', now()->toDateString());
         } elseif ($range === '7d') {
             $query->where('created_at', '>=', now()->subDays(7));
@@ -201,7 +205,9 @@ class UserLogController extends Controller
 
         // Stats — selalu dihitung dari seluruh data (tidak terpengaruh filter), kecuali date range
         $statsScope = UserLog::query();
-        if ($range === 'today') {
+        if ($range === '24h') {
+            $statsScope->where('created_at', '>=', now()->subDay());
+        } elseif ($range === 'today') {
             $statsScope->whereDate('created_at', now()->toDateString());
         } elseif ($range === '7d') {
             $statsScope->where('created_at', '>=', now()->subDays(7));
@@ -307,7 +313,12 @@ class UserLogController extends Controller
         });
 
         // Ringkasan filter supaya pembaca PDF tahu data ini hasil saringan apa.
-        $rangeLabels = ['today' => 'Hari ini', '7d' => '7 hari terakhir', '30d' => '30 hari terakhir'];
+        $rangeLabels = [
+            '24h' => '24 jam terakhir',
+            'today' => 'Hari ini',
+            '7d' => '7 hari terakhir',
+            '30d' => '30 hari terakhir',
+        ];
         $activityLabels = [
             'auth' => 'Autentikasi', 'ac' => 'Kontrol AC', 'user' => 'Manajemen User',
             'room' => 'Manajemen Ruangan', 'power_on' => 'Power ON', 'power_off' => 'Power OFF',

@@ -40,6 +40,15 @@ const quickCats: { value: string; label: string }[] = [
     { value: 'user', label: 'User' },
 ];
 
+// '24h' = 24 jam bergulir (bukan hari kalender) — lihat filteredQuery() di
+// UserLogController. Nilai harus sama persis dengan yang dikenali backend.
+const rangeOpts: { value: string; label: string }[] = [
+    { value: '', label: 'Semua' },
+    { value: '24h', label: '24 Jam' },
+    { value: '7d', label: '7 Hari' },
+    { value: '30d', label: '30 Hari' },
+];
+
 function StatCard({ accent, label, value, sub, icon }: { accent: string; label: string; value: number; sub: string; icon: string }) {
     return (
         <div className={`stat-card acc-${accent}`}>
@@ -74,13 +83,14 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
     const [deletingAll, setDeletingAll] = useState(false);
     const [confirmDeleteLogs, setConfirmDeleteLogs] = useState(false);
     const cat = quickCats.some((c) => c.value === filters.activity) ? filters.activity : '';
+    const rng = rangeOpts.some((r) => r.value === filters.range) ? filters.range : '';
     const searchTimer = useRef<number | null>(null);
 
-    const applyFilters = (next: { search?: string; activity?: string }) => {
+    const applyFilters = (next: { search?: string; activity?: string; range?: string }) => {
         const params: Record<string, string> = {
             search: next.search ?? search,
             activity: next.activity ?? filters.activity,
-            range: filters.range,
+            range: next.range ?? filters.range,
         };
         Object.keys(params).forEach((k) => params[k] === '' && delete params[k]);
         router.get('/logs', params, { preserveState: true, preserveScroll: true, replace: true });
@@ -167,6 +177,13 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
                         )}
                     </label>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                        <div className="segmented">
+                            {rangeOpts.map((r) => (
+                                <button key={r.value} type="button" className={`seg ${rng === r.value ? 'active' : ''}`} onClick={() => applyFilters({ range: r.value })} title={`Periode: ${r.label}`}>
+                                    {r.label}
+                                </button>
+                            ))}
+                        </div>
                         <div className="segmented">
                             {quickCats.map((c) => (
                                 <button key={c.value} type="button" className={`seg ${cat === c.value ? 'active' : ''}`} onClick={() => applyFilters({ activity: c.value })}>
