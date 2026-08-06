@@ -86,6 +86,18 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
         router.get('/logs', params, { preserveState: true, preserveScroll: true, replace: true });
     };
 
+    // Dibangun dari `filters` (filter yang sudah diterapkan), bukan dari state
+    // input yang masih di-debounce — supaya isi PDF persis sama dengan daftar
+    // yang sedang tampil di layar.
+    const exportUrl = (() => {
+        const params = new URLSearchParams();
+        if (filters.search) params.set('search', filters.search);
+        if (filters.activity) params.set('activity', filters.activity);
+        if (filters.range) params.set('range', filters.range);
+        const qs = params.toString();
+        return `/logs/export-pdf${qs ? `?${qs}` : ''}`;
+    })();
+
     const onSearchChange = (value: string) => {
         setSearch(value);
         if (searchTimer.current) window.clearTimeout(searchTimer.current);
@@ -162,6 +174,11 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
                                 </button>
                             ))}
                         </div>
+                        {isAdmin && (
+                            <a href={exportUrl} className="btn btn-export btn-sm" title="Download laporan PDF">
+                                <i className="fa-solid fa-file-pdf text-[15px]"></i>
+                            </a>
+                        )}
                         {isAdmin && (
                             <button type="button" onClick={deleteAll} disabled={deletingAll} className="btn btn-danger btn-sm" title="Delete All Logs">
                                 <i className="fa-solid fa-trash text-[15px]"></i>

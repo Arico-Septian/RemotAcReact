@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\UserLogsCleared;
 use App\Models\User;
 use App\Models\UserLog;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -72,14 +73,36 @@ class UserLogController extends Controller
         };
     }
 
-    public function index(Request $request)
+    /**
+     * Activity groupings shared by the list view and the PDF export.
+     *
+     * @return array<string, array<int, string>>
+     */
+    private function activityGroups(): array
     {
-        $authActs = ['login', 'logout', 'change_password'];
-        $acActs = ['on', 'off', 'bulk_on', 'bulk_off', 'timer_on', 'timer_off', 'set_timer_delete', 'control_ac'];
-        $acLikes = ['set_temp_%', 'mode_%', 'fan_speed_%', 'swing_%', 'set_timer:%'];
-        $userActs = ['add_user', 'delete_user', 'update_role'];
-        $roomActs = ['add_room', 'delete_room', 'add_ac', 'delete_ac'];
-        $destructiveActs = ['delete_user', 'delete_room', 'delete_ac'];
+        return [
+            'auth' => ['login', 'logout', 'change_password'],
+            'ac' => ['on', 'off', 'bulk_on', 'bulk_off', 'timer_on', 'timer_off', 'set_timer_delete', 'control_ac'],
+            'acLikes' => ['set_temp_%', 'mode_%', 'fan_speed_%', 'swing_%', 'set_timer:%'],
+            'user' => ['add_user', 'delete_user', 'update_role'],
+            'room' => ['add_room', 'delete_room', 'add_ac', 'delete_ac'],
+            'destructive' => ['delete_user', 'delete_room', 'delete_ac'],
+        ];
+    }
+
+    /**
+     * Build the filtered log query. Shared by index() and exportPdf() so the
+     * PDF always contains exactly the rows the admin is looking at — if these
+     * ever drift apart, the export silently stops matching the screen.
+     */
+    private function filteredQuery(Request $request)
+    {
+        $g = $this->activityGroups();
+        $authActs = $g['auth'];
+        $acActs = $g['ac'];
+        $acLikes = $g['acLikes'];
+        $userActs = $g['user'];
+        $roomActs = $g['room'];
 
         $applyAcFilter = function ($q) use ($acActs, $acLikes) {
             $q->where(function ($qq) use ($acActs, $acLikes) {
@@ -163,7 +186,18 @@ class UserLogController extends Controller
             $query->orderBy($sort, $order);
         }
 
-        $logs = $query->paginate(25)->withQueryString();
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $g = $this->activityGroups();
+        $acActs = $g['ac'];
+        $acLikes = $g['acLikes'];
+        $destructiveActs = $g['destructive'];
+        $range = $request->input('range');
+
+        $logs = $this->filteredQuery($request)->paginate(25)->withQueryString();
 
         // Stats — selalu dihitung dari seluruh data (tidak terpengaruh filter), kecuali date range
         $statsScope = UserLog::query();
@@ -228,6 +262,96 @@ class UserLogController extends Controller
                 'next_url' => $logs->nextPageUrl(),
             ],
         ]);
+    }
+
+    /**
+     * Measured on this project's own data: dompdf's table layout scales
+     * roughly quadratically — 300 rows ≈ 3 s, 500 rows ≈ 5 s / 142 MB on a
+     * desktop. A Raspberry Pi 3 is several times slower and has 1 GB RAM
+     * shared with nginx, php-fpm, the MQTT subscriber and Reverb, so the cap
+     * is deliberately low. Raising it risks a request timeout or an OOM that
+     * would take the whole site down, not just the export.
+     */
+    private const PDF_MAX_ROWS = 500;
+
+    /**
+     * Download the currently filtered activity log as a PDF report.
+     *
+     * Reuses filteredQuery() so the PDF matches the on-screen list exactly.
+     * When PDF_MAX_ROWS trims the result the PDF says so on its face rather
+     * than silently handing over an incomplete report.
+     */
+    public function exportPdf(Request $request)
+    {
+        // Scoped to this request only. dompdf is synchronous and memory-hungry;
+        // without this the Pi's default limits can abort mid-render and return
+        // a broken download instead of a clear failure.
+        ini_set('memory_limit', '256M');
+        set_time_limit(120);
+
+        $query = $this->filteredQuery($request);
+        $total = (clone $query)->count();
+        $logs = $query->limit(self::PDF_MAX_ROWS)->get();
+
+        $rows = $logs->map(function (UserLog $log) {
+            [$label] = $this->activityBadge((string) $log->activity);
+            $isEmpty = fn ($v) => $v === null || $v === '' || $v === '-' || $v === '—';
+
+            return [
+                'datetime' => $log->created_at?->format('d/m/Y H:i') ?? '—',
+                'user' => $log->user?->name ?? '—',
+                'room' => $isEmpty($log->room) ? '—' : $log->room,
+                'ac' => $isEmpty($log->ac) ? '—' : $log->ac,
+                'activity' => $label,
+            ];
+        });
+
+        // Ringkasan filter supaya pembaca PDF tahu data ini hasil saringan apa.
+        $rangeLabels = ['today' => 'Hari ini', '7d' => '7 hari terakhir', '30d' => '30 hari terakhir'];
+        $activityLabels = [
+            'auth' => 'Autentikasi', 'ac' => 'Kontrol AC', 'user' => 'Manajemen User',
+            'room' => 'Manajemen Ruangan', 'power_on' => 'Power ON', 'power_off' => 'Power OFF',
+            'temp' => 'Ubah Suhu', 'mode' => 'Ubah Mode', 'fan' => 'Ubah Fan', 'swing' => 'Ubah Swing',
+            'user_mgmt' => 'Manajemen User', 'room_mgmt' => 'Manajemen Ruangan',
+        ];
+
+        $filters = [];
+        if ($request->filled('range')) {
+            $filters['Periode'] = $rangeLabels[$request->range] ?? $request->range;
+        } elseif ($request->filled('date_from') || $request->filled('date_to')) {
+            $filters['Periode'] = trim(($request->date_from ?: '…').' s/d '.($request->date_to ?: '…'));
+        }
+        if ($request->filled('activity')) {
+            $filters['Jenis Aktivitas'] = $activityLabels[$request->activity] ?? $request->activity;
+        }
+        if ($request->filled('room')) {
+            $filters['Ruangan'] = $request->room;
+        }
+        if ($request->filled('search')) {
+            $filters['Pencarian'] = $request->search;
+        }
+        if ($request->filled('user_id')) {
+            $filters['User'] = User::find($request->user_id)?->name ?? $request->user_id;
+        }
+
+        UserLog::create([
+            'user_id' => Auth::id(),
+            'room' => '-',
+            'ac' => '-',
+            'activity' => 'export_logs',
+        ]);
+
+        $pdf = Pdf::loadView('reports.activity-log', [
+            'rows' => $rows,
+            'total' => $total,
+            'shown' => $rows->count(),
+            'truncated' => $total > $rows->count(),
+            'filters' => $filters,
+            'generatedAt' => now('Asia/Jakarta')->format('d F Y, H:i').' WIB',
+            'generatedBy' => Auth::user()?->name ?? '—',
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('activity-log-'.now('Asia/Jakarta')->format('Ymd-His').'.pdf');
     }
 
     public function destroyAll(Request $request)

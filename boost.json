@@ -8,6 +8,7 @@
     "sail": false,
     "skills": [
         "laravel-best-practices",
+        "inertia-react-development",
         "echo-development",
         "tailwindcss-development",
         "deploying-laravel-cloud"

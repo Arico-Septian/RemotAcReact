@@ -25,6 +25,45 @@
             font-size: 18px !important;
         }
 
+        /* Export PDF — bentuk kotak sama seperti tombol hapus, warna netral */
+        .btn.btn-export {
+            background: #335fc2;
+            border-color: #335fc2;
+            color: #ffffff;
+            box-shadow: none;
+            transition: var(--t-base);
+        }
+
+        .btn.btn-export:hover {
+            background: #2a4fa3;
+            border-color: #2a4fa3;
+            color: #ffffff;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .tbl-toolbar .btn.btn-export i {
+            font-size: 18px !important;
+        }
+
+        .tbl-toolbar .btn.btn-export {
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            padding: 0 !important;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        @media (max-width: 480px) {
+            .tbl-toolbar .btn.btn-export {
+                width: 36px;
+                height: 36px;
+                min-height: 36px;
+            }
+        }
+
         /* Keep the box a fixed square so it doesn't grow with the icon */
         .tbl-toolbar .btn.btn-danger {
             width: 40px;

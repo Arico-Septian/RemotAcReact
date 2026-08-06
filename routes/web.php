@@ -466,6 +466,7 @@ Route::middleware(['auth', 'activity'])->group(function () {
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/logs', [UserLogController::class, 'index']);
+        Route::get('/logs/export-pdf', [UserLogController::class, 'exportPdf'])->name('logs.export-pdf');
         Route::delete('/logs/delete-all', [UserLogController::class, 'destroyAll']);
 
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');
