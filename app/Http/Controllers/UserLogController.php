@@ -354,13 +354,10 @@ class UserLogController extends Controller
             $filters['User'] = User::find($request->user_id)?->name ?? $request->user_id;
         }
 
-        UserLog::create([
-            'user_id' => Auth::id(),
-            'room' => '-',
-            'ac' => '-',
-            'activity' => 'export_logs',
-        ]);
-
+        // Sengaja TIDAK dicatat ke UserLog. Export bersifat baca-saja dan tidak
+        // mengubah apa pun, sementara catatannya akan ikut muncul di export
+        // berikutnya — mengotori laporan dengan jejak pembuatan laporan itu
+        // sendiri.
         $pdf = Pdf::loadView('reports.activity-log', [
             'rows' => $rows,
             'total' => $total,
