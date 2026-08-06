@@ -385,13 +385,10 @@ class UserLogController extends Controller
 
         UserLog::query()->delete();
 
-        UserLog::create([
-            'user_id' => $user->id,
-            'room' => '-',
-            'ac' => '-',
-            'activity' => 'clear_logs',
-        ]);
-
+        // Tidak dicatat balik ke UserLog — setelah dihapus, daftar harus benar
+        // benar kosong. Jejak auditnya tetap ada di file log server (baris di
+        // bawah), lengkap dengan siapa yang menghapus dan berapa banyak, jadi
+        // pertanggungjawabannya tidak hilang — hanya pindah tempat.
         Log::warning('User wiped activity log', [
             'admin_id' => $user->id,
             'admin_name' => $user->name,
