@@ -194,7 +194,7 @@ export default function ActivityLog({ logs, stats, filters, pagination }: Activi
                         {isAdmin && (
                             <a href={exportUrl} className="btn btn-export btn-sm" title="Download laporan PDF">
                                 <i className="fa-solid fa-download"></i>
-                                <span>PDF</span>
+                                <span>Report</span>
                             </a>
                         )}
                         {isAdmin && (
