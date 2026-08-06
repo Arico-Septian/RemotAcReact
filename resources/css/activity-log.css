@@ -42,25 +42,37 @@
             transform: none;
         }
 
-        .tbl-toolbar .btn.btn-export i {
-            font-size: 18px !important;
-        }
-
+        /* Ikon + label "PDF" — label sengaja ditampilkan supaya tidak bergantung
+           pada huruf kecil di dalam glyph ikon yang mudah salah baca. */
         .tbl-toolbar .btn.btn-export {
-            width: 40px;
             height: 40px;
             min-height: 40px;
-            padding: 0 !important;
+            padding: 0 14px !important;
+            gap: 7px;
             flex-shrink: 0;
+            white-space: nowrap;
             box-sizing: border-box;
-            overflow: hidden;
+        }
+
+        .tbl-toolbar .btn.btn-export i {
+            font-size: 13px !important;
+        }
+
+        .tbl-toolbar .btn.btn-export span {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .04em;
         }
 
         @media (max-width: 480px) {
             .tbl-toolbar .btn.btn-export {
-                width: 36px;
                 height: 36px;
                 min-height: 36px;
+                padding: 0 11px !important;
+            }
+
+            .tbl-toolbar .btn.btn-export span {
+                font-size: 11px;
             }
         }
 
