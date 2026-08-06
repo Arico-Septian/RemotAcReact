@@ -271,14 +271,23 @@ class UserLogController extends Controller
     }
 
     /**
-     * Measured on this project's own data: dompdf's table layout scales
-     * roughly quadratically — 300 rows ≈ 3 s, 500 rows ≈ 5 s / 142 MB on a
-     * desktop. A Raspberry Pi 3 is several times slower and has 1 GB RAM
-     * shared with nginx, php-fpm, the MQTT subscriber and Reverb, so the cap
-     * is deliberately low. Raising it risks a request timeout or an OOM that
-     * would take the whole site down, not just the export.
+     * Splitting the table per page (see the report view) turned dompdf's
+     * quadratic reflow into linear scaling. Measured with the real template
+     * on desktop: 500 rows 3.7 s / 96 MB, 1000 rows 7.7 s / 150 MB, 1500 rows
+     * 12.9 s / 204 MB — versus 5.3 s / 142 MB for 500 rows before the split.
+     *
+     * 1000 is the cap because a Raspberry Pi 3 runs several times slower and
+     * shares 1 GB with nginx, php-fpm, the MQTT subscriber and Reverb: 150 MB
+     * sits well inside the 256 MB request limit below, while 1500 rows would
+     * push past 200 MB and risk an OOM that takes down more than the export.
      */
-    private const PDF_MAX_ROWS = 500;
+    private const PDF_MAX_ROWS = 1000;
+
+    /**
+     * Rows per PDF page. Sized to fit A4 landscape including the first page's
+     * report header, so no chunk overflows and leaves a near-empty page.
+     */
+    private const PDF_ROWS_PER_PAGE = 28;
 
     /**
      * Download the currently filtered activity log as a PDF report.
@@ -358,6 +367,7 @@ class UserLogController extends Controller
             'shown' => $rows->count(),
             'truncated' => $total > $rows->count(),
             'filters' => $filters,
+            'perPage' => self::PDF_ROWS_PER_PAGE,
             'generatedAt' => now('Asia/Jakarta')->format('d F Y, H:i').' WIB',
             'generatedBy' => Auth::user()?->name ?? '—',
         ])->setPaper('a4', 'landscape');
