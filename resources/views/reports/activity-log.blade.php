@@ -147,7 +147,7 @@
     <div class="footer">
         <table style="width:100%; border-collapse:collapse;">
             <tr>
-                <td style="font-size:7.5px; color:#6b7280;">SmartAC — Sistem Kontrol AC Berbasis IoT</td>
+                <td style="font-size:7.5px; color:#6b7280;">SmartAC Sistem Kontrol AC Berbasis IoT</td>
                 <td style="font-size:7.5px; color:#6b7280; text-align:right;">Halaman <span class="page"></span></td>
             </tr>
         </table>
@@ -155,7 +155,7 @@
 
     <div class="header">
         <h1>Laporan Log Aktivitas</h1>
-        <p class="sub">SmartAC — Sistem Kontrol AC Ruang Server Berbasis IoT</p>
+        <p class="sub">SmartAC Sistem Kontrol AC Ruang Server Berbasis IoT</p>
     </div>
 
     <table class="meta">
