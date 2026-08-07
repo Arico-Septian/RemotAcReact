@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Laporan Log Aktivitas — SmartAC</title>
+    <title>Laporan Log Aktivitas SmartAC</title>
     <style>
         /* dompdf tidak mendukung flexbox/grid — seluruh tata letak memakai tabel. */
         @page {
